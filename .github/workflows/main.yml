@@ -13,15 +13,14 @@ jobs:
       - name: Build and test code
         run: |
           if [[ $GITHUB_REF == refs/heads/feature/* ]]; then
-            # Build and test feature branch
+            # 빌드,테스트 feature 브랜치
           elif [[ $GITHUB_REF == refs/heads/develop ]]; then
-            # Merge feature branches and build and test develop branch
+            # feature 브랜치들을 머지, 빌드하고 테스트 develop 브랜치 
           elif [[ $GITHUB_REF == refs/heads/main ]]; then
-            # Deploy build to production
+            # 배포 브랜치
           elif [[ $GITHUB_REF == refs/heads/release ]]; then
-            # Fix bugs and build and test release branch
-          fi
+            # 오류수정하고 빌드, 테스트하는 release 브랜치
       - name: Deploy code
         if: github.ref == 'refs/heads/main'
         run: |
-          # Deploy code to production
+          
