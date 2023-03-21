@@ -1,0 +1,13 @@
+.sidebarDiv {
+    background-color: #88CFBA;
+    width: 75px;
+    height: 1125px;
+}
+
+.sidebarDiv>div {
+    display: block;
+}
+
+.sidebarDiv img {
+    margin: 0 auto;
+}
