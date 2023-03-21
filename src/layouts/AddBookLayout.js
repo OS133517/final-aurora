@@ -1,12 +1,11 @@
 import AddBookLayoutCSS from "./AddBookLayout.module.css";
+import AddBookSidebar from "../components/subSidebar/AddBookSidebar";
 
 function AddBookLayout() {
 
     return (
         <div className={AddBookLayoutCSS.addBookLayout}>
-            <div>
-                주소록
-            </div>
+            <AddBookSidebar/>
             <div>
 
             </div>
