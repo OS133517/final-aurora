@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import SidebarCSS from "./Sidebar.module.css";
 
 function AddBookSidebar() {
     
+    const useDispatch = useDispatch();
     const [firstIsOpen, setFirstIsOpen] = useState(false);
     const [secondIsOpen, setSecondIsOpen] = useState(false);
     const [thirdIsOpen, setThirdIsOpen] = useState(false);
@@ -32,9 +34,9 @@ function AddBookSidebar() {
                 </button>
                 {firstIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
-                        <p>Menu Item 1</p>
-                        <p>Menu Item 2</p>
-                        <p>Menu Item 3</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 1</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 2</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 3</p>
                     </div>
                 )}
                 <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
@@ -46,9 +48,9 @@ function AddBookSidebar() {
                 </button>
                 {secondIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
-                        <p>Menu Item 1</p>
-                        <p>Menu Item 2</p>
-                        <p>Menu Item 3</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 1</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 2</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 3</p>
                     </div>
                 )}
                 <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
@@ -60,9 +62,9 @@ function AddBookSidebar() {
                 </button>
                 {thirdIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
-                        <p>전체 주소록</p>
-                        <p>부서 주소록</p>
-                        <p>팀 주소록</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;부서 주소록</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</p>
                     </div>
                 )}
             </div>
