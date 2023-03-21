@@ -1,12 +1,5 @@
 .layout {
-    display: flex;
+    width: 1920px;
+    height: 1200px;
 }
 
-.layout:first-child {
-    display: block;
-
-}
-
-.layout:nth-child(2) {
-    margin-top: 0;
-}
