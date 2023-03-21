@@ -31,7 +31,7 @@ function AddBookSidebar() {
                         alt="화살표"/>공용 주소록
                 </button>
                 {firstIsOpen && (
-                    <div>
+                    <div className={SidebarCSS.dropDownMenus}>
                         <p>Menu Item 1</p>
                         <p>Menu Item 2</p>
                         <p>Menu Item 3</p>
@@ -45,7 +45,7 @@ function AddBookSidebar() {
                         alt="화살표"/>개인 주소록
                 </button>
                 {secondIsOpen && (
-                    <div>
+                    <div className={SidebarCSS.dropDownMenus}>
                         <p>Menu Item 1</p>
                         <p>Menu Item 2</p>
                         <p>Menu Item 3</p>
@@ -59,7 +59,7 @@ function AddBookSidebar() {
                         alt="화살표"/>전사 주소록
                 </button>
                 {thirdIsOpen && (
-                    <div>
+                    <div className={SidebarCSS.dropDownMenus}>
                         <p>전체 주소록</p>
                         <p>부서 주소록</p>
                         <p>팀 주소록</p>
