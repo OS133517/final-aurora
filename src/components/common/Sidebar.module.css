@@ -2,11 +2,9 @@
     background-color: #88CFBA;
     width: 75px;
     height: 1125px;
+    display: inline-block;
 }
 
-.sidebarDiv>div {
-    display: block;
-}
 
 .sidebarDiv img {
     margin: 0 auto;

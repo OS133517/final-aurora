@@ -1,10 +1,15 @@
-
+import AddBookLayoutCSS from "./AddBookLayout.module.css";
 
 function AddBookLayout() {
 
     return (
-        <div>
-            레이아웃
+        <div className={AddBookLayoutCSS.addBookLayout}>
+            <div>
+                주소록
+            </div>
+            <div>
+
+            </div>
         </div>
     );
 }
