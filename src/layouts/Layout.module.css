@@ -1,6 +1,12 @@
 .layout {
-    display: grid;
-    grid-template-areas: 
-        "header"
-        "sidebar outlet";
+    display: flex;
+}
+
+.layout:first-child {
+    display: block;
+
+}
+
+.layout:nth-child(2) {
+    margin-top: 0;
 }
