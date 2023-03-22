@@ -10,9 +10,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout/>}>
         <Route index element={<Main/>}/>
-        <Route path="address-book">
-          <Route index element={<AddBookLayout/>}/>
-          <Route path="addresses" element={<Addresses/>}/>
+        <Route path="address-book" element={<AddBookLayout/>}>
+          <Route index="/addresses" element={<Addresses/>}/>
         </Route>
       </Route>
     </Routes>
