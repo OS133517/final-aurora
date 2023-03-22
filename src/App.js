@@ -11,7 +11,7 @@ function App() {
       <Route path="/" element={<Layout/>}>
         <Route index element={<Main/>}/>
         <Route path="address-book" element={<AddBookLayout/>}>
-          <Route index="/addresses" element={<Addresses/>}/>
+          <Route index path="addresses" element={<Addresses/>}/>
         </Route>
       </Route>
     </Routes>

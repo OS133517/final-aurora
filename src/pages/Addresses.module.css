@@ -124,6 +124,11 @@
     height: 40px;
 }
 
+.contentTable tr:hover {
+    background-color: #88CFBA;
+    color: white;
+}
+
 .pagingBtn {
     margin: 5px;
     border-radius: 5px;

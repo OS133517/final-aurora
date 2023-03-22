@@ -2,16 +2,26 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SidebarCSS from "./SubSidebar.module.css";
 import { callPersonalGroupAPI } from "../../apis/AddBookAPICall";
+import { useNavigate } from "react-router-dom";
 
 function AddBookSidebar() {
     
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [firstIsOpen, setFirstIsOpen] = useState(false);
     const [secondIsOpen, setSecondIsOpen] = useState(false);
     const [thirdIsOpen, setThirdIsOpen] = useState(false);
 
-    const groups = useSelector(state => state.AddBookReducer);
-    const groupList = groups?.data;
+    const groups = useSelector(state => state.addBookReducer);
+    console.log("groups : ", groups);
+    const [groupList, setGroupList] = useState([]);
+    
+   
+    useEffect(() => {
+        if(Array.isArray(groupList) && groupList === []) {
+            setGroupList(groups);
+        }
+    }, [groups])
 
     const toggleMenu = (menuNum) => {
         switch(menuNum) {
@@ -20,13 +30,17 @@ function AddBookSidebar() {
                 break;
             case 2: 
                 setSecondIsOpen(!secondIsOpen); 
-                !secondIsOpen && dispatch(callPersonalGroupAPI({
+                groupList.length === 0 && dispatch(callPersonalGroupAPI({
                     memberCode : 2
                 }))
                 break;
             case 3: setThirdIsOpen(!thirdIsOpen); break;
             default: break;
         }
+    }
+
+    const onClickHandler = () => {
+        navigate("/address-book/addresses")
     }
 
     return (
@@ -60,8 +74,8 @@ function AddBookSidebar() {
                 {secondIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
                         {
-                            Array.isArray(groupList) && groupList.map(group => (
-                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</p>
+                            Array.isArray(groupList) && groupList.length > 0 && groupList.map(group => (
+                                <p key={group.groupCode}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</p>
                             ))
                         }
                         {/* <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 1</p>
@@ -78,7 +92,7 @@ function AddBookSidebar() {
                 </button>
                 {thirdIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</p>
+                        <p onClick={() => onClickHandler()}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</p>
                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;부서 주소록</p>
                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</p>
                     </div>
