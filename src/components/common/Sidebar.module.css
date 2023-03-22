@@ -3,6 +3,7 @@
     width: 75px;
     height: 1125px;
     float: left;
+    border-bottom: 1px solid #C1C1C1;
 }
 
 .sidebarDiv img {

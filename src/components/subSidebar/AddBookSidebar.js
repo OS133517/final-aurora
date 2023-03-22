@@ -1,18 +1,29 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import SidebarCSS from "./Sidebar.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import SidebarCSS from "./SubSidebar.module.css";
+import { callPersonalGroupAPI } from "../../apis/AddBookAPICall";
 
 function AddBookSidebar() {
     
-    const useDispatch = useDispatch();
+    const dispatch = useDispatch();
     const [firstIsOpen, setFirstIsOpen] = useState(false);
     const [secondIsOpen, setSecondIsOpen] = useState(false);
     const [thirdIsOpen, setThirdIsOpen] = useState(false);
 
+    const groups = useSelector(state => state.AddBookReducer);
+    const groupList = groups?.data;
+
     const toggleMenu = (menuNum) => {
         switch(menuNum) {
-            case 1: setFirstIsOpen(!firstIsOpen); break;
-            case 2: setSecondIsOpen(!secondIsOpen); break;
+            case 1: 
+                setFirstIsOpen(!firstIsOpen); 
+                break;
+            case 2: 
+                setSecondIsOpen(!secondIsOpen); 
+                !secondIsOpen && dispatch(callPersonalGroupAPI({
+                    memberCode : 2
+                }))
+                break;
             case 3: setThirdIsOpen(!thirdIsOpen); break;
             default: break;
         }
@@ -48,9 +59,14 @@ function AddBookSidebar() {
                 </button>
                 {secondIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 1</p>
+                        {
+                            Array.isArray(groupList) && groupList.map(group => (
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</p>
+                            ))
+                        }
+                        {/* <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 1</p>
                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 2</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 3</p>
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 3</p> */}
                     </div>
                 )}
                 <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
