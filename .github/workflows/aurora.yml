@@ -1,5 +1,9 @@
+# 적용할 깃헙 액션 이름
 name: React CI/CD
 
+# 깃헙 액션은 특정 이벤트에 어떤 일들을 자동으로 하게 할 수 있음.
+# 이 때 어떤 이벤트에 자동으로 작동할 지 작성하는 곳이 여기 
+# 밑에는 아래 적힌 브랜치들에 push가 될 경우 작동한다는 뜻
 on:
   push:
     branches:
@@ -8,9 +12,13 @@ on:
       - feature/*
       - release/*
 
+# 위에 이벤트 때 아래의 jobs 들을 한다는 뜻. 빌드와 테스트를 하게 재홍이가 설정함
 jobs:
   build-and-test:
+  # 어떤 환경에서 작동할지 작성하는 부분
     runs-on: ubuntu-latest
+    # 아래 스텝들을 한다는 건데 각 부분은 오른쪽 마켓플레이스에서 검색하면 설명나옴, 깃헙액션 자체 설명은 다큐멘테이션
+    # 드림코딩에 10분짜리 설명 간단하고 쉽게한 영상 있음 참고
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
