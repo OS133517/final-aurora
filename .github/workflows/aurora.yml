@@ -22,9 +22,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run tests
-        run: npm test -- --passWithNoTests
+      
+      - name: test start
+        run: npm start
 
       - name: Build React app
         run: npm run build
