@@ -74,6 +74,7 @@
 .contentTable {
     width: 1534px;
     border-bottom: 1px solid #88CFBA;
+    border-collapse : collapse
 }
 
 .contentTable th input:first-child, .contentTable td input:first-child {
