@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import AddBookLayout from "./layouts/AddBookLayout";
 import Main from "./pages/Main";
-import Addresses from "./pages/Addresses";
+import Addresses from "./pages/addBook/Addresses";
 
 function App() {
   return (

@@ -41,10 +41,6 @@ function AddBookSidebar() {
         }));
     }, [])
 
-    // useEffect(() => {
-
-    // }, []);
-    
     const toggleMenu = (menuNum) => {
         switch(menuNum) {
             case 1: 
@@ -64,27 +60,28 @@ function AddBookSidebar() {
 
         switch(onOff) {
             case 't' :
-                
-                if(tIsVisible) {
+                if(tIsVisible && newTGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newTGroupName,
                         // TODO -> 나중에 토큰에서 꺼내는 걸로
                         team : '개발4팀'
                     }));
-                    // window.location.reload(true);
+                    window.location.reload(); 
                 }
                 setTIsVisible(!tIsVisible);
+                setNewTGroupName("");
                 break;
             case 'p' :
-                if(pIsVisible) {
+                if(pIsVisible && newPGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newPGroupName,
                         // TODO -> 나중에 토큰에서 꺼내는 걸로
                         memberCode : 2
                     }));
-                    // window.location.reload(true); 
+                    window.location.reload(); 
                 }
                 setPIsVisible(!pIsVisible);
+                setNewPGroupName("");
                 break;
             default :
                 setTIsVisible(!tIsVisible);

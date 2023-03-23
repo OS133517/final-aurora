@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddressesCSS from "./Addresses.module.css";
-import { callAllMemberAddressesAPI, callGroupAddressAPI } from "../apis/AddBookAPICall";
+import { callAllMemberAddressesAPI, callGroupAddressAPI } from "../../apis/AddBookAPICall";
 import { useParams } from "react-router-dom";
+import AddBookFormModal from "../../components/addBook/AddBookFormModal";
 
-function Addresses({category = "전사원 주소록"}) {
+function Addresses({category = "전체 주소록"}) {
 
     const dispatch = useDispatch();
     const addBook = useSelector(state => state.addBookReducer.addresses);
@@ -24,7 +25,7 @@ function Addresses({category = "전사원 주소록"}) {
     useEffect(
         () => {
             switch(category) {
-                case "전사원 주소록" : 
+                case "전체 주소록" : 
                     dispatch(callAllMemberAddressesAPI({
                         currentPage : currentPage
                     }));
@@ -51,6 +52,8 @@ function Addresses({category = "전사원 주소록"}) {
     }
 
     return (
+        <>
+        <AddBookFormModal/>
         <div className={AddressesCSS.addressesDiv}>
             <div className={AddressesCSS.addressesHeader}>
                 {category}
@@ -64,9 +67,11 @@ function Addresses({category = "전사원 주소록"}) {
                 </select>
                 <input type="text" name="searchValue" value={searchValue} onChange={onChangeHandler}/>
                 <button type="button">검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
-                <div>
+                <div className={AddressesCSS.imgDiv}>
                     <img src={process.env.PUBLIC_URL + "/sendMail.png"} alt="메일 발송"/>
-                    <img src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>
+                    {category === "전체 주소록" && <img src={process.env.PUBLIC_URL + "/insert.png"} alt="추가"/>}
+                    {category !== "전체 주소록" && <img src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>}
+                    {category !== "전체 주소록" && <img src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>}
                 </div>
             </div>
             <table className={AddressesCSS.contentTable}>
@@ -164,6 +169,7 @@ function Addresses({category = "전사원 주소록"}) {
                 }
             </div>
         </div>
+        </>
     );
 }
 
