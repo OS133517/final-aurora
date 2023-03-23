@@ -5,6 +5,12 @@
     float: left;
 }
 
+.sidebarDiv a {
+    display: block;
+    width: 75px;
+    height: 75px;
+}
+
 .sidebarDiv img {
     margin: 0 auto;
 }
