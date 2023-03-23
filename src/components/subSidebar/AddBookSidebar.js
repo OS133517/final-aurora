@@ -29,7 +29,7 @@ function AddBookSidebar() {
                     <img 
                         className={SidebarCSS.dropDownArrow} 
                         style={firstIsOpen? {transform:`rotate(90deg)`}:{}} 
-                        src={process.env.PUBLIC_URL + "arrow.png"} 
+                        src={process.env.PUBLIC_URL + "/arrow.png"} 
                         alt="화살표"/>공용 주소록
                 </button>
                 {firstIsOpen && (
@@ -43,7 +43,7 @@ function AddBookSidebar() {
                     <img 
                         className={SidebarCSS.dropDownArrow} 
                         style={secondIsOpen? {transform:`rotate(90deg)`}:{}} 
-                        src={process.env.PUBLIC_URL + "arrow.png"} 
+                        src={process.env.PUBLIC_URL + "/arrow.png"} 
                         alt="화살표"/>개인 주소록
                 </button>
                 {secondIsOpen && (
@@ -57,7 +57,7 @@ function AddBookSidebar() {
                     <img 
                         className={SidebarCSS.dropDownArrow} 
                         style={thirdIsOpen? {transform:`rotate(90deg)`}:{}} 
-                        src={process.env.PUBLIC_URL + "arrow.png"} 
+                        src={process.env.PUBLIC_URL + "/arrow.png"} 
                         alt="화살표"/>전사 주소록
                 </button>
                 {thirdIsOpen && (
