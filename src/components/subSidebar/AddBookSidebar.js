@@ -1,46 +1,110 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SidebarCSS from "./SubSidebar.module.css";
-import { callPersonalGroupAPI } from "../../apis/AddBookAPICall";
-import { useNavigate } from "react-router-dom";
+import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI } from "../../apis/AddBookAPICall";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function AddBookSidebar() {
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // 드롭다운 메뉴 조정용
     const [firstIsOpen, setFirstIsOpen] = useState(false);
     const [secondIsOpen, setSecondIsOpen] = useState(false);
     const [thirdIsOpen, setThirdIsOpen] = useState(false);
+    // 그룹 추가 인풋창 조정용
+    const [pIsVisible, setPIsVisible] = useState(false);
+    const [tIsVisible, setTIsVisible] = useState(false);
+    // 그룹 추가 인풋창 밸류 조정용
+    const [newPGroupName, setNewPGroupName] = useState("");
+    const [newTGroupName, setNewTGroupName] = useState("");
 
-    const groups = useSelector(state => state.addBookReducer);
-    console.log("groups : ", groups);
-    const [groupList, setGroupList] = useState([]);
-    
-   
+    const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
+    const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
+
+    const activeStyle = {
+        backgroundColor : "#73b8a3",
+        color : "white"
+    };
+
     useEffect(() => {
-        if(Array.isArray(groupList) && groupList === []) {
-            setGroupList(groups);
-        }
-    }, [groups])
 
+        dispatch(callTeamGroupAPI({
+            // TODO -> 나중에 토큰에서 꺼내는 걸로
+            memberCode : 2
+        }));
+        
+        dispatch(callPersonalGroupAPI({
+            // TODO -> 나중에 토큰에서 꺼내는 걸로
+            memberCode : 2
+        }));
+    }, [])
+
+    // useEffect(() => {
+
+    // }, []);
+    
     const toggleMenu = (menuNum) => {
         switch(menuNum) {
             case 1: 
-                setFirstIsOpen(!firstIsOpen); 
+                setFirstIsOpen(!firstIsOpen);
                 break;
             case 2: 
                 setSecondIsOpen(!secondIsOpen); 
-                groupList.length === 0 && dispatch(callPersonalGroupAPI({
-                    memberCode : 2
-                }))
                 break;
-            case 3: setThirdIsOpen(!thirdIsOpen); break;
+            case 3: 
+                setThirdIsOpen(!thirdIsOpen); 
+                break;
             default: break;
         }
     }
 
-    const onClickHandler = () => {
-        navigate("/address-book/addresses")
+    const onClickInsert = (onOff) => {
+
+        switch(onOff) {
+            case 't' :
+                
+                if(tIsVisible) {
+                    dispatch(callGroupRegistAPI({
+                        groupName : newTGroupName,
+                        // TODO -> 나중에 토큰에서 꺼내는 걸로
+                        team : '개발4팀'
+                    }));
+                    // window.location.reload(true);
+                }
+                setTIsVisible(!tIsVisible);
+                break;
+            case 'p' :
+                if(pIsVisible) {
+                    dispatch(callGroupRegistAPI({
+                        groupName : newPGroupName,
+                        // TODO -> 나중에 토큰에서 꺼내는 걸로
+                        memberCode : 2
+                    }));
+                    // window.location.reload(true); 
+                }
+                setPIsVisible(!pIsVisible);
+                break;
+            default :
+                setTIsVisible(!tIsVisible);
+                setPIsVisible(!pIsVisible);
+                break;
+        }
+    }
+
+    const onChangeHandler = (e) => {
+
+        switch(e.target.name) {
+            case "personal" :
+                setNewPGroupName(e.target.value);
+                break;
+            case "team" :
+                setNewTGroupName(e.target.value);
+                break;
+            default :
+                break;
+        }
     }
 
     return (
@@ -54,47 +118,63 @@ function AddBookSidebar() {
                     <img 
                         className={SidebarCSS.dropDownArrow} 
                         style={firstIsOpen? {transform:`rotate(90deg)`}:{}} 
-                        src={process.env.PUBLIC_URL + "arrow.png"} 
+                        src={process.env.PUBLIC_URL + "/arrow.png"} 
                         alt="화살표"/>공용 주소록
                 </button>
                 {firstIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 1</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 2</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 3</p>
+                        {
+                            Array.isArray(teamGroupList) && teamGroupList.map(group => (
+                                <NavLink 
+                                    style = { ({ isActive }) => isActive? activeStyle : undefined }
+                                    to={`/address-book/team-groups/${group.groupCode}`} 
+                                    key={group.groupCode}
+                                    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</NavLink>
+                            ))
+                        }
+                        {tIsVisible && <input type="text" name="team" value={newTGroupName} onChange={onChangeHandler}/>}
+                        <p onClick={() => onClickInsert('t')}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 그룹 추가</p>
                     </div>
                 )}
                 <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
                     <img 
                         className={SidebarCSS.dropDownArrow} 
                         style={secondIsOpen? {transform:`rotate(90deg)`}:{}} 
-                        src={process.env.PUBLIC_URL + "arrow.png"} 
+                        src={process.env.PUBLIC_URL + "/arrow.png"} 
                         alt="화살표"/>개인 주소록
                 </button>
                 {secondIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
                         {
-                            Array.isArray(groupList) && groupList.length > 0 && groupList.map(group => (
-                                <p key={group.groupCode}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</p>
+                            Array.isArray(personalGroupList) && personalGroupList.map(group => (
+                                <NavLink 
+                                    style = { ({ isActive }) => isActive? activeStyle : undefined }
+                                    to={`/address-book/personal-groups/${group.groupCode}`} 
+                                    key={group.groupCode}
+                                    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</NavLink>
                             ))
                         }
-                        {/* <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 1</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 2</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Menu Item 3</p> */}
+                        {pIsVisible && <input type="text" name="personal" value={newPGroupName} onChange={onChangeHandler}/>}
+                        <p onClick={() => onClickInsert('p')}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 그룹 추가</p>
                     </div>
                 )}
                 <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
                     <img 
                         className={SidebarCSS.dropDownArrow} 
                         style={thirdIsOpen? {transform:`rotate(90deg)`}:{}} 
-                        src={process.env.PUBLIC_URL + "arrow.png"} 
+                        src={process.env.PUBLIC_URL + "/arrow.png"} 
                         alt="화살표"/>전사 주소록
                 </button>
                 {thirdIsOpen && (
                     <div className={SidebarCSS.dropDownMenus}>
-                        <p onClick={() => onClickHandler()}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;부서 주소록</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</p>
+                        <NavLink 
+                            style = { ({ isActive }) => isActive? activeStyle : undefined }
+                            to={"/address-book/addresses"}
+                            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</NavLink>
+                        <NavLink 
+                            style = { ({ isActive }) => isActive? activeStyle : undefined }
+                            to={"/address-book/team-addresses"}
+                            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</NavLink>
                     </div>
                 )}
             </div>

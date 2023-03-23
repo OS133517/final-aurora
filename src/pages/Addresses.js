@@ -1,32 +1,39 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddressesCSS from "./Addresses.module.css";
-import { callAllMemberAddressesAPI } from "../apis/AddBookAPICall";
+import { callAllMemberAddressesAPI, callGroupAddressAPI } from "../apis/AddBookAPICall";
+import { useParams } from "react-router-dom";
 
-function Addresses({category = "all"}) {
+function Addresses({category = "전사원 주소록"}) {
 
     const dispatch = useDispatch();
-    const addBook = useSelector(state => state.addBookReducer);
+    const addBook = useSelector(state => state.addBookReducer.addresses);
     const addressList = addBook.data;
-    console.log(addressList);
     const pageInfo = addBook.pageInfo;
-    console.log(pageInfo);
+    const {groupCode} = useParams();
 
+    const [searchValue, setSearchValue] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
     if(pageInfo) {
         for(let i = 1; i <= pageInfo.endPage; i++) {
             pageNumber.push(i);
         }
-        console.log(pageNumber);
     }
 
     useEffect(
         () => {
             switch(category) {
-                case "all" : 
+                case "전사원 주소록" : 
                     dispatch(callAllMemberAddressesAPI({
                         currentPage : currentPage
+                    }));
+                    break;
+                case "개인 주소록" :
+                case "공용 주소록" :
+                    dispatch(callGroupAddressAPI({
+                        currentPage : currentPage,
+                        groupCode : groupCode
                     }));
                     break;
                 default :
@@ -36,13 +43,17 @@ function Addresses({category = "all"}) {
                     break;
             }
         } // eslint-disable-next-line
-        , [currentPage, category]
+        , [currentPage, category, groupCode]
     )
+
+    const onChangeHandler = (e) => {
+        setSearchValue(e.target.value);
+    }
 
     return (
         <div className={AddressesCSS.addressesDiv}>
             <div className={AddressesCSS.addressesHeader}>
-                주소록
+                {category}
             </div>
             <div className={AddressesCSS.addressesSearch}>
                 <select>
@@ -51,11 +62,11 @@ function Addresses({category = "all"}) {
                     <option value="name">회사</option>
                     <option value="name">이메일</option>
                 </select>
-                <input type="text" name="searchValue" value=""/>
+                <input type="text" name="searchValue" value={searchValue} onChange={onChangeHandler}/>
                 <button type="button">검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
                 <div>
-                    <img src={process.env.PUBLIC_URL + "sendMail.png"} alt="메일 발송"/>
-                    <img src={process.env.PUBLIC_URL + "delete.png"} alt="삭제"/>
+                    <img src={process.env.PUBLIC_URL + "/sendMail.png"} alt="메일 발송"/>
+                    <img src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>
                 </div>
             </div>
             <table className={AddressesCSS.contentTable}>
@@ -86,8 +97,8 @@ function Addresses({category = "all"}) {
                 </thead>
                 <tbody>
                     {
-                        Array.isArray(addressList) && addressList.map(address => (
-                            <tr key={address.name}>
+                        Array.isArray(addressList) && addressList.map((address, index) => (
+                            <tr key={index}>
                                 <td>
                                     <input type="checkBox" name=""/>
                                 </td>

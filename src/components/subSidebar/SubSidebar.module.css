@@ -84,3 +84,30 @@
     margin: 0;
     cursor: pointer;
 }
+
+.dropDownMenus a {
+    display: block;
+    text-decoration: none;
+    line-height: 40px;
+    width: 100%;
+    margin: 0;
+    cursor: pointer;
+    color: #88CFBA;
+    font-size: 16px;
+}
+
+.dropDownMenus a:hover {
+    background-color: #73b8a3;
+    color: white;
+}
+
+.dropDownMenus>input {
+    height: 30px;
+    width: 180px;
+    line-height: 30px;
+    color: #88CFBA;
+    border: 1px solid #88CFBA;
+    border-radius: 10px;
+    margin-left: 50px;
+}
+

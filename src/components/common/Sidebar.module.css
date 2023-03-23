@@ -6,6 +6,12 @@
     border-bottom: 1px solid #C1C1C1;
 }
 
+.sidebarDiv a {
+    display: block;
+    width: 75px;
+    height: 75px;
+}
+
 .sidebarDiv img {
     margin: 0 auto;
 }
