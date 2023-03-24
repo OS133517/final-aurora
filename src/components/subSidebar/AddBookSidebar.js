@@ -123,7 +123,6 @@ function AddBookSidebar() {
     }
 
     return (
-        <>
             {addBookModal? <AddBookFormModal setAddBookModal={setAddBookModal}/>:null}
             <div className={SidebarCSS.sidebarDiv}>
                 <div className={SidebarCSS.sideHeader}>
@@ -196,7 +195,6 @@ function AddBookSidebar() {
                     )}
                 </div>
             </div>
-        </>
     );
 }
 
