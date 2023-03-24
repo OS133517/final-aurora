@@ -1,10 +1,9 @@
-.modal{
+.modalBackground{
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,11 +13,12 @@
 .modalContainer{
     position: absolute;
     height: 500px;
-    width: 730px;
+    width: 600px;
     text-align: center;
     background-color: rgb(255, 255, 255);
+    border: 1px solid black;
     border-radius: 10px;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);    
+    box-shadow: 5px 5px 8px 1px gray;    
     z-index: 1000;
 }
 
@@ -35,17 +35,29 @@
 }
 
 .modalDiv{    
-    height: 350px;
+    height: 340px;
     width: 100%;
     border-bottom: 1px solid black;
+    padding-top: 10px;
 }
 
-.modalDiv input {
+.modalDiv>table {
+    margin-left: 50px;
+}
+
+.modalDiv td:nth-child(2n - 1) {
+    font-size: 16px;
+    text-align: start;
+    width: 90px;
+}
+
+.modalDiv input, .modalDiv select {
+    box-sizing: border-box;
     margin-top: 5px;
     margin-bottom: 5px;
     width: 350px;
-    height: 40px;
-    font-size: 25px;
+    height: 32px;
+    font-size: 16px;
     text-indent: 10px;
 }
 
@@ -55,7 +67,7 @@
 
 .buttonDiv {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .buttonDiv>button {
@@ -69,6 +81,7 @@
     font-weight: bold;
     margin-right: 10px;
     margin-top: 10px;
+    cursor: pointer;
 }
 
 

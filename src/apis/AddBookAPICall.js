@@ -3,7 +3,9 @@ import {
     GET_PERSONAL_GROUP,
     GET_TEAM_GROUP,
     GET_GROUP_ADDRESSES,
-    POST_GROUP_REGIST
+    POST_GROUP_REGIST,
+    POST_ADD_BOOK_REGIST,
+    DELETE_ADD_BOOK_DELETE
 } from "../modules/AddBookModule";
 
 export const callAllMemberAddressesAPI = ({currentPage}) => {
@@ -125,11 +127,65 @@ export const callGroupRegistAPI = ({groupName, memberCode, team}) => {
                 memberCode : memberCode,
                 team : team
             })
-        }).then(response => response.json())
+        }).then(response => response.json());
 
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callGroupRegistAPI RESULT', result);
             dispatch({type : POST_GROUP_REGIST, payload : result});
+        }
+    }
+}
+
+export const callAddBookRegistAPI = ({form}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/groups`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            },
+            body : JSON.stringify({
+                name : form.name,
+                phone : form.phone,
+                email : form.email,
+                company : form.company,
+                department : form.department,
+                comPhone : form.comPhone,
+                groupCode : form.groupCode
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAddBookRegistAPI RESULT', result);
+            dispatch({type : POST_ADD_BOOK_REGIST, payload : result});
+        }
+    }
+}
+
+export const callAddBookDeleteAPI = ({addBookNos}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/groups`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "DELETE",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            },
+            body : JSON.stringify({
+                addBookNos : addBookNos
+            })
+        }).then(response => response.json());
+        
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAddBookDeleteAPI RESULT', result);
+            dispatch({type : DELETE_ADD_BOOK_DELETE, payload : result});
         }
     }
 }

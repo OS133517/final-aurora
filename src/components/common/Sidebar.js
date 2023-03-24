@@ -12,6 +12,7 @@ function Sidebar() {
         <div className={SidebarCSS.sidebarDiv}>
             {sidebarMenus.map((menu) => (
                 <NavLink 
+                    key={menu}
                     to = { `/${menu}` }
                     style = { ({ isActive }) => isActive? activeStyle : undefined }
                     ><img src={ process.env.PUBLIC_URL + "/" + menu + ".png" } alt={ menu }/></NavLink>

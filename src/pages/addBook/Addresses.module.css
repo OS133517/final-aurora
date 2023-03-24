@@ -131,7 +131,7 @@
     height: 40px;
 }
 
-.contentTable tr:hover {
+.contentTable tbody>tr:hover {
     background-color: #88CFBA;
     color: white;
 }
