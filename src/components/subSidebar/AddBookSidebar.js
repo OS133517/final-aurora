@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+// import { useDispatch } from "react-redux";
 import SidebarCSS from "./Sidebar.module.css";
 
 function AddBookSidebar() {
     
-    const useDispatch = useDispatch();
+    // const useDispatch = useDispatch();
     const [firstIsOpen, setFirstIsOpen] = useState(false);
     const [secondIsOpen, setSecondIsOpen] = useState(false);
     const [thirdIsOpen, setThirdIsOpen] = useState(false);
