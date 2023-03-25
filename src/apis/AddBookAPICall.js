@@ -5,7 +5,8 @@ import {
     GET_GROUP_ADDRESSES,
     POST_GROUP_REGIST,
     POST_ADD_BOOK_REGIST,
-    DELETE_ADD_BOOK_DELETE
+    DELETE_ADD_BOOK_DELETE,
+    GET_MEMBER_SEARCH
 } from "../modules/AddBookModule";
 
 export const callAllMemberAddressesAPI = ({currentPage}) => {
@@ -186,6 +187,34 @@ export const callAddBookDeleteAPI = ({addBookNos}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callAddBookDeleteAPI RESULT', result);
             dispatch({type : DELETE_ADD_BOOK_DELETE, payload : result});
+        }
+    }
+}
+
+export const callMemberSearchAPI = ({searchForm, currentPage}) => {
+
+    let requestURL;
+
+    if(currentPage !== undefined || currentPage !== null) {
+        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/search?offset=${currentPage}&searchCondition=${searchForm.searchCondition}&searchValue=${searchForm.searchValue}`;
+    } else {
+        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/search?searchCondition=${searchForm.searchCondition}&searchValue=${searchForm.searchValue}`;
+    }
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callMemberSearchAPI RESULT', result);
+            dispatch({type : GET_MEMBER_SEARCH, payload : result.data});
         }
     }
 }

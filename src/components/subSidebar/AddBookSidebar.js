@@ -4,6 +4,7 @@ import SidebarCSS from "./SubSidebar.module.css";
 import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI } from "../../apis/AddBookAPICall";
 import { NavLink } from "react-router-dom";
 import AddBookFormModal from "../addBook/AddBookFormModal";
+import Swal from "sweetalert2";
 
 function AddBookSidebar() {
     
@@ -57,7 +58,11 @@ function AddBookSidebar() {
                 memberCode : 2
             }));
         } else if(groupRegistResult.status === 400) {
-            alert(groupRegistResult.message);
+            Swal.fire({
+                icon : "error",
+                title : "그룹 추가",
+                text : groupRegistResult.message
+            })
         }// eslint-disable-next-line
     }, [groupRegistResult])
 
@@ -188,10 +193,10 @@ function AddBookSidebar() {
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
                                 to={"/address-book/addresses"}
                                 >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</NavLink>
-                            <NavLink 
+                            {/* <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
                                 to={"/address-book/team-addresses"}
-                                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</NavLink>
+                                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</NavLink> */}
                         </div>
                     )}
                 </div>

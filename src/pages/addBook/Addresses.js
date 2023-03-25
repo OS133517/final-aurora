@@ -1,21 +1,26 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddressesCSS from "./Addresses.module.css";
-import { callAllMemberAddressesAPI, callGroupAddressAPI, callAddBookDeleteAPI } from "../../apis/AddBookAPICall";
+import { callAllMemberAddressesAPI, callGroupAddressAPI, callAddBookDeleteAPI, callMemberSearchAPI } from "../../apis/AddBookAPICall";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 function Addresses({category = "전체 주소록"}) {
 
     const dispatch = useDispatch();
+    const addBookDeleteResult = useSelector(state => state.addBookReducer.addBookDeleteMessage);
     const addBook = useSelector(state => state.addBookReducer.addresses);
     const addressList = addBook.data;
     const pageInfo = addBook.pageInfo;
     const {groupCode} = useParams();
-    const addBookDeleteResult = useSelector(state => state.addBookReducer.addBookDeleteMessage);
-    console.log('addBookDeleteResult', addBookDeleteResult);
-
-    const [searchValue, setSearchValue] = useState("");
+    
+    const [searchForm, setSearchForm] = useState({
+        searchCondition : "name",
+        searchValue : "",
+        formerCondition : "",
+        formerValue : ""
+    });
+    const [isSearching, setIsSearching] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
     if(pageInfo) {
@@ -24,38 +29,69 @@ function Addresses({category = "전체 주소록"}) {
         }
     }
 
-    useEffect(
-        () => {
+    // 리스트 새로 불러와도 페이지번호가 유지가 되서 바꾸기 위해 함수를 밖에 둠
+    const listChange = () => {
 
-            // 체크한게 다른 리스트를 불러와도 유지되서 초기화하는 코드
-            const checkBoxes = document.querySelectorAll("input[type=checkBox]");
-            for(let i = 0; i < checkBoxes.length; i++) {
-                checkBoxes[i].checked = false;
-            }
+        // 체크한게 다른 리스트를 불러와도 유지되서 초기화하는 코드
+        const checkBoxes = document.querySelectorAll("input[type=checkBox]");
+        for(let i = 0; i < checkBoxes.length; i++) {
+            checkBoxes[i].checked = false;
+        }
 
-            switch(category) {
-                case "전체 주소록" : 
-                    dispatch(callAllMemberAddressesAPI({
-                        currentPage : currentPage
-                    }));
-                    break;
-                case "개인 주소록" :
-                case "공용 주소록" :
-                    dispatch(callGroupAddressAPI({
-                        currentPage : currentPage,
-                        groupCode : groupCode
-                    }));
-                    break;
-                default :
-                    dispatch(callAllMemberAddressesAPI({
-                        currentPage : currentPage
-                    }));
-                    break;
-            }
-        }// eslint-disable-next-line
-        , [currentPage, category, groupCode]
-    )
+        switch(category) {
+            case "전체 주소록" : 
+                dispatch(callAllMemberAddressesAPI({
+                    currentPage : currentPage
+                }));
+                break;
+            case "개인 주소록" :
+            case "공용 주소록" :
+                dispatch(callGroupAddressAPI({
+                    currentPage : currentPage,
+                    groupCode : groupCode
+                }));
+                break;
+            default :
+                dispatch(callAllMemberAddressesAPI({
+                    currentPage : currentPage
+                }));
+                break;
+        }
+    }
 
+    // TODO - 검색 후 검색 조건 바꾸고 페이지 버튼 눌렀을 때 검색 조건 바뀌는거 수정, api 두번 쏘는거 수정해야됨
+
+    // 페이지 번호 바뀔 때
+    useEffect(() => {
+
+        if(isSearching) {
+            onClickSearch();
+        } else {
+            listChange();
+        }
+    // eslint-disable-next-line
+    }, [currentPage])
+
+    // 카테고리, 그룹코드 변할 때
+    useEffect(() => {
+
+        // 페이지 번호 1번으로 바꾸기
+        setCurrentPage(1);
+        // 검색 중 아님으로 바꾸기
+        setIsSearching(false);
+        // 검색창 초기화
+        setSearchForm({
+            searchCondition : "name",
+            searchValue : "",
+            formerCondition : "",
+            formerValue : ""
+        });
+
+        listChange();
+    // eslint-disable-next-line
+    }, [category, groupCode])
+
+    // 주소록 삭제 시 
     useEffect(
         () => {
             
@@ -82,35 +118,69 @@ function Addresses({category = "전체 주소록"}) {
 
     // 검색 상자 state 관리용 함수
     const onChangeHandler = (e) => {
-        setSearchValue(e.target.value);
+
+        setSearchForm({
+            ...searchForm,
+            [e.target.name] : e.target.value
+        });
     }
 
-    // 체크 박스 관리용 함수
-    const onClickCheck = (e) => {
+    // 검색 버튼 함수
+    const onClickSearch = () => {
+
+        if(!isSearching) {
+            setIsSearching(true);
+        }
+
+        if(searchForm.searchCondition !== searchForm.formerCondition || searchForm.searchValue !== searchForm.formerValue) {
+
+            setSearchForm({
+                ...searchForm,
+                formerCondition : searchForm.searchCondition,
+                formerValue : searchForm.searchValue
+            });
+
+            setCurrentPage(1);
+        }
+
+
+        if(category === '전체 주소록') {
+
+            dispatch(callMemberSearchAPI({
+                searchForm : searchForm,
+                currentPage : currentPage
+            }));
+        }
+    }
+
+    // 전체 체크 박스 관리용 함수
+    const onClickAllCheck = (e) => {
 
         const checkList = document.querySelectorAll(`input[type=checkBox]`);
 
         if(e.target.id === 'all' && e.target.checked === false) {
 
-            [...checkList].map(check => {
-                document.querySelector(`checkBox${check.id}`).checked = true;
-            });
+            [...checkList].filter(check => check.id !== 'all').forEach(check => check.checked = false);
         } else if (e.target.id === 'all' && e.target.checked === true) {
 
-            [...checkList].stream(check => {
-                document.querySelector(`checkBox${check.id}`).checked = false;
-            });
-        } else {
-            const ckBox = document.querySelector(`#checkBox${e.currentTarget.id}`)
-            ckBox.checked = !ckBox.checked;
-        }
+            [...checkList].filter(check => check.id !== 'all').forEach(check => check.checked = true);
+        } 
+    }
+
+    // 체크 박스 관리용 함수
+    const onClickCheck = (e) => {
+
+        if(e.target.type === 'checkbox') return;
+
+        const ckBox = document.querySelector(`#checkBox${e.currentTarget.id}`)
+        ckBox.checked = !ckBox.checked;
     }
 
     // 주소록 삭제 버튼 함수
     const onClickDelete = () => {
 
         const checkList = document.querySelectorAll(`input[type=checkBox]`);
-        const deleteList = [...checkList].filter(check => check.checked === true).map(item => item.id.replace("checkBox", ""));
+        const deleteList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
 
         Swal.fire({
             icon : "warning",
@@ -134,14 +204,14 @@ function Addresses({category = "전체 주소록"}) {
                 {category}
             </div>
             <div className={AddressesCSS.addressesSearch}>
-                <select>
-                    <option value="name">이름</option>
-                    <option value="name">부서</option>
-                    <option value="name">회사</option>
-                    <option value="name">이메일</option>
+                <select name="searchCondition" onChange={onChangeHandler}>
+                    <option name="searchCondition" value="name">이름</option>
+                    {category !== '전체 주소록' && <option name="searchCondition" value="department">부서</option>}
+                    {category !== '전체 주소록' && <option name="searchCondition" value="company">회사</option>}
+                    <option name="searchCondition" value="email">이메일</option>
                 </select>
-                <input type="text" name="searchValue" value={searchValue} onChange={onChangeHandler}/>
-                <button type="button">검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
+                <input type="text" name="searchValue" value={searchForm.searchValue} onChange={onChangeHandler}/>
+                <button type="button" onClick={onClickSearch}>검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
                 <div className={AddressesCSS.imgDiv}>
                     <img src={process.env.PUBLIC_URL + "/sendMail.png"} alt="메일 발송"/>
                     {category === "전체 주소록" && <img src={process.env.PUBLIC_URL + "/insert.png"} alt="추가"/>}
@@ -153,7 +223,7 @@ function Addresses({category = "전체 주소록"}) {
                 <thead className={AddressesCSS.contentHead}>
                     <tr>
                         <th>
-                            <input type="checkBox" id="all" onClick={onClickCheck}/>
+                            <input type="checkBox" id="all" onClick={onClickAllCheck}/>
                         </th>
                         <th>
                             이름
@@ -165,13 +235,15 @@ function Addresses({category = "전체 주소록"}) {
                             이메일
                         </th>
                         <th>
-                            회사
+                            {category !== '전체 주소록' && '회사'}
+                            {category === '전체 주소록' && '직급'}
                         </th>
                         <th>
                             부서
                         </th>
                         <th>
-                            회사 전화
+                            {category !== '전체 주소록' && '회사 전화'}
+                            {category === '전체 주소록' && '소속팀'}
                         </th>
                     </tr>
                 </thead>
