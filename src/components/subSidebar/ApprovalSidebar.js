@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { NavLink, Route } from "react-router-dom";
-import Pending from "../../pages/Pending";
-import SidebarCSS from "./Sidebar.module.css";
+import { NavLink } from "react-router-dom";
+import SidebarCSS from "./SubSidebar.module.css";
 
 function ApprovalSidebar() {
-    const key = [1,2,3];
     const [open, setOpen] = useState('false');
 
     return(
