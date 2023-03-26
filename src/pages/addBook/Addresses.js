@@ -236,7 +236,9 @@ function Addresses({category = "전체 주소록"}) {
             icon : "warning",
             title : `${deleteList.length} 개의 주소록이 삭제됩니다.`,
             text : "정말 삭제하시겠습니까?",
-            showCancelButton : true
+            showCancelButton : true,
+            cancelButtonText : '취소',
+            confirmButtonText : '확인'
         }).then((result) => {
             if(result.isConfirmed) {
                 dispatch(callAddBookDeleteAPI({

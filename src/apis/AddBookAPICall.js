@@ -8,7 +8,8 @@ import {
     DELETE_ADD_BOOK_DELETE,
     GET_MEMBER_SEARCH,
     GET_GROUP_SEARCH,
-    POST_MEMBER_TO_GROUP
+    POST_MEMBER_TO_GROUP,
+    DELETE_GROUP
 } from "../modules/AddBookModule";
 
 export const callAllMemberAddressesAPI = ({currentPage}) => {
@@ -249,7 +250,7 @@ export const callAddBookSearchAPI = ({searchForm, currentPage, groupCode}) => {
 }
 
 export const callMemberToGroupsAPI = ({memberCodes, groupCode}) => {
-    
+
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/member-to-group`;
 
     return async (dispatch, getState) => {
@@ -269,6 +270,27 @@ export const callMemberToGroupsAPI = ({memberCodes, groupCode}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callMemberToGroupsAPI RESULT', result);
             dispatch({type : POST_MEMBER_TO_GROUP, payload : result});
+        }
+    }
+}
+
+export const callGroupDeleteAPI = ({groupCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/group/${groupCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "DELETE",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            }
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callGroupDeleteAPI RESULT', result);
+            dispatch({type : DELETE_GROUP, payload : result});
         }
     }
 }

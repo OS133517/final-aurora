@@ -6,6 +6,7 @@ const initialState = {
     personalGroups : [],
     teamGroups : [],
     groupRegistMessage : [],
+    groupDeleteMessage : [],
     addBookRegistMessage : [],
     addBookDeleteMessage : [],
     memberToGroupMessage : []
@@ -22,6 +23,7 @@ export const DELETE_ADD_BOOK_DELETE = 'addBook/DELETE_ADD_BOOK_DELETE';
 export const GET_MEMBER_SEARCH = 'addBook/GET_MEMBER_SEARCH';
 export const GET_GROUP_SEARCH = 'addBook/GET_GROUP_SEARCH';
 export const POST_MEMBER_TO_GROUP = 'addBook/POST_MEMBER_TO_GROUP';
+export const DELETE_GROUP = 'addBook/DELETE_GROUP';
 
 // eslint-disable-next-line
 const actions = createActions({
@@ -34,7 +36,8 @@ const actions = createActions({
     [DELETE_ADD_BOOK_DELETE] : () => {},
     [GET_MEMBER_SEARCH] : () => {},
     [GET_GROUP_SEARCH] : () => {},
-    [POST_MEMBER_TO_GROUP] : () => {}
+    [POST_MEMBER_TO_GROUP] : () => {},
+    [DELETE_GROUP] : () => {}
 });
 
 // 리듀서
@@ -88,7 +91,13 @@ const addBookReducer = handleActions({
         return {
             ...state,
             memberToGroupMessage : payload
-        }}
+        }},
+    [DELETE_GROUP] : (state, { payload }) => {
+        return {
+            ...state,
+            groupDeleteMessage : payload
+        }
+    }
 }, initialState);
 
 export default addBookReducer;

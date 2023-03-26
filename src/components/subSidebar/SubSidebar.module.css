@@ -72,13 +72,21 @@
     font-size: 16px;
 }
 
+.dropDownMenus a>input {
+    color: #88CFBA;
+    font-size: 16px;
+    border: none;
+    background-color: transparent;
+    width: 120px;
+}
+
 .dropDownMenus p:hover {
     background-color: #73b8a3;
     color: white;
 }
 
 .dropDownMenus p {
-    display: block;
+    display: inline-block;
     line-height: 40px;
     width: 100%;
     margin: 0;
@@ -100,15 +108,22 @@
 }
 
 .dropDownMenus a>div {
-    display: inline;
+    display: flex;
     position: absolute;
-    right: 50px;
+    top: 8px;
+    right: 30px;
+    width: 100px;
+    height: 25px;
+    background-color: transparent;
+    visibility: hidden;
 }
 
-.dropDownMenus a button {
-    border: none;
+.dropDownMenus a>div>button {
     background-color: transparent;
     color: gray;
+    width: 40px;
+    height: 25px;
+    border: none;
 }
 
 .dropDownMenus a:hover {
