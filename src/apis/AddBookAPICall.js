@@ -6,7 +6,9 @@ import {
     POST_GROUP_REGIST,
     POST_ADD_BOOK_REGIST,
     DELETE_ADD_BOOK_DELETE,
-    GET_MEMBER_SEARCH
+    GET_MEMBER_SEARCH,
+    GET_GROUP_SEARCH,
+    POST_MEMBER_TO_GROUP
 } from "../modules/AddBookModule";
 
 export const callAllMemberAddressesAPI = ({currentPage}) => {
@@ -209,12 +211,65 @@ export const callMemberSearchAPI = ({searchForm, currentPage}) => {
                 "Content-Type" : "application/json",
                 "Accept" : "*/*"
             }
-        })
-        .then(response => response.json());
+        }).then(response => response.json());
 
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callMemberSearchAPI RESULT', result);
             dispatch({type : GET_MEMBER_SEARCH, payload : result.data});
+        }
+    }
+}
+
+export const callAddBookSearchAPI = ({searchForm, currentPage, groupCode}) => {
+
+    let requestURL;
+
+    if(currentPage !== undefined || currentPage !== null) {
+        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/groups/${groupCode}/search?offset=${currentPage}&searchCondition=${searchForm.searchCondition}&searchValue=${searchForm.searchValue}`;
+    } else {
+        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/groups/${groupCode}/search?searchCondition=${searchForm.searchCondition}&searchValue=${searchForm.searchValue}`;
+    }
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            }
+        }).then(response => response.json());
+
+        
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAddBookSearchAPI RESULT', result);
+            dispatch({type : GET_GROUP_SEARCH, payload : result.data});
+        }
+    }
+}
+
+export const callMemberToGroupsAPI = ({memberCodes, groupCode}) => {
+    console.log('groupCode'. groupCode);
+    console.log('memberCodes', memberCodes);
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/member-to-group`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            },
+            body : JSON.stringify({
+                memberCodes : memberCodes,
+                groupCode : groupCode
+            }
+        )}).then(response => response.json());
+        
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callMemberToGroupsAPI RESULT', result);
+            dispatch({type : POST_MEMBER_TO_GROUP, payload : result});
         }
     }
 }

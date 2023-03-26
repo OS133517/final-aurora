@@ -133,11 +133,11 @@ function AddBookFormModal({setAddBookModal}) {
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
-                                <td><label htmlFor="comPhone">회사 전화</label></td>
+                                <td><label htmlFor="jobName">직급</label></td>
                                 <td><input 
                                         type="text" 
-                                        name="comPhone" 
-                                        id="comPhone" 
+                                        name="jobName" 
+                                        id="jobName" 
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
