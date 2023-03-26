@@ -116,11 +116,14 @@
     height: 25px;
     background-color: transparent;
     visibility: hidden;
+    opacity: 0;
+    transform : translateX(100%);
+    transition: all 0.4s ease-in-out;
 }
 
 .dropDownMenus a>div>button {
     background-color: transparent;
-    color: gray;
+    color: rgb(56, 56, 56);
     width: 40px;
     height: 25px;
     border: none;

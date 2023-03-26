@@ -36,7 +36,9 @@ function AddBookSidebar() {
         color : "white"
     };
     const manageStyle = {
-        visibility : "visible"
+        visibility : "visible",
+        transform : "translateX(0)",
+        opacity : "1"
     }
 
     useEffect(() => {
