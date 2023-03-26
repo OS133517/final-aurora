@@ -20,6 +20,7 @@ function Addresses({category = "전체 주소록"}) {
     const {groupCode} = useParams();
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
+    const memberToGroupResult = useSelector(state => state.addBookReducer.memberToGroupMessage);
     
     const [searchInput, setSearchInput]  = useState({
         condition : "name",
@@ -75,7 +76,8 @@ function Addresses({category = "전체 주소록"}) {
             Swal.fire({
                 icon : "success",
                 title : "주소록 삭제",
-                text : addBookDeleteResult.message
+                text : addBookDeleteResult.message,
+                confirmButtonText: '확인'
             }).then((result) => {
                 if(result.isConfirmed) {
                     window.location.reload(true); 
@@ -100,6 +102,33 @@ function Addresses({category = "전체 주소록"}) {
         setCurrentPage(1);
     // eslint-disable-next-line
     }, [searchForm])
+
+    // 사원 -> 그룹 주소록으로 추가 결과
+    useEffect(() => {
+
+        if(memberToGroupResult.status === 200) {
+            Swal.fire({
+                icon : "success",
+                title : "추가",
+                text : memberToGroupResult.message,
+                confirmButtonText: '확인'
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    window.location.reload(true); 
+                } else {
+                    window.location.reload(true); 
+                }
+            })
+        } else if(memberToGroupResult.status === 400) {
+            Swal.fire({
+                icon : "error",
+                title : "추가",
+                text : memberToGroupResult.message,
+                confirmButtonText: '확인'
+            })
+        }
+    // eslint-disable-next-line
+    }, [memberToGroupResult])
     
     // 리스트 새로 불러와도 페이지번호가 유지가 되서 바꾸기 위해 함수를 밖에 둠
     const listChange = () => {
@@ -222,7 +251,6 @@ function Addresses({category = "전체 주소록"}) {
     // 사원 -> 그룹 주소록으로 추가
     const onClickMembersToGroups = () => {
 
-        
         const checkList = document.querySelectorAll(`input[type=checkBox]`);
         const insertList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
         const groupList = personalGroupList.concat(teamGroupList);
@@ -232,19 +260,31 @@ function Addresses({category = "전체 주소록"}) {
         }, {});
         let temp;
 
+        if(insertList.length === 0) {
+            Swal.fire({
+                icon : 'warning',
+                text : '선택된 사원 주소록이 없습니다.'
+            });
+
+            return;
+        }
+
         Swal.fire({
-            icon : "question",
-            title : '사원 그룹 주소록으로 추가하기',
+            icon : 'question',
+            title : `${insertList.length} 개의 주소록이 추가됩니다.`,
             text : '추가할 그룹을 선택하세요.',
             showCancelButton : true,
             input : 'select',
-            inputPlaceholder: '그룹 선택',
-            inputOptions: map
+            inputPlaceholder : '그룹 선택',
+            inputOptions : map,
+            inputValidator : (value) => {
+                return !value && '그룹을 선택하세요.'
+            },
+            confirmButtonText: '확인', 
+            cancelButtonText: '취소' 
         }).then((result) => {
             if(result.isConfirmed) {
                 temp = result.value;
-                console.log('groupCode : ', temp);
-                alert(`${result.value}`);
                 dispatch(callMemberToGroupsAPI({
                     'groupCode' : temp,
                     memberCodes : insertList

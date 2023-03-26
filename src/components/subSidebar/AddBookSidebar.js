@@ -151,11 +151,11 @@ function AddBookSidebar() {
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
                                         to={`/address-book/team-groups/${group.groupCode}`} 
                                         key={group.groupCode}
-                                        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</NavLink>
+                                        >{group.groupName}</NavLink>
                                 ))
                             }
                             {tIsVisible && <input type="text" name="team" value={newTGroupName} onChange={onChangeHandler}/>}
-                            <p onClick={() => onClickInsert('t')}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 그룹 추가</p>
+                            {teamGroupList.length <= 4 && <p onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
@@ -173,11 +173,17 @@ function AddBookSidebar() {
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
                                         to={`/address-book/personal-groups/${group.groupCode}`} 
                                         key={group.groupCode}
-                                        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</NavLink>
+                                        >{group.groupName}
+                                        <div>
+                                            <button>수정</button>
+                                            <button>삭제</button>
+                                        </div>
+                                    </NavLink>
                                 ))
                             }
                             {pIsVisible && <input type="text" name="personal" value={newPGroupName} onChange={onChangeHandler}/>}
-                            <p onClick={() => onClickInsert('p')}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 그룹 추가</p>
+                            {/* {personalGroupList.length <= 4 && <p onClick={() => onClickInsert('p')}>+ 그룹 추가</p>} */}
+                            <p onClick={() => onClickInsert('p')}>+ 그룹 추가</p>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
@@ -192,11 +198,11 @@ function AddBookSidebar() {
                             <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
                                 to={"/address-book/addresses"}
-                                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</NavLink>
+                                >전체 주소록</NavLink>
                             {/* <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
                                 to={"/address-book/team-addresses"}
-                                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</NavLink> */}
+                                >팀 주소록</NavLink> */}
                         </div>
                     )}
                 </div>

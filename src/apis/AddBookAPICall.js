@@ -249,8 +249,7 @@ export const callAddBookSearchAPI = ({searchForm, currentPage, groupCode}) => {
 }
 
 export const callMemberToGroupsAPI = ({memberCodes, groupCode}) => {
-    console.log('groupCode'. groupCode);
-    console.log('memberCodes', memberCodes);
+    
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/member-to-group`;
 
     return async (dispatch, getState) => {

@@ -4,12 +4,11 @@ import AddBookModalCSS from "./AddBookFormModal.module.css";
 import { callAddBookRegistAPI } from "../../apis/AddBookAPICall";
 import Swal from "sweetalert2";
 
-function AddBookFormModal({setAddBookModal}) {
+function AddBookUpdateModal({setAddBookModal}) {
 
     const dispatch = useDispatch();
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
-    const addBookRegistResult = useSelector(state => state.addBookReducer.addBookRegistMessage);
     
     const [form, setForm] = useState({
         name : '',
@@ -21,34 +20,7 @@ function AddBookFormModal({setAddBookModal}) {
         groupCode : ''
     })
 
-    useEffect(() => {
-
-            if(addBookRegistResult.status === 200) {
-
-                setAddBookModal(false);
-                Swal.fire({
-                    icon : "success",
-                    title : "주소록 추가",
-                    text : addBookRegistResult.message,
-                    confirmButtonText: '확인'
-                }).then((result) => {
-                    if(result.isConfirmed) {
-                        window.location.reload(true); 
-                    } else {
-                        window.location.reload(true); 
-                    }
-                })
-            } else if (addBookRegistResult.state === 400){
-                Swal.fire({
-                    icon : "error",
-                    title : "주소록 추가",
-                    text : addBookRegistResult.message
-                });
-            } 
-        }, // eslint-disable-next-line
-    [addBookRegistResult]);
-
-
+  
     const onClickModalOff = (e) => {
 
         if(e.target.className.includes("modalBackground")) {
@@ -64,30 +36,12 @@ function AddBookFormModal({setAddBookModal}) {
         })
     }
 
-    const onClickAddBookRegist = () => {
-
-        if(form.groupCode.trim().length === 0) {
-
-            Swal.fire({
-                icon : 'warning',
-                title : '주소록 추가',
-                text : '그룹을 선택하세요.',
-                confirmButtonText: '확인'
-            })
-            return;
-        } 
-
-        // TODO - null 체크, 정규식으로 입력값 체크
-        dispatch(callAddBookRegistAPI({
-            form : form
-        }));
-    }
-
+  
     return (
         <div className={AddBookModalCSS.modalBackground} onClick={onClickModalOff}>
             <div className={AddBookModalCSS.modalContainer}>
                 <div className={AddBookModalCSS.header}>
-                    연락처 추가
+                    연락처 수정
                 </div>
                 <div className={AddBookModalCSS.modalDiv}>
                     <table>
@@ -170,4 +124,4 @@ function AddBookFormModal({setAddBookModal}) {
     );
 }
 
-export default AddBookFormModal;
+export default AddBookUpdateModal;

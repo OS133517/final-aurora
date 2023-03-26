@@ -83,6 +83,7 @@
     width: 100%;
     margin: 0;
     cursor: pointer;
+    padding-left: 50px;
 }
 
 .dropDownMenus a {
@@ -94,6 +95,20 @@
     cursor: pointer;
     color: #88CFBA;
     font-size: 16px;
+    padding-left: 50px;
+    position: relative;
+}
+
+.dropDownMenus a>div {
+    display: inline;
+    position: absolute;
+    right: 50px;
+}
+
+.dropDownMenus a button {
+    border: none;
+    background-color: transparent;
+    color: gray;
 }
 
 .dropDownMenus a:hover {
