@@ -4,7 +4,7 @@ import Pending from "../../pages/Pending";
 import SidebarCSS from "./Sidebar.module.css";
 
 function ApprovalSidebar() {
-
+    const key = [1,2,3];
     const [open, setOpen] = useState('false');
 
     return(
@@ -36,7 +36,7 @@ function ApprovalSidebar() {
                         <>
                             <ul className={SidebarCSS.approvalList}>
                                 <li>
-                                    <NavLink to="/pending">미결재</NavLink>
+                                    <NavLink to="/approval/pending">미결재</NavLink>
                                 </li>
                                 <li>
                                     <NavLink>결재완료</NavLink>

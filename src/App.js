@@ -18,7 +18,7 @@ function App() {
         </Route>
         <Route path="approval" element={<ApprovalLayout/>}>
           <Route index="approvals" element={<Approvals/>}/>
-          <Route path="pending" element={<Pending/>}/>
+          <Route index path="pending" element={<Pending/>}/>
         </Route>
       </Route>
     </Routes>

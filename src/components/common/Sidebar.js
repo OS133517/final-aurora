@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
-
+    //eslint-disable-next-line
     const navigate = useNavigate();
     const activeStyle = { borderLeft : "7px solid orange"};
 
@@ -12,8 +12,8 @@ function Sidebar() {
 
     return (
         <div className={SidebarCSS.sidebarDiv}>
-            {sidebarMenus.map((menu) => (
-                <NavLink 
+            {sidebarMenus.map((menu, i) => (
+                <NavLink key={i}
                     to = { `/${menu}` }
                     style = { ({ isActive }) => isActive? activeStyle : undefined }
                     ><img src={ process.env.PUBLIC_URL + menu + ".png" } alt={ menu }/></NavLink>
