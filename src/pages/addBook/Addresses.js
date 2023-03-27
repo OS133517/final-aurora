@@ -15,6 +15,7 @@ function Addresses({category = "전체 주소록"}) {
 
     const dispatch = useDispatch();
     const addBookDeleteResult = useSelector(state => state.addBookReducer.addBookDeleteMessage);
+    const addBookUpdateResult = useSelector(state => state.addBookReducer.addBookUpdateMessage);
     const addBook = useSelector(state => state.addBookReducer.addresses);
     const addressList = addBook.data;
     const pageInfo = addBook.pageInfo;
@@ -33,6 +34,7 @@ function Addresses({category = "전체 주소록"}) {
     });
     const [isSearching, setIsSearching] = useState(false);
     const [updateModalIsOn, setUpdateModalIsOn] = useState(false);
+    const [updateList, setUpdateList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
     if(pageInfo) {
@@ -80,12 +82,8 @@ function Addresses({category = "전체 주소록"}) {
                 title : "주소록 삭제",
                 text : addBookDeleteResult.message,
                 confirmButtonText: '확인'
-            }).then((result) => {
-                if(result.isConfirmed) {
+            }).then(() => {
                     window.location.reload(true); 
-                } else {
-                    window.location.reload(true); 
-                }
             })
         } else if(addBookDeleteResult.status === 400) {
             Swal.fire({
@@ -109,17 +107,14 @@ function Addresses({category = "전체 주소록"}) {
     useEffect(() => {
 
         if(memberToGroupResult.status === 200) {
+
             Swal.fire({
                 icon : "success",
                 title : "추가",
                 text : memberToGroupResult.message,
                 confirmButtonText: '확인'
-            }).then((result) => {
-                if(result.isConfirmed) {
+            }).then(() => {
                     window.location.reload(true); 
-                } else {
-                    window.location.reload(true); 
-                }
             })
         } else if(memberToGroupResult.status === 400) {
             Swal.fire({
@@ -131,6 +126,48 @@ function Addresses({category = "전체 주소록"}) {
         }
     // eslint-disable-next-line
     }, [memberToGroupResult])
+
+    useEffect(() => {
+
+        if(memberToGroupResult.status === 200) {
+            Swal.fire({
+                icon : "success",
+                title : "추가",
+                text : memberToGroupResult.message,
+                confirmButtonText: '확인'
+            }).then(() => {
+                    window.location.reload(true); 
+            })
+        } else if(memberToGroupResult.status === 400) {
+            Swal.fire({
+                icon : "error",
+                title : "추가",
+                text : memberToGroupResult.message,
+                confirmButtonText: '확인'
+            })
+        }  
+    }, [memberToGroupResult])
+
+    useEffect(() => {
+
+        if(addBookUpdateResult.status === 200) {
+            Swal.fire({
+                icon : "success",
+                title : "수정",
+                text : addBookUpdateResult.message,
+                confirmButtonText: '확인'
+            }).then(() => {
+                    window.location.reload(true); 
+            })
+        } else if(addBookUpdateResult.status === 400) {
+            Swal.fire({
+                icon : "error",
+                title : "수정",
+                text : addBookUpdateResult.message,
+                confirmButtonText: '확인'
+            })
+        }  
+    }, [addBookUpdateResult])
     
     // 리스트 새로 불러와도 페이지번호가 유지가 되서 바꾸기 위해 함수를 밖에 둠
     const listChange = () => {
@@ -240,7 +277,7 @@ function Addresses({category = "전체 주소록"}) {
             text : "정말 삭제하시겠습니까?",
             showCancelButton : true,
             cancelButtonText : '취소',
-            confirmButtonText : '확인'
+            confirmButtonText : '확인',
         }).then((result) => {
             if(result.isConfirmed) {
                 dispatch(callAddBookDeleteAPI({
@@ -308,15 +345,25 @@ function Addresses({category = "전체 주소록"}) {
     const onClickUpdateModalOn = () => {
 
         const checkList = document.querySelectorAll(`input[type=checkBox]`);
-        const updateList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
+        const checkedUpdateList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
+        setUpdateList(checkedUpdateList);
+        console.log('updateList', updateList);
+        if(checkedUpdateList.length === 0) {
 
+            Swal.fire({
+                icon : "warning",
+                text : '선택된 주소록이 없습니다.',
+                confirmButtonText : '확인'
+            });
+
+            return;
+        }
         setUpdateModalIsOn(!updateModalIsOn);
-        // const updateList = 
     }
 
     return (
         <>
-        {updateModalIsOn? <AddBookUpdateModal setUpdateModalIsOn={setUpdateModalIsOn}/> : null}
+        {updateModalIsOn? <AddBookUpdateModal updateList={updateList} setUpdateModalIsOn={setUpdateModalIsOn}/> : null}
         <div className={AddressesCSS.addressesDiv}>
             <div className={AddressesCSS.addressesHeader}>
                 {category}

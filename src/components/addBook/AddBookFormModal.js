@@ -17,7 +17,7 @@ function AddBookFormModal({setAddBookModal}) {
         email : '',
         company : '',
         department : '',
-        comPhone : '',
+        jobName : '',
         groupCode : ''
     })
 
@@ -147,12 +147,12 @@ function AddBookFormModal({setAddBookModal}) {
                                         <option value="requireSelect">그룹 선택</option>
                                     {
                                         Array.isArray(teamGroupList) && teamGroupList.map(group => (
-                                        <option value={group.groupCode}>팀 그룹 - {group.groupName}</option>
+                                        <option key={group.groupCode} value={group.groupCode}>팀 그룹 - {group.groupName}</option>
                                         ))
                                     }
                                     {
                                         Array.isArray(personalGroupList) && personalGroupList.map(group => (
-                                        <option value={group.groupCode}>개인 그룹 - {group.groupName}</option>
+                                        <option key={group.groupCode} value={group.groupCode}>개인 그룹 - {group.groupName}</option>
                                         ))
                                     }
                                     </select>

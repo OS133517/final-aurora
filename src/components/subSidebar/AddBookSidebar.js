@@ -29,8 +29,6 @@ function AddBookSidebar() {
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
     const groupResultMessage = useSelector(state => state.addBookReducer.groupMessage);
-    // const groupRegistResult = useSelector(state => state.addBookReducer.groupRegistMessage);
-    // const groupDeleteResult = useSelector(state => state.addBookReducer.groupDeleteMessage);
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -60,34 +58,6 @@ function AddBookSidebar() {
             })
         }// eslint-disable-next-line
     }, [groupResultMessage]);
-
-    // useEffect(() => {
-
-    //     if(groupRegistResult.status === 200) {
-            
-    //         getGroups();
-    //     } else if(groupRegistResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 추가",
-    //             text : groupRegistResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupRegistResult]);
-
-    // useEffect(() => {
-
-    //     if(groupDeleteResult.status === 200) {
-
-    //         getGroups();
-    //     } else if(groupDeleteResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 삭제",
-    //             text : groupDeleteResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupDeleteResult]);
 
     const getGroups = () => {
 
@@ -292,8 +262,8 @@ function AddBookSidebar() {
                                                 name="team" 
                                                 value={newTGroupName} 
                                                 onChange={onChangeHandler}/>}
-                            {teamGroupList.length <= 4 && <p onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
-                            <p id="tGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
+                            {teamGroupList.length <= 4 && <p style={tIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
+                            <p style={tManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="tGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
@@ -334,8 +304,8 @@ function AddBookSidebar() {
                                 ))
                             }
                             {pIsVisible && <input type="text" name="personal" value={newPGroupName} onChange={onChangeHandler}/>}
-                            {personalGroupList.length <= 4 && <p onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
-                            <p id="pGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
+                            {personalGroupList.length <= 4 && <p style={pIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
+                            <p style={pManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="pGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
