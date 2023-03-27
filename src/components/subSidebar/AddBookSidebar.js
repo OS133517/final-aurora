@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SidebarCSS from "./SubSidebar.module.css";
-import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI, callGroupDeleteAPI } from "../../apis/AddBookAPICall";
+import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI, callGroupDeleteAPI, callGroupUpdateAPI } from "../../apis/AddBookAPICall";
 import { NavLink } from "react-router-dom";
 import AddBookFormModal from "../addBook/AddBookFormModal";
 import Swal from "sweetalert2";
@@ -28,8 +28,9 @@ function AddBookSidebar() {
 
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
-    const groupRegistResult = useSelector(state => state.addBookReducer.groupRegistMessage);
-    const groupDeleteResult = useSelector(state => state.addBookReducer.groupDeleteMessage);
+    const groupResultMessage = useSelector(state => state.addBookReducer.groupMessage);
+    // const groupRegistResult = useSelector(state => state.addBookReducer.groupRegistMessage);
+    // const groupDeleteResult = useSelector(state => state.addBookReducer.groupDeleteMessage);
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -49,31 +50,44 @@ function AddBookSidebar() {
 
     useEffect(() => {
 
-        if(groupRegistResult.status === 200) {
+        if(groupResultMessage.status === 200) {
             
             getGroups();
-        } else if(groupRegistResult.status === 400) {
+        } else if(groupResultMessage.status === 400) {
             Swal.fire({
                 icon : "error",
-                title : "그룹 추가",
-                text : groupRegistResult.message
+                text : groupResultMessage.message
             })
         }// eslint-disable-next-line
-    }, [groupRegistResult]);
+    }, [groupResultMessage]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if(groupDeleteResult.status === 200) {
+    //     if(groupRegistResult.status === 200) {
+            
+    //         getGroups();
+    //     } else if(groupRegistResult.status === 400) {
+    //         Swal.fire({
+    //             icon : "error",
+    //             title : "그룹 추가",
+    //             text : groupRegistResult.message
+    //         })
+    //     }// eslint-disable-next-line
+    // }, [groupRegistResult]);
 
-            getGroups();
-        } else if(groupDeleteResult.status === 400) {
-            Swal.fire({
-                icon : "error",
-                title : "그룹 삭제",
-                text : groupDeleteResult.message
-            })
-        }// eslint-disable-next-line
-    }, [groupDeleteResult]);
+    // useEffect(() => {
+
+    //     if(groupDeleteResult.status === 200) {
+
+    //         getGroups();
+    //     } else if(groupDeleteResult.status === 400) {
+    //         Swal.fire({
+    //             icon : "error",
+    //             title : "그룹 삭제",
+    //             text : groupDeleteResult.message
+    //         })
+    //     }// eslint-disable-next-line
+    // }, [groupDeleteResult]);
 
     const getGroups = () => {
 
@@ -187,6 +201,40 @@ function AddBookSidebar() {
         })
     }
 
+    const onClickGroupUpdate = (e) => {
+
+        const input = document.querySelector(`#groupUpdateInput${e.target.value}`);
+        const nameSpan = document.querySelector(`#groupNameSpan${e.target.value}`);
+
+        if(input.style.display !== 'block') {
+
+            input.style.display = 'block';
+            nameSpan.style.display = 'none';
+        } else {
+
+            Swal.fire({
+                icon : "warning",
+                title : "그룹명 수정",
+                text : "수정하시겠습니까?",
+                showCancelButton : true,
+                cancelButtonText : "취소",
+                confirmButtonText : "확인"  
+            }).then(result => {
+                if(result.isConfirmed) {
+                    dispatch(callGroupUpdateAPI({
+                        groupCode : e.target.value,
+                        groupName : input.value
+                    }));
+                } else {
+                    Swal.fire('취소되었습니다.');
+                }
+            })
+
+            input.style.display = 'none';
+            nameSpan.style.display = 'block';
+        }
+    }
+
     return (
         <>
             {addBookModal? <AddBookFormModal setAddBookModal={setAddBookModal}/>:null}
@@ -212,10 +260,18 @@ function AddBookSidebar() {
                                         to={`/address-book/team-groups/${group.groupCode}`} 
                                         key={group.groupCode}
                                         >
-                                        {/* <input type="text" name="groupName" value={group.groupName}/> */}
-                                        {group.groupName}
+                                        <input 
+                                            className={SidebarCSS.groupUpdateInput}
+                                            id={`groupUpdateInput${group.groupCode}`}
+                                            type="text" 
+                                            name="groupName"/>
+                                        <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
                                         <div style={tManageIsOn? manageStyle:null}>
-                                            <button>수정</button>
+                                            <button
+                                                value={group.groupCode}
+                                                onClick={(e) => {e.preventDefault(); onClickGroupUpdate(e);}}
+                                                >수정
+                                            </button>
                                             <button 
                                                 value={group.groupCode} 
                                                 onClick={(e) => {e.preventDefault(); onClickGroupDelete(e);}}
@@ -225,7 +281,12 @@ function AddBookSidebar() {
                                     </NavLink>
                                 ))
                             }
-                            {tIsVisible && <input type="text" name="team" value={newTGroupName} onChange={onChangeHandler}/>}
+                            {tIsVisible && <input
+                                                className={SidebarCSS.groupInsertInput} 
+                                                type="text" 
+                                                name="team" 
+                                                value={newTGroupName} 
+                                                onChange={onChangeHandler}/>}
                             {teamGroupList.length <= 4 && <p onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
                             <p id="tGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
@@ -245,9 +306,19 @@ function AddBookSidebar() {
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
                                         to={`/address-book/personal-groups/${group.groupCode}`} 
                                         key={group.groupCode}
-                                        >{group.groupName}
+                                        >
+                                        <input 
+                                            className={SidebarCSS.groupUpdateInput}
+                                            id={`groupUpdateInput${group.groupCode}`}
+                                            type="text" 
+                                            name="groupName"/>
+                                        <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
                                         <div style={pManageIsOn? manageStyle:null}>
-                                            <button>수정</button>
+                                            <button
+                                                value={group.groupCode}
+                                                onClick={(e) => {e.preventDefault(); onClickGroupUpdate(e);}}
+                                                >수정
+                                            </button>
                                             <button 
                                                 value={group.groupCode} 
                                                 onClick={(e) => {e.preventDefault(); onClickGroupDelete(e);}}

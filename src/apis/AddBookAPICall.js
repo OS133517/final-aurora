@@ -9,7 +9,8 @@ import {
     GET_MEMBER_SEARCH,
     GET_GROUP_SEARCH,
     POST_MEMBER_TO_GROUP,
-    DELETE_GROUP
+    DELETE_GROUP,
+    PUT_GROUP
 } from "../modules/AddBookModule";
 
 export const callAllMemberAddressesAPI = ({currentPage}) => {
@@ -291,6 +292,31 @@ export const callGroupDeleteAPI = ({groupCode}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callGroupDeleteAPI RESULT', result);
             dispatch({type : DELETE_GROUP, payload : result});
+        }
+    }
+}
+
+export const callGroupUpdateAPI = ({groupCode, groupName}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/group`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "PUT",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            },
+            body : JSON.stringify({
+                groupCode : groupCode,
+                groupName : groupName
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callGroupUpdateAPI RESULT', result);
+            dispatch({type : PUT_GROUP, payload : result});
         }
     }
 }
