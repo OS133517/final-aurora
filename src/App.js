@@ -3,6 +3,7 @@ import Layout from "./layouts/Layout";
 import AddBookLayout from "./layouts/AddBookLayout";
 import Main from "./pages/Main";
 import Addresses from "./pages/addBook/Addresses";
+import WorklogLayout from "./layouts/WorklogLayout";
 
 function App() {
   return (
@@ -14,6 +15,12 @@ function App() {
           <Route index path="addresses" element={<Addresses category='전체 주소록'/>}/>
           <Route index path="personal-groups/:groupCode" element={<Addresses category='개인 주소록'/>}/>
           <Route index path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
+        </Route>
+
+        <Route path="worklog" element={<WorklogLayout/>}>
+          {/* <Route index path="worklog/day" element={<DayWorklog/>}/>
+          <Route index path="worklog/week" element={<WeekWorklog/>}/> */}
+
         </Route>
       </Route>
     </Routes>
