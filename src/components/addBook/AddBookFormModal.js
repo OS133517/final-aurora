@@ -87,7 +87,7 @@ function AddBookFormModal({setAddBookModal}) {
         <div className={AddBookModalCSS.modalBackground} onClick={onClickModalOff}>
             <div className={AddBookModalCSS.modalContainer}>
                 <div className={AddBookModalCSS.header}>
-                    연락처 추가
+                    주소록 추가
                 </div>
                 <div className={AddBookModalCSS.modalDiv}>
                     <table>

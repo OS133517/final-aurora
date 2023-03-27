@@ -9,6 +9,7 @@ import { callAllMemberAddressesAPI,
             callMemberToGroupsAPI } from "../../apis/AddBookAPICall";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import AddBookUpdateModal from "../../components/addBook/AddBookUpdateModal";
 
 function Addresses({category = "전체 주소록"}) {
 
@@ -31,6 +32,7 @@ function Addresses({category = "전체 주소록"}) {
         searchValue : ""
     });
     const [isSearching, setIsSearching] = useState(false);
+    const [updateModalIsOn, setUpdateModalIsOn] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
     if(pageInfo) {
@@ -257,13 +259,16 @@ function Addresses({category = "전체 주소록"}) {
         const insertList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
         const groupList = personalGroupList.concat(teamGroupList);
         const map = groupList.reduce((acc, cur) => {
+            
             acc[cur.groupCode] = cur.groupName;
             return acc;
         }, {});
         let temp;
 
         if(insertList.length === 0) {
+
             Swal.fire({
+
                 icon : 'warning',
                 text : '선택된 사원 주소록이 없습니다.'
             });
@@ -272,6 +277,7 @@ function Addresses({category = "전체 주소록"}) {
         }
 
         Swal.fire({
+
             icon : 'question',
             title : `${insertList.length} 개의 주소록이 추가됩니다.`,
             text : '추가할 그룹을 선택하세요.',
@@ -286,18 +292,31 @@ function Addresses({category = "전체 주소록"}) {
             cancelButtonText: '취소' 
         }).then((result) => {
             if(result.isConfirmed) {
+
                 temp = result.value;
                 dispatch(callMemberToGroupsAPI({
                     'groupCode' : temp,
                     memberCodes : insertList
                 }))
             } else {
+                
                 Swal.fire('취소되었습니다.');
             }
         })
     }
 
+    const onClickUpdateModalOn = () => {
+
+        const checkList = document.querySelectorAll(`input[type=checkBox]`);
+        const updateList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
+
+        setUpdateModalIsOn(!updateModalIsOn);
+        // const updateList = 
+    }
+
     return (
+        <>
+        {updateModalIsOn? <AddBookUpdateModal setUpdateModalIsOn={setUpdateModalIsOn}/> : null}
         <div className={AddressesCSS.addressesDiv}>
             <div className={AddressesCSS.addressesHeader}>
                 {category}
@@ -314,7 +333,7 @@ function Addresses({category = "전체 주소록"}) {
                 <div className={AddressesCSS.imgDiv}>
                     <img src={process.env.PUBLIC_URL + "/sendMail.png"} alt="메일 발송"/>
                     {category === "전체 주소록" && <img onClick={onClickMembersToGroups} src={process.env.PUBLIC_URL + "/insert.png"} alt="추가"/>}
-                    {category !== "전체 주소록" && <img src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>}
+                    {category !== "전체 주소록" && <img onClick={onClickUpdateModalOn} src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>}
                     {category !== "전체 주소록" && <img onClick={onClickDelete} src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>}
                 </div>
             </div>
@@ -414,6 +433,7 @@ function Addresses({category = "전체 주소록"}) {
                 }
             </div>
         </div>
+        </>
     );
 }
 

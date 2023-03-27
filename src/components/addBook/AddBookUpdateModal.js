@@ -4,7 +4,7 @@ import AddBookModalCSS from "./AddBookFormModal.module.css";
 import { callAddBookRegistAPI } from "../../apis/AddBookAPICall";
 import Swal from "sweetalert2";
 
-function AddBookUpdateModal({setAddBookModal}) {
+function AddBookUpdateModal({setUpdateModalIsOn}) {
 
     const dispatch = useDispatch();
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
@@ -24,7 +24,7 @@ function AddBookUpdateModal({setAddBookModal}) {
     const onClickModalOff = (e) => {
 
         if(e.target.className.includes("modalBackground")) {
-            setAddBookModal(false);
+            setUpdateModalIsOn(false);
         }
     }
 
@@ -41,7 +41,7 @@ function AddBookUpdateModal({setAddBookModal}) {
         <div className={AddBookModalCSS.modalBackground} onClick={onClickModalOff}>
             <div className={AddBookModalCSS.modalContainer}>
                 <div className={AddBookModalCSS.header}>
-                    연락처 수정
+                    주소록 수정
                 </div>
                 <div className={AddBookModalCSS.modalDiv}>
                     <table>
@@ -116,8 +116,8 @@ function AddBookUpdateModal({setAddBookModal}) {
                     </table>
                 </div>
                 <div className={AddBookModalCSS.buttonDiv}>
-                    <button onClick={() => setAddBookModal(false)}>나가기</button>
-                    <button onClick={onClickAddBookRegist}>추가하기</button>
+                    <button onClick={() => setUpdateModalIsOn(false)}>나가기</button>
+                    <button onClick={""}>추가하기</button>
                 </div>
             </div>
         </div>

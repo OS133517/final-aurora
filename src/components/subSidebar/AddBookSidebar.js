@@ -212,6 +212,11 @@ function AddBookSidebar() {
             nameSpan.style.display = 'none';
         } else {
 
+            if(input.value.trim().length === 0) {
+                Swal.fire('그룹명을 입력하세요.');
+                return;
+            }
+
             Swal.fire({
                 icon : "warning",
                 title : "그룹명 수정",

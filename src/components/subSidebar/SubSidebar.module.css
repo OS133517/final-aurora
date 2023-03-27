@@ -80,10 +80,10 @@
 .dropDownMenus p {
     display: inline-block;
     line-height: 40px;
-    width: 100%;
+    width: 40%;
     margin: 0;
     cursor: pointer;
-    padding-left: 50px;
+    padding-left: 10%;
 }
 
 .dropDownMenus a {
