@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import AddBookModalCSS from "./AddBookFormModal.module.css";
 import { callAddBookRegistAPI } from "../../apis/AddBookAPICall";
 import Swal from "sweetalert2";
+import { type } from "@testing-library/user-event/dist/type";
 
 function AddBookFormModal({setAddBookModal}) {
 
@@ -64,20 +65,49 @@ function AddBookFormModal({setAddBookModal}) {
         })
     }
 
+    function validateInput(form) {
+
+        let result = '';
+
+        if(!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email)) {
+            result = '이메일 형식이 틀렸습니다.';
+        }
+
+        Object.entries(form).forEach(([key, value]) => {
+
+            if(key !== 'jobName' && key !== 'department') {
+
+                if(value.trim().length === 0) {
+
+                    result = key;
+                } 
+            }
+        });
+
+        switch(result) {
+            case 'name' : return '이름을 입력하세요.';
+            case 'phone' : return '번호를 입력하세요.';
+            case 'email' : return '이메일을 입력하세요.';
+            case 'groupCode' : return '그룹을 선택하세요.';
+            case 'company' : return '회사를 입력하세요.';
+            default : return result;
+        }
+    }
+    
     const onClickAddBookRegist = () => {
 
-        if(form.groupCode.trim().length === 0) {
+        const result = validateInput(form);
+
+        if(result.trim().length !== 0 || result === '이메일 형식이 틀렸습니다.') {
 
             Swal.fire({
                 icon : 'warning',
-                title : '주소록 추가',
-                text : '그룹을 선택하세요.',
-                confirmButtonText: '확인'
+                text : result
             })
+
             return;
         } 
 
-        // TODO - null 체크, 정규식으로 입력값 체크
         dispatch(callAddBookRegistAPI({
             form : form
         }));
@@ -98,6 +128,7 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="name" 
                                         id="name" 
+                                        value={form.name}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -106,6 +137,7 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="phone" 
                                         id="phone" 
+                                        value={form.phone}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -114,6 +146,7 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="email" 
                                         name="email" 
                                         id="email" 
+                                        value={form.email}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -122,6 +155,7 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="company" 
                                         id="company" 
+                                        value={form.company}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -130,6 +164,7 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="department" 
                                         id="department"
+                                        value={form.department}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -138,12 +173,13 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="jobName" 
                                         id="jobName" 
+                                        value={form.jobName}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
                                 <td>그룹</td>
                                 <td>
-                                    <select name="groupCode" onChange={onChangeHandler}>
+                                    <select name="groupCode" onChange={onChangeHandler} value={form.groupCode}>
                                         <option value="requireSelect">그룹 선택</option>
                                     {
                                         Array.isArray(teamGroupList) && teamGroupList.map(group => (

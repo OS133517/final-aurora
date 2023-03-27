@@ -271,6 +271,16 @@ function Addresses({category = "전체 주소록"}) {
         const checkList = document.querySelectorAll(`input[type=checkBox]`);
         const deleteList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
 
+        if(deleteList.length === 0) {
+
+            Swal.fire({
+                icon : 'warning',
+                text : '선택된 주소록이 없습니다.'
+            });
+
+            return;
+        }
+
         Swal.fire({
             icon : "warning",
             title : `${deleteList.length} 개의 주소록이 삭제됩니다.`,
