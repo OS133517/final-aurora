@@ -22,6 +22,7 @@ function App() {
         <Route path="approval" element={<ApprovalLayout/>}>
           <Route index="approvals" element={<Approvals/>}/>
           <Route index path="pending" element={<Pending/>}/>
+          {/* <Route index path="completed" element={<ApprovalForm/>}/> */}
         </Route>
       </Route>
     </Routes>

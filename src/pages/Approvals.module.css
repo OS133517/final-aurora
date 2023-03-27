@@ -2,3 +2,16 @@
     display: inline-block;
 
 }
+
+.approvalTable {
+    width: 100vh;
+
+}
+
+.approvalTable > thead {
+    border: 1px solid moccasin;
+}
+
+.approvalTable > tbody {
+    border: 1px solid royalblue;
+}

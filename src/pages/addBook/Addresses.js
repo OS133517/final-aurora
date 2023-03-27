@@ -91,7 +91,7 @@ function Addresses({category = "전체 주소록"}) {
         const checkList = document.querySelectorAll(`input[type=checkBox]`);
 
         if(e.target.id === 'all' && e.target.checked === false) {
-
+            // eslint-disable-next-line
             [...checkList].map(check => {
                 document.querySelector(`checkBox${check.id}`).checked = true;
             });
