@@ -5,6 +5,7 @@ import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI, callGroupDe
 import { NavLink } from "react-router-dom";
 import AddBookFormModal from "../addBook/AddBookFormModal";
 import Swal from "sweetalert2";
+import { decodeJwt } from "../../utils/tokenUtils";
 
 function AddBookSidebar() {
     
@@ -29,6 +30,7 @@ function AddBookSidebar() {
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
     const groupResultMessage = useSelector(state => state.addBookReducer.groupMessage);
+    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -62,13 +64,11 @@ function AddBookSidebar() {
     const getGroups = () => {
 
         dispatch(callTeamGroupAPI({
-            // TODO -> 나중에 토큰에서 꺼내는 걸로
-            memberCode : 2
+            memberCode : loginMember.memberCode
         }));
         
         dispatch(callPersonalGroupAPI({
-            // TODO -> 나중에 토큰에서 꺼내는 걸로
-            memberCode : 2
+            memberCode : loginMember.memberCode
         }));
     }
 
@@ -98,8 +98,7 @@ function AddBookSidebar() {
                 if(tIsVisible && newTGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newTGroupName,
-                        // TODO -> 나중에 토큰에서 꺼내는 걸로
-                        team : '개발4팀'
+                        team : loginMember.team
                     }));
                 }
                 setTIsVisible(!tIsVisible);
@@ -109,8 +108,7 @@ function AddBookSidebar() {
                 if(pIsVisible && newPGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newPGroupName,
-                        // TODO -> 나중에 토큰에서 꺼내는 걸로
-                        memberCode : 2
+                        memberCode : loginMember.memberCode
                     }));
                 }
                 setPIsVisible(!pIsVisible);

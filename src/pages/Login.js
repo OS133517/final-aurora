@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Header from "../components/common/Header";
 import LoginCSS from "./Login.module.css";
 import { callLoginAPI } from "../apis/MemberAPICall";
-import { decodeJwt } from "../utils/tokenUtils";
 import Swal from "sweetalert2";
 
 function Login() {
@@ -78,8 +77,6 @@ function Login() {
                         onChange={onChangeHandler}/>
                     <br/>
                     <button onClick={onClickHandler}>로그인</button>
-                    <br/>
-                    <Link to="/signup">회원가입</Link>
                 </div>
             </div>
         </>
