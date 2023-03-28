@@ -30,3 +30,12 @@ export const  callLoginAPI = ({form}) => {
         dispatch({type : POST_LOGIN, payload : result});
     }
 }
+
+export const callLogoutAPI = () => {
+
+    return async (dispatch, getState) => {
+
+        dispatch({type : POST_LOGIN, payload : ''});// 이렇게 로컬스토리지에서 토큰 지우고 아무것도 없는 걸로 로그인하는 식으로 로그아웃하는구나
+        console.log('[MemberAPICalls] callLogoutAPI RESULT : SUCCESS');
+    }
+}
