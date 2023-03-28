@@ -1,0 +1,13 @@
+.link {
+    cursor: pointer;
+    width: 450px;
+}
+
+.approvalList{
+    padding-top: 22px;
+    padding-bottom: 22px;
+    padding-left: 15px;
+    border-bottom: 1px solid #c1c1c1;
+    width: 200px;
+}
+

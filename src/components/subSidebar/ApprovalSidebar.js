@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { callGetApprovalsAPI } from "../../apis/ApprovalAPICalls";
 import SidebarCSS from "./SubSidebar.module.css";
 
 function ApprovalSidebar() {
+    //eslint-disable-next-line
+    const dispatch = useDispatch;
+    const list = useSelector(state => state.approvalReducer)
     const [open, setOpen] = useState('false');
 
+    useEffect(() => {
+        callGetApprovalsAPI(1);
+    // eslint-disable-next-line
+    },[])
     return(
         <div className={SidebarCSS.sidebarDiv}>
             <div className={SidebarCSS.sideHeader}>
@@ -14,7 +23,7 @@ function ApprovalSidebar() {
                 <button className={SidebarCSS.buttons}>서류 작성</button>
                 <div className={SidebarCSS.checked}>
                     <div className={SidebarCSS.count}>
-                        <h1>0</h1>
+                        <h1>{list.length}</h1>
                         <label>결재 대기</label>
                     </div>
                     <div className={SidebarCSS.count}>
@@ -34,14 +43,15 @@ function ApprovalSidebar() {
                         <>
                             <ul className={SidebarCSS.approvalList}>
                                 <li>
-                                    <NavLink to="/approval/pending">미결재</NavLink>
+                                    <NavLink to="/approval/pending" className={SidebarCSS.approvalItem}>미결재</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink>결재완료</NavLink>
+                                    <NavLink className={SidebarCSS.approvalItem}>결재완료</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink className={SidebarCSS.approvalItem}>요청대기</NavLink>
                                 </li>
                             </ul>
-                            
-                            
                         </>     
                     )}
                 </div>

@@ -1,0 +1,77 @@
+.mainList {
+    display: inline-block;
+    width: 82%;
+    
+}
+
+.approvalTable {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.theadStyle {
+    background-color: #F1F2F3;
+    font-size: 16px;
+    height: 5vh;
+
+}
+
+.subtitle{
+    padding-left: 10px;
+    border-bottom: 1px solid #c1c1c1;
+    height: 39px;
+    color: #88cfba;
+}
+
+.title {
+    padding-left: 15px;
+}
+
+.detailtable {
+    width: 100vh;
+    height: 100vh;
+    /* border : 1px solid #c1c1c1; */
+    background-color: white;
+    border-collapse: collapse;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    display: inline-block;
+}
+
+.detaildocName {
+    text-align: center;
+    width: 100vh;
+}
+
+.detailTitle{
+    width: 20px;
+    height: 50px;
+    text-align: center;
+    background-color: #e4e4e4;
+    border: 1px solid #c1c1c1;
+}
+
+.description {
+    width: 80%;
+    border: 1px solid #c1c1c1;
+}
+
+.detailDescript {
+    height: 618px;
+    padding: 5px;
+    border: 1px solid #c1c1c1;
+    vertical-align: top;
+}
+
+.approvalLineBox {
+    border: 2px solid salmon;
+    width: 40vh;
+    height: 100vh;
+    display: inline-block;
+}
+
+.detailBox {
+    display: flex;
+}
