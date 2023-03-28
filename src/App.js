@@ -5,6 +5,7 @@ import ReservationLayout from "./layouts/ReservationLayout";
 import Login from "./pages/Login";
 import Addresses from "./pages/addBook/Addresses";
 import Main from "./pages/Main";
+import MyReservation from "./pages/reservation/MyReservation";
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
             <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
           </Route>
           <Route path="reservation" element={<ReservationLayout/>}>
-            {/* <Route index ele */}
+            <Route index element={<MyReservation/>}/>
+            <Route path="my-reservation" element={<MyReservation/>}/>
           </Route>
         </Route>
       </Route>
