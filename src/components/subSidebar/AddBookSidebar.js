@@ -232,7 +232,7 @@ function AddBookSidebar() {
                                 Array.isArray(teamGroupList) && teamGroupList.map(group => (
                                     <NavLink 
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                        to={`/address-book/team-groups/${group.groupCode}`} 
+                                        to={`/aurora/address-book/team-groups/${group.groupCode}`} 
                                         key={group.groupCode}
                                         >
                                         <input 
@@ -279,7 +279,7 @@ function AddBookSidebar() {
                                 Array.isArray(personalGroupList) && personalGroupList.map(group => (
                                     <NavLink 
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                        to={`/address-book/personal-groups/${group.groupCode}`} 
+                                        to={`/aurora/address-book/personal-groups/${group.groupCode}`} 
                                         key={group.groupCode}
                                         >
                                         <input 
@@ -319,7 +319,7 @@ function AddBookSidebar() {
                         <div className={SidebarCSS.dropDownMenus}>
                             <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                to={"/address-book/addresses"}
+                                to={"/aurora/address-book/addresses"}
                                 >전체 주소록</NavLink>
                             {/* <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
