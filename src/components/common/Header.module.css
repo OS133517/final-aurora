@@ -5,11 +5,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 12px;
 }
 
 .logout {
     width: 32px;
     height: 32px;
     cursor: pointer;
+    margin-top: 12px;
 }
 
