@@ -33,7 +33,8 @@ export const callAllMemberAddressesAPI = ({currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -55,7 +56,8 @@ export const callPersonalGroupAPI = ({memberCode}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -77,7 +79,8 @@ export const callTeamGroupAPI = ({memberCode}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -105,7 +108,8 @@ export const callGroupAddressAPI = ({groupCode, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -127,7 +131,8 @@ export const callGroupRegistAPI = ({groupName, memberCode, team}) => {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 groupName : groupName,
@@ -153,7 +158,8 @@ export const callAddBookRegistAPI = ({form}) => {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 name : form.name,
@@ -183,7 +189,8 @@ export const callAddBookDeleteAPI = ({addBookNos}) => {
             method : "DELETE",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 addBookNos : addBookNos
@@ -213,7 +220,8 @@ export const callMemberSearchAPI = ({searchForm, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         }).then(response => response.json());
 
@@ -240,7 +248,8 @@ export const callAddBookSearchAPI = ({searchForm, currentPage, groupCode}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         }).then(response => response.json());
 
@@ -262,7 +271,8 @@ export const callMemberToGroupsAPI = ({memberCodes, groupCode}) => {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 memberCodes : memberCodes,
@@ -287,7 +297,8 @@ export const callGroupDeleteAPI = ({groupCode}) => {
             method : "DELETE",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         }).then(response => response.json());
 
@@ -308,7 +319,8 @@ export const callGroupUpdateAPI = ({groupCode, groupName}) => {
             method : "PUT",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 groupCode : groupCode,
@@ -333,7 +345,8 @@ export const callAddBookForUpdateAPI = ({addBookNo}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         }).then(response => response.json());
 
@@ -354,7 +367,8 @@ export const callAddBookUpdateAPI = ({addBookNos, form}) => {
             method : "PUT",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 name : form.name||'',
