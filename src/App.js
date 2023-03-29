@@ -23,7 +23,7 @@ function App() {
         <Route path="approval" element={<ApprovalLayout/>}>
           <Route index="approvals" element={<Approvals/>}/>
           <Route index path="pending" element={<Pending/>}/>
-          <Route index path="detail" element={<ApprovalDetail/>}/>
+          <Route index path="detail/:appCode" element={<ApprovalDetail/>}/>
         </Route>
       </Route>
     </Routes>

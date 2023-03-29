@@ -6,7 +6,7 @@ function ApprovalForm({approve : {appCode,documentDTO, appTitle, appEndDate}}) {
     const navigate = useNavigate();
 
     const onClickModal = () => {
-        navigate('/approval/detail', {state: {appCode, documentDTO}});
+        navigate(`/approval/detail/${appCode}`, {state: {documentDTO}});
     }
     return(
         <>

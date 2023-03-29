@@ -46,7 +46,7 @@ export const callApprovalDetailAPI = ({appCode}) => {
       
             console.log("[callApprovalDetailAPI] RESULT :", result);
       
-            dispatch({ type: GET_APPROVALS, payload: result.data });
+            dispatch({ type: GET_DETAIL, payload: result.data });
           } catch (error) {
             console.error("Error occurred in callApprovalDetailAPI:", error);
           };

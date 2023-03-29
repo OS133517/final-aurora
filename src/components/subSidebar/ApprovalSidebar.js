@@ -7,7 +7,7 @@ import SidebarCSS from "./SubSidebar.module.css";
 function ApprovalSidebar() {
     //eslint-disable-next-line
     const dispatch = useDispatch;
-    const list = useSelector(state => state.approvalReducer)
+    const list = useSelector(state => state.approvalReducer.approvalInfo)
     const [open, setOpen] = useState('false');
 
     useEffect(() => {
@@ -22,6 +22,7 @@ function ApprovalSidebar() {
             <div >
                 <button className={SidebarCSS.buttons}>서류 작성</button>
                 <div className={SidebarCSS.checked}>
+                    {/* 새로운 컴포넌트로 해서 바꿔야할듯? */}
                     <div className={SidebarCSS.count}>
                         <h1>{list.length}</h1>
                         <label>결재 대기</label>
@@ -37,7 +38,7 @@ function ApprovalSidebar() {
                             className={SidebarCSS.dropDownArrow} 
                             style={open? {transform:`rotate(90deg)`}:{}} 
                             src={process.env.PUBLIC_URL + "arrow.png"} 
-                            alt="화살표"/>공용 주소록
+                            alt="화살표"/>결재함
                     </button>
                     {open && (
                         <>

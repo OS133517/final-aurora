@@ -7,7 +7,7 @@ import ApprovalForm from "../../components/form/approval/ApprovalForm";
 function Approvals() {
 
     const dispatch = useDispatch();
-    const lastList = useSelector(state => state.approvalReducer);
+    const lastList = useSelector(state => state.approvalReducer.approvalInfo);
     // 로그인 기능 구현 되면 사용
     // const token = decodeJwt(window.localStorage.getItem('accessToken'));
     useEffect(() => {
