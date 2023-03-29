@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Addresses from "./pages/addBook/Addresses";
 import Main from "./pages/Main";
 import MyReservation from "./pages/reservation/MyReservation";
+import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 
 function App() {
   return (
@@ -22,8 +23,9 @@ function App() {
             <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
           </Route>
           <Route path="reservation" element={<ReservationLayout/>}>
-            <Route index element={<MyReservation/>}/>
+            {/* <Route index element={<MyReservation/>}/> */}
             <Route path="my-reservation" element={<MyReservation/>}/>
+            <Route path="assets/:asserCode" element={<ReservationCalendar/>}/>
           </Route>
         </Route>
       </Route>
