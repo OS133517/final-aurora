@@ -11,8 +11,10 @@ function MyReservation() {
     const dispatch = useDispatch();
 
     const myReservation = useSelector(state => state.reservationReducer.reservations);
+    const reservationUpdateResult = useSelector(state => state.reservationReducer?.reservationMessage);
     const reservationList = myReservation?.data;
     const pageInfo = myReservation?.pageInfo;
+  
     const isLogin = decodeJwt(window.localStorage.getItem("accessToken"));
     
     const [reservationModal, setReservationModal] = useState(false);
@@ -27,9 +29,30 @@ function MyReservation() {
 
     useEffect(() => {
 
+        if(reservationUpdateResult.status === 200) {
+            Swal.fire({
+                icon : 'success',
+                text : reservationUpdateResult.message,
+                confirmButtonText : '확인'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        } else if (reservationUpdateResult.status === 400) {
+            Swal.fire({
+                icon : 'error',
+                text : reservationUpdateResult.message,
+                confirmButtonText : '확인'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        }
+    }, [reservationUpdateResult])
+    
+    useEffect(() => {
+
         getData();
     // eslint-disable-next-line
-    }, [currentPage])
+    }, [currentPage]);
 
     const getData = () => {
 
@@ -87,6 +110,39 @@ function MyReservation() {
         setReservationModal(!reservationModal);
     }
 
+    const onClickReservationDelete = () => {
+
+        const checkList = document.querySelectorAll(`input[type=checkBox]`);
+        const deleteList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
+
+        if(deleteList.length === 0) {
+
+            Swal.fire({
+                icon : 'warning',
+                text : '선택된 예약이 없습니다.'
+            });
+
+            return;
+        }
+
+        Swal.fire({
+            icon : "warning",
+            title : `${deleteList.length} 개의 예약이 삭제됩니다.`,
+            text : "정말 삭제하시겠습니까?",
+            showCancelButton : true,
+            cancelButtonText : '취소',
+            confirmButtonText : '확인',
+        }).then((result) => {
+            if(result.isConfirmed) {
+                dispatch(callReservationDeleteAPI({
+                    reservationNos : deleteList
+                }));
+            } else {
+                Swal.fire('취소되었습니다.');
+            }
+        })
+    }
+
     return (
         <>
             {reservationModal? <ReservationModal reservationNo={selectedNo} setReservationModal={setReservationModal}/>:null}
@@ -95,7 +151,7 @@ function MyReservation() {
                     <span>내 예약</span>
                     <div className={MyReservationCSS.imgDiv}>
                         <img onClick={onClickReservationUpdate} src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>
-                        <img src={process.env.PUBLIC_URL + "/reservationDelete.png"} alt="삭제"/>
+                        <img onClick={onClickReservationDelete} src={process.env.PUBLIC_URL + "/reservationDelete.png"} alt="삭제"/>
                     </div>
                 </div>
                 <table className={MyReservationCSS.contentTable}>
