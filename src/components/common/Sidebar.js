@@ -7,7 +7,7 @@ function Sidebar() {
     
     const activeStyle = { borderLeft : "7px solid orange"};
     const sidebarMenus = ["home", "mail", "address-book", "board", "calendar", "toDo", "worklog", "innOut", "approval", 
-                            "hrm", "report"];
+                            "hrm", "report", "reservation"];
 
     return (
         <div className={SidebarCSS.sidebarDiv}>
@@ -15,7 +15,7 @@ function Sidebar() {
             {sidebarMenus.map((menu) => (
                 <NavLink 
                     key={menu}
-                    to = { `/${menu}` }
+                    to = { `/aurora/${menu}` }
                     style = { ({ isActive }) => isActive? activeStyle : undefined }
                     ><img src={ process.env.PUBLIC_URL + "/" + menu + ".png" } alt={ menu }/></NavLink>
             ))}
