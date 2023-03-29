@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import AddBookModalCSS from "./AddBookFormModal.module.css";
 import { callAddBookRegistAPI } from "../../apis/AddBookAPICall";
 import Swal from "sweetalert2";
-import { type } from "@testing-library/user-event/dist/type";
 
 function AddBookFormModal({setAddBookModal}) {
 

@@ -13,7 +13,7 @@ function Sidebar() {
             {sidebarMenus.map((menu) => (
                 <NavLink 
                     key={menu}
-                    to = { `/${menu}` }
+                    to = { `/aurora/${menu}` }
                     style = { ({ isActive }) => isActive? activeStyle : undefined }
                     ><img src={ process.env.PUBLIC_URL + "/" + menu + ".png" } alt={ menu }/></NavLink>
             ))}

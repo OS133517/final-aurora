@@ -357,13 +357,13 @@ export const callAddBookUpdateAPI = ({addBookNos, form}) => {
                 "Accept" : "*/*"
             },
             body : JSON.stringify({
-                name : form?.name,
-                phone : form?.phone,
-                company : form?.company,
-                department : form?.department,
-                jobName : form?.jobName,
-                groupCode : form?.groupCode,
-                email : form?.email
+                name : form.name||'',
+                phone : form.phone||'',
+                company : form.company||'',
+                department : form.department||'',
+                jobName : form.jobName||'',
+                groupCode : form.groupCode||'',
+                email : form.email||''
             })
         }).then(response => response.json());
 
