@@ -134,9 +134,9 @@ function MyReservation() {
             confirmButtonText : '확인',
         }).then((result) => {
             if(result.isConfirmed) {
-                dispatch(callReservationDeleteAPI({
-                    reservationNos : deleteList
-                }));
+                // dispatch(callReservationDeleteAPI({
+                //     reservationNos : deleteList
+                // }));
             } else {
                 Swal.fire('취소되었습니다.');
             }
