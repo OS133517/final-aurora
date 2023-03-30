@@ -1,9 +1,9 @@
 import { Outlet, useParams } from "react-router-dom";
-import ReservationCalendar from "../pages/reservation/ReservationCalendar";
+import ReservationCalendar from "./ReservationCalendar";
 
 function ReservationCalendarLayout() {
 
-    const {assetCode} = useParams();
+   
 
     return (
         <>

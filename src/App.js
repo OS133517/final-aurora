@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import Addresses from "./pages/addBook/Addresses";
 import Main from "./pages/Main";
 import MyReservation from "./pages/reservation/MyReservation";
-import ReservationCalendarLayout from "./layouts/ReservationCalendarLayout";
+import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import "./App.css";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
             <Route path="reservation" element={<ReservationLayout/>}>
               {/* <Route index element={<MyReservation/>}/> */}
               <Route path="my-reservation" element={<MyReservation/>}/>
-              <Route path="assets/:assetCode" element={<ReservationCalendarLayout/>}/>
+              <Route path="assets/:assetCode" element={<ReservationCalendar/>}/>
             </Route>
           </Route>
         </Route>
