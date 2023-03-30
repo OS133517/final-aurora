@@ -2,7 +2,8 @@ import { GET_ASSET_CATEGORY,
          GET_ASSETS,
          GET_MY_RESERVATION,
          GET_RESERVATION,
-         PUT_RESERVATION } from "../modules/ReservationModule";
+         PUT_RESERVATION,
+         DELETE_RESERVATION } from "../modules/ReservationModule";
 
 export const callAssetCategoryAPI = () => {
 
@@ -99,7 +100,7 @@ export const callReservationAPI = ({reservationNo}) => {
 }
 
 export const callReservationUpdateAPI = ({form, reservationNo}) => {
-    console.log('시작시간', form.startTime.toLocaleString());
+
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation/${reservationNo}`;
 
     return async (dispatch, getState) => {
@@ -122,6 +123,31 @@ export const callReservationUpdateAPI = ({form, reservationNo}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callReservationUpdateAPI RESULT', result);
             dispatch({type : PUT_RESERVATION, payload : result});
+        }
+    }
+}
+
+export const callReservationDeleteAPI = ({reservationNos}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "DELETE",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                reservationNos : reservationNos
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callReservationDeleteAPI RESULT', result);
+            dispatch({type : DELETE_RESERVATION, payload : result});
         }
     }
 }

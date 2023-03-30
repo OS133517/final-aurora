@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { decodeJwt } from "../../utils/tokenUtils";
 import MyReservationCSS from "../reservation/MyReservation.module.css";
-import { callMyReservationAPI } from "../../apis/ReservationAPICall";
+import { callMyReservationAPI, callReservationDeleteAPI } from "../../apis/ReservationAPICall";
 import ReservationModal from "../../components/reservation/ReservationModal";
 import Swal from "sweetalert2";
 
@@ -11,7 +11,7 @@ function MyReservation() {
     const dispatch = useDispatch();
 
     const myReservation = useSelector(state => state.reservationReducer.reservations);
-    const reservationUpdateResult = useSelector(state => state.reservationReducer?.reservationMessage);
+    const reservationResult = useSelector(state => state.reservationReducer?.reservationMessage);
     const reservationList = myReservation?.data;
     const pageInfo = myReservation?.pageInfo;
   
@@ -29,24 +29,24 @@ function MyReservation() {
 
     useEffect(() => {
 
-        if(reservationUpdateResult.status === 200) {
+        if(reservationResult.status === 200) {
             Swal.fire({
                 icon : 'success',
-                text : reservationUpdateResult.message,
+                text : reservationResult.message,
                 confirmButtonText : '확인'
             }).then(() => {
                 window.location.reload(true); 
             })
-        } else if (reservationUpdateResult.status === 400) {
+        } else if (reservationResult.status === 400) {
             Swal.fire({
                 icon : 'error',
-                text : reservationUpdateResult.message,
+                text : reservationResult.message,
                 confirmButtonText : '확인'
             }).then(() => {
                 window.location.reload(true); 
             })
         }
-    }, [reservationUpdateResult])
+    }, [reservationResult])
     
     useEffect(() => {
 
@@ -134,9 +134,9 @@ function MyReservation() {
             confirmButtonText : '확인',
         }).then((result) => {
             if(result.isConfirmed) {
-                // dispatch(callReservationDeleteAPI({
-                //     reservationNos : deleteList
-                // }));
+                dispatch(callReservationDeleteAPI({
+                    reservationNos : deleteList
+                }));
             } else {
                 Swal.fire('취소되었습니다.');
             }
