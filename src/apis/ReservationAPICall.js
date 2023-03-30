@@ -3,7 +3,8 @@ import { GET_ASSET_CATEGORY,
          GET_MY_RESERVATION,
          GET_RESERVATION,
          PUT_RESERVATION,
-         DELETE_RESERVATION } from "../modules/ReservationModule";
+         DELETE_RESERVATION,
+         GET_RESERVATIONS } from "../modules/ReservationModule";
 
 export const callAssetCategoryAPI = () => {
 
@@ -148,6 +149,28 @@ export const callReservationDeleteAPI = ({reservationNos}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callReservationDeleteAPI RESULT', result);
             dispatch({type : DELETE_RESERVATION, payload : result});
+        }
+    }
+}
+
+export const callReservationsAPI = ({assetCode, startTime, endTime}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservations/${assetCode}?startTime=${startTime}&endTime=${endTime}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callReservationsAPI RESULT', result);
+            dispatch({type : GET_RESERVATIONS, payload : result.data});
         }
     }
 }

@@ -2,7 +2,6 @@
     float: left;
     width: 1514px;
     height: 820px;
-    border-bottom: 1px solid #C1C1C1;
 }
 
 .calendarHeader {
@@ -16,21 +15,53 @@
     padding-left: 20px;
 }
 
-.calendarTable td {
+.monthDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
     border-bottom: 1px solid #C1C1C1;
     border-right: 1px solid #C1C1C1;
-    font-size: 20px;
-}
-
-.calendarTable>thead td {
     height: 38px;
-    padding-left: 20px;
+    width: 98%;
+    line-height: 38px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: #88CFBA;
 }
 
-.calendarTable>thead td:first-child {
+.monthDiv>button {
+    border: none;
+    text-align: center;
+    font-size: 25px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 1px;
+    color: #88CFBA;
+}
+
+.sunToSat>span {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 14%;
+    height: 38px;
+    border-bottom: 1px solid #C1C1C1;
+    border-right: 1px solid #C1C1C1;
+    text-indent: 10px;
+    font-size: 20px;
+    line-height: 38px;
+}
+
+.sunToSat>span:first-child {
     color: red;
 }
 
-.calendarTable>thead td:last-child {
+.sunToSat>span:last-child {
     color: blue;
+}
+
+.daysDiv {
+    display: flex;
+    flex-wrap: wrap;
 }
