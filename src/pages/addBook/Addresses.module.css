@@ -1,6 +1,6 @@
 .addressesDiv {
-    float: left;
-    width: 1514px;
+    /* float: left; */
+    width: 100%;
 }
 
 .addressesHeader {
@@ -11,7 +11,7 @@
     font-weight: bold;
     color: #88CFBA;
     line-height: 58px;
-    padding-left: 20px;
+    text-indent: 20px;
 }
 
 .addressesSearch {
@@ -19,10 +19,11 @@
     height: 58px;
     border-bottom: 1px solid #C1C1C1;
     line-height: 58px;
-    padding-left: 20px;
     display: flex;
     align-items: center;
     position: relative;
+    padding-left: 20px;
+    box-sizing: border-box;
 }
 
 .addressesSearch>select {
@@ -60,7 +61,7 @@
 
 .addressesSearch>div {
     position: absolute;
-    right: 0;
+    right: 10px;
     height: 58px;
     line-height: 58px;
     padding-top: 10px;
@@ -78,7 +79,7 @@
 }
 
 .contentTable {
-    width: 1534px;
+    width: 100%;
     border-bottom: 1px solid #88CFBA;
     border-collapse : collapse
 }

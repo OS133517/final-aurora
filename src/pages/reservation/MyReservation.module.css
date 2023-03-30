@@ -1,6 +1,6 @@
 .myReservationDiv {
-    float: left;
-    width: 1514px;
+    /* float: left; */
+    width: 100%;
 }
 
 .myReservationHeader {
@@ -11,8 +11,8 @@
     font-weight: bold;
     color: #88CFBA;
     line-height: 58px;
-    padding-left: 20px;
     display: flex;
+    text-indent: 20px;
     justify-content: space-between;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .contentTable {
-    width: 1534px;
+    width: 100%;
     border-bottom: 1px solid #88CFBA;
     border-collapse : collapse
 }
