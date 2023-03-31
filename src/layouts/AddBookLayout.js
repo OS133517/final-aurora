@@ -7,7 +7,9 @@ function AddBookLayout() {
     return (
         <div className={AddBookLayoutCSS.addBookLayout}>
             <AddBookSidebar/>
-            <Outlet/>
+            <div className={AddBookLayoutCSS.outletDiv}>
+                <Outlet/>
+            </div>
         </div>
     );
 }
