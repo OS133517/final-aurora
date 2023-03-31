@@ -25,7 +25,7 @@ function App() {
               <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
             </Route>
             <Route path="reservation" element={<ReservationLayout/>}>
-              {/* <Route index element={<MyReservation/>}/> */}
+              <Route index element={<MyReservation/>}/>
               <Route path="my-reservation" element={<MyReservation/>}/>
               <Route path="assets/:assetCode" element={<ReservationCalendar/>}/>
             </Route>

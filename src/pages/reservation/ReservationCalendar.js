@@ -148,7 +148,7 @@ function ReservationCalendar() {
                     </div>
                 </div>
                 <div>
-                    {selectedDate.date !== '' && <ReservationDayDetail selectedDate={selectedDate}/>}
+                    {selectedDate.date !== '' && <ReservationDayDetail assetCode={assetCode} selectedDate={selectedDate}/>}
                 </div>
             </div>
         </>

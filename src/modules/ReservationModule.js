@@ -16,6 +16,7 @@ export const GET_RESERVATION = 'reservation/GET_RESERVATION';
 export const PUT_RESERVATION = 'reservation/PUT_RESERVATION';
 export const DELETE_RESERVATION = 'reservation/DELETE_RESERVATION';
 export const GET_RESERVATIONS = 'reservation/GET_RESERVATIONS';
+export const GET_RESERVATIONS_BY_DATE = 'reservation/GET_RESERVATIONS_BY_DATE';
 
 // eslint-disable-next-line
 const actions = createActions({
@@ -25,7 +26,8 @@ const actions = createActions({
     [GET_RESERVATION] : () => {},
     [PUT_RESERVATION] : () => {},
     [DELETE_RESERVATION] : () => {},
-    [GET_RESERVATIONS] : () => {}
+    [GET_RESERVATIONS] : () => {},
+    [GET_RESERVATIONS_BY_DATE] : () => {}
 });
 
 // 리듀서
@@ -64,7 +66,13 @@ const reservationReducer = handleActions({
         return {
             ...state,
             reservations : payload
-        }}
+        }},
+    [GET_RESERVATIONS_BY_DATE] : (state, { payload }) => {
+        return {
+            ...state,
+            reservations : payload
+        }
+    }
 }, initialState);
 
 export default reservationReducer;

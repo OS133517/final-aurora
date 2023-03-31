@@ -4,7 +4,8 @@ import { GET_ASSET_CATEGORY,
          GET_RESERVATION,
          PUT_RESERVATION,
          DELETE_RESERVATION,
-         GET_RESERVATIONS } from "../modules/ReservationModule";
+         GET_RESERVATIONS,
+         GET_RESERVATIONS_BY_DATE } from "../modules/ReservationModule";
 
 export const callAssetCategoryAPI = () => {
 
@@ -171,6 +172,28 @@ export const callReservationsAPI = ({assetCode, startTime, endTime}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callReservationsAPI RESULT', result);
             dispatch({type : GET_RESERVATIONS, payload : result.data});
+        }
+    }
+}
+
+export const callReservationByDateAPI = ({assetCode, selectedDate}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservations/${assetCode}/date/${selectedDate}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callReservationByDateAPI RESULT', result);
+            dispatch({type : GET_RESERVATIONS_BY_DATE, payload : result.data});
         }
     }
 }
