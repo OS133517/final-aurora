@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import SidebarCSS from "./SubSidebar.module.css";
 
-
 function WorklogSidebar() {
 
     const dispatch = useDispatch();
@@ -11,6 +10,11 @@ function WorklogSidebar() {
     // 드롭다운 메뉴 조정용
     const [firstIsOpen, setFirstIsOpen] = useState(false);
     const [secondIsOpen, setSecondIsOpen] = useState(false);
+
+    const activeStyle = {
+        backgroundColor : "#73b8a3",
+        color : "white"
+    };
 
     const toggleMenu = (menuNum) => {
         switch(menuNum) {
@@ -21,20 +25,16 @@ function WorklogSidebar() {
                 setSecondIsOpen(!secondIsOpen); 
                 break;
             default: break;
-        }
+        };
     }
-
-
 
     return (
         <>
-            {/* {addBookModal? <AddBookFormModal setAddBookModal={setAddBookModal}/>:null} */}
             <div className={SidebarCSS.sidebarDiv}>
                 <div className={SidebarCSS.sideHeader}>
                     <span>업무일지</span>
                 </div>
                 <div>
-             
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(1)}>
                         <img 
                         className={SidebarCSS.dropDownArrow} 
@@ -43,8 +43,16 @@ function WorklogSidebar() {
                         alt="화살표"/>일일 업무일지
                     </button>
                     {firstIsOpen && (
-                        <NavLink to="worklog/day">업무일지 추가</NavLink>
-                        )}
+                        <div className={SidebarCSS.dropDownMenus}>
+                        <NavLink 
+                            style = { ({ isActive }) => isActive? activeStyle : undefined }
+                            to={"/worklog/day"}
+                            >일일 업무일지</NavLink>
+                        <NavLink className={SidebarCSS.buttons}
+                        style={ ({ isActive }) => isActive? activeStyle : undefined }
+                        to={"/worklog/day/insert"}>일일업무 추가</NavLink>
+                        </div>
+                    )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
                         <img 
                         className={SidebarCSS.dropDownArrow} 
@@ -53,7 +61,15 @@ function WorklogSidebar() {
                         alt="화살표"/>주간 업무일지
                     </button>
                     {secondIsOpen && (
-                        <NavLink to="worklog/week" className={SidebarCSS.buttons}>업무일지 추가</NavLink>
+                        <div className={SidebarCSS.dropDownMenus}>
+                        <NavLink 
+                            style = { ({ isActive }) => isActive? activeStyle : undefined }
+                            to={"/address-book/addresses"}
+                            >주간 업무일지</NavLink>
+                        <NavLink className={SidebarCSS.buttons}
+                        style={ ({ isActive }) => isActive? activeStyle : undefined }
+                        to={"/worklog/day"}>주간업무 추가</NavLink>
+                        </div>
                         )}
                 </div>
             </div>
