@@ -1,12 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import { callReservationByDateAPI } from "../../apis/ReservationAPICall";
 import DetailCSS from "./ReservationDayDetail.module.css";
+import ReservationRegistModal from "./ReservationRegistModal";
 
 function ReservationDayDetail({assetCode, selectedDate}) {
 
     const dispatch = useDispatch();
-    const reservationList = useSelector(state => state.reservationReducer.reservations)
+    const reservationList = useSelector(state => state.reservationReducer.reservationsByDate);
+    const [registModal, setRegistModal] = useState(false);
+
 
     useEffect(() => {
 
@@ -15,40 +19,58 @@ function ReservationDayDetail({assetCode, selectedDate}) {
         }
 
         dispatch(callReservationByDateAPI({
-            selectedDate : selectedDate.date,
+            startDateTime : selectedDate.startDateTime,
+            endDateTime : selectedDate.endDateTime,
             assetCode : assetCode
         }));
-    }, [selectedDate])
+    // eslint-disable-next-line
+    }, [selectedDate, assetCode]);
+
+    const onClickRegist = () => {
+
+        if(selectedDate.startDateTime === '') {
+            Swal.fire({
+                icon : 'warning',
+                text : '날짜를 선택하세요.',
+                confirmButtonText : '확인'
+            }).then(() => {
+                return;
+            })
+        }
+
+        setRegistModal(!registModal);
+    }
 
     return (
         <div>
+            {registModal?<ReservationRegistModal setRegistModal={setRegistModal}/>:null}
             <div className={DetailCSS.detailHeader}>
-                <span>{`${selectedDate.date||''}   ${selectedDate.day||''}`}</span>
-                {selectedDate.day !== '토요일' && selectedDate.day !== '일요일' && <button className={DetailCSS.okButton}>예약하기</button>}
+                <span>{`${selectedDate.startDateTime.replace('00:00:00', '')||''}   ${selectedDate.day||''}`}</span>
+                {selectedDate.day !== '토요일' && selectedDate.day !== '일요일' && <button onClick={onClickRegist} className={DetailCSS.okButton}>예약하기</button>}
                 {selectedDate.day === '토요일' && <button className={DetailCSS.noButton}>예약불가</button>}
                 {selectedDate.day === '일요일' && <button className={DetailCSS.noButton}>예약불가</button>}
             </div>
-            <table className={DetailCSS.detailContent}>
-                <thead>
+            <table className={DetailCSS.contentTable}>
+                <thead className={DetailCSS.contentHead}>
                     <tr>
-                        <td>
+                        <th>
                             자산
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             이름
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             내용
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             소속팀
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             시간
-                        </td>
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className={DetailCSS.contentBody}>
                     {Array.isArray(reservationList) && reservationList.length > 0? reservationList.map(
                         item => (
                             <tr key={item.reservationNo}>

@@ -4,12 +4,11 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from "date-fns/locale";
 import { useDispatch, useSelector } from "react-redux";
-import { callReservationAPI, callReservationUpdateAPI } from "../../apis/ReservationAPICall";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import Swal from "sweetalert2";
 
-function ReservationModal({reservationNo, setReservationModal}) {
+function ReservationRegistModal({reservationNo, setRegistModal}) {
 
     const dispatch = useDispatch();
     const reservationDetail = useSelector(state => state.reservationReducer?.reservation);
@@ -27,9 +26,6 @@ function ReservationModal({reservationNo, setReservationModal}) {
 
     useEffect(() => {
 
-        dispatch(callReservationAPI({
-            reservationNo : reservationNo
-        }));
     // eslint-disable-next-line
     }, []);
 
@@ -52,7 +48,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
     const onClickModalOff = (e) => {
 
         if(e.target.className.includes("modalBackground")) {
-            setReservationModal(false);
+            setRegistModal(false);
         }
     }
 
@@ -82,7 +78,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
         }
     }
 
-    const onClickUpdate = () => {
+    const onClickRegist = () => {
 
         if(!isSelect) {
             Swal.fire({
@@ -102,13 +98,13 @@ function ReservationModal({reservationNo, setReservationModal}) {
             });  
         } else {
 
-            dispatch(callReservationUpdateAPI({
-                form : form,
-                reservationNo : reservationNo
-            }));
+            // dispatch(callReservationUpdateAPI({
+            //     form : form,
+            //     reservationNo : reservationNo
+            // }));
 
-            setIsSelect(false);
-            setReservationModal(!ReservationModal);
+            // setIsSelect(false);
+            // setUpdateModal(false);
         }
     }
 
@@ -116,7 +112,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
         <div className={ReservationModalCSS.modalBackground} onClick={onClickModalOff}>
         <div className={ReservationModalCSS.modalContainer}>
             <div className={ReservationModalCSS.header}>
-                예약 수정
+                예약 등록
             </div>
             <div className={ReservationModalCSS.modalDiv}>
                 <table>
@@ -128,8 +124,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     name="assetName" 
                                     id="assetName" 
                                     value={form.assetName||''}
-                                    readOnly
-                                    disabled={true}/></td>
+                                    /></td>
                         </tr>
                         <tr>
                             <td><label htmlFor="name">이름</label></td>
@@ -138,8 +133,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     name="name" 
                                     id="name" 
                                     value={form.name||''}
-                                    readOnly
-                                    disabled={true}/></td>
+                                    /></td>
                         </tr>
                         <tr>
                             <td><label htmlFor="reservationDate">예약일</label></td>
@@ -148,8 +142,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     name="reservationDate" 
                                     id="reservationDate" 
                                     value={form.reservationDate||''}
-                                    readOnly
-                                    disabled={true}/></td>
+                                    /></td>
                         </tr>
                         <tr>
                             <td><label htmlFor="startTime">시작 시간</label></td>
@@ -182,7 +175,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     timeIntervals={60}
                                     dateFormat="yyyy-MM-dd HH:mm"
                                     minDate={form.startTime}
-                                    minTime={setHours(setMinutes(form.startTime, 0), form.startTime.getHours())}
+                                    minTime={form.startTime === form.endTime? setHours(setMinutes(form.startTime, 0), form.startTime.getHours()):setHours(setMinutes(new Date(), 0), 8)}
                                     maxTime={setHours(setMinutes(new Date(), 0), 18)}
                                 />}
                             </td>
@@ -194,8 +187,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     name="team" 
                                     id="team"
                                     value={form.team||''}
-                                    readOnly
-                                    disabled={true}/></td>
+                                    /></td>
                         </tr>
                         <tr>
                             <td><label htmlFor="description">내용</label></td>
@@ -210,12 +202,12 @@ function ReservationModal({reservationNo, setReservationModal}) {
                 </table>
             </div>
             <div className={ReservationModalCSS.buttonDiv}>
-                <button onClick={() => setReservationModal(false)}>나가기</button>
-                <button onClick={onClickUpdate}>수정하기</button>
+                <button onClick={() => setRegistModal(false)}>나가기</button>
+                <button onClick={onClickRegist}>예약하기</button>
             </div>
         </div>
     </div>
     );
 }
 
-export default ReservationModal;
+export default ReservationRegistModal;

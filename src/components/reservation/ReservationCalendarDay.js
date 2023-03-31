@@ -3,16 +3,16 @@ import ReservationCalendarDayCSS from "./ReservationCalendarDay.module.css";
 
 function ReservationCalendarDay({day, setSelectedDate}) {
 
-
-    useEffect(() => {
-
-    }, [])
-
     const setDate =() => {
 
-        const thisDay = new Date(day.year, day.month - 1, day.date).toLocaleDateString();
+        const TIME_ZONE = 9 * 60 * 60 * 1000; 
+        const startDateTime = new Date(day.year, day.month - 1, day.date);
+        const endDateTime = new Date(day.year, day.month - 1, day.date + 1);
+
         setSelectedDate({
-            date : thisDay,
+            ...setSelectedDate,
+            startDateTime : new Date(startDateTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
+            endDateTime : new Date(endDateTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
             day : day.day
         });
     }

@@ -176,9 +176,9 @@ export const callReservationsAPI = ({assetCode, startTime, endTime}) => {
     }
 }
 
-export const callReservationByDateAPI = ({assetCode, selectedDate}) => {
+export const callReservationByDateAPI = ({assetCode, startDateTime, endDateTime}) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservations/${assetCode}/date/${selectedDate}`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservations/${assetCode}/date?startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
 
     return async (dispatch, getState) => {
 

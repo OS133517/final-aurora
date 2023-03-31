@@ -5,7 +5,8 @@ const initialState = {
     assets : [],
     reservations : [],
     reservation : [],
-    reservationMessage : []
+    reservationMessage : [],
+    reservationsByDate : [],
 };
 
 // 액션
@@ -70,7 +71,7 @@ const reservationReducer = handleActions({
     [GET_RESERVATIONS_BY_DATE] : (state, { payload }) => {
         return {
             ...state,
-            reservations : payload
+            reservationsByDate : payload
         }
     }
 }, initialState);

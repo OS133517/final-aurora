@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
-import Swal from "sweetalert2";
 import { callReservationsAPI } from "../../apis/ReservationAPICall";
 import ReservationCalendarDay from "../../components/reservation/ReservationCalendarDay";
 import ReservationDayDetail from "../../components/reservation/ReservationDayDetail";
@@ -16,7 +15,8 @@ function ReservationCalendar() {
     const [selectedMonth, setSelectedMonth] = useState([]);
     const [thisMonth, setThisMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState({
-        date : '',
+        startDateTime : '',
+        endDateTime : '',
         day : ''
     });
     const dispatch = useDispatch();
