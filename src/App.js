@@ -5,6 +5,12 @@ import ReservationLayout from "./layouts/ReservationLayout";
 import Login from "./pages/Login";
 import Addresses from "./pages/addBook/Addresses";
 import Main from "./pages/Main";
+import ReportLayout from "./layouts/ReportLayout";
+import ReportsSummary from "./pages/report/ReportSummary";
+import ReportCreate from "./pages/report/ReportCreate";
+import Reports from "./pages/report/Reports";
+import ReportRounds from "./pages/report/ReportRounds";
+import ReportRoundDetail from "./pages/report/ReportRoundDetail";
 import MyReservation from "./pages/reservation/MyReservation";
 import ReservationCalendarLayout from "./layouts/ReservationCalendarLayout";
 
@@ -21,6 +27,14 @@ function App() {
             <Route path="addresses" element={<Addresses category='전체 주소록'/>}/>
             <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록'/>}/>
             <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
+          </Route>
+          <Route path="reports" element={<ReportLayout/>}>
+            <Route path="summary" index element={<ReportsSummary/>}/>
+            <Route path="edit" element={<ReportCreate/>}/>
+            <Route path="routines" element={<Reports/>}/>
+            <Route path="casuals" element={<Reports/>}/>
+            <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
+            <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
           </Route>
           <Route path="reservation" element={<ReservationLayout/>}>
             {/* <Route index element={<MyReservation/>}/> */}
