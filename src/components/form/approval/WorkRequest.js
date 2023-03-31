@@ -4,8 +4,10 @@ import { Editor } from "react-draft-wysiwyg";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // EditorState 처리를 위한 draft-js
 import { EditorState } from 'draft-js';
-import { useState } from 'react';
-function WorkRequest() {
+import { useEffect, useState } from 'react';
+function WorkRequest(props) {
+
+    const { docCode } = props;
     /* 에디터 설정 */
     // EditorState 사용하기 위해 useState로 설정
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -13,9 +15,14 @@ function WorkRequest() {
     const onEditorStateChange = (newEditorState) => {
         setEditorState(newEditorState);
     };
-    const docCode = undefined;
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
+
+    useEffect(() => {
+        if (docCode !== undefined) {
+            setIsEdit(true);
+        }
+    }, [docCode]);
 
     return (
         <div className={workRequestCSS.detailBox}>
@@ -60,7 +67,7 @@ function WorkRequest() {
                                     editorState={editorState}
                                     // 에디터와 상호작용할때마다 새로운 에디터 상태로 상태를 업데이트
                                     onEditorStateChange={onEditorStateChange}
-                                    readOnly={docCode < 0 || docCode === undefined ? true : false}
+                                    readOnly={!isEdit}
                                     toolbar={{
                                         options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'remove', 'history'],
                                         inline: { inDropdown: true },

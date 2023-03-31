@@ -16,10 +16,10 @@ function DraftForm() {
 
     useEffect(() => {
         const num = Number(param.docCode);
-        console.log('num', typeof num);
-        switch (param.docCode) {
+        const docCode = param.docCode;
+        switch (num) {
             case 0:
-                setDraftComponent(<WorkRequest />);
+                setDraftComponent(<WorkRequest docCode={docCode} />);
                 break;
             case 1: setDraftComponent(<Resignation />);
                 break;
