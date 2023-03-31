@@ -1,24 +1,17 @@
-import { useEffect, useState } from "react";
-// eslint-disable-next-line
-import { useDispatch, useSelector } from "react-redux";
+
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import SidebarCSS from "../subSidebar/SubSidebar.module.css";
 
 function DropDownButton({ category, assetList }) {
-    // eslint-disable-next-line
-    const dispatch = useDispatch();
+
+    // const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     // eslint-disable-next-line
     const activeStyle = {
         backgroundColor: "#73b8a3",
         color: "white"
     };
-    useEffect(() => {
-
-
-    }, []);
-
-
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     }
@@ -38,8 +31,8 @@ function DropDownButton({ category, assetList }) {
                     {
                         Array.isArray(assetList) && assetList.map(asset => (
                             <NavLink
-                                // style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                // to={`/aurora/reservation/assets/${asset.assetCode}`} 
+                                style={({ isActive }) => isActive ? activeStyle : undefined}
+                                to={`/aurora/reservation/assets/${asset.assetCode}`}
                                 key={asset.assetCode}
                             >
                                 <span>{asset.assetName}</span>

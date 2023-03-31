@@ -11,6 +11,8 @@ import ApprovalDetail from "./pages/approval/ApprovalDetail";
 import ReservationLayout from "./layouts/ReservationLayout";
 import Login from "./pages/Login";
 import MyReservation from "./pages/reservation/MyReservation";
+import ReservationCalendarLayout from "./layouts/ReservationCalendarLayout";
+import "./App.css";
 import ApprovalDraft from "./pages/approval/ApprovalDraft";
 import DraftForm from "./pages/approval/DraftForm";
 
@@ -45,6 +47,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+  </div >
   );
 }
 

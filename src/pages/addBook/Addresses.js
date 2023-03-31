@@ -372,9 +372,8 @@ function Addresses({category = "전체 주소록"}) {
     }
 
     return (
-        <>
-        {updateModalIsOn? <AddBookUpdateModal updateList={updateList} setUpdateModalIsOn={setUpdateModalIsOn}/> : null}
         <div className={AddressesCSS.addressesDiv}>
+        {updateModalIsOn? <AddBookUpdateModal updateList={updateList} setUpdateModalIsOn={setUpdateModalIsOn}/> : null}
             <div className={AddressesCSS.addressesHeader}>
                 {category}
             </div>
@@ -490,7 +489,6 @@ function Addresses({category = "전체 주소록"}) {
                 }
             </div>
         </div>
-        </>
     );
 }
 

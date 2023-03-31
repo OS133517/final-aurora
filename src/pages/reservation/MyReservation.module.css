@@ -1,9 +1,9 @@
-.addressesDiv {
+.myReservationDiv {
     /* float: left; */
     width: 100%;
 }
 
-.addressesHeader {
+.myReservationHeader {
     width: 100%;
     height: 58px;
     border-bottom: 1px solid #C1C1C1;
@@ -11,65 +11,15 @@
     font-weight: bold;
     color: #88CFBA;
     line-height: 58px;
-    text-indent: 20px;
-}
-
-.addressesSearch {
-    width: 100%;
-    height: 58px;
-    border-bottom: 1px solid #C1C1C1;
-    line-height: 58px;
     display: flex;
-    align-items: center;
-    position: relative;
-    padding-left: 20px;
-    box-sizing: border-box;
-}
-
-.addressesSearch>select {
-    box-sizing: border-box;
-    width: 93px;
-    height: 32px;
-    border-radius: 10px 0 0 10px;
-    border: 1px solid #C1C1C1;
-    border-right: none;
-    padding-left: 10px;
-    font-size: 16px;
-}
-
-.addressesSearch>input {
-    box-sizing: border-box;
-    width: 600px;
-    height: 32px;
-    border-radius: 0 10px 10px 0;
-    border: 1px solid #C1C1C1;
-    font-size: 16px;
-}
-
-.addressesSearch>button {
-    box-sizing: border-box;
-    width: 93px;
-    height: 32px;
-    margin-left: 8px;
-    border-radius: 5px;
-    border: none;
-    background-color: #88CFBA;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.addressesSearch>div {
-    position: absolute;
-    right: 10px;
-    height: 58px;
-    line-height: 58px;
-    padding-top: 10px;
+    text-indent: 20px;
+    justify-content: space-between;
 }
 
 .imgDiv {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    padding-top: 7px;
 }
 
 .imgDiv>img {
@@ -105,27 +55,27 @@
     padding-left: 5px;
 }
 .contentHead th:nth-child(2) {
-    width: 175px;
+    width: 100px;
 }
 
 .contentHead th:nth-child(3) {
-    width: 235px;
+    width: 60px;
 }
 
 .contentHead th:nth-child(4) {
-    width: 600px;
+    width: 450px;
 }
 
 .contentHead th:nth-child(5) {
-    width: 225px;
+    width: 100px;
 }
 
 .contentHead th:nth-child(6) {
-    width: 165px;
+    width: 250px;
 }
 
 .contentHead th:last-child {
-    width: 150px;
+    width: 100px;
 }
 
 .contentTable td {
