@@ -1,15 +1,18 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { callGetApprovalsAPI } from '../../apis/ApprovalAPICalls';
+import { callGetpendingAPI } from '../../apis/ApprovalAPICalls';
 import ApprovalForm from '../../components/form/approval/ApprovalForm';
+import { decodeJwt } from '../../utils/tokenUtils';
 import ApprovalCSS from './Approvals.module.css'
 
 function Pending() {
     const dispatch = useDispatch();
-    const pendingList = useSelector(state => state.approvalReducer.approvalInfo);
-
+    const pendingList = useSelector(state => state.approvalReducer.pendingList);
+    const token = decodeJwt(window.localStorage.getItem('accessToken'));
+    const code = token.memberCode;
+    console.log('pendingList', pendingList);
     useEffect(() => {
-        dispatch(callGetApprovalsAPI(1))
+        dispatch(callGetpendingAPI({memberCode : code}))
     // eslint-disable-next-line
     },[])
     return(
@@ -30,7 +33,7 @@ function Pending() {
                 </thead>
                 <tbody className={ApprovalCSS.tbodyStyle}>
                     {
-                        pendingList.length > 0 && pendingList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval}/>))
+                        pendingList?.length > 0 && pendingList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval}/>))
                     }
                 </tbody>
             </table>

@@ -1,6 +1,8 @@
-import { async } from "q";
-import { GET_ASSET_CATEGORY,
-         GET_ASSETS } from "../modules/ReservationModule";
+
+import {
+    GET_ASSET_CATEGORY,
+    GET_ASSETS
+} from "../modules/ReservationModule";
 
 export const callAssetCategoryAPI = () => {
 
@@ -9,17 +11,17 @@ export const callAssetCategoryAPI = () => {
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
-            method : "GET",
-            headers : {
-                "Content-Type" : "application/json",
-                "Accept" : "*/*",
-                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             }
         }).then(response => response.json());
 
-        if(result.status === 200) {
+        if (result.status === 200) {
             console.log('[AddBookAPICalls] callAssetCategoryAPI RESULT', result);
-            dispatch({type : GET_ASSET_CATEGORY, payload : result.data});
+            dispatch({ type: GET_ASSET_CATEGORY, payload: result.data });
         }
     }
 }
@@ -31,17 +33,17 @@ export const callAllAssetsAPI = () => {
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
-            method : "GET",
-            headers : {
-                "Content-Type" : "application/json",
-                "Accept" : "*/*",
-                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             }
         }).then(response => response.json());
 
-        if(result.status === 200) {
+        if (result.status === 200) {
             console.log('[AddBookAPICalls] callAllAssetsAPI RESULT', result);
-            dispatch({type : GET_ASSETS, payload : result.data});
+            dispatch({ type: GET_ASSETS, payload: result.data });
         }
     }
 }

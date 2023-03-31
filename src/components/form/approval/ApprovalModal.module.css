@@ -11,3 +11,74 @@
     width: 200px;
 }
 
+/* 업무 협조 요청서 */
+.mainList {
+    display: inline-block;
+    width: 82%;
+    
+}
+
+.approvalTable {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.theadStyle {
+    background-color: #F1F2F3;
+    font-size: 16px;
+    height: 5vh;
+
+}
+
+.subtitle{
+    padding-left: 10px;
+    border-bottom: 1px solid #c1c1c1;
+    height: 39px;
+    color: #88cfba;
+}
+
+.title {
+    padding-left: 15px;
+}
+.detailView {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+.detailtable {
+    width: 100%;
+    height: 100%;
+    /* border : 1px solid #c1c1c1; */
+    background-color: white;
+    border-collapse: collapse;
+    justify-content: left;
+    
+}
+
+.detaildocName {
+    text-align: center;
+    width: 100vh;
+}
+
+.detailTitle{
+    width: 20px;
+    height: 50px;
+    text-align: center;
+    background-color: #e4e4e4;
+    border: 1px solid #c1c1c1;
+}
+
+.description {
+    width: 80%;
+    border: 1px solid #c1c1c1;
+}
+
+.detailDescript {
+    height: 592px;
+    padding: 5px;
+    border: 1px solid #c1c1c1;
+    vertical-align: top;
+}

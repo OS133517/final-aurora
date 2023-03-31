@@ -3,7 +3,8 @@ import { createAction, handleActions } from "redux-actions";
 // 초기값
 const initialState = {
     approvalInfo :  [],
-    approvalLine : []
+    approvalLine : [] ,
+    pendingList : []
 };
 
 // 액션 상수로 정의
@@ -46,7 +47,10 @@ const approvalReducer = handleActions(
         },
         [GET_PENDING]: (state, { payload }) => {
 
-            return payload;
+            return {
+                ...state,
+                pendingList : payload
+            } 
         },
         [GET_COMPLETED]: (state, { payload }) => {
 
