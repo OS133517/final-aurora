@@ -15,13 +15,10 @@ function ReservationUpdateModal({reservationNo, setUpdateModal}) {
     const reservationDetail = useSelector(state => state.reservationReducer?.reservation);
    
     const [form, setForm] = useState({
-        name : "",
         reservationDate : new Date(),
         startTime : new Date(),
         endTime : new Date(),
-        team : "",
-        description : "",
-        assetName : ""
+        description : ""
     });
     const [isSelect, setIsSelect] = useState(false);
 
@@ -37,12 +34,7 @@ function ReservationUpdateModal({reservationNo, setUpdateModal}) {
 
         setForm({
             ...form,
-            aasetCode : reservationDetail?.assetCode,
-            name : reservationDetail?.memberName,
-            reservationDate : reservationDetail?.reservationDate,
-            team : reservationDetail?.team,
-            description : reservationDetail?.description,
-            assetName : reservationDetail?.assetName
+            description : reservationDetail?.description
         });
     // eslint-disable-next-line
     }, [reservationDetail]);
@@ -127,7 +119,7 @@ function ReservationUpdateModal({reservationNo, setUpdateModal}) {
                                     type="text" 
                                     name="assetName" 
                                     id="assetName" 
-                                    value={form.assetName||''}
+                                    value={reservationDetail.assetName||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>
@@ -137,7 +129,7 @@ function ReservationUpdateModal({reservationNo, setUpdateModal}) {
                                     type="text" 
                                     name="name" 
                                     id="name" 
-                                    value={form.name||''}
+                                    value={reservationDetail.memberName||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>
@@ -147,7 +139,7 @@ function ReservationUpdateModal({reservationNo, setUpdateModal}) {
                                     type="text" 
                                     name="reservationDate" 
                                     id="reservationDate" 
-                                    value={form.reservationDate||''}
+                                    value={reservationDetail.reservationDate||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>
@@ -193,7 +185,7 @@ function ReservationUpdateModal({reservationNo, setUpdateModal}) {
                                     type="text" 
                                     name="team" 
                                     id="team"
-                                    value={form.team||''}
+                                    value={reservationDetail.team||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>

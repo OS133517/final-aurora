@@ -26,7 +26,7 @@ function ReservationCalendar() {
         console.log('달력 출력', thisMonth);
         getCalendar(thisMonth);
     // eslint-disable-next-line
-    }, [thisMonth])
+    }, [thisMonth, assetCode])
 
     useEffect(() => {
         console.log('예약 조회 요청');
@@ -148,7 +148,7 @@ function ReservationCalendar() {
                     </div>
                 </div>
                 <div>
-                    {selectedDate.date !== '' && <ReservationDayDetail assetCode={assetCode} selectedDate={selectedDate}/>}
+                    {selectedDate.date !== '' && <ReservationDayDetail assetCode={assetCode} assetName={assetName} selectedDate={selectedDate}/>}
                 </div>
             </div>
         </>

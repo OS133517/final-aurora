@@ -5,7 +5,7 @@ import { callReservationByDateAPI } from "../../apis/ReservationAPICall";
 import DetailCSS from "./ReservationDayDetail.module.css";
 import ReservationRegistModal from "./ReservationRegistModal";
 
-function ReservationDayDetail({assetCode, selectedDate}) {
+function ReservationDayDetail({assetCode, assetName, selectedDate}) {
 
     const dispatch = useDispatch();
     const reservationList = useSelector(state => state.reservationReducer.reservationsByDate);
@@ -17,7 +17,7 @@ function ReservationDayDetail({assetCode, selectedDate}) {
         if(selectedDate.day === '일요일' || selectedDate.day === '토요일') {
             return;
         }
-
+        console.log("assetCode", assetCode);
         dispatch(callReservationByDateAPI({
             startDateTime : selectedDate.startDateTime,
             endDateTime : selectedDate.endDateTime,
@@ -36,14 +36,14 @@ function ReservationDayDetail({assetCode, selectedDate}) {
             }).then(() => {
                 return;
             })
+        } else {
+            setRegistModal(!registModal);
         }
-
-        setRegistModal(!registModal);
     }
 
     return (
         <div>
-            {registModal?<ReservationRegistModal setRegistModal={setRegistModal}/>:null}
+            {registModal?<ReservationRegistModal assetName={assetName} assetCode={assetName} setRegistModal={setRegistModal}/>:null}
             <div className={DetailCSS.detailHeader}>
                 <span>{`${selectedDate.startDateTime.replace('00:00:00', '')||''}   ${selectedDate.day||''}`}</span>
                 {selectedDate.day !== '토요일' && selectedDate.day !== '일요일' && <button onClick={onClickRegist} className={DetailCSS.okButton}>예약하기</button>}

@@ -7,25 +7,31 @@ import { useDispatch, useSelector } from "react-redux";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import Swal from "sweetalert2";
+import jwtDecode from "jwt-decode";
+import { callMemberInfoForRegist, callReservationRegistAPI } from "../../apis/ReservationAPICall";
 
-function ReservationRegistModal({reservationNo, setRegistModal}) {
+function ReservationRegistModal({assetName, assetCode, setRegistModal}) {
 
     const dispatch = useDispatch();
-    const reservationDetail = useSelector(state => state.reservationReducer?.reservation);
-   
+    const { memberCode } = jwtDecode(window.localStorage.getItem("accessToken"));
+    const thisMember = useSelector(state => state.reservationReducer.memberInfo);
+
     const [form, setForm] = useState({
-        name : "",
-        reservationDate : new Date(),
+        reservationDate : new Date().toLocaleDateString(),
         startTime : new Date(),
         endTime : new Date(),
         team : "",
         description : "",
-        assetName : ""
+        assetCode : assetCode,
+        memberCode : memberCode
     });
     const [isSelect, setIsSelect] = useState(false);
 
     useEffect(() => {
 
+        dispatch(callMemberInfoForRegist({
+            memberCode : memberCode
+        }))
     // eslint-disable-next-line
     }, []);
 
@@ -33,17 +39,10 @@ function ReservationRegistModal({reservationNo, setRegistModal}) {
 
         setForm({
             ...form,
-            aasetCode : reservationDetail?.assetCode,
-            name : reservationDetail?.memberName,
-            reservationDate : reservationDetail?.reservationDate,
-            team : reservationDetail?.team,
-            description : reservationDetail?.description,
-            assetName : reservationDetail?.assetName
+            team : thisMember?.team
         });
     // eslint-disable-next-line
-    }, [reservationDetail]);
-
-  
+    }, [thisMember])
 
     const onClickModalOff = (e) => {
 
@@ -98,13 +97,12 @@ function ReservationRegistModal({reservationNo, setRegistModal}) {
             });  
         } else {
 
-            // dispatch(callReservationUpdateAPI({
-            //     form : form,
-            //     reservationNo : reservationNo
-            // }));
+            dispatch(callReservationRegistAPI({
+                form : form
+            }));
 
-            // setIsSelect(false);
-            // setUpdateModal(false);
+            setIsSelect(false);
+            setRegistModal(false);
         }
     }
 
@@ -123,7 +121,8 @@ function ReservationRegistModal({reservationNo, setRegistModal}) {
                                     type="text" 
                                     name="assetName" 
                                     id="assetName" 
-                                    value={form.assetName||''}
+                                    value={assetName}
+                                    disabled={true}
                                     /></td>
                         </tr>
                         <tr>
@@ -132,7 +131,8 @@ function ReservationRegistModal({reservationNo, setRegistModal}) {
                                     type="text" 
                                     name="name" 
                                     id="name" 
-                                    value={form.name||''}
+                                    value={thisMember.memberName||''}
+                                    disabled={true}
                                     /></td>
                         </tr>
                         <tr>
@@ -141,7 +141,8 @@ function ReservationRegistModal({reservationNo, setRegistModal}) {
                                     type="text" 
                                     name="reservationDate" 
                                     id="reservationDate" 
-                                    value={form.reservationDate||''}
+                                    value={form.reservationDate}
+                                    disabled={true}
                                     /></td>
                         </tr>
                         <tr>
@@ -187,6 +188,7 @@ function ReservationRegistModal({reservationNo, setRegistModal}) {
                                     name="team" 
                                     id="team"
                                     value={form.team||''}
+                                    disabled={true}
                                     /></td>
                         </tr>
                         <tr>

@@ -98,14 +98,15 @@
     font-size: 16px;
     position: relative;
     text-indent: 50px;
+    overflow: hidden;
 }
 
 .dropDownMenus a>div {
     display: flex;
     position: absolute;
     top: 8px;
-    right: 30px;
-    width: 100px;
+    right: 0px;
+    width: 120px;
     height: 25px;
     background-color: transparent;
     visibility: hidden;
@@ -118,12 +119,14 @@
     background-color: transparent;
     color: rgb(56, 56, 56);
     width: 40px;
+    font-size: 13px;
     height: 25px;
     border: none;
     cursor: pointer;
 }
 
 .dropDownMenus a>div>button:hover {
+    background-color: #73b8a3;
     color: white;
 }
 
