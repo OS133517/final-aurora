@@ -10,15 +10,14 @@ function ReservationDayDetail({assetCode, assetName, selectedDate}) {
     const dispatch = useDispatch();
     const reservationList = useSelector(state => state.reservationReducer.reservationsByDate);
     const [registModal, setRegistModal] = useState(false);
-
-
+   
     useEffect(() => {
 
         if(selectedDate.day === '일요일' || selectedDate.day === '토요일') {
             return;
         }
-        console.log("assetCode", assetCode);
-        dispatch(callReservationByDateAPI({
+        
+        selectedDate.startDateTime && dispatch(callReservationByDateAPI({
             startDateTime : selectedDate.startDateTime,
             endDateTime : selectedDate.endDateTime,
             assetCode : assetCode
@@ -43,7 +42,7 @@ function ReservationDayDetail({assetCode, assetName, selectedDate}) {
 
     return (
         <div>
-            {registModal?<ReservationRegistModal assetName={assetName} assetCode={assetName} setRegistModal={setRegistModal}/>:null}
+            {registModal?<ReservationRegistModal startDate={selectedDate?.startDateTime} assetName={assetName} assetCode={assetCode} setRegistModal={setRegistModal}/>:null}
             <div className={DetailCSS.detailHeader}>
                 <span>{`${selectedDate.startDateTime.replace('00:00:00', '')||''}   ${selectedDate.day||''}`}</span>
                 {selectedDate.day !== '토요일' && selectedDate.day !== '일요일' && <button onClick={onClickRegist} className={DetailCSS.okButton}>예약하기</button>}

@@ -225,6 +225,7 @@ export const callMemberInfoForRegist = ({memberCode}) => {
 export const callReservationRegistAPI = ({form}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation`;
+    const TIME_ZONE = 9 * 60 * 60 * 1000; 
 
     return async (dispatch, getState) => {
 
@@ -240,8 +241,8 @@ export const callReservationRegistAPI = ({form}) => {
                 memberCode : form.memberCode,
                 team : form.team,
                 reservationDate : form.reservationDate,
-                startTime : form.startTime,
-                endTime : form.endTime,
+                startTime : new Date(form.startTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
+                endTime : new Date(form.endTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
                 description : form.description
             })
         }).then(response => response.json());

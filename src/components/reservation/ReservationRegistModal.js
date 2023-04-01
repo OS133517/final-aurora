@@ -9,16 +9,18 @@ import setMinutes from "date-fns/setMinutes";
 import Swal from "sweetalert2";
 import jwtDecode from "jwt-decode";
 import { callMemberInfoForRegist, callReservationRegistAPI } from "../../apis/ReservationAPICall";
+import { useCallback } from "react";
 
-function ReservationRegistModal({assetName, assetCode, setRegistModal}) {
+function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal}) {
 
     const dispatch = useDispatch();
     const { memberCode } = jwtDecode(window.localStorage.getItem("accessToken"));
     const thisMember = useSelector(state => state.reservationReducer.memberInfo);
+    const reservationList = useSelector(state => state.reservationReducer.reservationsByDate);
 
     const [form, setForm] = useState({
-        reservationDate : new Date().toLocaleDateString(),
-        startTime : new Date(),
+        reservationDate : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
+        startTime : new Date(startDate),
         endTime : new Date(),
         team : "",
         description : "",
@@ -42,7 +44,67 @@ function ReservationRegistModal({assetName, assetCode, setRegistModal}) {
             team : thisMember?.team
         });
     // eslint-disable-next-line
-    }, [thisMember])
+    }, [thisMember]);
+
+
+    // TODO - 이거 더 손대야됨...일단 화면에 막대기 출력부터하자
+    // 호 아니면 endTime에는 startTime 제일 빠른거 그게 maxTime으로 주면 되지않나?? 구우우우우웃!!!
+    // 예약된 시간 제거하기 위한 함수
+    // function getExcludeTimes(check) {
+    const getExcludeTimes = useCallback((check) => {
+
+        let excludeTimes = [];
+        if(check === 'start') {
+
+            const sameDay = reservationList && reservationList.filter(day => new Date(day.startTime).getDate() === new Date(startDate).getDate() && new Date(day.endTime).getDate() === new Date(startDate).getDate());
+            for(let i = 0; i < sameDay.length; i++) {
+                for(let startHour = new Date(sameDay[i].startTime).getHours(); startHour < new Date(sameDay[i].endTime).getHours(); startHour++) {
+                    excludeTimes.push(startHour);
+                }    
+            }
+            const diffDay1 = reservationList && reservationList.filter(day => new Date(day.startTime).getDate() < new Date(startDate).getDate());
+            for(let i = 0; i < diffDay1.length; i++) {
+                for(let startHour = 8; startHour < new Date(diffDay1[i].endTime).getHours(); startHour++) {
+                    excludeTimes.push(startHour);
+                }
+            }
+            const diffDay2 = reservationList && reservationList.filter(day => new Date(day.endTime).getDate() > new Date(startDate).getDate());
+            for(let i = 0; i < diffDay2.length; i++) {
+                for(let startHour = new Date(diffDay2[i].startTime).getHours(); startHour < 18; startHour++) {
+                    excludeTimes.push(startHour);
+                }
+            }
+            excludeTimes = [...new Set(excludeTimes)];
+        } else if(check === 'end') {
+
+            const sameDay = reservationList && reservationList.filter(day => new Date(day.startTime).getDate() === new Date(startDate).getDate() && new Date(day.endTime).getDate() === new Date(startDate).getDate());
+            for(let i = 0; i < sameDay.length; i++) {
+                for(let startHour = new Date(sameDay[i].startTime).getHours() + 1; startHour <= new Date(sameDay[i].endTime).getHours(); startHour++) {
+                    excludeTimes.push(startHour);
+                }    
+            }
+            const diffDay1 = reservationList && reservationList.filter(day => new Date(day.startTime).getDate() < new Date(startDate).getDate());
+            for(let i = 0; i < diffDay1.length; i++) {
+                for(let startHour = 9; startHour <= new Date(diffDay1[i].endTime).getHours(); startHour++) {
+                    excludeTimes.push(startHour);
+                }
+            }
+            const diffDay2 = reservationList && reservationList.filter(day => new Date(day.endTime).getDate() > new Date(startDate).getDate());
+            for(let i = 0; i < diffDay2.length; i++) {
+                for(let startHour = new Date(diffDay2[i].startTime).getHours() + 1; startHour <= 18; startHour++) {
+                    excludeTimes.push(startHour);
+                }
+            }
+            excludeTimes = [...new Set(excludeTimes)];
+            console.log('excludeTimes', excludeTimes);
+        }
+        
+        return excludeTimes.map(time => setHours(setMinutes(new Date(), 0), time));
+    }, [reservationList, startDate])
+   
+
+        
+    
 
     const onClickModalOff = (e) => {
 
@@ -94,7 +156,15 @@ function ReservationRegistModal({assetName, assetCode, setRegistModal}) {
                 confirmButtonText : '확인'
             }).then(() => {
                 return;
-            });  
+            }); 
+        } else if(form.description.trim().length === 0) {
+            Swal.fire({
+                icon : 'warning',
+                text : '내용을 입력하세요.',
+                confirmButtonText : '확인'
+            }).then(() => {
+                return;
+            });
         } else {
 
             dispatch(callReservationRegistAPI({
@@ -160,6 +230,7 @@ function ReservationRegistModal({assetName, assetCode, setRegistModal}) {
                                     minDate={new Date()}
                                     minTime={setHours(setMinutes(new Date(), 0), 8)}
                                     maxTime={setHours(setMinutes(new Date(), 0), 18)}
+                                    excludeTimes={getExcludeTimes('start')}
                                 />
                             </td>
                         </tr>
@@ -177,7 +248,8 @@ function ReservationRegistModal({assetName, assetCode, setRegistModal}) {
                                     dateFormat="yyyy-MM-dd HH:mm"
                                     minDate={form.startTime}
                                     minTime={form.startTime === form.endTime? setHours(setMinutes(form.startTime, 0), form.startTime.getHours()):setHours(setMinutes(new Date(), 0), 8)}
-                                    maxTime={setHours(setMinutes(new Date(), 0), 18)}
+                                    maxTime={getExcludeTimes('end')[0]}
+                                    excludeTimes={getExcludeTimes('end')}
                                 />}
                             </td>
                         </tr>

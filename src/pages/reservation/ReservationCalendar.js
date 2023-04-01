@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { callReservationsAPI } from "../../apis/ReservationAPICall";
 import ReservationCalendarDay from "../../components/reservation/ReservationCalendarDay";
 import ReservationDayDetail from "../../components/reservation/ReservationDayDetail";
 import ReservationCalendarCSS from "./ReservationCalendar.module.css";
+import Swal from "sweetalert2";
 
 function ReservationCalendar() {
 
@@ -20,16 +21,37 @@ function ReservationCalendar() {
         day : ''
     });
     const dispatch = useDispatch();
+    const reservationResult = useSelector(state => state.reservationReducer.reservationMessage);
 
     useEffect(() => {
 
-        console.log('달력 출력', thisMonth);
+        if(reservationResult.status === 200) {
+            Swal.fire({
+                icon : 'success',
+                text : reservationResult.message,
+                confirmButtonText : '확인'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        } else if (reservationResult.status === 400) {
+            Swal.fire({
+                icon : 'error',
+                text : reservationResult.message,
+                confirmButtonText : '확인'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        }
+    }, [reservationResult]);
+
+    useEffect(() => {
+
         getCalendar(thisMonth);
     // eslint-disable-next-line
     }, [thisMonth, assetCode])
 
     useEffect(() => {
-        console.log('예약 조회 요청');
+
         selectedMonth.length > 0 && dispatch(callReservationsAPI({
             assetCode : assetCode,
             startTime : `${selectedMonth[0]?.year}-${selectedMonth[0]?.month}-${selectedMonth[0]?.date}`,
@@ -92,7 +114,6 @@ function ReservationCalendar() {
     const onClickMonthChange = (plusMinus) => {
         
         const newDate = new Date(thisMonth);
-        console.log(newDate.getMonth(), thisMonth.getMonth());
 
         switch(plusMinus) {
             case '+' :
@@ -115,7 +136,6 @@ function ReservationCalendar() {
             newDate.setMonth(newDate.getMonth() - 1);
         }
 
-        console.log(newDate.getMonth(), thisMonth.getMonth());
         setThisMonth(newDate);
     }
 
