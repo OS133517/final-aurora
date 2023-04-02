@@ -1,0 +1,22 @@
+.pagingBtn {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #00CAA6;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+
+.pagingBtn:hover{
+    cursor: pointer;
+    background-color: rgb(12, 250, 180);
+}
+
+.pagingBtnDiv {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    list-style: none;
+}

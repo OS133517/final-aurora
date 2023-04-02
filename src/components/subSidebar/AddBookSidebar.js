@@ -45,9 +45,44 @@ function AddBookSidebar() {
 
     useEffect(() => {
 
-        getGroups();
-    // eslint-disable-next-line
-    }, []);
+        if(groupResultMessage.status === 200) {
+            
+            getGroups();
+        } else if(groupResultMessage.status === 400) {
+            Swal.fire({
+                icon : "error",
+                text : groupResultMessage.message
+            })
+        }// eslint-disable-next-line
+    }, [groupResultMessage]);
+
+    // useEffect(() => {
+
+    //     if(groupRegistResult.status === 200) {
+            
+    //         getGroups();
+    //     } else if(groupRegistResult.status === 400) {
+    //         Swal.fire({
+    //             icon : "error",
+    //             title : "그룹 추가",
+    //             text : groupRegistResult.message
+    //         })
+    //     }// eslint-disable-next-line
+    // }, [groupRegistResult]);
+
+    // useEffect(() => {
+
+    //     if(groupDeleteResult.status === 200) {
+
+    //         getGroups();
+    //     } else if(groupDeleteResult.status === 400) {
+    //         Swal.fire({
+    //             icon : "error",
+    //             title : "그룹 삭제",
+    //             text : groupDeleteResult.message
+    //         })
+    //     }// eslint-disable-next-line
+    // }, [groupDeleteResult]);
 
     useEffect(() => {
 

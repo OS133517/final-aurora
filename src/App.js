@@ -29,6 +29,11 @@ import DraftForm from "./pages/approval/DraftForm";
 import HrmDetail from './pages/hrm/HrmDetail';
 import HrmModify from './pages/hrm/HrmModify';
 
+import WorklogLayout from "./layouts/WorklogLayout";
+import DayWorklogs from "./pages/worklog/DayWorklogs";
+import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
+import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
+
 
 function App() {
   return (
@@ -63,6 +68,11 @@ function App() {
                 <Route path="hrm-detail/:memberCode" element={<HrmDetail category='인사 정보'/>}/>
                 <Route path="hrm-modify" element={<Hrm category='인사 수정'/>}/>
                 <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정'/>}/>
+              </Route>
+              <Route path="worklog" element={<WorklogLayout/>}>
+                <Route path="day" element={<DayWorklogs/>}/>
+                <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
+                <Route path="day/insert" element={<DayWorklogInsert/>}/>
               </Route>
             </Route>
           </Route>
