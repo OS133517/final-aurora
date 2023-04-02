@@ -232,9 +232,6 @@ function Addresses({category = "전체 주소록"}) {
 
         setIsSearching(true);
 
-        console.log('searchCondition', searchForm.searchCondition);
-        console.log('searchValue', searchForm.searchValue);
-
         setSearchForm({
             ...searchForm,
             searchCondition : searchInput.condition,

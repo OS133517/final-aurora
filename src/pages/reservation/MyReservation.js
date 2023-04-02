@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { decodeJwt } from "../../utils/tokenUtils";
 import MyReservationCSS from "../reservation/MyReservation.module.css";
 import { callMyReservationAPI, callReservationDeleteAPI } from "../../apis/ReservationAPICall";
-import ReservationModal from "../../components/reservation/ReservationModal";
+import ReservationUpdateModal from "../../components/reservation/ReservationUpdateModal";
 import Swal from "sweetalert2";
 
 function MyReservation() {
@@ -17,7 +17,7 @@ function MyReservation() {
   
     const isLogin = decodeJwt(window.localStorage.getItem("accessToken"));
     
-    const [reservationModal, setReservationModal] = useState(false);
+    const [updateModal, setUpdateModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedNo, setSelectedNo] = useState("");
     const pageNumber = [];
@@ -107,7 +107,7 @@ function MyReservation() {
         } 
 
         setSelectedNo(checkedList[0]);
-        setReservationModal(!reservationModal);
+        setUpdateModal(!updateModal);
     }
 
     const onClickReservationDelete = () => {
@@ -145,7 +145,7 @@ function MyReservation() {
 
     return (
         <>
-            {reservationModal? <ReservationModal reservationNo={selectedNo} setReservationModal={setReservationModal}/>:null}
+            {updateModal? <ReservationUpdateModal reservationNo={selectedNo} setUpdateModal={setUpdateModal}/>:null}
             <div className={MyReservationCSS.myReservationDiv}>
                 <div className={MyReservationCSS.myReservationHeader}>
                     <span>내 예약</span>

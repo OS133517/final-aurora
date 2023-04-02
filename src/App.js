@@ -12,34 +12,34 @@ import Reports from "./pages/report/Reports";
 import ReportRounds from "./pages/report/ReportRounds";
 import ReportRoundDetail from "./pages/report/ReportRoundDetail";
 import MyReservation from "./pages/reservation/MyReservation";
-import ReservationCalendarLayout from "./layouts/ReservationCalendarLayout";
+import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/">
-            <Route index element={<Login/>}/>
-            <Route path="aurora" element={<Layout/>}>
-              <Route index element={<Main/>}/>
-              <Route path="address-book" element={<AddBookLayout/>}>
-                <Route index element={<Addresses/>}/>
-                <Route path="addresses" element={<Addresses category='전체 주소록'/>}/>
-                <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록'/>}/>
-                <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
-              </Route>
-              <Route path="reservation" element={<ReservationLayout/>}>
-                {/* <Route index element={<MyReservation/>}/> */}
-                <Route path="my-reservation" element={<MyReservation/>}/>
-                <Route path="assets/:assetCode" element={<ReservationCalendarLayout/>}/>
-              </Route>
+  <div className="App">
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Login/>}/>
+          <Route path="aurora" element={<Layout/>}>
+            <Route index element={<Main/>}/>
+            <Route path="address-book" element={<AddBookLayout/>}>
+              <Route index element={<Addresses/>}/>
+              <Route path="addresses" element={<Addresses category='전체 주소록'/>}/>
+              <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록'/>}/>
+              <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
+            </Route>
+            <Route path="reservation" element={<ReservationLayout/>}>
+              <Route index element={<MyReservation/>}/>
+              <Route path="my-reservation" element={<MyReservation/>}/>
+              <Route path="assets/:assetCode" element={<ReservationCalendar/>}/>
             </Route>
           </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </div>
   );
 }
 
