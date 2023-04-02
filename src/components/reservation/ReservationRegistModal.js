@@ -248,7 +248,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
                                     dateFormat="yyyy-MM-dd HH:mm"
                                     minDate={form.startTime}
                                     minTime={form.startTime === form.endTime? setHours(setMinutes(form.startTime, 0), form.startTime.getHours()):setHours(setMinutes(new Date(), 0), 8)}
-                                    maxTime={getExcludeTimes('end')[0]}
+                                    maxTime={setHours(setMinutes(new Date(), 0), 18)}
                                     excludeTimes={getExcludeTimes('end')}
                                 />}
                             </td>
