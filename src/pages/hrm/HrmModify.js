@@ -5,32 +5,50 @@ import { callMemberDetailAPI, callMemberModifyAPI } from '../../apis/HrmAPICall'
 import { decodeJwt } from '../../utils/tokenUtils';
 import HrmDetailCSS from './HrmDetail.module.css';
 
+
 export default function HrmModify() {
   const dispatch = useDispatch();
   const {memberCode} = useParams()
   const member = useSelector(state => state.hrmReducer.memberDetail);
-  const changeInfo  = useSelector(state => state.hrmReducer.memberModify);
+  // const changeInfo  = useSelector(state => state.hrmReducer.memberModify);
   const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
   const memberInfo = member.memberDTO;
   console.log(loginMember.memberCode);
   console.log('member' , member);
 
   const [textarea, setTextarea] =useState('')
-
   const onChangeHandler = (e) => {
 
     setTextarea(e.target.value);
 
   }
 
+  
   const onInputChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    if (name === "deptName") {
+      const selectedDept = member.selectDept.find((dept) => dept.deptCode === value);
+      setFormValues({ ...formValues, deptName: selectedDept.deptName, deptCode: selectedDept.deptCode });
+    } else if (name === "jobName") {
+      const selectedJob = member.selectJob.find((job) => job.jobCode === value);
+      setFormValues({ ...formValues, jobName: selectedJob.jobName, jobCode: selectedJob.jobCode });
+    } else {
+      setFormValues({ ...formValues, [name]: value });
+    }
   };
 
   
   console.log('loginMember' , loginMember);
   console.log('memberInfo', memberInfo);
+
+  const searchAddress = () => { //주소 api
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        const fullAddress = data.address;
+        setFormValues({ ...formValues, address: fullAddress });
+      },
+    }).open();
+  };
  
 
   const [formValues, setFormValues] = useState({
@@ -41,6 +59,8 @@ export default function HrmModify() {
     memberEmail: '',
     deptName: '',
     jobName: '',
+    deptCode: '',
+    jobCode: '',
     birthDay: '',
     address: '',
     memberHireDate: '',
@@ -63,10 +83,10 @@ export default function HrmModify() {
           memberName: formValues.memberName,
           memberId: formValues.memberId,
           email: formValues.memberEmail,
-          deptCode: memberInfo.deptCode,
-          jobCode: memberInfo.jobCode,
           status: formValues.status,
           phone: formValues.phone,
+          deptCode: formValues.deptCode,
+          jobCode: formValues.jobCode,
           address: formValues.address,
           memberEndDate: formValues.memberEndDate,
           taskCode: memberInfo.taskName,
@@ -97,22 +117,23 @@ export default function HrmModify() {
   }, [memberInfo]);
 
   useEffect(() => {
-    
     if (memberInfo) {
       setFormValues({
-        memberCode: memberInfo?.memberCode,
-        memberId: memberInfo?.memberId,
-        memberName: memberInfo?.memberName,
-        phone: memberInfo?.phone,
-        memberEmail: memberInfo?.memberEmail,
-        deptName: memberInfo?.deptName,
-        jobName: memberInfo?.jobName,
-        birthDay: memberInfo?.birthDay,
-        address: memberInfo?.address,
-        memberHireDate: memberInfo?.memberHireDate,
-        signficant: memberInfo?.signficant,
-        status: memberInfo?.status,
-        memberEndDate: memberInfo?.memberEndDate,
+        memberCode: memberInfo?.memberCode || '',
+        memberId: memberInfo?.memberId || '',
+        memberName: memberInfo?.memberName || '',
+        phone: memberInfo?.phone || '',
+        memberEmail: memberInfo?.memberEmail || '',
+        deptName: memberInfo?.deptName || '',
+        jobName: memberInfo?.jobName || '',
+        deptCode: memberInfo?.deptCode || '',
+        jobCode: memberInfo?.jobCode || '',
+        birthDay: memberInfo?.birthDay || '',
+        address: memberInfo?.address || '',
+        memberHireDate: memberInfo?.memberHireDate || '',
+        signficant: memberInfo?.signficant || '',
+        status: memberInfo?.status || '',
+        memberEndDate: memberInfo?.memberEndDate || '',
       });
     }
   }, [memberInfo]);
@@ -176,9 +197,9 @@ export default function HrmModify() {
               type="text"
               name="deptName"
               onChange={onInputChange}
-              value={formValues.deptName}
+              value={formValues.deptCode}
             >
-               {member.selectDept.map((dept) => (
+               {member.selectDept?.map((dept) => (
             <option key={dept.deptCode} value={dept.deptCode}>
               {dept.deptName}
             </option>
@@ -191,15 +212,29 @@ export default function HrmModify() {
               className={HrmDetailCSS.inputBox}
               name="jobName"
               onChange={onInputChange}
-              value={formValues.jobName}
+              value={formValues.jobCode}
              >
-              {member.selectJob.map((job) => (
+              {member.selectJob?.map((job) => (
             <option key={job.jobCode} value={job.jobCode}>
               {job.jobName}
             </option>
           ))}
         </select>
-            <span className={HrmDetailCSS.inputLabel}>생년월일</span>
+        <span className={HrmDetailCSS.inputLabel}>주소</span>
+            <input
+              className={HrmDetailCSS.inputBox}
+              type="text"
+              name="address"
+              onChange={onInputChange}
+              value={formValues.address}
+            />
+              <button type="button" onClick={searchAddress}>주소 검색</button>
+        
+      
+     
+          </div>
+          <div className={HrmDetailCSS.inputWrapper}>
+          <span className={HrmDetailCSS.inputLabel}>생년월일</span>
             <input
               className={HrmDetailCSS.inputBox}
               type="text"
@@ -208,16 +243,7 @@ export default function HrmModify() {
               readOnly
               value={formValues.birthDay}
             />
-          </div>
-          <div className={HrmDetailCSS.inputWrapper}>
-            <span className={HrmDetailCSS.inputLabel}>주소</span>
-            <input
-              className={HrmDetailCSS.inputBox}
-              type="text"
-              name="address"
-              onChange={onInputChange}
-              value={formValues.address}
-            />
+     
             <span className={HrmDetailCSS.inputLabel}>입사일</span>
             <input
               className={HrmDetailCSS.inputBox}
