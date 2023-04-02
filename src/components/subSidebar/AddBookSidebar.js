@@ -238,7 +238,7 @@ function AddBookSidebar() {
                     <button className={SidebarCSS.buttons} onClick={() => setAddBookModal(true)}>주소록 추가</button>
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(1)}>
                         <img 
-                            className={SidebarCSS.dropDownArrow} 
+                            className={SidebarCSS.dropDownArrow} tive
                             style={firstIsOpen? {transform:`rotate(90deg)`}:{}} 
                             src={process.env.PUBLIC_URL + "/arrow.png"} 
                             alt="화살표"/>공용 주소록

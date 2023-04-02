@@ -11,6 +11,8 @@ import ApprovalDetail from "./pages/approval/ApprovalDetail";
 import ReservationLayout from "./layouts/ReservationLayout";
 import Login from "./pages/Login";
 import Addresses from "./pages/addBook/Addresses";
+import HrmLayout from "./layouts/HrmLayout";
+import Hrm from "./pages/hrm/Hrm";
 import Main from "./pages/Main";
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
@@ -23,6 +25,9 @@ import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import "./App.css";
 import ApprovalDraft from "./pages/approval/ApprovalDraft";
 import DraftForm from "./pages/approval/DraftForm";
+
+import HrmDetail from './pages/hrm/HrmDetail';
+import HrmModify from './pages/hrm/HrmModify';
 
 
 function App() {
@@ -51,6 +56,13 @@ function App() {
                 <Route index path="draft" element={<ApprovalDraft />} />
                 <Route index path="detail/:appCode" element={<ApprovalDetail />} />
                 <Route index path="form/:docCode" element={<DraftForm />} />
+              </Route>
+              <Route path="hrm" element={<HrmLayout/>}>
+                <Route index element={<Hrm/>}/>
+                <Route path="list" element={<Hrm category='인사 목록'/>}/>
+                <Route path="hrm-detail/:memberCode" element={<HrmDetail category='인사 정보'/>}/>
+                <Route path="hrm-modify" element={<Hrm category='인사 수정'/>}/>
+                <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정'/>}/>
               </Route>
             </Route>
           </Route>
