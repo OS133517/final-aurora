@@ -1,16 +1,17 @@
+
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import SidebarCSS from "../subSidebar/SubSidebar.module.css";
 
-function DropDownButton({category, assetList}) {
+function DropDownButton({ category, assetList }) {
 
     // const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
+    // eslint-disable-next-line
     const activeStyle = {
-        backgroundColor : "#73b8a3",
-        color : "white"
+        backgroundColor: "#73b8a3",
+        color: "white"
     };
-
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     }
@@ -18,11 +19,11 @@ function DropDownButton({category, assetList}) {
     return (
         <>
             <button className={SidebarCSS.dropDownButtons} onClick={toggleMenu}>
-                <img 
-                    className={SidebarCSS.dropDownArrow} 
-                    style={isOpen? {transform:`rotate(90deg)`}:{}} 
-                    src={process.env.PUBLIC_URL + "/arrow.png"} 
-                    alt="화살표"/>
+                <img
+                    className={SidebarCSS.dropDownArrow}
+                    style={isOpen ? { transform: `rotate(90deg)` } : {}}
+                    src={process.env.PUBLIC_URL + "/arrow.png"}
+                    alt="화살표" />
                 {category}
             </button>
             {isOpen && (
@@ -33,8 +34,7 @@ function DropDownButton({category, assetList}) {
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
                                 to={`/aurora/reservation/assets/${asset.assetCode}?name=${asset.assetName}`} 
                                 key={asset.assetCode}
-                                about=""
-                                >
+                            >
                                 <span>{asset.assetName}</span>
                             </NavLink>
                         ))

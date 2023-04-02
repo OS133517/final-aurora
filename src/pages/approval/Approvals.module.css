@@ -1,0 +1,253 @@
+.mainList {
+    display: inline-block;
+    width: 100%;
+    
+}
+
+.approvalTable {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.theadStyle {
+    background-color: #F1F2F3;
+    font-size: 16px;
+    height: 5vh;
+
+}
+
+.subtitle{
+    padding-left: 10px;
+    border-bottom: 1px solid #c1c1c1;
+    height: 39px;
+    color: #88cfba;
+}
+
+.title {
+    padding-left: 15px;
+}
+
+.detailtable {
+    width: 100vh;
+    height: 100vh;
+    /* border : 1px solid #c1c1c1; */
+    background-color: white;
+    border-collapse: collapse;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    display: inline-block;
+    
+}
+
+.detaildocName {
+    text-align: center;
+    width: 100vh;
+}
+
+.detailTitle{
+    width: 20px;
+    height: 50px;
+    text-align: center;
+    background-color: #e4e4e4;
+    border: 1px solid #c1c1c1;
+}
+
+.description {
+    width: 80%;
+    border: 1px solid #c1c1c1;
+}
+
+.detailDescript {
+    height: 592px;
+    padding: 5px;
+    border: 1px solid #c1c1c1;
+    vertical-align: top;
+}
+.buttonBox {
+    height: 58px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+.buttonBox button {
+    width: 51px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid #c1c1c1;
+    margin-right: 15px;
+}
+
+
+.approvalLineBox {
+    border: 1px solid #c1c1c1;
+    width: 40vh;
+    height: 87vh;
+    display: inline-block;
+    margin-top: 170px;
+}
+
+.detailBox {
+    display: flex;
+    width: 65%;
+    padding-bottom: 10px;
+    border-right: 1px solid #c1c1c1;
+    border-bottom: 1px solid #c1c1c1;
+}
+/* 결재선 상태 CSS */
+.checkOkCircle {
+    width: 50px;
+    height: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border: 2px solid green;
+    color: green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-left: 200px;
+}
+
+.checkWaitCircle {
+    width: 50px;
+    height: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border: 2px solid gray;
+    color: gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-left: 200px;
+  }
+
+  .checkDenyCircle {
+    width: 50px;
+    height: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border: 2px solid red;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-left: 200px;
+  }
+  
+  .lineBox {
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    height: 80px;
+    padding-left: 5px;
+    position: relative;
+  }
+
+  .titleBox {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding-left: 5px;
+  }
+
+  .titleBox img {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .stick {
+    border: 1px solid gray;
+    width: 0px;
+    height: 50px;
+    background-color: gray;
+    position: absolute;
+    right: 39px;
+    top: 28px;
+    display: inline-block;
+  }
+  /* 결제 작성 */
+  .draftList {
+    list-style: none;
+    border-bottom: 1px solid #c1c1c1;
+    border-left: 4px solid white;
+    height: 46px;
+    width: 294px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+  }
+  .draftClickList {
+    list-style: none;
+    border-bottom: 1px solid #c1c1c1;
+    border-left: 4px solid orange;
+    height: 46px;
+    width: 294px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+  }
+
+  .draftUi {
+    border: 1px solid #c1c1c1;
+    background-color: white;
+    border-collapse: collapse;
+    margin-left: 20px;
+    margin-top: 20px;
+    display: inline-block;
+  }
+
+  ul {padding-inline-start: 0px;}
+/*  결재 생성 미리보기 */
+  .draftView {
+    width: 60vw;
+    height: 100vh;
+    display: flex;
+    
+  }
+
+  .preview{
+    border: 1px solid #c1c1c1;
+    margin-top: 20px;
+    margin-left: 25px;
+    height: 95vh;
+    width: 100vw;
+    overflow: auto;
+    
+  }
+  /* 스크롤바 안보이게 */
+  .preview::-webkit-scrollbar{
+    width: 0;
+  }
+
+  .draftBox {
+    width: 100%;
+    padding-bottom: 10px;
+  }
+
+  .draftInput {
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    border-bottom: 1px solid #c1c1c1;
+  }
+
+  .draftInput button {
+    width: 70px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid #c1c1c1;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
