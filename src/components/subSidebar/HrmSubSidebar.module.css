@@ -195,10 +195,11 @@
     width: 252px;
     height: 50px;
     cursor: pointer;
-    justify-content: center;
+    padding-left: 45px;
     align-items: center;
     text-decoration: none;
     font-weight: bold;
+    margin: 0;
   }
     
   

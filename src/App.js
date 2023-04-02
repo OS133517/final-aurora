@@ -6,6 +6,8 @@ import Addresses from "./pages/addBook/Addresses";
 import HrmLayout from "./layouts/HrmLayout";
 import Hrm from "./pages/hrm/Hrm";
 import Main from "./pages/Main";
+import HrmDetail from './pages/hrm/HrmDetail';
+import HrmModify from './pages/hrm/HrmModify';
 
 
 function App() {
@@ -22,13 +24,16 @@ function App() {
             <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록'/>}/>
             <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
           </Route>
-        </Route>
-        <Route path="hrm" element={<HrmLayout/>}>
-          <Route index element={<Hrm/>}/>
-          <Route path="hrm-list" element={<Hrm category='인사 목록'/>}/>
+          <Route path="hrm" element={<HrmLayout/>}>
+            <Route index element={<Hrm/>}/>
+            <Route path="list" element={<Hrm category='인사 목록'/>}/>
+            <Route path="hrm-detail/:memberCode" element={<HrmDetail category='인사 정보'/>}/>
+            <Route path="hrm-modify" element={<Hrm category='인사 수정'/>}/>
+            <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정'/>}/>
+          </Route>
           
-
         </Route>
+      
       </Route>
     </Routes>
    </BrowserRouter>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import Header from "../components/common/Header";
+// import Header from "../components/common/Header";
 import LoginCSS from "./Login.module.css";
 import { callLoginAPI } from "../apis/MemberAPICall";
 import Swal from "sweetalert2";
