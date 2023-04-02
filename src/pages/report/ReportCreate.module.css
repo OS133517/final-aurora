@@ -1,0 +1,130 @@
+.reportCreateContainer {
+    /* width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 상위 div의 높이를 설정해야 중앙 정렬이 가능합니다 */
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* 상위 div의 높이를 설정해야 중앙 정렬이 가능합니다 */
+}
+
+.reportCreateHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 20px;
+    align-self: flex-start;
+}
+
+.reportCreateDiv {
+    width: 50%; 
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin-top: auto; 
+    margin-bottom: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.formTable {
+    /* border: 1px solid black; */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.formTable th{
+    font-size: 1.5em;
+}
+
+.form-table td {
+    /* width: 30%; */
+    text-align: left;
+    padding: 5px;
+}
+
+.inputContainer {
+    position: relative;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 10;
+}
+
+.suggestionItem {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestionItem:hover {
+    background-color: #88CFBA;
+}
+
+.buttonDiv {
+    display: flex;
+    justify-content: space-between;
+    width: 30%;
+    padding: 10px;
+}
+
+.underBarInput {
+    /* width: 300px; */
+    width: 100%;
+    border: none;
+    border-bottom: 3px solid #C1C1C1;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 1.5em;
+}
+
+.boxInput {
+    border: 3px solid #C1C1C1;
+    /* width: 300px; */
+    width: 100%;
+    height: 150px;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.highlighted {
+    outline: none;
+    border-color: #88CFBA;
+    box-shadow: 0 0 0 2px #4a90e2;
+}
+
+.fileTableContainer {
+    margin-top: 20px;
+}
+  
+.fileTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+.fileTable th,
+.fileTable td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+  
+.fileTabled-table th {
+    background-color: #f2f2f2;
+}
