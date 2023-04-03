@@ -1,15 +1,47 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import AddBookModalCSS from "./AddBookFormModal.module.css";
-import { callAddBookRegistAPI } from "../../apis/AddBookAPICall";
 import Swal from "sweetalert2";
+import { callAddBookForUpdateAPI, callAddBookUpdateAPI } from "../../apis/AddBookAPICall";
 
-function AddBookFormModal({setAddBookModal}) {
+function AddBookUpdateModal({updateList, setUpdateModalIsOn}) {
 
     const dispatch = useDispatch();
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
-    const addBookRegistResult = useSelector(state => state.addBookReducer.addBookRegistMessage);
+    const addressDetail = useSelector(state => state.addBookReducer.address);
+
+    useEffect(() => {
+
+        dispatch(callAddBookForUpdateAPI({
+            addBookNo : updateList[0]
+        }))
+    // eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {
+
+        if(updateList.length === 1) {
+            setForm({
+                ...form,
+                name : addressDetail.name,
+                phone : addressDetail.phone,
+                company : addressDetail.company,
+                department : addressDetail.department,
+                jobName : addressDetail.jobName,
+                groupCode : addressDetail.groupCode,
+                email : addressDetail.email
+            });
+        } else {
+            setForm({
+                ...form,
+                company : addressDetail.company,
+                department : addressDetail.department,
+                groupCode : addressDetail.groupCode
+            })
+        }
+    // eslint-disable-next-line
+    }, [addressDetail]);
     
     const [form, setForm] = useState({
         name : '',
@@ -21,38 +53,10 @@ function AddBookFormModal({setAddBookModal}) {
         groupCode : ''
     })
 
-    useEffect(() => {
-
-            if(addBookRegistResult.status === 200) {
-
-                setAddBookModal(false);
-                Swal.fire({
-                    icon : "success",
-                    title : "주소록 추가",
-                    text : addBookRegistResult.message,
-                    confirmButtonText: '확인'
-                }).then((result) => {
-                    if(result.isConfirmed) {
-                        window.location.reload(true); 
-                    } else {
-                        window.location.reload(true); 
-                    }
-                })
-            } else if (addBookRegistResult.state === 400){
-                Swal.fire({
-                    icon : "error",
-                    title : "주소록 추가",
-                    text : addBookRegistResult.message
-                });
-            } 
-        }, // eslint-disable-next-line
-    [addBookRegistResult]);
-
-
     const onClickModalOff = (e) => {
 
         if(e.target.className.includes("modalBackground")) {
-            setAddBookModal(false);
+            setUpdateModalIsOn(false);
         }
     }
 
@@ -64,70 +68,52 @@ function AddBookFormModal({setAddBookModal}) {
         })
     }
 
-    function validateInput(form) {
+    const onClickAddBookUpdate = () => {
 
-        let result = '';
+        Swal.fire({
 
-        if(!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(form.email)) {
-            result = '이메일 형식이 틀렸습니다.';
-        }
+            icon : "warning",
+            title : "주소록 수정",
+            text : `${updateList.length} 개의 주소록이 수정됩니다.`,
+            showCancelButton : true,
+            cancelButtonText : "취소",
+            confirmButtonText : "확인"
+        }).then(result => {
 
-        Object.entries(form).forEach(([key, value]) => {
+            if(result.isConfirmed) {
 
-            if(key !== 'jobName' && key !== 'department') {
+                dispatch(callAddBookUpdateAPI({
+                    addBookNos : updateList,
+                    form : form
+                }));
+                
+                setUpdateModalIsOn(false);
+            } else {
 
-                if(value.trim().length === 0) {
-
-                    result = key;
-                } 
+                Swal.fire('취소되었습니다.');
+                return;
             }
-        });
-
-        switch(result) {
-            case 'name' : return '이름을 입력하세요.';
-            case 'phone' : return '번호를 입력하세요.';
-            case 'email' : return '이메일을 입력하세요.';
-            case 'groupCode' : return '그룹을 선택하세요.';
-            case 'company' : return '회사를 입력하세요.';
-            default : return result;
-        }
+        })
     }
-    
-    const onClickAddBookRegist = () => {
-
-        const result = validateInput(form);
-
-        if(result.trim().length !== 0 || result === '이메일 형식이 틀렸습니다.') {
-
-            Swal.fire({
-                icon : 'warning',
-                text : result
-            })
-
-            return;
-        } 
-
-        dispatch(callAddBookRegistAPI({
-            form : form
-        }));
-    }
-
+  
     return (
         <div className={AddBookModalCSS.modalBackground} onClick={onClickModalOff}>
             <div className={AddBookModalCSS.modalContainer}>
                 <div className={AddBookModalCSS.header}>
-                    주소록 추가
+                    주소록 수정
                 </div>
                 <div className={AddBookModalCSS.modalDiv}>
                     <table>
                         <tbody>
-                            <tr>
+                             <tr>
                                 <td><label htmlFor="name">이름</label></td>
                                 <td><input 
                                         type="text" 
                                         name="name" 
                                         id="name" 
-                                        value={form.name}
+                                        value={updateList.length === 1? form.name||'' : '다중 선택시 변경 불가'}
+                                        style={updateList.length === 1? null : {backgroundColor : "#C1C1C1", border : "none"}}
+                                        disabled={updateList.length === 1? false : true}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -136,7 +122,9 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="phone" 
                                         id="phone" 
-                                        value={form.phone}
+                                        value={updateList.length === 1? form.phone||'' : '다중 선택시 변경 불가'}
+                                        style={updateList.length === 1? null : {backgroundColor : "#C1C1C1", border : "none"}}
+                                        disabled={updateList.length === 1? false : true}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -145,16 +133,18 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="email" 
                                         name="email" 
                                         id="email" 
-                                        value={form.email}
+                                        value={updateList.length === 1? form.email||'' : '다중 선택시 변경 불가'}
+                                        style={updateList.length === 1? null : {backgroundColor : "#C1C1C1", border : "none"}}
+                                        disabled={updateList.length === 1? false : true}
                                         onChange={onChangeHandler}/></td>
-                            </tr>
+                                </tr>
                             <tr>
                                 <td><label htmlFor="company">회사</label></td>
                                 <td><input 
                                         type="text" 
                                         name="company" 
                                         id="company" 
-                                        value={form.company}
+                                        value={form.company || ''}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -163,7 +153,7 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="department" 
                                         id="department"
-                                        value={form.department}
+                                        value={form.department || ''}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
@@ -172,13 +162,15 @@ function AddBookFormModal({setAddBookModal}) {
                                         type="text" 
                                         name="jobName" 
                                         id="jobName" 
-                                        value={form.jobName}
+                                        value={updateList.length === 1? form.jobName||'' : '다중 선택시 변경 불가'}
+                                        style={updateList.length === 1? null : {backgroundColor : "#C1C1C1", border : "none"}}
+                                        disabled={updateList.length === 1? false : true}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
                                 <td>그룹</td>
                                 <td>
-                                    <select name="groupCode" onChange={onChangeHandler} value={form.groupCode}>
+                                    <select name="groupCode" onChange={onChangeHandler} value={form.groupCode||''}>
                                         <option value="requireSelect">그룹 선택</option>
                                     {
                                         Array.isArray(teamGroupList) && teamGroupList.map(group => (
@@ -197,12 +189,12 @@ function AddBookFormModal({setAddBookModal}) {
                     </table>
                 </div>
                 <div className={AddBookModalCSS.buttonDiv}>
-                    <button onClick={() => setAddBookModal(false)}>나가기</button>
-                    <button onClick={onClickAddBookRegist}>추가하기</button>
+                    <button onClick={() => setUpdateModalIsOn(false)}>나가기</button>
+                    <button onClick={onClickAddBookUpdate}>수정하기</button>
                 </div>
             </div>
         </div>
     );
 }
 
-export default AddBookFormModal;
+export default AddBookUpdateModal;

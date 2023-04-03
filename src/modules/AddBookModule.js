@@ -6,13 +6,11 @@ const initialState = {
     personalGroups : [],
     teamGroups : [],
     groupMessage : [],
-    // groupRegistMessage : [],
-    // groupDeleteMessage : [],
-    // groupUpdateMessage : [],
     addBookRegistMessage : [],
     addBookDeleteMessage : [],
     addBookUpdateMessage : [],
-    memberToGroupMessage : []
+    memberToGroupMessage : [],
+    address : []
 };
 
 // 액션
@@ -28,6 +26,8 @@ export const GET_GROUP_SEARCH = 'addBook/GET_GROUP_SEARCH';
 export const POST_MEMBER_TO_GROUP = 'addBook/POST_MEMBER_TO_GROUP';
 export const DELETE_GROUP = 'addBook/DELETE_GROUP';
 export const PUT_GROUP = 'addBook/PUT_GROUP';
+export const GET_ADDRESS = 'addBook/GET_ADDRESS';
+export const PUT_ADDRESS = 'addBook/PUT_ADDRESS';
 
 // eslint-disable-next-line
 const actions = createActions({
@@ -42,7 +42,9 @@ const actions = createActions({
     [GET_GROUP_SEARCH] : () => {},
     [POST_MEMBER_TO_GROUP] : () => {},
     [DELETE_GROUP] : () => {},
-    [PUT_GROUP] : () => {}
+    [PUT_GROUP] : () => {},
+    [GET_ADDRESS] : () => {},
+    [PUT_ADDRESS] : () => {}
 });
 
 // 리듀서
@@ -70,7 +72,6 @@ const addBookReducer = handleActions({
     [POST_GROUP_REGIST] : (state, { payload }) => {
         return {
             ...state,
-            // groupRegistMessage : payload
             groupMessage : payload
         }},
     [POST_ADD_BOOK_REGIST] : (state, { payload }) => {
@@ -101,14 +102,22 @@ const addBookReducer = handleActions({
     [DELETE_GROUP] : (state, { payload }) => {
         return {
             ...state,
-            // groupDeleteMessage : payload
             groupMessage : payload
         }},
     [PUT_GROUP] : (state, { payload }) => {
         return {
             ...state,
-            // groupUpdateMessage : payload
             groupMessage : payload
+        }},
+    [GET_ADDRESS] : (state, { payload }) => {
+        return {
+            ...state,
+            address : payload
+        }},
+    [PUT_ADDRESS] : (state, { payload }) => {
+        return {
+            ...state,
+            addBookUpdateMessage : payload
         }}
 }, initialState);
 

@@ -10,7 +10,9 @@ import {
     GET_GROUP_SEARCH,
     POST_MEMBER_TO_GROUP,
     DELETE_GROUP,
-    PUT_GROUP
+    PUT_GROUP,
+    GET_ADDRESS,
+    PUT_ADDRESS
 } from "../modules/AddBookModule";
 
 export const callAllMemberAddressesAPI = ({currentPage}) => {
@@ -31,7 +33,8 @@ export const callAllMemberAddressesAPI = ({currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -53,7 +56,8 @@ export const callPersonalGroupAPI = ({memberCode}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -75,7 +79,8 @@ export const callTeamGroupAPI = ({memberCode}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -103,7 +108,8 @@ export const callGroupAddressAPI = ({groupCode, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -125,7 +131,8 @@ export const callGroupRegistAPI = ({groupName, memberCode, team}) => {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 groupName : groupName,
@@ -151,7 +158,8 @@ export const callAddBookRegistAPI = ({form}) => {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 name : form.name,
@@ -159,7 +167,7 @@ export const callAddBookRegistAPI = ({form}) => {
                 email : form.email,
                 company : form.company,
                 department : form.department,
-                comPhone : form.comPhone,
+                jobName : form.jobName,
                 groupCode : form.groupCode
             })
         }).then(response => response.json());
@@ -181,7 +189,8 @@ export const callAddBookDeleteAPI = ({addBookNos}) => {
             method : "DELETE",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 addBookNos : addBookNos
@@ -211,7 +220,8 @@ export const callMemberSearchAPI = ({searchForm, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         }).then(response => response.json());
 
@@ -238,7 +248,8 @@ export const callAddBookSearchAPI = ({searchForm, currentPage, groupCode}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         }).then(response => response.json());
 
@@ -260,7 +271,8 @@ export const callMemberToGroupsAPI = ({memberCodes, groupCode}) => {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 memberCodes : memberCodes,
@@ -277,7 +289,7 @@ export const callMemberToGroupsAPI = ({memberCodes, groupCode}) => {
 
 export const callGroupDeleteAPI = ({groupCode}) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/group/${groupCode}`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/group/${ groupCode }`;
 
     return async (dispatch, getState) => {
 
@@ -285,7 +297,8 @@ export const callGroupDeleteAPI = ({groupCode}) => {
             method : "DELETE",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         }).then(response => response.json());
 
@@ -306,7 +319,8 @@ export const callGroupUpdateAPI = ({groupCode, groupName}) => {
             method : "PUT",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
                 groupCode : groupCode,
@@ -317,6 +331,59 @@ export const callGroupUpdateAPI = ({groupCode, groupName}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callGroupUpdateAPI RESULT', result);
             dispatch({type : PUT_GROUP, payload : result});
+        }
+    }
+}
+
+export const callAddBookForUpdateAPI = ({addBookNo}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/${addBookNo}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAddBookForUpdateAPI RESULT', result);
+            dispatch({type : GET_ADDRESS, payload : result.data});
+        }
+    }
+}
+
+export const callAddBookUpdateAPI = ({addBookNos, form}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/address?addBookNos=${addBookNos}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "PUT",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                name : form.name||'',
+                phone : form.phone||'',
+                company : form.company||'',
+                department : form.department||'',
+                jobName : form.jobName||'',
+                groupCode : form.groupCode||'',
+                email : form.email||''
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAddBookUpdateAPI RESULT', result);
+            dispatch({type : PUT_ADDRESS, payload : result});
         }
     }
 }

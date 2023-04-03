@@ -5,6 +5,7 @@ import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI, callGroupDe
 import { NavLink } from "react-router-dom";
 import AddBookFormModal from "../addBook/AddBookFormModal";
 import Swal from "sweetalert2";
+import { decodeJwt } from "../../utils/tokenUtils";
 
 function AddBookSidebar() {
     
@@ -29,8 +30,7 @@ function AddBookSidebar() {
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
     const groupResultMessage = useSelector(state => state.addBookReducer.groupMessage);
-    // const groupRegistResult = useSelector(state => state.addBookReducer.groupRegistMessage);
-    // const groupDeleteResult = useSelector(state => state.addBookReducer.groupDeleteMessage);
+    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -61,44 +61,14 @@ function AddBookSidebar() {
         }// eslint-disable-next-line
     }, [groupResultMessage]);
 
-    // useEffect(() => {
-
-    //     if(groupRegistResult.status === 200) {
-            
-    //         getGroups();
-    //     } else if(groupRegistResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 추가",
-    //             text : groupRegistResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupRegistResult]);
-
-    // useEffect(() => {
-
-    //     if(groupDeleteResult.status === 200) {
-
-    //         getGroups();
-    //     } else if(groupDeleteResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 삭제",
-    //             text : groupDeleteResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupDeleteResult]);
-
     const getGroups = () => {
 
         dispatch(callTeamGroupAPI({
-            // TODO -> 나중에 토큰에서 꺼내는 걸로
-            memberCode : 2
+            memberCode : loginMember.memberCode
         }));
         
         dispatch(callPersonalGroupAPI({
-            // TODO -> 나중에 토큰에서 꺼내는 걸로
-            memberCode : 2
+            memberCode : loginMember.memberCode
         }));
     }
 
@@ -128,8 +98,7 @@ function AddBookSidebar() {
                 if(tIsVisible && newTGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newTGroupName,
-                        // TODO -> 나중에 토큰에서 꺼내는 걸로
-                        team : '개발4팀'
+                        team : loginMember.team
                     }));
                 }
                 setTIsVisible(!tIsVisible);
@@ -139,8 +108,7 @@ function AddBookSidebar() {
                 if(pIsVisible && newPGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newPGroupName,
-                        // TODO -> 나중에 토큰에서 꺼내는 걸로
-                        memberCode : 2
+                        memberCode : loginMember.memberCode
                     }));
                 }
                 setPIsVisible(!pIsVisible);
@@ -262,7 +230,7 @@ function AddBookSidebar() {
                                 Array.isArray(teamGroupList) && teamGroupList.map(group => (
                                     <NavLink 
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                        to={`/address-book/team-groups/${group.groupCode}`} 
+                                        to={`/aurora/address-book/team-groups/${group.groupCode}`} 
                                         key={group.groupCode}
                                         >
                                         <input 
@@ -292,8 +260,8 @@ function AddBookSidebar() {
                                                 name="team" 
                                                 value={newTGroupName} 
                                                 onChange={onChangeHandler}/>}
-                            {teamGroupList.length <= 4 && <p onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
-                            <p id="tGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
+                            {teamGroupList.length <= 4 && <p style={tIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
+                            <p style={tManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="tGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
@@ -309,7 +277,7 @@ function AddBookSidebar() {
                                 Array.isArray(personalGroupList) && personalGroupList.map(group => (
                                     <NavLink 
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                        to={`/address-book/personal-groups/${group.groupCode}`} 
+                                        to={`/aurora/address-book/personal-groups/${group.groupCode}`} 
                                         key={group.groupCode}
                                         >
                                         <input 
@@ -334,8 +302,8 @@ function AddBookSidebar() {
                                 ))
                             }
                             {pIsVisible && <input type="text" name="personal" value={newPGroupName} onChange={onChangeHandler}/>}
-                            {personalGroupList.length <= 4 && <p onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
-                            <p id="pGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
+                            {personalGroupList.length <= 4 && <p style={pIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
+                            <p style={pManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="pGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
@@ -349,7 +317,7 @@ function AddBookSidebar() {
                         <div className={SidebarCSS.dropDownMenus}>
                             <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                to={"/address-book/addresses"}
+                                to={"/aurora/address-book/addresses"}
                                 >전체 주소록</NavLink>
                             {/* <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
