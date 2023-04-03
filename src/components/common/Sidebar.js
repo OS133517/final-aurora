@@ -1,15 +1,17 @@
 import SidebarCSS from "./Sidebar.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Sidebar() {
-
+    //eslint-disable-next-line
+    const navigate = useNavigate();
+    
     const activeStyle = { borderLeft : "7px solid orange"};
-
     const sidebarMenus = ["home", "mail", "address-book", "board", "calendar", "toDo", "worklog", "innOut", "approval", 
                             "hrm", "reports/summary", "reservation"];
 
     return (
         <div className={SidebarCSS.sidebarDiv}>
+
             {sidebarMenus.map((menu) => (
                 <NavLink 
                     key={menu}
