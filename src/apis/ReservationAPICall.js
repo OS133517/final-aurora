@@ -5,7 +5,9 @@ import { GET_ASSET_CATEGORY,
          PUT_RESERVATION,
          DELETE_RESERVATION,
          GET_RESERVATIONS,
-         GET_RESERVATIONS_BY_DATE } from "../modules/ReservationModule";
+         GET_RESERVATIONS_BY_DATE,
+         GET_MEMBER_INFO,
+         POST_RESERVATION } from "../modules/ReservationModule";
 
 export const callAssetCategoryAPI = () => {
 
@@ -178,7 +180,7 @@ export const callReservationAPI = ({ reservationNo }) => {
     }
 }
 
-export const callReservationByDateAPI = ({assetCode, selectedDate}) => {
+export const callReservationByDateAPI = ({assetCode, startDateTime, endDateTime}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservations/${assetCode}/date?startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
 
@@ -196,6 +198,60 @@ export const callReservationByDateAPI = ({assetCode, selectedDate}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callReservationByDateAPI RESULT', result);
             dispatch({type : GET_RESERVATIONS_BY_DATE, payload : result.data});
+        }
+    }
+}
+
+export const callMemberInfoForRegist = ({memberCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation/member-info/${memberCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callMemberInfoForRegist RESULT', result);
+            dispatch({type : GET_MEMBER_INFO, payload : result.data});
+        }
+    }
+}
+
+export const callReservationRegistAPI = ({form}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation`;
+    const TIME_ZONE = 9 * 60 * 60 * 1000; 
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                assetCode : form.assetCode,
+                memberCode : form.memberCode,
+                team : form.team,
+                reservationDate : form.reservationDate,
+                startTime : new Date(form.startTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
+                endTime : new Date(form.endTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
+                description : form.description
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callReservationRegistAPI RESULT', result);
+            dispatch({type : POST_RESERVATION, payload : result});
         }
     }
 }

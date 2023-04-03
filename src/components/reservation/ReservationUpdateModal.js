@@ -9,19 +9,16 @@ import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import Swal from "sweetalert2";
 
-function ReservationModal({reservationNo, setReservationModal}) {
+function ReservationUpdateModal({reservationNo, setUpdateModal}) {
 
     const dispatch = useDispatch();
     const reservationDetail = useSelector(state => state.reservationReducer?.reservation);
    
     const [form, setForm] = useState({
-        name : "",
         reservationDate : new Date(),
         startTime : new Date(),
         endTime : new Date(),
-        team : "",
-        description : "",
-        assetName : ""
+        description : ""
     });
     const [isSelect, setIsSelect] = useState(false);
 
@@ -37,12 +34,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
 
         setForm({
             ...form,
-            aasetCode : reservationDetail?.assetCode,
-            name : reservationDetail?.memberName,
-            reservationDate : reservationDetail?.reservationDate,
-            team : reservationDetail?.team,
-            description : reservationDetail?.description,
-            assetName : reservationDetail?.assetName
+            description : reservationDetail?.description
         });
     // eslint-disable-next-line
     }, [reservationDetail]);
@@ -52,7 +44,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
     const onClickModalOff = (e) => {
 
         if(e.target.className.includes("modalBackground")) {
-            setReservationModal(false);
+            setUpdateModal(false);
         }
     }
 
@@ -108,7 +100,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
             }));
 
             setIsSelect(false);
-            setReservationModal(!ReservationModal);
+            setUpdateModal(false);
         }
     }
 
@@ -127,7 +119,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     type="text" 
                                     name="assetName" 
                                     id="assetName" 
-                                    value={form.assetName||''}
+                                    value={reservationDetail.assetName||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>
@@ -137,7 +129,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     type="text" 
                                     name="name" 
                                     id="name" 
-                                    value={form.name||''}
+                                    value={reservationDetail.memberName||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>
@@ -147,7 +139,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     type="text" 
                                     name="reservationDate" 
                                     id="reservationDate" 
-                                    value={form.reservationDate||''}
+                                    value={reservationDetail.reservationDate||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>
@@ -182,7 +174,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     timeIntervals={60}
                                     dateFormat="yyyy-MM-dd HH:mm"
                                     minDate={form.startTime}
-                                    minTime={setHours(setMinutes(form.startTime, 0), form.startTime.getHours())}
+                                    minTime={form.startTime === form.endTime? setHours(setMinutes(form.startTime, 0), form.startTime.getHours()):setHours(setMinutes(new Date(), 0), 8)}
                                     maxTime={setHours(setMinutes(new Date(), 0), 18)}
                                 />}
                             </td>
@@ -193,7 +185,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                                     type="text" 
                                     name="team" 
                                     id="team"
-                                    value={form.team||''}
+                                    value={reservationDetail.team||''}
                                     readOnly
                                     disabled={true}/></td>
                         </tr>
@@ -210,7 +202,7 @@ function ReservationModal({reservationNo, setReservationModal}) {
                 </table>
             </div>
             <div className={ReservationModalCSS.buttonDiv}>
-                <button onClick={() => setReservationModal(false)}>나가기</button>
+                <button onClick={() => setUpdateModal(false)}>나가기</button>
                 <button onClick={onClickUpdate}>수정하기</button>
             </div>
         </div>
@@ -218,4 +210,4 @@ function ReservationModal({reservationNo, setReservationModal}) {
     );
 }
 
-export default ReservationModal;
+export default ReservationUpdateModal;

@@ -222,6 +222,24 @@ function AddBookSidebar() {
         }
     }
 
+    const onClickCancel = (tOrP, e) => {
+        const input = document.querySelector(`#groupUpdateInput${e.target.value}`);
+        const nameSpan = document.querySelector(`#groupNameSpan${e.target.value}`);
+
+        switch(tOrP) {
+            case 't' :
+                input.style.display = 'none';
+                nameSpan.style.display = 'block';
+                break;
+            case 'p' :
+                input.style.display = 'none';
+                nameSpan.style.display = 'block';
+                break;
+            default :
+                return;
+        }
+    }
+
     return (
         <>
             {addBookModal? <AddBookFormModal setAddBookModal={setAddBookModal}/>:null}
@@ -263,6 +281,11 @@ function AddBookSidebar() {
                                                 value={group.groupCode} 
                                                 onClick={(e) => {e.preventDefault(); onClickGroupDelete(e);}}
                                                 >삭제
+                                            </button>
+                                            <button 
+                                                value={group.groupCode} 
+                                                onClick={(e) => {e.preventDefault(); onClickCancel('t', e);}}
+                                                >X
                                             </button>
                                         </div>
                                     </NavLink>
@@ -310,6 +333,11 @@ function AddBookSidebar() {
                                                 value={group.groupCode} 
                                                 onClick={(e) => {e.preventDefault(); onClickGroupDelete(e);}}
                                                 >삭제
+                                            </button>
+                                            <button 
+                                                value={group.groupCode} 
+                                                onClick={(e) => {e.preventDefault(); onClickCancel('p', e);}}
+                                                >X
                                             </button>
                                         </div>
                                     </NavLink>
