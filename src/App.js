@@ -30,6 +30,14 @@ function App() {
                 <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록'/>}/>
                 <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
               </Route>
+              <Route path="reports" element={<ReportLayout/>}>
+                <Route path="summary" index element={<ReportsSummary/>}/>
+                <Route path="edit" element={<ReportCreate/>}/>
+                <Route path="routines" element={<Reports/>}/>
+                <Route path="casuals" element={<Reports/>}/>
+                <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
+                <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
+              </Route>
               <Route path="reservation" element={<ReservationLayout/>}>
                 {/* <Route index element={<MyReservation/>}/> */}
                 <Route path="my-reservation" element={<MyReservation/>}/>
