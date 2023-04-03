@@ -1,0 +1,104 @@
+.reportsContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.reportsHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 20px;
+    align-self: flex-start;
+}
+
+.reportsDiv {
+    width: 80%; 
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.reportType {
+    font-size: 2em;
+    color: #88CFBA;
+}
+
+.reportListTable {
+    border: 1px black solid;
+}
+
+.pagingBtn {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #00CAA6;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+
+.pagingBtn:hover{
+    cursor: pointer;
+    background-color: rgb(12, 250, 180);
+}
+
+.pagingBtnDiv {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    list-style: none;
+}
+
+.detailHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+}
+
+.detailHeaderTitle {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.headerButtonDiv {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.detailReportContainer {
+    border: 5px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.detailReportHeader {
+    border-bottom: 3px solid #ccc;
+    padding: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+}
+
+.detailReportBody {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 35px;
+    padding-right: 20px;
+}
+
+.regDate {
+    font-size: 0.5em;
+}

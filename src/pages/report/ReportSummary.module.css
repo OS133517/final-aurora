@@ -6,7 +6,6 @@
     margin: 2%;
 }
 .reportType {
-    /* font-size: 32px; */
     font-size: 2em;
     color: #88CFBA;
 }
@@ -58,6 +57,10 @@
 .roundListItem {
     text-decoration: none;
     /* color: inherit; */
+    color: black;
+}
+a {
+    text-decoration: none;
     color: black;
 }
 .casualReportContainer {

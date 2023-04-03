@@ -8,7 +8,8 @@ import Main from "./pages/Main";
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
-import Reports from "./pages/report/Reports";
+import RoutineReports from "./pages/report/RoutineReports";
+import CasualReports from "./pages/report/CasualReports";
 import ReportRounds from "./pages/report/ReportRounds";
 import ReportRoundDetail from "./pages/report/ReportRoundDetail";
 import MyReservation from "./pages/reservation/MyReservation";
@@ -33,10 +34,9 @@ function App() {
               <Route path="reports" element={<ReportLayout/>}>
                 <Route path="summary" index element={<ReportsSummary/>}/>
                 <Route path="edit" element={<ReportCreate/>}/>
-                <Route path="routines" element={<Reports/>}/>
-                <Route path="casuals" element={<Reports/>}/>
+                <Route path="routines" element={<RoutineReports/>}/>
+                <Route path="casuals" element={<CasualReports/>}/>
                 <Route path="create" element={<ReportCreate/>}/>
-                {/* <Route path=":reportCode" element={<ReportDetail/>}/> */}
                 <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
                 <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
               </Route>

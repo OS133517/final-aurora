@@ -3,26 +3,121 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
-import { callReportSummaryAPI } from "../../apis/ReportAPICall";
+import { callselectReportRoundDetailAPI,
+            callSelectReportDetailListByRoundCodeAPI } from "../../apis/ReportAPICall";
 
-import ReportSummaryCSS from "./ReportSummary.module.css";
+import ReportRoundDetailCSS from "./ReportRoundDetail.module.css";
 import Swal from "sweetalert2";
 
 function ReportRoundDetail() {
 
-    const location = useLocation();
+    const dispatch = useDispatch();
+    const { reportCode } = useParams();
+    console.log("reportCode : " + reportCode);
+    const { roundCode } = useParams();
+    console.log("roundCode : " + roundCode);
 
-    // 쿼리 파라미터 파싱
-    const queryParams = new URLSearchParams(location.search);
-    const a = queryParams.get('a');
+    const reportDetailList = useSelector(state => state.reportReducer.reportDetailList);
+    reportDetailList && console.log("reportDetailList : " + JSON.stringify(reportDetailList));
+
+    const reportRoundDetailData = useSelector(state => state.reportReducer.reportRoundDetailData);
+    reportRoundDetailData && console.log("reportRoundDetailData : " + JSON.stringify(reportRoundDetailData));
+    // const reportRoundDTO = reportRoundDetailData.reportRoundDTO;
+    // reportRoundDetailData && console.log("reportRoundDTO : " + JSON.stringify(reportRoundDTO));
+    const memberDTO = reportRoundDetailData.memberDTO;
+    reportRoundDetailData && console.log("memberDTO : " + JSON.stringify(memberDTO));
+    const reportRoundDetail = reportRoundDetailData.reportRoundDetail;
+    reportRoundDetailData && console.log("reportRoundDetail : " + JSON.stringify(reportRoundDetail));
+    const reportDTO = reportRoundDetailData.reportDTO;
+    reportRoundDetailData && console.log("reportDTO : " + JSON.stringify(reportDTO));
+
+    // 회차 상세 조회 
+    useEffect(() => {
+
+        dispatch(callselectReportRoundDetailAPI({
+
+            reportCode : reportCode,
+            roundCode : roundCode
+        }))
+    // eslint-disable-next-line
+    }, [])
+
+    // 상세 보고 목록 조회 
+    useEffect(() => {
+        
+        dispatch(callSelectReportDetailListByRoundCodeAPI({
+
+            reportCode : reportCode,
+            roundCode : roundCode
+        }))
+    // eslint-disable-next-line
+    }, [])
 
     return (
         <>
-            <div className={ReportSummaryCSS.container}>
-                reports 페이지
-            </div>
-            <div>
-            <h1>Query Parameter a: {a}</h1>
+            <div className={ReportRoundDetailCSS.reportsContainer}>
+                <div className={ReportRoundDetailCSS.reportsHeader}>
+                    보고서 확인 
+                </div>
+                <div className={ReportRoundDetailCSS.reportsDiv}>
+                    <div className={ReportRoundDetailCSS.detailHeader}>
+                        <span className={ReportRoundDetailCSS.detailHeaderTitle}>
+                            정기 보고 회차 상세
+                        </span>
+                        <div className={ReportRoundDetailCSS.headerButtonDiv}>
+                            <button>
+                                수정
+                            </button>
+                            <button>
+                                삭제
+                            </button>
+                            <button>
+                                확인
+                            </button>
+                        </div>
+                    </div>
+                    <div style={{marginLeft:'15px'}}>
+                        <p>
+                            <span>{reportDTO && reportDTO.reportTitle} </span>
+                            <span> / 책임자 : </span>
+                            <span>{memberDTO && memberDTO.deptName} </span>
+                            <span>{memberDTO && memberDTO.jobName} </span>
+                            <span>{memberDTO && memberDTO.memberName}</span>
+                        </p>
+                        <span>
+                            {reportRoundDetail && reportRoundDetail.roundTitle}
+                        </span>
+                        <br></br>
+                        <br></br>
+                        {/* 상세보고 목록 */}
+                        {reportDetailList && reportDetailList.map((reportDetail) => (
+                            <div className={ReportRoundDetailCSS.detailReportContainer}>
+                                <div className={ReportRoundDetailCSS.detailReportHeader}>
+                                    <span>
+                                        {reportDetail.memberName} {reportDetail.jobName}
+                                        <span className={ReportRoundDetailCSS.regDate}>
+                                            &nbsp;&nbsp;{reportDetail.regDate}
+                                        </span>
+                                        {/* <span>수정</span> */}
+                                        <button>수정</button>
+                                    </span>
+                                </div>
+                                <div className={ReportRoundDetailCSS.detailReportBody}>
+                                    {reportDetail.detailBody}
+                                </div>
+                            </div>
+                        ))}
+                        <div className={ReportRoundDetailCSS.commentContainer}>
+                            <div>댓글 헤더</div>
+                            <div>
+                                <div>작성자사진 작성자 댓글내용 // 수정 / 댓글</div>
+                            </div>
+                            <div>
+                                작성자 입력창
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     )

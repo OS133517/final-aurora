@@ -11,12 +11,15 @@ function ReportSummary() {
     const dispatch = useDispatch();
     
     const reportSummary = useSelector(state => state.reportReducer.reportSummary);
-    console.log(reportSummary);
+    console.log("reportSummary : " + JSON.stringify(reportSummary));
 
     const casualList = reportSummary.casualList;
     const routineList1 = reportSummary.routineList1;
+    console.log("routineList1 : " + JSON.stringify(routineList1));
     const routineList2 = reportSummary.routineList2;
+    console.log("routineList2 : " + JSON.stringify(routineList2));
     const routineList3 = reportSummary.routineList3;
+    console.log("routineList3 : " + JSON.stringify(routineList3));
     
     useEffect(() => {
 
@@ -43,14 +46,18 @@ function ReportSummary() {
                         {Array.isArray(routineList1) && 
                             <>
                                 <div className={ReportSummaryCSS.routineReportHeader}>
-                                    {reportSummary.routineReportTitle1}
+                                    <NavLink to={`/aurora/reports/${reportSummary.routineReportDTO1.reportCode}/rounds`}>
+                                        <span>
+                                            {reportSummary.routineReportDTO1.reportTitle}
+                                        </span>
+                                    </NavLink>
                                 </div>
                                 <div className={ReportSummaryCSS.routineReportBody}>
                                     <ul className={ReportSummaryCSS.reportList}>
                                         {
                                             Array.isArray(routineList1) && routineList1.map((routineReport) => (
                                                 <li key={routineReport.roundCode} id={routineReport.roundCode}>
-                                                    <NavLink className={ReportSummaryCSS.roundListItem} to={`/reports/${routineReport.reportCode}/rounds/${routineReport.roundCode}`}>
+                                                    <NavLink className={ReportSummaryCSS.roundListItem} to={`/aurora/reports/${routineReport.reportCode}/rounds/${routineReport.roundCode}`}>
                                                         {routineReport.roundTitle}
                                                     </NavLink>
                                                 </li>
@@ -75,14 +82,18 @@ function ReportSummary() {
                             className={ReportSummaryCSS.routineReport}
                         >
                             <div className={ReportSummaryCSS.routineReportHeader}>
-                                {reportSummary.routineReportTitle2}
+                                    <NavLink to={`/aurora/reports/${reportSummary.routineReportDTO2.reportCode}/rounds`}>
+                                        <span>
+                                            {reportSummary.routineReportDTO2.reportTitle}
+                                        </span>
+                                    </NavLink>
                             </div>
                             <div className={ReportSummaryCSS.routineReportBody}>
                                 <ul className={ReportSummaryCSS.reportList}>
                                     {
                                         Array.isArray(routineList2) && routineList2.map((routineReport) => (
                                             <li key={routineReport.roundCode} id={routineReport.roundCode}>
-                                                <NavLink className={ReportSummaryCSS.roundListItem} to={`/reports/${routineReport.reportCode}/rounds/${routineReport.roundCode}`}>
+                                                <NavLink className={ReportSummaryCSS.roundListItem} to={`/aurora/reports/${routineReport.reportCode}/rounds/${routineReport.roundCode}`}>
                                                     {routineReport.roundTitle}
                                                 </NavLink>
                                             </li>
@@ -100,14 +111,18 @@ function ReportSummary() {
                             // onClick={onClickRound}
                         >
                             <div className={ReportSummaryCSS.routineReportHeader}>
-                                {reportSummary.routineReportTitle3}
+                                    <NavLink to={`/aurora/reports/${reportSummary.routineReportDTO3.reportCode}/rounds`}>
+                                        <span>
+                                            {reportSummary.routineReportDTO3.reportTitle}
+                                        </span>
+                                    </NavLink>
                             </div>
                             <div className={ReportSummaryCSS.routineReportBody}>
                                 <ul className={ReportSummaryCSS.reportList}>
                                     {
                                         Array.isArray(routineList3) && routineList3.map((routineReport) => (
                                             <li key={routineReport.roundCode} id={routineReport.roundCode}>
-                                                <NavLink className={ReportSummaryCSS.roundListItem} to={`/reports/${routineReport.reportCode}/rounds/${routineReport.roundCode}`}>
+                                                <NavLink className={ReportSummaryCSS.roundListItem} to={`/aurora/reports/${routineReport.reportCode}/rounds/${routineReport.roundCode}`}>
                                                     {routineReport.roundTitle}
                                                 </NavLink>
                                             </li>
@@ -120,7 +135,23 @@ function ReportSummary() {
                 </div>
                 <span className={ReportSummaryCSS.reportType}>비정기 보고</span>
                 <div className={`${ReportSummaryCSS.casualReportContainer} ${ReportSummaryCSS.flexContainer}`}>
-                    {casualList == undefined && 
+                    <div className={ReportSummaryCSS.casualReportDiv}>
+                        <ul className={ReportSummaryCSS.reportList}>
+                            {
+                                Array.isArray(casualList) && casualList.slice(0, 10).map((routineReport) => (
+                                    <li key={routineReport.reportCode} id={routineReport.roundCode}>
+                                    <NavLink className={ReportSummaryCSS.roundListItem} to={`/aurora/reports/casuals/${routineReport.reportCode}`}>
+                                            {routineReport.reportTitle}
+                                        </NavLink>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </div>
+                    {casualList != undefined && casualList.length != 0 &&
+                        <div className={ReportSummaryCSS.centerLine}/>
+                    }
+                    {casualList != undefined && casualList.length === 0 && 
                         <div className={ReportSummaryCSS.noticeContainer}>
                             <span className={ReportSummaryCSS.notice}>
                                 비정기보고 내역이 없습니다.
@@ -130,25 +161,9 @@ function ReportSummary() {
                     <div className={ReportSummaryCSS.casualReportDiv}>
                         <ul className={ReportSummaryCSS.reportList}>
                             {
-                                Array.isArray(casualList) && casualList.slice(0, 10).map((routineReport) => (
-                                    <li key={routineReport.reportCode} id={routineReport.roundCode}>
-                                    <NavLink className={ReportSummaryCSS.roundListItem} to={`/reports/casuals/${routineReport.reportCode}`}>
-                                            {routineReport.reportTitle}
-                                        </NavLink>
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                    </div>
-                    {casualList != undefined &&
-                        <div className={ReportSummaryCSS.centerLine}/>
-                    }
-                    <div className={ReportSummaryCSS.casualReportDiv}>
-                        <ul className={ReportSummaryCSS.reportList}>
-                            {
                                 Array.isArray(casualList) && casualList.slice(10, 20).map((routineReport) => (
                                     <li key={routineReport.reportCode} id={routineReport.roundCode}>
-                                        <NavLink className={ReportSummaryCSS.roundListItem} to={`/reports/casuals/${routineReport.reportCode}`}>
+                                        <NavLink className={ReportSummaryCSS.roundListItem} to={`/aurora/reports/casuals/${routineReport.reportCode}`}>
                                             {routineReport.reportTitle}
                                         </NavLink>
                                     </li>

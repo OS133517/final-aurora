@@ -1,16 +1,11 @@
-import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useParams } from "react-router-dom";
-import { callReportSummaryAPI,
-            callSelectSearchListAboutNameAPI,
+import { callSelectSearchListAboutNameAPI,
             callRegisterReportAPI } from "../../apis/ReportAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
+import { useNavigate } from 'react-router-dom';
 
 import ReportCreateCSS from "./ReportCreate.module.css";
-import Swal from "sweetalert2";
-import { Navigate } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
 
 function ReportCreate() {
 
@@ -27,10 +22,12 @@ function ReportCreate() {
     const [focused, setFocused] = useState(false);
     const [fileList, setFileList] = useState([]);
     const [inputValue, setInputValue] = useState("");
-    const matchingMembers = useSelector(state => state.reportReducer.matchingMembers)
     const [selectedMembers, setSelectedMembers] = useState([]);
     const [memberList, setMemberList] = useState([]);
     const [cycleType, setCycleType] = useState("monthly");
+    const matchingMembers = useSelector(state => state.reportReducer.matchingMembers);
+    console.log("matchingMembers : " + JSON.stringify(matchingMembers));
+    console.log("Matching members:", matchingMembers);
 
     const daysOfMonth = Array.from({ length: 31 }, (_, i) => i + 1);
     const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -44,7 +41,7 @@ function ReportCreate() {
     }}, [inputValue]);
 
     useEffect(() => {
-
+        
         setMemberList(selectedMembers.map((member) => member.memberCode));
     }, [selectedMembers]);
 
@@ -88,7 +85,7 @@ function ReportCreate() {
         const newInputValue = e.target.value;
         setInputValue(newInputValue);
       
-        const selectedMember = matchingMembers.find(
+        const selectedMember = matchingMembers && matchingMembers.find(
           (member) => member.memberName === newInputValue
         );
       
@@ -130,6 +127,7 @@ function ReportCreate() {
 
     // 입력 검사 
     const validateFormData = () => {
+
         const { reportTitle, reportInfo, reportType, reportCycle } = reportDTO;
       
         if (!reportTitle) {
@@ -249,9 +247,9 @@ function ReportCreate() {
                                 <td></td>
                                 <td>
                                     <datalist id="members">
-                                        {matchingMembers.map((member) => (
+                                        {matchingMembers && matchingMembers.map((member) => (
                                             <option key={member.memberCode} value={member.memberName}>
-                                                {member.name}
+                                                {member.memberName}
                                             </option>
                                         ))}
                                     </datalist>
@@ -310,7 +308,7 @@ function ReportCreate() {
                                     <label htmlFor="Casual">비정기</label>
                                 </td>
                             </tr>
-                            {reportDTO.reportType == 'Routine' && 
+                            {reportDTO.reportType === 'Routine' && 
                                 <>
                                     <tr>
                                         <td></td>
@@ -336,7 +334,7 @@ function ReportCreate() {
                                     </tr>
                                 </>
                             }
-                            {reportDTO.reportType == 'Casual' && 
+                            {reportDTO.reportType === 'Casual' && 
                                 <>
                                     <tr>
                                         <td></td>
