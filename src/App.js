@@ -19,7 +19,7 @@ import Reports from "./pages/report/Reports";
 import ReportRounds from "./pages/report/ReportRounds";
 import ReportRoundDetail from "./pages/report/ReportRoundDetail";
 import MyReservation from "./pages/reservation/MyReservation";
-import ReservationCalendarLayout from "./layouts/ReservationCalendarLayout";
+import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import "./App.css";
 import ApprovalDraft from "./pages/approval/ApprovalDraft";
 import DraftForm from "./pages/approval/DraftForm";

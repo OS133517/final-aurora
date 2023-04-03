@@ -30,11 +30,12 @@ function DropDownButton({ category, assetList }) {
                 <div className={SidebarCSS.dropDownMenus}>
                     {
                         Array.isArray(assetList) && assetList.map(asset => (
-                            <NavLink
-                                style={({ isActive }) => isActive ? activeStyle : undefined}
-                                to={`/aurora/reservation/assets/${asset.assetCode}`}
+                            <NavLink 
+                                style = { ({ isActive }) => isActive? activeStyle : undefined }
+                                to={`/aurora/reservation/assets/${asset.assetCode}?name=${asset.assetName}`} 
                                 key={asset.assetCode}
-                            >
+                                about=""
+                                >
                                 <span>{asset.assetName}</span>
                             </NavLink>
                         ))
