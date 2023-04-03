@@ -10,10 +10,8 @@ import Addresses from "./pages/addBook/Addresses";
 import ApprovalDetail from "./pages/approval/ApprovalDetail";
 import ReservationLayout from "./layouts/ReservationLayout";
 import Login from "./pages/Login";
-import Addresses from "./pages/addBook/Addresses";
 import HrmLayout from "./layouts/HrmLayout";
 import Hrm from "./pages/hrm/Hrm";
-import Main from "./pages/Main";
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
@@ -29,6 +27,10 @@ import DraftForm from "./pages/approval/DraftForm";
 import HrmDetail from './pages/hrm/HrmDetail';
 import HrmModify from './pages/hrm/HrmModify';
 
+import WorklogLayout from './layouts/WorklogLayout';
+import DayWorklogs from './pages/worklog/DayWorklogs';
+import DayWorklogDetail from './pages/worklog/DayWorklogDetail';
+import DayWorklogInsert from './pages/worklog/DayWorklogInsert';
 
 function App() {
   return (
