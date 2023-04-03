@@ -40,7 +40,7 @@ function App() {
                 <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
               </Route>
               <Route path="reservation" element={<ReservationLayout/>}>
-                {/* <Route index element={<MyReservation/>}/> */}
+                <Route index element={<MyReservation/>}/>
                 <Route path="my-reservation" element={<MyReservation/>}/>
                 <Route path="assets/:assetCode" element={<ReservationCalendarLayout/>}/>
               </Route>
