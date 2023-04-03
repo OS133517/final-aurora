@@ -73,6 +73,11 @@ function App() {
                 <Route path="hrm-modify" element={<Hrm category='인사 수정'/>}/>
                 <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정'/>}/>
               </Route>
+              <Route path="worklog" element={<WorklogLayout/>}>
+                <Route path="day" element={<DayWorklogs/>}/>
+                <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
+                <Route path="day/insert" element={<DayWorklogInsert/>}/>
+              </Route>
             </Route>
           </Route>
          </Routes>
