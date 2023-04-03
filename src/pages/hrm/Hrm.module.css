@@ -1,0 +1,195 @@
+.hrmDiv {
+    float: left;
+    width: 1514px;
+}
+
+.hrmHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    padding-left: 20px;
+}
+
+.hrmSearch {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    line-height: 58px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.hrmSearch>select {
+    box-sizing: border-box;
+    width: 93px;
+    height: 32px;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid #C1C1C1;
+    border-right: none;
+    padding-left: 10px;
+    font-size: 16px;
+}
+
+.hrmSearch>input {
+    box-sizing: border-box;
+    width: 600px;
+    height: 32px;
+    border-radius: 0 10px 10px 0;
+    border: 1px solid #C1C1C1;
+    font-size: 16px;
+}
+
+.hrmSearch>button {
+    box-sizing: border-box;
+    width: 93px;
+    height: 32px;
+    margin-left: 8px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.hrmSearch>div {
+    position: absolute;
+    right: 0;
+    height: 58px;
+    line-height: 58px;
+    padding-top: 10px;
+}
+
+.imgDiv {
+    display: flex;
+    align-items: center;
+}
+
+.imgDiv>img {
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-right: 15px;
+}
+
+.contentTable {
+    width: 1534px;
+    border-bottom: 1px solid #88CFBA;
+    border-collapse : collapse
+}
+
+.contentTable th input:first-child, .contentTable td input:first-child {
+    display: flex;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    margin: 0 auto;
+}
+
+.contentHead th {
+    font-weight: normal;
+    font-size: 16px;
+    height: 58px;
+    line-height: 32px;
+    text-align: start;
+    border-bottom: 1px solid #88CFBA;
+}
+.contentHead th:first-child {
+    width: 100px;
+    padding-left: 5px;
+}
+.contentHead th:nth-child(2) {
+    width: 100px;
+}
+
+.contentHead th:nth-child(3) {
+    width: 150px;
+}
+
+.contentHead th:nth-child(4) {
+    width: 300px;
+
+}
+
+.contentHead th:nth-child(5) {
+    width: 100px;
+}
+
+.contentHead th:nth-child(6) {
+    width: 100px;
+}
+.contentHead th:nth-child(7) {
+    width: 100px;
+}
+
+.contentHead th:nth-child(8) {
+    width: 350px;
+}
+.contentHead th:nth-child(9) {
+    width: 100px;
+}
+.contentHead th:nth-child(10) {
+    width: 150px;
+}
+
+.contentHead th:nth-child(11) {
+    width: 150px;
+}
+.contentHead th:nth-child(12) {
+    width: 150px;
+}
+
+
+.contentHead th:last-child {
+    width: 150px;
+}
+
+.contentTable td {
+    height: 40px;
+}
+
+.contentTable tbody>tr:hover {
+    background-color: #88CFBA;
+    color: white;
+}
+
+.pagingBtn {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #00CAA6;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+
+.pagingBtn:hover{
+    cursor: pointer;
+    background-color: rgb(12, 250, 180);
+}
+
+.pagingBtnDiv {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    list-style: none;
+}
+
+.contentTable >tbody >tr > td> button {
+    box-sizing: border-box;
+    width: 93px;
+    height: 32px;
+    margin-left: 8px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
