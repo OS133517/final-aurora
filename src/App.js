@@ -35,6 +35,8 @@ function App() {
                 <Route path="edit" element={<ReportCreate/>}/>
                 <Route path="routines" element={<Reports/>}/>
                 <Route path="casuals" element={<Reports/>}/>
+                <Route path="create" element={<ReportCreate/>}/>
+                {/* <Route path=":reportCode" element={<ReportDetail/>}/> */}
                 <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
                 <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
               </Route>

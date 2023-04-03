@@ -94,7 +94,7 @@ function ReportSidebar() {
                                 Array.isArray(casualReportList) && casualReportList.slice(0,10).map(casualReport => (
                                     <NavLink 
                                         style={ ({isActive}) => isActive? activeStyle : undefined }
-                                        to={`/aurora/reports/${casualReport.reportCode}/rounds`}
+                                        to={`/aurora/reports/${casualReport.reportCode}`}
                                         key={casualReport.reportCode}
                                     >
                                         <span id={`reportTitleSpan${casualReport.reportTitle}`}>{casualReport.reportTitle}</span>
@@ -121,16 +121,3 @@ function ReportSidebar() {
 }
 
 export default ReportSidebar;
-
-            //         {/* <button className={SidebarCSS.dropDownButtons}>
-            //             {/* <div className={SidebarCSS.dropDownMenus}> */}
-            //             <NavLink 
-            //             style={ ({isActive}) => isActive? activeStyle : undefined }
-            //             to={`/aurora/reports/casuals?completionStatus=N&offset=1`}
-            //         >
-            //             {/* <span>비정기 보고</span> */}
-            //             비정기 보고
-            //             {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-            //         </NavLink>
-            //     {/* </div> */}
-            // {/* </button> */}
