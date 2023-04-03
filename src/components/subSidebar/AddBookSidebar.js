@@ -56,34 +56,9 @@ function AddBookSidebar() {
         }// eslint-disable-next-line
     }, [groupResultMessage]);
 
-    // useEffect(() => {
-
-    //     if(groupRegistResult.status === 200) {
-            
-    //         getGroups();
-    //     } else if(groupRegistResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 추가",
-    //             text : groupRegistResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupRegistResult]);
-
-    // useEffect(() => {
-
-    //     if(groupDeleteResult.status === 200) {
-
-    //         getGroups();
-    //     } else if(groupDeleteResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 삭제",
-    //             text : groupDeleteResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupDeleteResult]);
-
+    useEffect(() => {
+        getGroups();
+    }, [])
 
     useEffect(() => {
 
@@ -258,7 +233,7 @@ function AddBookSidebar() {
                     <button className={SidebarCSS.buttons} onClick={() => setAddBookModal(true)}>주소록 추가</button>
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(1)}>
                         <img 
-                            className={SidebarCSS.dropDownArrow} tive
+                            className={SidebarCSS.dropDownArrow} 
                             style={firstIsOpen? {transform:`rotate(90deg)`}:{}} 
                             src={process.env.PUBLIC_URL + "/arrow.png"} 
                             alt="화살표"/>공용 주소록

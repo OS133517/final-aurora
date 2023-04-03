@@ -59,7 +59,7 @@ function App() {
               <Route path="reservation" element={<ReservationLayout />}>
                 <Route index element={<MyReservation/>}/>
                 <Route path="my-reservation" element={<MyReservation />} />
-                <Route path="assets/:assetCode" element={<ReservationCalendarLayout />} />
+                <Route path="assets/:assetCode" element={<ReservationCalendar />} />
               </Route>
               <Route path="approval" element={<ApprovalLayout />}>
                 <Route index="approvals" element={<Approvals />} />

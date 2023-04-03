@@ -74,7 +74,7 @@ export const callMyReservationAPI = ({ memberCode, currentPage }) => {
 
         if (result.status === 200) {
             console.log('[AddBookAPICalls] callAssetCategoryAPI RESULT', result);
-            dispatch({ type: GET_ASSET_CATEGORY, payload: result.data });
+            dispatch({ type: GET_MY_RESERVATION, payload: result.data });
         }
     }
 }
@@ -151,7 +151,7 @@ export const callReservationsAPI = ({ assetCode, startTime, endTime }) => {
 
         if (result.status === 200) {
             console.log('[AddBookAPICalls] callAllAssetsAPI RESULT', result);
-            dispatch({ type: GET_ASSETS, payload: result.data });
+            dispatch({ type: GET_RESERVATIONS, payload: result.data });
         }
     }
 }
@@ -180,7 +180,7 @@ export const callReservationAPI = ({ reservationNo }) => {
 
 export const callReservationByDateAPI = ({assetCode, selectedDate}) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservations/${assetCode}/date/${selectedDate}`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservations/${assetCode}/date?startDateTime=${startDateTime}&endDateTime=${endDateTime}`;
 
     return async (dispatch, getState) => {
 
