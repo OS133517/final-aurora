@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import DayWorklogsCSS from "./DayWorklogs.module.css";
-import { callDayWorklogListAPI } from "../../apis/DayWorklogAPICall";
+import WeekWorklogsCSS from "./WeekWorklogs.module.css";
 import { useNavigate } from "react-router-dom";
 import { decodeJwt } from "../../utils/tokenUtils";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { callWeekWorklogListAPI } from "../../apis/WeekWorklogAPICall";
 
-function DayWorklogs() {
+function WeekWorklogs() {
 
     const navigate = useNavigate();
     
@@ -13,12 +13,12 @@ function DayWorklogs() {
 
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
     
-    const dayWorklogs = useSelector(state => state.dayWorklogReducer.dayWorklog);
-    console.log('dayWorklogs : ', dayWorklogs);
+    const weekWorklogs = useSelector(state => state.weekWorklogReducer.weekWorklog);
+    console.log('weekWorklogs : ', weekWorklogs);
     
-    const dayWorklogList = dayWorklogs?.data;
+    const weekWorklogList = weekWorklogs?.data;
     
-    const pageInfo = dayWorklogs?.pageInfo;
+    const pageInfo = weekWorklogs?.pageInfo;
     
     const [currentPage, setCurrentPage] = useState(1);
     
@@ -31,23 +31,23 @@ function DayWorklogs() {
 
     useEffect (() => {
 
-        dispatch(callDayWorklogListAPI({
+        dispatch(callWeekWorklogListAPI({
             currentPage : currentPage,
             memberCode : loginMember.memberCode
         }));
     },[currentPage]
     );
     
-    const onClickDayWorklogHandler = (dayWorklogCode) => {
-        navigate(`/aurora/worklog/day/${ dayWorklogCode }`, { replace : false });
+    const onClickWeekWorklogHandler = (weekWorklogCode) => {
+        navigate(`/aurora/worklog/week/${ weekWorklogCode }`, { replace : false });
     }
 
     return (
-        <div className={ DayWorklogsCSS.dayWorklogsDiv }>
+        <div className={ WeekWorklogsCSS.weekWorklogsDiv }>
             <div>
-                <div className={ DayWorklogsCSS.dayWorklogsHeader }>일일 업무일지</div>
-                <table className={ DayWorklogsCSS.contentTable }>
-                    <thead className={ DayWorklogsCSS.contentHead }>
+                <div className={ WeekWorklogsCSS.weekWorklogsHeader }>주간 업무일지</div>
+                <table className={ WeekWorklogsCSS.contentTable }>
+                    <thead className={ WeekWorklogsCSS.contentHead }>
                         
                         <tr>
                             <th>
@@ -57,25 +57,22 @@ function DayWorklogs() {
                                 작성일
                             </th>
                             {/* <th>
-                                부서
+                                직급
                             </th>
                             <th>
-                                직급
+                                부서
                             </th> */}
                         </tr>
                     </thead>
                     <tbody>
                         { 
-                            Array.isArray(dayWorklogList) && dayWorklogList.map((dayWorklog) => (
-                                <tr key={dayWorklog.dayWorklogCode} id={dayWorklog.dayWorklogCode} onClick={() => onClickDayWorklogHandler(dayWorklog.dayWorklogCode)}>
+                            Array.isArray(weekWorklogList) && weekWorklogList.map((weekWorklog) => (
+                                <tr key={weekWorklog.weekWorklogCode} id={weekWorklog.weekWorklogCode} onClick={() => onClickWeekWorklogHandler(weekWorklog.weekWorklogCode)}>
                                     <td>
-                                        {dayWorklog.dayWorklogCode}
+                                        {weekWorklog.weekWorklogCode}
                                     </td>
                                     <td>
-                                        {dayWorklog.dayReportingDate}
-                                    </td>
-                                    <td>
-                                        {/* {loginMember.} */}
+                                        {weekWorklog.weekReportingDate}
                                     </td>
                                 </tr>
                             ))
@@ -83,12 +80,12 @@ function DayWorklogs() {
                     </tbody>
                 </table>
 
-                <div className={ DayWorklogsCSS.pagingBtnDiv }>
-                    { Array.isArray(dayWorklogList) &&
+                <div className={ WeekWorklogsCSS.pagingBtnDiv }>
+                    { Array.isArray(weekWorklogList) &&
                     <button 
                         onClick={() => setCurrentPage(currentPage - 1)} 
                         disabled={currentPage === 1}
-                        className={ DayWorklogsCSS.pagingBtn }
+                        className={ WeekWorklogsCSS.pagingBtn }
                     >
                         &lt;
                     </button>
@@ -97,17 +94,17 @@ function DayWorklogs() {
                     <li key={num} onClick={() => setCurrentPage(num)}>
                         <button
                             style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                            className={ DayWorklogsCSS.pagingBtn }
+                            className={ WeekWorklogsCSS.pagingBtn }
                         >
                             {num}
                         </button>
                     </li>
                     ))}
-                    { Array.isArray(dayWorklogList) &&
+                    { Array.isArray(weekWorklogList) &&
                     <button 
                         onClick={() => setCurrentPage(currentPage + 1)} 
                         disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
-                        className={ DayWorklogsCSS.pagingBtn }
+                        className={ WeekWorklogsCSS.pagingBtn }
                     >
                         &gt;
                     </button>
@@ -117,5 +114,5 @@ function DayWorklogs() {
         </div>    
     );
 };
- 
-export default DayWorklogs;
+
+export default WeekWorklogs;

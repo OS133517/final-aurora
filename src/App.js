@@ -8,7 +8,9 @@ import WorklogLayout from "./layouts/WorklogLayout";
 import DayWorklogs from "./pages/worklog/DayWorklogs";
 import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
 import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
-
+import WeekWorklogs from "./pages/worklog/WeekWorklogs";
+import WeekWorklogDetail from "./pages/worklog/WeekWorklogDetail";
+import WeekWorklogInsert from "./pages/worklog/WeekWorklogInsert";
 import Main from "./pages/Main";
 import MyReservation from "./pages/reservation/MyReservation";
 import ReservationCalendarLayout from "./layouts/ReservationCalendarLayout";
@@ -34,6 +36,10 @@ function App() {
               <Route path="day" element={<DayWorklogs/>}/>
               <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
               <Route path="day/insert" element={<DayWorklogInsert/>}/>
+           
+              <Route path="week" element={<WeekWorklogs/>}/>
+              <Route path="week/:weekWorklogCode" element={<WeekWorklogDetail/>}/>
+              <Route path="week/insert" element={<WeekWorklogInsert/>}/>
             </Route>
 
             <Route path="reservation" element={<ReservationLayout/>}>

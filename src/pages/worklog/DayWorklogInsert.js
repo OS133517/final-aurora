@@ -1,15 +1,18 @@
 import DayWorklogInsertCSS from './DayWorklogInsert.module.css';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { callDayWorklogInsertAPI } from '../../apis/DayWorklogAPICall';
 import { useState } from 'react';
+import { callDayWorklogInsertAPI } from '../../apis/DayWorklogAPICall';
+import { decodeJwt } from "../../utils/tokenUtils";
 
 function DayWorklogInsert() {
-
 
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
+
+    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
+    console.log(loginMember);
     
     const [form, setForm] = useState({
         morningDayContent : '',
@@ -30,22 +33,22 @@ function DayWorklogInsert() {
     const onClickDayWorklogInsertHandler = () => {
 
         console.log('[DayWorklogInsert] onClickDayWorklogInsertHandler');
+        const formData = new FormData();
 
-        // const formData = new FormData();
+        formData.append("morningDayContent", form.morningDayContent);
+        formData.append("morningDayNote", form.morningDayNote);
+        formData.append("afternoonDayContent", form.afternoonDayContent);
+        formData.append("afternoonDayNote", form.afternoonDayNote); 
+        formData.append("daySpecialNote", form.daySpecialNote);
+        
+        dispatch(callDayWorklogInsertAPI({
+            form : formData,
+            memberCode : loginMember.memberCode
+        }));
 
-        // formData.append("morningDayContent", form.morningDayContent);
-        // formData.append("morningDayNote", form.morningDayNote);
-        // formData.append("afternnonDayContent", form.afternnonDayContent);
-        // formData.append("afternnonDayNote", form.afternnonDayNote);
-        // formData.append("daySpecialNote", form.daySpecialNote);
-
-        // dispatch(callDayWorklogInsertAPI({
-        //     form : formData
-        // }));
+        navigate("/aurora/worklog/day", { replace : true });
+        // window.location.reload();
     }
-
-
-    
 
     return (
         <div>
@@ -104,7 +107,7 @@ function DayWorklogInsert() {
                             <td>오후</td>
                             <td>
                                 <input
-                                    name='afternnonDayContent'
+                                    name='afternoonDayContent'
                                     placeholder='오후 업무 비고'
                                     className={ DayWorklogInsertCSS.dayWorklogInfoInput }
                                     onChange={ onChangeHandler }
@@ -112,7 +115,7 @@ function DayWorklogInsert() {
                             </td>
                             <td>
                                 <input
-                                    name='afternnonDayNote'
+                                    name='afternoonDayNote'
                                     placeholder='오후 업무 비고'
                                     className={ DayWorklogInsertCSS.dayWorklogInfoInput }
                                     onChange={ onChangeHandler }
@@ -120,9 +123,9 @@ function DayWorklogInsert() {
                             </td>
                             <td></td>
                         </tr>
-                    
-                    <tr> <td>특이 사항</td></tr>
-                        <tr> <td>
+                        <tr><td>특이 사항</td></tr>
+                        <tr> 
+                            <td>
                             <input
                                 name='daySpecialNote'
                                 placeholder='특이 사항'
@@ -132,7 +135,6 @@ function DayWorklogInsert() {
                                     <td></td>
                                     <td></td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>

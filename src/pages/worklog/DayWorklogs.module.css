@@ -1,3 +1,8 @@
+.dayWorklogsDiv {
+    /* float: left; */
+    width: 100%;
+}
+
 .pagingBtn {
     margin: 5px;
     border-radius: 5px;
