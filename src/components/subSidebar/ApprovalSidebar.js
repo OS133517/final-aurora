@@ -19,7 +19,8 @@ function ApprovalSidebar() {
     useEffect(() => {
         callGetApprovalsAPI(1);
     // eslint-disable-next-line
-    },[])
+    }, [])
+
     return(
         <div className={SidebarCSS.sidebarDiv}>
             <div className={SidebarCSS.sideHeader}>
@@ -29,7 +30,7 @@ function ApprovalSidebar() {
                 <button className={SidebarCSS.buttons} onClick={ cilckMakeApproval }>서류 작성</button>
                 <div className={SidebarCSS.checked}>
                     <div className={SidebarCSS.count}>
-                        <h1>{list.length}</h1>
+                        <h1>{Array.isArray(list) && list.length}</h1>
                         <label>결재 대기</label>
                     </div>
                     <div className={SidebarCSS.count}>

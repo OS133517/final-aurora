@@ -215,7 +215,10 @@ function ReportCreate() {
                                     />
                                 </td>
                             </tr>
-                            <br></br>
+                            <tr>
+                                <td><br/></td>
+                                <td></td>
+                            </tr>
                             <tr>
                                 <th>
                                     설명
@@ -230,7 +233,10 @@ function ReportCreate() {
                                     />
                                 </td>
                             </tr>
-                            <br></br>
+                            <tr>
+                                <td><br/></td>
+                                <td></td>
+                            </tr>
                             <tr>
                                 <th>
                                     보고자
@@ -284,7 +290,10 @@ function ReportCreate() {
                                     </div>
                                 </td>
                             </tr>
-                            <br></br>
+                            <tr>
+                                <td><br/></td>
+                                <td></td>
+                            </tr>
                             <tr>
                                 <th>
                                     유형
@@ -382,7 +391,10 @@ function ReportCreate() {
                             <tr>
                                 <td></td>
                             </tr>
-                            <br></br>
+                            <tr>
+                                <td><br/></td>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
                     <div className={ReportCreateCSS.buttonDiv}>

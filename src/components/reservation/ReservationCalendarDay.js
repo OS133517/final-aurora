@@ -8,13 +8,11 @@ function ReservationCalendarDay({day, setSelectedDate}) {
     const endDateTime = new Date(day.year, day.month - 1, day.date + 1);
 
     const reservationList = useSelector(state => state.reservationReducer.reservations);
-    const reservationBar = reservationList && reservationList.filter(reservation => (
+    const reservationBar = Array.isArray(reservationList) && reservationList.filter(reservation => (
         new Date(reservation.startTime).getDate() >= startDateTime.getDate() 
         && new Date(reservation.startTime).getDate() <= endDateTime.getDate())
         ||new Date(reservation.endTime).getDate() >= startDateTime.getDate() 
         && new Date(reservation.endTime).getDate() <= endDateTime.getDate());
-    reservationBar.length > 0 && console.log(`날짜`, startDateTime.getDate(), reservationBar.length);
-    reservationBar.length > 0 && console.log(`날짜`, startDateTime.getDate(), reservationBar);
 
     const setDate =() => {
 
