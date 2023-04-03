@@ -4,7 +4,6 @@ import SidebarCSS from "../subSidebar/SubSidebar.module.css";
 
 function DropDownButton({category, assetList}) {
 
-    // const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -33,12 +32,17 @@ function DropDownButton({category, assetList}) {
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
                                 to={`/aurora/reservation/assets/${asset.assetCode}?name=${asset.assetName}`} 
                                 key={asset.assetCode}
-                                about=""
                                 >
                                 <span>{asset.assetName}</span>
                             </NavLink>
                         ))
                     }
+                    {category === '예약 관리' && <NavLink 
+                                                    style = { ({ isActive }) => isActive? activeStyle : undefined }
+                                                    to={`/aurora/reservation/asset-management`} 
+                                                    >
+                                                    <span>예약 품목 관리</span>
+                                                </NavLink>}
                 </div>
             )}
         </>

@@ -7,7 +7,8 @@ import { GET_ASSET_CATEGORY,
          GET_RESERVATIONS,
          GET_RESERVATIONS_BY_DATE,
          GET_MEMBER_INFO,
-         POST_RESERVATION } from "../modules/ReservationModule";
+         POST_RESERVATION,
+         GET_ASSETS_FOR_MANAGEMENT } from "../modules/ReservationModule";
 
 export const callAssetCategoryAPI = () => {
 
@@ -251,6 +252,28 @@ export const callReservationRegistAPI = ({form}) => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callReservationRegistAPI RESULT', result);
             dispatch({type : POST_RESERVATION, payload : result});
+        }
+    }
+}
+
+export const callAllAssetsForManagementAPI = () => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation/asset-management`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAllAssetsForManagementAPI RESULT', result);
+            dispatch({type : GET_ASSETS_FOR_MANAGEMENT, payload : result.data});
         }
     }
 }

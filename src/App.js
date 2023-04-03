@@ -8,6 +8,7 @@ import Main from "./pages/Main";
 import MyReservation from "./pages/reservation/MyReservation";
 import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import "./App.css";
+import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route index element={<MyReservation/>}/>
               <Route path="my-reservation" element={<MyReservation/>}/>
               <Route path="assets/:assetCode" element={<ReservationCalendar/>}/>
+              <Route path="asset-management" element={<ReservationAssetManagement/>}/>
             </Route>
           </Route>
         </Route>

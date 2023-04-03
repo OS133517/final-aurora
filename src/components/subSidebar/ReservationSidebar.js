@@ -6,7 +6,6 @@ import { callAllAssetsAPI } from "../../apis/ReservationAPICall";
 import DropDownButton from "../reservation/DropDownButton";
 import { useNavigate } from "react-router";
 import { decodeJwt } from "../../utils/tokenUtils";
-import { NavLink } from "react-router-dom";
 
 function ReservationSidebar() {
 
@@ -29,8 +28,6 @@ function ReservationSidebar() {
         });
     }
 
-    // const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
-
     useEffect(() => {
 
         // dispatch(callAssetCategoryAPI());
@@ -38,29 +35,25 @@ function ReservationSidebar() {
     // eslint-disable-next-line
     }, [])
 
-
     return (
         <>
          <div className={SidebarCSS.sidebarDiv}>
                 <div className={SidebarCSS.sideHeader}>
                     <span>예약</span>
                 </div>
-                <div>
+                <div className={SidebarCSS.sidebarBody}>
                     <button 
                         className={SidebarCSS.buttons} 
                         onClick={() => navigate("/aurora/reservation/my-reservation")}
                         >내 예약
                     </button>
+                    {loginMember && loginMember.auth[0] === 'ROLE_ADMIN'? <DropDownButton 
+                                                                                        category={'예약 관리'}
+                                                                                        />:null}
                     {Array.isArray(categoryList) && categoryList.map(asset => <DropDownButton 
                                                                                         key={asset.assetCode} 
                                                                                         category={asset.assetCategory}
                                                                                         assetList={assetList.filter(item => item.assetCategory === asset.assetCategory)}/>)}
-                    {loginMember && loginMember.auth[0] === 'ROLE_ADMIN'? (
-                        <NavLink
-                            to={"/aurora/asset-management"}>
-                            예약 품목 관리
-                        </NavLink>
-                    ):null}
                 </div>
             </div>
         </>
