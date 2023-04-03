@@ -77,7 +77,7 @@ function AddBookUpdateModal({updateList, setUpdateModalIsOn}) {
             text : `${updateList.length} 개의 주소록이 수정됩니다.`,
             showCancelButton : true,
             cancelButtonText : "취소",
-            confirmButtonText : "확인"
+            confirmButtonText : "확인",
         }).then(result => {
 
             if(result.isConfirmed) {

@@ -86,7 +86,11 @@ export default function HrmDetail() {
 
     return (
         <>
+        <div className={HrmDetailCSS.hrmHeader}>
+                <span>인사 정보</span>
+            </div>
       <div className={HrmDetailCSS.allContainer}>
+      
         <div className={HrmDetailCSS.container}>
           <div>
             <div className={HrmDetailCSS.inputWrapper}>

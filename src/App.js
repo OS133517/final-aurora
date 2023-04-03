@@ -8,6 +8,8 @@ import Hrm from "./pages/hrm/Hrm";
 import Main from "./pages/Main";
 import HrmDetail from './pages/hrm/HrmDetail';
 import HrmModify from './pages/hrm/HrmModify';
+import HrmRegist from './pages/hrm/HrmSignup';
+import HrmSignup from './pages/hrm/HrmSignup';
 
 
 function App() {
@@ -30,6 +32,7 @@ function App() {
             <Route path="hrm-detail/:memberCode" element={<HrmDetail category='인사 정보'/>}/>
             <Route path="hrm-modify" element={<Hrm category='인사 수정'/>}/>
             <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정'/>}/>
+            <Route path="hrm-regist" element={<HrmSignup category='인사 등록'/>}/>
           </Route>
           
         </Route>
