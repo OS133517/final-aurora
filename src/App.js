@@ -49,11 +49,11 @@ function App() {
                 <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
                 <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
               </Route>
-                <Route path="reservation" element={<ReservationLayout />}>
-                  <Route index element={<MyReservation/>}/>
-                  <Route path="my-reservation" element={<MyReservation />} />
-                  <Route path="assets/:assetCode" element={<ReservationCalendarLayout />} />
-                </Route>
+              <Route path="reservation" element={<ReservationLayout />}>
+                <Route index element={<MyReservation/>}/>
+                <Route path="my-reservation" element={<MyReservation />} />
+                <Route path="assets/:assetCode" element={<ReservationCalendarLayout />} />
+              </Route>
               <Route path="approval" element={<ApprovalLayout />}>
                 <Route index="approvals" element={<Approvals />} />
                 <Route index path="pending" element={<Pending />} />
@@ -62,9 +62,8 @@ function App() {
                 <Route index path="form/:docCode" element={<DraftForm />} />
               </Route>
             </Route>
-  
           </Route>
-            </Routes>
+         </Routes>
         </BrowserRouter>
       </div>
   );
