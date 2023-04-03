@@ -106,6 +106,7 @@ export const callReservationAPI = ({reservationNo}) => {
 export const callReservationUpdateAPI = ({form, reservationNo}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation/${reservationNo}`;
+    const TIME_ZONE = 9 * 60 * 60 * 1000; 
 
     return async (dispatch, getState) => {
 
@@ -119,7 +120,7 @@ export const callReservationUpdateAPI = ({form, reservationNo}) => {
             body : JSON.stringify({
                 startTime : form.startTime.toLocaleString(),
                 endTime : form.endTime.toLocaleString(),
-                reservationDate : form.reservationDate,
+                reservationDate : new Date(form.reservationDate.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -13),
                 description : form.description
             })
         }).then(response => response.json());

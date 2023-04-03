@@ -1,10 +1,11 @@
 .dayDiv {
     box-sizing: border-box;
     width: 14.8%;
-    height: 137px;
+    height: 100px;
     border-bottom: 1px solid #c1c1c1;
     border-right: 1px solid #c1c1c1;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .dayDiv:nth-child(7n), .dayDiv:nth-child(7n + 1) {

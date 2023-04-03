@@ -5,11 +5,14 @@ import SidebarCSS from "./SubSidebar.module.css";
 import { callAllAssetsAPI } from "../../apis/ReservationAPICall";
 import DropDownButton from "../reservation/DropDownButton";
 import { useNavigate } from "react-router";
+import { decodeJwt } from "../../utils/tokenUtils";
+import { NavLink } from "react-router-dom";
 
 function ReservationSidebar() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
 
     // const categoryList = useSelector(state => state.reservationReducer.assetCategories);
     const assetList = useSelector(state => state.reservationReducer.assets);
@@ -52,6 +55,12 @@ function ReservationSidebar() {
                                                                                         key={asset.assetCode} 
                                                                                         category={asset.assetCategory}
                                                                                         assetList={assetList.filter(item => item.assetCategory === asset.assetCategory)}/>)}
+                    {loginMember && loginMember.auth[0] === 'ROLE_ADMIN'? (
+                        <NavLink
+                            to={"/aurora/asset-management"}>
+                            예약 품목 관리
+                        </NavLink>
+                    ):null}
                 </div>
             </div>
         </>

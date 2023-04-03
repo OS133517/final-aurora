@@ -41,7 +41,7 @@ function ReservationDayDetail({assetCode, assetName, selectedDate}) {
     }
 
     return (
-        <div>
+        <div className={DetailCSS.detailDiv}>
             {registModal?<ReservationRegistModal startDate={selectedDate?.startDateTime} assetName={assetName} assetCode={assetCode} setRegistModal={setRegistModal}/>:null}
             <div className={DetailCSS.detailHeader}>
                 <span>{`${selectedDate.startDateTime.replace('00:00:00', '')||''}   ${selectedDate.day||''}`}</span>

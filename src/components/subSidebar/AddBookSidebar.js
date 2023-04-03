@@ -255,6 +255,7 @@ function AddBookSidebar() {
                                             className={SidebarCSS.groupUpdateInput}
                                             id={`groupUpdateInput${group.groupCode}`}
                                             type="text" 
+                                            maxLength='10'
                                             name="groupName"/>
                                         <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
                                         <div style={tManageIsOn? manageStyle:null}>
@@ -281,6 +282,7 @@ function AddBookSidebar() {
                                                 className={SidebarCSS.groupInsertInput} 
                                                 type="text" 
                                                 name="team" 
+                                                maxLength='10'
                                                 value={newTGroupName} 
                                                 onChange={onChangeHandler}/>}
                             {teamGroupList.length <= 4 && <p style={tIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
@@ -307,6 +309,7 @@ function AddBookSidebar() {
                                             className={SidebarCSS.groupUpdateInput}
                                             id={`groupUpdateInput${group.groupCode}`}
                                             type="text" 
+                                            maxLength='10'
                                             name="groupName"/>
                                         <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
                                         <div style={pManageIsOn? manageStyle:null}>
@@ -329,7 +332,12 @@ function AddBookSidebar() {
                                     </NavLink>
                                 ))
                             }
-                            {pIsVisible && <input type="text" name="personal" value={newPGroupName} onChange={onChangeHandler}/>}
+                            {pIsVisible && <input 
+                                                type="text"
+                                                name="personal" 
+                                                value={newPGroupName} 
+                                                maxLength='10'
+                                                onChange={onChangeHandler}/>}
                             {personalGroupList.length <= 4 && <p style={pIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
                             <p style={pManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="pGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
