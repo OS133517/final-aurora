@@ -73,10 +73,8 @@ function App() {
                 <Route path="hrm-modify" element={<Hrm category='인사 수정'/>}/>
                 <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정'/>}/>
               </Route>
-          
-        </Route>
-          
-      </Route>
+            </Route>
+          </Route>
          </Routes>
         </BrowserRouter>
       </div>
