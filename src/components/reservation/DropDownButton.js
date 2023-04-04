@@ -30,7 +30,7 @@ function DropDownButton({category, assetList}) {
                         Array.isArray(assetList) && assetList.map(asset => (
                             <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                to={`/aurora/reservation/assets/${asset.assetCode}?name=${asset.assetName}`} 
+                                to={`/aurora/reservation/assets/${asset.assetCode}?name=${asset.assetName}&status=${asset.status}`} 
                                 key={asset.assetCode}
                                 >
                                 <span>{asset.assetName}</span>

@@ -8,7 +8,8 @@ const initialState = {
     reservationMessage : [],
     reservationsByDate : [],
     memberInfo : [],
-    assetsForManagement : []
+    assetsForManagement : [],
+    assetResult : []
 };
 
 // 액션
@@ -23,6 +24,9 @@ export const GET_RESERVATIONS_BY_DATE = 'reservation/GET_RESERVATIONS_BY_DATE';
 export const GET_MEMBER_INFO = 'reservation/GET_MEMBER_INFO';
 export const POST_RESERVATION = 'reservation/POST_RESERVATION';
 export const GET_ASSETS_FOR_MANAGEMENT = 'reservation/GET_ASSETS_FOR_MANAGEMENT';
+export const PUT_ASSET_STATUS = 'reservation/PUT_ASSET_STATUS';
+export const DELETE_ASSET = 'reservation/DELETE_ASSET';
+export const POST_ASSET = 'reservation/POST_ASSET';
 
 // eslint-disable-next-line
 const actions = createActions({
@@ -36,7 +40,10 @@ const actions = createActions({
     [GET_RESERVATIONS_BY_DATE] : () => {},
     [GET_MEMBER_INFO] : () => {},
     [POST_RESERVATION] : () => {},
-    [GET_ASSETS_FOR_MANAGEMENT] : () => {}
+    [GET_ASSETS_FOR_MANAGEMENT] : () => {},
+    [PUT_ASSET_STATUS] : () => {},
+    [DELETE_ASSET] : () => {},
+    [POST_ASSET] : () => {}
 });
 
 // 리듀서
@@ -95,6 +102,21 @@ const reservationReducer = handleActions({
         return {
             ...state,
             assetsForManagement : payload
+        }},
+    [PUT_ASSET_STATUS] : (state, { payload }) => {
+        return {
+            ...state,
+            assetResult : payload
+        }},
+    [DELETE_ASSET] : (state, { payload }) => {
+        return {
+            ...state,
+            assetResult : payload
+        }},
+    [POST_ASSET] : (state, { payload }) => {
+        return {
+            ...state,
+            assetResult : payload
         }}
 }, initialState);
 

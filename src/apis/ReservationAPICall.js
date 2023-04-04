@@ -8,7 +8,10 @@ import { GET_ASSET_CATEGORY,
          GET_RESERVATIONS_BY_DATE,
          GET_MEMBER_INFO,
          POST_RESERVATION,
-         GET_ASSETS_FOR_MANAGEMENT } from "../modules/ReservationModule";
+         GET_ASSETS_FOR_MANAGEMENT,
+         PUT_ASSET_STATUS,
+         DELETE_ASSET,
+         POST_ASSET } from "../modules/ReservationModule";
 
 export const callAssetCategoryAPI = () => {
 
@@ -274,6 +277,85 @@ export const callAllAssetsForManagementAPI = () => {
         if(result.status === 200) {
             console.log('[AddBookAPICalls] callAllAssetsForManagementAPI RESULT', result);
             dispatch({type : GET_ASSETS_FOR_MANAGEMENT, payload : result.data});
+        }
+    }
+}
+
+export const callAssetStatusChangeAPI = ({assetCode, status}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation/asset-management`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "PUT",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                assetCode : assetCode,
+                status : status
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAssetStatusChangeAPI RESULT', result);
+            dispatch({type : PUT_ASSET_STATUS, payload : result});
+        }
+    }
+}
+
+export const callAssetDeleteAPI = ({assetCodes}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation/asset-management`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "DELETE",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                assetCodes : assetCodes
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAssetDeleteAPI RESULT', result);
+            dispatch({type : DELETE_ASSET, payload : result});
+        }
+    }
+}
+
+export const callAssetRegistAPI = ({form}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation/asset-management`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                assetCode : form.assetCode,
+                assetName : form.assetName,
+                assetCategory : form.assetCategory,
+                status : form.status
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AddBookAPICalls] callAssetRegistAPI RESULT', result);
+            dispatch({type : POST_ASSET, payload : result});
         }
     }
 }

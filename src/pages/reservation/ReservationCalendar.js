@@ -13,6 +13,7 @@ function ReservationCalendar() {
     const {assetCode} = useParams();
     const [searchParams] = useSearchParams();
     const assetName = searchParams.get("name");
+    const assetStatus = searchParams.get("status");
     const [selectedMonth, setSelectedMonth] = useState([]);
     const [thisMonth, setThisMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState({
@@ -168,7 +169,7 @@ function ReservationCalendar() {
                     </div>
                 </div>
                 <div>
-                    {selectedDate.date !== '' && <ReservationDayDetail assetCode={assetCode} assetName={assetName} selectedDate={selectedDate}/>}
+                    {selectedDate.date !== '' && <ReservationDayDetail assetCode={assetCode} assetName={assetName} assetStatus={assetStatus} selectedDate={selectedDate}/>}
                 </div>
             </div>
         </>

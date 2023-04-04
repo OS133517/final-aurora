@@ -71,7 +71,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
 
             const sameDay = Array.isArray(reservationList) && reservationList.filter(day => day.startTime.slice(0, -8) === startDate.slice(0, -8)).sort((a, b) => new Date(a.startTime).getHours() - new Date(b.startTime).getHours());
             console.log('sameDay1212', sameDay);
-            return sameDay.filter(item => new Date(item.startTime).getHours() > new Date(form.startTime).getHours()).map(item => new Date(item.startTime).getHours())[0];
+            return sameDay.length === 0? 18 : sameDay.filter(item => new Date(item.startTime).getHours() > new Date(form.startTime).getHours()).map(item => new Date(item.startTime).getHours())[0];
         }
         
         return excludeTimes.map(time => setHours(setMinutes(new Date(), 0), time));
