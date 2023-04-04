@@ -6,35 +6,52 @@ import DayWorklogInsertCSS from './DayWorklogInsert.module.css'
 import { callDayWorklogDetailAPI } from '../../apis/DayWorklogAPICall';
 import { callDayWorklogUpdateAPI } from '../../apis/DayWorklogAPICall';
 import { callDayWorklogDeleteAPI } from '../../apis/DayWorklogAPICall';
-import { decodeJwt } from "../../utils/tokenUtils";
+import { callLoginAPI } from '../../apis/MemberAPICall';
+import { decodeJwt } from '../../utils/tokenUtils';
+import { callMemberDayWorklogAPI } from '../../apis/DayWorklogAPICall';
 
 function DayWorklogDetail() {
 
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
-
-    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
-    console.log(loginMember)
-    console.log("loginMember.memberCode : " + loginMember.memberCode)
-    console.log("loginMember.memberName : " + loginMember.memberName)
-
+    
     const {dayWorklogCode} = useParams(); // 패스배리어블을 쓰면 유즈파람을 쓴다??
 
+    // const {memberCode} = useParams();
+
+    // const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
+    
+    //디테일에 내용 뽑듯이 토큰에서 멤버코드 빼와서 멤버테이블에서 뺴온다
+
     const dayWorklog = useSelector(state => state.dayWorklogReducer.dayWorklog);
-    console.log(dayWorklog);
+
     //DB에 없는 내용은 멤버코드에 담겨있다.
     //그거는 토큰에 멤버코드를 담아놔서 꺼내쓸수 있따. token.memberCode 를 이용해서 사용할 수 있음??
+    
+    const memberLogin = useSelector(state => state.memberReducer.memberLogin);
+    // console.log("memberLogin : " + memberLogin.memberCode)
+
     const [modifyMode, setModifyMode] = useState(false);
 
     const [form, setForm] = useState({});
 
+    // useEffect (() => {
+    //     dispatch(callMemberDayWorklogAPI({
+    //         memberCode : memberCode
+    //     }));
+    // },[]
+    // );
+
     useEffect (() => { // 백에서 패스발리어블?로 넘겨서 이렇게 씀? 패스배리어블을 쓰면 유즈파람을 쓴다??
         dispatch(callDayWorklogDetailAPI({
             dayWorklogCode : dayWorklogCode
+            // ,memberCode : loginMember.memberCode 
         }));
     },[]
     );
+    console.log("dayWorklogCode : " + dayWorklogCode)
+    // console.log("memberCode : " + memberCode)
 
     const onChangeHandler = (e) => {
         setForm({
@@ -54,16 +71,16 @@ function DayWorklogDetail() {
         formData.append("afternoonDayNote", form.afternoonDayNote);
         formData.append("daySpecialNote", form.daySpecialNote);
 
-        for(let key of formData.keys()){
-        console.log(key, formData.get(key));
-        }
+        // for(let key of formData.keys()){
+        // console.log(key, formData.get(key));
+        // }
         
         dispatch(callDayWorklogUpdateAPI({
             form: formData
         }));
 
         navigate("/aurora/worklog/day", { replace : true });
-        // window.location.reload();
+        window.location.reload();
     }
 
     const onClickDayWorklogDeleteHandler = () => {
@@ -73,7 +90,7 @@ function DayWorklogDetail() {
         }));
         console.log("delete" + dayWorklogCode)
         navigate("/aurora/worklog/day", { replace : true });
-        // window.location.reload();
+        window.location.reload();
     }
 
     const onClickModifyModeHandler = () => {
@@ -100,7 +117,7 @@ function DayWorklogDetail() {
                             <td>작성일</td>
                             <td>{ dayWorklog.dayReportingDate || '' }</td>
                             <td>작성자</td>
-                            <td>{ loginMember.memberName || '' }</td>
+                            <td>{ dayWorklog.memberName || '' }</td>
                         </tr>
                         <tr>
                             <td>부서</td>

@@ -61,6 +61,8 @@ export const callDayWorklogDetailAPI = ({ dayWorklogCode }) => {
     };
 }
 
+// export const callMemberDayWorklogAPI = ()
+
 export const callDayWorklogInsertAPI = ({form, memberCode}) => {
 
     console.log('[DayWorklogAPICalls] callDayWorklogInsertAPI Call');

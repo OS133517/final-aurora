@@ -36,7 +36,6 @@ function App() {
               <Route path="day" element={<DayWorklogs/>}/>
               <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
               <Route path="day/insert" element={<DayWorklogInsert/>}/>
-           
               <Route path="week" element={<WeekWorklogs/>}/>
               <Route path="week/:weekWorklogCode" element={<WeekWorklogDetail/>}/>
               <Route path="week/insert" element={<WeekWorklogInsert/>}/>

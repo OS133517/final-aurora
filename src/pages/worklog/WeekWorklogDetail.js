@@ -57,7 +57,7 @@ function WeekWorklogDetail() {
         }));
 
         navigate("/aurora/worklog/week", { replace : true });
-        // window.location.reload();
+        window.location.reload();
     }
     
     const onClickWeekWorklogDeleteHandler = () => {
@@ -67,7 +67,7 @@ function WeekWorklogDetail() {
         }));
         console.log("delete" + weekWorklogCode)
         navigate("/aurora/worklog/week", { replace : true });
-        // window.location.reload();
+        window.location.reload();
     }
 
 
@@ -97,7 +97,7 @@ function WeekWorklogDetail() {
                             <td>작성일</td>
                             <td>{ weekWorklog.weekReportingDate || '' }</td>
                             <td>작성자</td>
-                            <td>{ weekWorklog.memberName}</td>
+                            <td>{ weekWorklog.memberName }</td>
                         </tr>
                         <tr>
                             <td>부서</td>
