@@ -28,10 +28,12 @@ export const GET_REPORT_ROUND_DETAIL = 'report/GET_REPORT_ROUND_DETAIL';
 export const GET_REPORT_DETAIL_LIST = 'report/GET_REPORT_DETAIL_LIST';
 export const GET_REPORT_ROUND_REPLY_LIST = 'report/GET_REPORT_ROUND_REPLY_LIST';
 
-export const POST_REGISTER_REPORT = 'report/POST_REGISTER_REPORT';
-export const POST_REGISTER_REPORT_ROUND_REPLY = 'report/POST_REGISTER_REPORT_ROUND_REPLY';
+export const POST_REPORT = 'report/POST_REGISTER_REPORT';
+export const POST_REPORT_ROUND_REPLY = 'report/POST_REGISTER_REPORT_ROUND_REPLY';
+export const POST_REPORT_DETAIL = 'report/POST_REGISTER_REPORT_DETAIL';
 
 export const PUT_REPORT_ROUND_REPLY = 'report/PUT_REPORT_ROUND_REPLY';
+export const PUT_REPORT_DETAIL = 'report/PUT_REPORT_DETAIL';
 
 export const DELETE_REPORT_ROUND_REPLY = 'report/DELETE_REPORT_ROUND_REPLY';
 
@@ -56,8 +58,13 @@ const actions = createActions({
     [GET_REPORT_DETAIL_LIST] : () => {},
     [GET_REPORT_ROUND_REPLY_LIST] : () => {},
 
-    [POST_REGISTER_REPORT] : () => {},
-    [POST_REGISTER_REPORT_ROUND_REPLY] : () => {},
+    [POST_REPORT] : () => {},
+    [POST_REPORT_DETAIL] : () => {},
+    [POST_REPORT_ROUND_REPLY] : () => {},
+
+    [PUT_REPORT_ROUND_REPLY] : () => {},
+    [PUT_REPORT_DETAIL] : () => {},
+    
     [DELETE_REPORT_ROUND_REPLY] : () => {}
 });
 
@@ -104,17 +111,27 @@ const reportReducer = handleActions({
             ...state,
             reportRoundReplyList : payload
         }},
-    [POST_REGISTER_REPORT] : (state, { payload }) => {
+    [POST_REPORT] : (state, { payload }) => {
         return {
             ...state,
             registReportMessage : payload,
         }},
-    [POST_REGISTER_REPORT_ROUND_REPLY] : (state, { payload }) => {
+    [POST_REPORT_DETAIL] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload,
+        }},
+    [POST_REPORT_ROUND_REPLY] : (state, { payload }) => {
         return {
             ...state,
             isReportUpdated : payload,
         }},
     [PUT_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
+    [PUT_REPORT_DETAIL] : (state, { payload }) => {
         return {
             ...state,
             isReportUpdated : payload

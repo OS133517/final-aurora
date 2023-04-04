@@ -9,9 +9,14 @@ import {
     GET_REPORT_ROUND_DETAIL,
     GET_REPORT_DETAIL_LIST,
     GET_REPORT_ROUND_REPLY_LIST,
-    POST_REGISTER_REPORT,
-    POST_REGISTER_REPORT_ROUND_REPLY,
+
+    POST_REPORT,
+    POST_REPORT_DETAIL,
+    POST_REPORT_ROUND_REPLY,
+
     PUT_REPORT_ROUND_REPLY,
+    PUT_REPORT_DETAIL,
+
     DELETE_REPORT_ROUND_REPLY,
 } from "../modules/ReportModule";
 
@@ -126,7 +131,7 @@ export const callRegisterReportAPI = ({formData}) => {
 
         if(result.status === 201) {
             console.log('[ReportAPICalls] callRegisterReportAPI RESULT', result);
-            dispatch({type : POST_REGISTER_REPORT, payload : result.data});
+            dispatch({type : POST_REPORT, payload : result.data});
 
             // 상태 변경 액션 디스패치
             dispatch(updateReportStatus(true));
@@ -246,9 +251,6 @@ export const callUpdateReportRoundReplyAPI = ({roundCode, replyCode, replyBody})
         if(result.status === 200) {
             console.log('[ReportAPICalls] callUpdateReportRoundReplyAPI RESULT', result);
             dispatch({type : PUT_REPORT_ROUND_REPLY, payload : result.data});
-            
-            // 상태 변경 액션 디스패치
-            dispatch(updateReportStatus(true));
         }
     };
 }
@@ -272,10 +274,7 @@ export const callRegisterReportRoundReplyAPI = ({roundCode, replyBody}) => {
 
         if(result.status === 200) {
             console.log('[ReportAPICalls] callRegisterReportRoundReplyAPI RESULT', result);
-            dispatch({type : POST_REGISTER_REPORT_ROUND_REPLY, payload : result.data});
-            
-            // 상태 변경 액션 디스패치
-            dispatch(updateReportStatus(true));
+            dispatch({type : POST_REPORT_ROUND_REPLY, payload : result.data});
         }
     };
 }
@@ -299,9 +298,57 @@ export const callDeleteReportRoundReplyAPI = ({replyCode}) => {
         if(result.status === 200) {
             console.log('[ReportAPICalls] callDeleteReportRoundReplyAPI RESULT', result);
             dispatch({type : DELETE_REPORT_ROUND_REPLY, payload : result.data});
-            
-            // 상태 변경 액션 디스패치
-            dispatch(updateReportStatus(true));
+        }
+    };
+}
+
+export const callRegisterReportDetailAPI = ({reportCode, roundCode, detailBody}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/${reportCode}/rounds/${roundCode}/detail-reports`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'POST',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : detailBody
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callRegisterReportDetailAPI RESULT', result);
+            dispatch({type : POST_REPORT_DETAIL, payload : result.data});
+        }
+    };
+}
+
+export const callUpdateReportDetailAPI = ({reportCode, roundCode, detailCode, detailBody}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/${reportCode}/rounds/${roundCode}/detail-reports`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'PUT',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                detailBody : detailBody,
+                detailCode : detailCode
+            })
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callUpdateReportDetailAPI RESULT', result);
+            dispatch({type : PUT_REPORT_DETAIL, payload : result.data});
         }
     };
 }

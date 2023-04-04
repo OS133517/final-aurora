@@ -116,6 +116,36 @@ button {
     padding-bottom: 30px;
     padding-left: 35px;
     padding-right: 20px;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    min-height: 100px;
+    height: auto;
+}
+
+.detailReportTextArea {
+    font-size: 1em;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    background-color: transparent;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 100px;
+    height: auto;
+}
+
+.detailReportSpan {
+    /* display: block; */
+    /* white-space: pre-wrap; */
+    /* word-wrap: break-word; */
+    /* padding: 29px 34px; div의 패딩 값과 동일하게 설정 */
+    /* margin: 0; */
+    /* box-sizing: border-box; 패딩과 테두리가 너비에 포함되도록 설정 */
+    /* min-height: 100px; */
+    /* height: auto; */
 }
 
 .commentContainer {
@@ -142,8 +172,7 @@ button {
 
 .comment {
     display: flex;
-    /* align-items: center; */
-    align-items: flex-start; /* 수정 */
+    align-items: flex-start;
     margin-bottom: 10px;
 }
 
@@ -163,24 +192,23 @@ button {
 }
 
 .commentContent {
-    /* max-width: 70%; */
     flex-grow: 1;
     white-space: pre-wrap;
     word-wrap: break-word;
-    margin-top: 5px; /* 수정 */
+    margin-top: 5px; 
 } 
 
 .replyAuthorInfo {
     display: flex;
     align-items: center;
     margin-right: 10px;
-    flex-shrink: 0; /* 추가 */
+    flex-shrink: 0;
 }
 
 .commentAuthor {
     font-weight: bold;
     margin-right: 10px;
-    margin-top: 5px; /* 수정 */
+    margin-top: 5px; 
 }
 
 .commentText {
@@ -249,4 +277,33 @@ button {
 .commentInput:focus {
     outline: none;
     border-color: #88CFBA;
+}
+
+.detailReportInput {
+    resize: none;
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    min-height: 100px; 
+}
+
+.detailReportRegisterDiv {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.detailReportRegisterButton {
+    margin-top: 10px;
+    width: 70px;
+    background-color: #88CFBA;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-left: 10px;
 }
