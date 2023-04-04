@@ -1,10 +1,9 @@
 .sidebarDiv {
     width: 252px;
-    height: 1125px;
+    height: 100%;
     border-right: 1px solid #C1C1C1;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    float: left;
-    overflow: hidden;
+    /* float: left; */
 }
 
 .sideHeader {
@@ -36,6 +35,22 @@
 
 .buttons:hover {
     background-color: #73b8a3;
+}
+
+.sidebarBody>a {
+    display: flex;
+    background-color: white;
+    border: none;
+    line-height: 50px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #88CFBA;
+    margin-top: 5px;
+    width: 252px;
+    height: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    text-indent: 50px;
 }
 
 .dropDownButtons {
@@ -97,16 +112,17 @@
     cursor: pointer;
     color: #88CFBA;
     font-size: 16px;
-    padding-left: 50px;
     position: relative;
+    text-indent: 50px;
+    overflow: hidden;
 }
 
 .dropDownMenus a>div {
     display: flex;
     position: absolute;
     top: 8px;
-    right: 30px;
-    width: 100px;
+    right: 0px;
+    width: 120px;
     height: 25px;
     background-color: transparent;
     visibility: hidden;
@@ -119,12 +135,14 @@
     background-color: transparent;
     color: rgb(56, 56, 56);
     width: 40px;
+    font-size: 13px;
     height: 25px;
     border: none;
     cursor: pointer;
 }
 
 .dropDownMenus a>div>button:hover {
+    background-color: #73b8a3;
     color: white;
 }
 

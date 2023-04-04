@@ -6,11 +6,13 @@ import LayoutCSS from "./Layout.module.css";
 function Layout() {
 
     return (
-        <div className={LayoutCSS.layout}>
+        <>
             <Header/>
-            <Sidebar/>
-            <Outlet/>
-        </div>
+            <div className={LayoutCSS.layout}>
+                <Sidebar/>
+                <Outlet/>
+            </div>
+        </>
     );
 }
 

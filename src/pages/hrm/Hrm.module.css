@@ -1,6 +1,5 @@
 .hrmDiv {
-    float: left;
-    width: 1514px;
+    width: 100%;
 }
 
 .hrmHeader {
@@ -11,7 +10,7 @@
     font-weight: bold;
     color: #88CFBA;
     line-height: 58px;
-    padding-left: 20px;
+    text-indent: 20px;
 }
 
 .hrmSearch {
@@ -19,7 +18,6 @@
     height: 58px;
     border-bottom: 1px solid #C1C1C1;
     line-height: 58px;
-    padding-left: 20px;
     display: flex;
     align-items: center;
     position: relative;
@@ -34,6 +32,7 @@
     border-right: none;
     padding-left: 10px;
     font-size: 16px;
+    margin-left: 20px;
 }
 
 .hrmSearch>input {
@@ -78,9 +77,10 @@
 }
 
 .contentTable {
-    width: 1534px;
+    width: 100%;
     border-bottom: 1px solid #88CFBA;
-    border-collapse : collapse
+    border-collapse : collapse;
+
 }
 
 .contentTable th input:first-child, .contentTable td input:first-child {
@@ -100,15 +100,15 @@
     border-bottom: 1px solid #88CFBA;
 }
 .contentHead th:first-child {
-    width: 100px;
-    padding-left: 5px;
+    width: 4%;
+    text-indent: 5px;
 }
 .contentHead th:nth-child(2) {
-    width: 100px;
+    width: 5%;
 }
 
 .contentHead th:nth-child(3) {
-    width: 150px;
+    width: 10%;
 }
 
 .contentHead th:nth-child(4) {
@@ -121,7 +121,7 @@
 }
 
 .contentHead th:nth-child(6) {
-    width: 100px;
+    width: 5%;
 }
 .contentHead th:nth-child(7) {
     width: 100px;
@@ -134,19 +134,12 @@
     width: 100px;
 }
 .contentHead th:nth-child(10) {
-    width: 150px;
+    width: 5%;
 }
-
-.contentHead th:nth-child(11) {
-    width: 150px;
-}
-.contentHead th:nth-child(12) {
-    width: 150px;
-}
-
 
 .contentHead th:last-child {
-    width: 150px;
+    width: 5%;
+    text-align: center;
 }
 
 .contentTable td {
@@ -188,7 +181,7 @@
     margin-left: 8px;
     border-radius: 5px;
     border: none;
-    background-color: #88CFBA;
+    background-color: #2bc592;
     color: white;
     cursor: pointer;
     font-size: 16px;

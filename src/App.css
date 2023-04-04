@@ -1,0 +1,7 @@
+.App {
+    width: 1920px;
+}
+    
+::-webkit-scrollbar {
+    display: none;
+}
