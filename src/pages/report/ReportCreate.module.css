@@ -1,10 +1,4 @@
 .reportCreateContainer {
-    /* width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; 상위 div의 높이를 설정해야 중앙 정렬이 가능합니다 */
-
     width: 100%;
     display: flex;
     flex-direction: column;
