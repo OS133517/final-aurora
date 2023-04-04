@@ -1,107 +1,102 @@
 .allContainer {
-  height: 100%;
-  padding-top:  5%;
+  width: 100%;
 }
 
 .container {
-    
     display: flex;
     justify-content: center;
     align-items: center;
     height: 40%; /* 브라우저 높이에 맞춰서 중앙 정렬 */
-  }
+}
+
 .input-container {
     display: flex;
     
-  }
-  
-  .input-wrapper {
-    
-    display: flex;
-    align-items: center;
-    border: 1px solid black;
-    padding: 0px;
-    margin-right: 10px;
-  }
-  
-  .inputLabel {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    text-align: center;
-    font-weight: bold;
-    color: aliceblue;
-    box-sizing: border-box;
-    border: none;
-
-    background-color: #88cfbab4;
-    padding: 0px;
-    width: 150px;
-    height: 57px; /* span 태그의 높이를 지정 */
-    line-height: 57px; /* 세로 정렬을 위한 라인 높이 지정 */
-    display: inline-block;
-    margin: 0;
-  }
-  
-  .inputBox {
-    box-sizing: border-box;
-    text-align: center;
-    font-size: 15px;
-    width: 250px;
-    margin: 0;
-    line-height: 50px;
-    margin-bottom: 0px;
-    border: none;
-    padding: 0px;
-    height: 57px;/* 높이를 50px에서 30px로 변경 */
-    outline: none;
-  }
-
-  .textareaContainer {
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 40%;
-    margin-top: 4%;
-    position: relative;
-  }
-
-  .textareaContainer > span {
-    position: absolute;
-    top: -20px; /* 이 값을 조절하여 span의 위치를 원하는 곳으로 이동시킬 수 있습니다 */
-    left: 300px;
-    font-size: 30px;
-   
-    
-  }
-  .textarea {
-    margin-top: 2%;
-    width: 1000px;
-    height: 150px;
-    resize: none;
-  }
-
-  .textareaContainer > div > button {
-    margin-top: 20px;
-    box-sizing: border-box;
-    width: 93px;
-    height: 32px;
-    margin-left: 8px;
-    border-radius: 5px;
-    border: none;
-    background-color: #88CFBA;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
 }
 
-  .hrmHeader {
-    width: 100%;
-    height: 58px;
-    border-bottom: 1px solid #C1C1C1;
-    font-size: 24px;
-    font-weight: bold;
-    color: #88CFBA;
-    line-height: 58px;
-    padding-left: 20px;
-  }
+.input-wrapper {
+  
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  padding: 0px;
+  margin-right: 10px;
+}
+
+.inputLabel {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  text-align: center;
+  font-weight: bold;
+  color: aliceblue;
+  box-sizing: border-box;
+  border: none;
+
+  background-color: #88cfbab4;
+  padding: 0px;
+  width: 150px;
+  height: 57px; /* span 태그의 높이를 지정 */
+  line-height: 57px; /* 세로 정렬을 위한 라인 높이 지정 */
+  display: inline-block;
+  margin: 0;
+}
+
+.inputBox {
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 15px;
+  width: 250px;
+  margin: 0;
+  line-height: 50px;
+  margin-bottom: 0px;
+  border: none;
+  padding: 0px;
+  height: 57px;/* 높이를 50px에서 30px로 변경 */
+  outline: none;
+}
+
+.textContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.textareaContainer {
+  position: relative;
+}
+
+.textareaContainer > span {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+}
+.textarea {
+  width: 900px;
+  height: 150px;
+  resize: none;
+}
+
+.textareaContainer > div > button {
+  position: absolute;
+  margin-top: 10px;
+  box-sizing: border-box;
+  width: 120px;
+  height: 32px;
+  border-radius: 5px;
+  border: none;
+  background-color: #88CFBA;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  right: 0;
+}
+
+.hrmHeader {
+  width: 100%;
+  height: 58px;
+  border-bottom: 1px solid #C1C1C1;
+  font-size: 24px;
+  font-weight: bold;
+  color: #88CFBA;
+  line-height: 58px;
+  text-indent: 20px;
+}

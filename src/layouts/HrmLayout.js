@@ -6,7 +6,7 @@ import HrmLayoutCSS from "./HrmLayout.module.css";
 export default function HrmLayout() {
     return (
         <div className={HrmLayoutCSS.hrmLayout}>
-            <HrmSidebar/>
+        <HrmSidebar/>
             <Outlet/>
         </div>
     );
