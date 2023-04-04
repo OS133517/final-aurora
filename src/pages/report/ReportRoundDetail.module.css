@@ -138,14 +138,14 @@ button {
 }
 
 .detailReportSpan {
-    /* display: block; */
-    /* white-space: pre-wrap; */
-    /* word-wrap: break-word; */
-    /* padding: 29px 34px; div의 패딩 값과 동일하게 설정 */
-    /* margin: 0; */
-    /* box-sizing: border-box; 패딩과 테두리가 너비에 포함되도록 설정 */
-    /* min-height: 100px; */
-    /* height: auto; */
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 29px 34px; 
+    margin: 0;
+    box-sizing: border-box;
+    min-height: 100px;
+    height: auto;
 }
 
 .commentContainer {
