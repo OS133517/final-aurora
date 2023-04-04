@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import SidebarCSS from "./SubSidebar.module.css";
 
 function WorklogSidebar() {
-
-    const dispatch = useDispatch();
 
     // 드롭다운 메뉴 조정용
     const [firstIsOpen, setFirstIsOpen] = useState(false);

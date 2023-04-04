@@ -1,4 +1,5 @@
 import { POST_LOGIN } from "../modules/MemberModule";
+import {GET_MEMEBER_INFO} from "../modules/MemberModule";
 
 export const  callLoginAPI = ({form}) => {
 
@@ -37,5 +38,39 @@ export const callLogoutAPI = () => {
 
         dispatch({type : POST_LOGIN, payload : ''});// 이렇게 로컬스토리지에서 토큰 지우고 아무것도 없는 걸로 로그인하는 식으로 로그아웃하는구나
         console.log('[MemberAPICalls] callLogoutAPI RESULT : SUCCESS');
+    }
+}
+
+export const callMemberInfoAPI = ({memberCode}) => {
+    console.log(memberCode);
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/worklogs/days/member/${memberCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type" : "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            },
+
+            // body : JSON.stringify({
+            //     memberCode : memberCode,
+            //     morningDayContent : form.get("morningDayContent"),
+            //     morningDayNote : form.get("morningDayNote"),
+            //     afternoonDayContent : form.get("afternoonDayContent"),
+            //     afternoonDayNote : form.get("afternoonDayNote"),
+            //     daySpecialNote : form.get("daySpecialNote")
+                
+            // })
+            })
+        .then(response => response.json());
+
+        if(result.status === 200){
+            console.log('[callMemberInfoAPI] callDayWorklogDetailAPI SUCCESS' + result);
+            dispatch({ type: GET_MEMEBER_INFO, payload: result.data });
+        }
     }
 }
