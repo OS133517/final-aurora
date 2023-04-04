@@ -46,11 +46,13 @@ function ReportSummary() {
                         {Array.isArray(routineList1) && 
                             <>
                                 <div className={ReportSummaryCSS.routineReportHeader}>
-                                    <NavLink to={`/aurora/reports/${reportSummary.routineReportDTO1.reportCode}/rounds`}>
-                                        <span>
-                                            {reportSummary.routineReportDTO1.reportTitle}
-                                        </span>
-                                    </NavLink>
+                                    {reportSummary && 
+                                        <NavLink to={`/aurora/reports/${reportSummary.routineReportDTO1.reportCode}/rounds`}>
+                                            <span>
+                                                {reportSummary.routineReportDTO1.reportTitle}
+                                            </span>
+                                        </NavLink>
+                                    }
                                 </div>
                                 <div className={ReportSummaryCSS.routineReportBody}>
                                     <ul className={ReportSummaryCSS.reportList}>
@@ -151,12 +153,13 @@ function ReportSummary() {
                     {casualList != undefined && casualList.length != 0 &&
                         <div className={ReportSummaryCSS.centerLine}/>
                     }
-                    {casualList != undefined && casualList.length === 0 && 
+                    {!reportSummary || !casualList || casualList.length === 0?
                         <div className={ReportSummaryCSS.noticeContainer}>
                             <span className={ReportSummaryCSS.notice}>
                                 비정기보고 내역이 없습니다.
                             </span>
                         </div>
+                        : null
                     }
                     <div className={ReportSummaryCSS.casualReportDiv}>
                         <ul className={ReportSummaryCSS.reportList}>

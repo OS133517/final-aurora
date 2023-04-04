@@ -4,6 +4,8 @@ import { createActions, handleActions } from 'redux-actions';
 const initialState = {
 
     matchingMembers : [],
+    isReportUpdated : false,
+    isReportReplyUpdated : false,
 
     reportSummary : [],
     routineReportList : [],
@@ -11,7 +13,8 @@ const initialState = {
     registReportMessage : [],
     reportRoundData : [],
     reportRoundDetailData : [],
-    reportDetailList : []
+    reportDetailList : [],
+    reportRoundReplyList : [],
 };
 
 // 액션
@@ -23,8 +26,23 @@ export const GET_CASUAL_REPORT_LIST_BY_CONDITIONS = 'report/GET_CASUAL_REPORT_LI
 export const GET_REPORT_ROUND_LIST = 'report/GET_REPORT_ROUND_LIST';
 export const GET_REPORT_ROUND_DETAIL = 'report/GET_REPORT_ROUND_DETAIL';
 export const GET_REPORT_DETAIL_LIST = 'report/GET_REPORT_DETAIL_LIST';
+export const GET_REPORT_ROUND_REPLY_LIST = 'report/GET_REPORT_ROUND_REPLY_LIST';
 
 export const POST_REGISTER_REPORT = 'report/POST_REGISTER_REPORT';
+export const POST_REGISTER_REPORT_ROUND_REPLY = 'report/POST_REGISTER_REPORT_ROUND_REPLY';
+
+export const PUT_REPORT_ROUND_REPLY = 'report/PUT_REPORT_ROUND_REPLY';
+
+export const DELETE_REPORT_ROUND_REPLY = 'report/DELETE_REPORT_ROUND_REPLY';
+
+export const UPDATE_REPORT_STATUS = "report/UPDATE_REPORT_STATUS";
+export const updateReportStatus = (updated) => {
+
+    return {
+        type: UPDATE_REPORT_STATUS,
+        payload: updated,
+    };
+};
 
 // eslint-disable-next-line
 const actions = createActions({
@@ -36,8 +54,11 @@ const actions = createActions({
     [GET_REPORT_ROUND_LIST] : () => {},
     [GET_REPORT_ROUND_DETAIL] : () => {},
     [GET_REPORT_DETAIL_LIST] : () => {},
+    [GET_REPORT_ROUND_REPLY_LIST] : () => {},
 
-    [POST_REGISTER_REPORT] : () => {}
+    [POST_REGISTER_REPORT] : () => {},
+    [POST_REGISTER_REPORT_ROUND_REPLY] : () => {},
+    [DELETE_REPORT_ROUND_REPLY] : () => {}
 });
 
 // 리듀서
@@ -78,13 +99,37 @@ const reportReducer = handleActions({
             ...state,
             reportDetailList : payload
         }},
-
-
+    [GET_REPORT_ROUND_REPLY_LIST] : (state, { payload }) => {
+        return {
+            ...state,
+            reportRoundReplyList : payload
+        }},
     [POST_REGISTER_REPORT] : (state, { payload }) => {
         return {
             ...state,
-            registReportMessage : payload
-        }}
+            registReportMessage : payload,
+        }},
+    [POST_REGISTER_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload,
+        }},
+    [PUT_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
+    [DELETE_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
+
+    [UPDATE_REPORT_STATUS]: (state, { payload }) => {
+        return {
+            ...state,
+            isReportListUpdated: payload,
+        }},
 }, initialState);
 
 export default reportReducer;

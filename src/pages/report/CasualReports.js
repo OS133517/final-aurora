@@ -1,54 +1,59 @@
-import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useParams } from "react-router-dom";
-import { call } from "../../apis/ReportAPICall";
+import { callCasualReportListByConditionsAPI } from "../../apis/ReportAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
-
-import Swal from "sweetalert2";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
-import CasualReportsCSS from "./CasualReports.module.css";
+import ReportsCSS from "./Reports.module.css";
 
-function RoutineReports() {
+function CasualReports() {
 
     const dispatch = useDispatch();
-    const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
+    // const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const navigate = useNavigate();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isCompleted, setIsCompleted] = useState('N');
+    const casualReportData = useSelector(state => state.reportReducer.casualReportList)
+    const casualReportList = casualReportData.data;
+    console.log("casualReportList : " + JSON.stringify(casualReportList));
 
-    // const addBook = useSelector(state => state.addBookReducer.addresses);
-    // const pageInfo = addBook.pageInfo;
-    // const pageNumber = [];
+    const pageInfo = casualReportData.pageInfo;
+    console.log("pageInfo : " + JSON.stringify(pageInfo));
+    const pageNumber = [];
 
-    // if(pageInfo) {
-    //     for(let i = 1; i <= pageInfo.endPage; i++) {
-    //         pageNumber.push(i);
-    //     }
-    // }
+    if(pageInfo) {
+        for(let i = 1; i <= pageInfo.endPage; i++) {
+            pageNumber.push(i);
+        }
+    }
     
-    // 페이지 번호 바뀔 때
-    // useEffect(() => {
+    // 목록 조회 
+    useEffect(() => {
 
-    //     if(isSearching) {
-    //         searchCall();
-    //     } else {
-    //         listChange();
-    //     }
-    // // eslint-disable-next-line
-    // }, [currentPage])
+        dispatch(callCasualReportListByConditionsAPI({
+            completionStatus : isCompleted,
+            offset : currentPage
+        }))
+    // eslint-disable-next-line
+    }, [isCompleted, currentPage])
+
+    const onClickReportHandler = (reportCode) => {
+        
+        navigate(`/aurora/reports/casuals/${reportCode}`)
+        // @GetMapping("/reports/casual/{reportCode}")
+    }
 
     return (
         <>
-            <div className={CasualReportsCSS.reportsContainer}>
-                <div className={CasualReportsCSS.reportsHeader}>
+            <div className={ReportsCSS.reportsContainer}>
+                <div className={ReportsCSS.reportsHeader}>
                     보고서 확인 
                 </div>
                 <div>
-                    보고 타입에 따라 정기보고. 비정기보고 
+                    <span className={ReportsCSS.reportType}>비정기 보고</span>
                 </div>
-                <div className={CasualReportsCSS.reportsDiv}>
-                    <table>
+                <div className={ReportsCSS.reportsDiv}>
+                    <table className={ReportsCSS.reportListTable}>
                         <thead>
                             <tr>
                                 <th>날짜</th>
@@ -59,19 +64,56 @@ function RoutineReports() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>날짜</td>
-                                <td>제목</td>
-                                <td>부서</td>
-                                <td>직급</td>
-                                <td>이름</td>
-                            </tr>
+                            {Array.isArray(casualReportList) && casualReportList.map((casualReport) => (
+                                <tr
+                                    key={casualReport.reportCode} 
+                                    id={casualReport.reportCode}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => onClickReportHandler(casualReport.reportCode)}
+                                >
+                                    <td>{casualReport.regDate}</td>
+                                    <td>{casualReport.reportTitle}</td>
+                                    <td>{casualReport.memberDTO.deptName}</td>
+                                    <td>{casualReport.memberDTO.jobName}</td>
+                                    <td>{casualReport.memberDTO.memberName}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
+                    <div className={ ReportsCSS.pagingBtnDiv }>
+                        { Array.isArray(casualReportList) &&
+                            <button 
+                                onClick={() => setCurrentPage(currentPage - 1)} 
+                                disabled={currentPage === 1}
+                                className={ ReportsCSS.pagingBtn }
+                            >
+                                &lt;
+                            </button>
+                        }
+                        {pageNumber.map((num) => (
+                            <li key={num} onClick={() => setCurrentPage(num)}>
+                                <button
+                                    style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
+                                    className={ ReportsCSS.pagingBtn }
+                                >
+                                    {num}
+                                </button>
+                            </li>
+                        ))}
+                        { Array.isArray(casualReportList) &&
+                            <button 
+                                onClick={() => setCurrentPage(currentPage + 1)} 
+                                disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
+                                className={ ReportsCSS.pagingBtn }
+                            >
+                                &gt;
+                            </button>
+                        }
+                    </div>
                 </div>
             </div>
         </>
     )
 }
 
-export default RoutineReports;
+export default CasualReports;

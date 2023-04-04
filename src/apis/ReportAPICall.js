@@ -1,4 +1,4 @@
-// import { async } from "q";
+import { updateReportStatus } from "../modules/ReportModule";
 import {
     GET_MATCHING_MEMBERS,
 
@@ -8,8 +8,11 @@ import {
     GET_REPORT_ROUND_LIST,
     GET_REPORT_ROUND_DETAIL,
     GET_REPORT_DETAIL_LIST,
-    
-    POST_REGISTER_REPORT
+    GET_REPORT_ROUND_REPLY_LIST,
+    POST_REGISTER_REPORT,
+    POST_REGISTER_REPORT_ROUND_REPLY,
+    PUT_REPORT_ROUND_REPLY,
+    DELETE_REPORT_ROUND_REPLY,
 } from "../modules/ReportModule";
 
 export const callSelectSearchListAboutNameAPI = ({name}) => {
@@ -114,23 +117,19 @@ export const callRegisterReportAPI = ({formData}) => {
         const result = await fetch(requestURL, {
             method : 'POST',
             headers : {
-                // "Content-Type" : "application/json",
-                // "Content-Type" : "application/json;charset=UTF-8",
-                // "Content-Type" : "multipart/form-data;",
-                // "Content-Type" : "multipart/form-data; boundary=<calculated when request is sent>",
                 "Accept" : "*/*",
                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : formData
-            // body : JSON.stringify({
-            //     formData
-            // })
         })
         .then(response => response.json());
 
-        if(result.status === 200) {
+        if(result.status === 201) {
             console.log('[ReportAPICalls] callRegisterReportAPI RESULT', result);
             dispatch({type : POST_REGISTER_REPORT, payload : result.data});
+
+            // 상태 변경 액션 디스패치
+            dispatch(updateReportStatus(true));
         }
     };
 }
@@ -145,16 +144,9 @@ export const callSelectReportRoundListAPI = ({reportCode, offset}) => {
             method : 'GET',
             headers : {
                 "Content-Type" : "application/json",
-                // "Content-Type" : "application/json;charset=UTF-8",
-                // "Content-Type" : "multipart/form-data;",
-                // "Content-Type" : "multipart/form-data; boundary=<calculated when request is sent>",
                 "Accept" : "*/*",
                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
-            // body : formData
-            // body : JSON.stringify({
-            //     formData
-            // })
         })
         .then(response => response.json());
 
@@ -207,6 +199,109 @@ export const callSelectReportDetailListByRoundCodeAPI = ({reportCode, roundCode}
         if(result.status === 200) {
             console.log('[ReportAPICalls] callSelectReportDetailListByRoundCodeAPI RESULT', result);
             dispatch({type : GET_REPORT_DETAIL_LIST, payload : result.data});
+        }
+    };
+}
+
+export const callSelectReportRoundReplyListAPI = ({reportCode, roundCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/${reportCode}/rounds/${roundCode}/comments`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'GET',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callSelectReportRoundReplyListAPI RESULT', result);
+            dispatch({type : GET_REPORT_ROUND_REPLY_LIST, payload : result.data});
+        }
+    };
+}
+
+export const callUpdateReportRoundReplyAPI = ({roundCode, replyCode, replyBody}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/rounds/${roundCode}/comments/${replyCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'PUT',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : replyBody
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callUpdateReportRoundReplyAPI RESULT', result);
+            dispatch({type : PUT_REPORT_ROUND_REPLY, payload : result.data});
+            
+            // 상태 변경 액션 디스패치
+            dispatch(updateReportStatus(true));
+        }
+    };
+}
+
+export const callRegisterReportRoundReplyAPI = ({roundCode, replyBody}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/rounds/${roundCode}/comments`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'POST',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : replyBody
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callRegisterReportRoundReplyAPI RESULT', result);
+            dispatch({type : POST_REGISTER_REPORT_ROUND_REPLY, payload : result.data});
+            
+            // 상태 변경 액션 디스패치
+            dispatch(updateReportStatus(true));
+        }
+    };
+}
+    
+export const callDeleteReportRoundReplyAPI = ({replyCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/rounds/comments/${replyCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'DELETE',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callDeleteReportRoundReplyAPI RESULT', result);
+            dispatch({type : DELETE_REPORT_ROUND_REPLY, payload : result.data});
+            
+            // 상태 변경 액션 디스패치
+            dispatch(updateReportStatus(true));
         }
     };
 }

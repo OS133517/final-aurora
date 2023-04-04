@@ -3,17 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { callRoutineReportListByConditionsAPI } from "../../apis/ReportAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
 import { useNavigate } from 'react-router-dom';
-// import { useLocation } from 'react-router-dom';
-// import { NavLink, useParams } from "react-router-dom";
-// import { Navigate } from "react-router-dom";
 
 import ReportsCSS from "./Reports.module.css";
-import Swal from "sweetalert2";
 
 function RoutineReports() {
 
+    // const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const dispatch = useDispatch();
-    const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState('N');

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callRoutineReportListByConditionsAPI,
-    callCasualReportListByConditionsAPI 
+    callCasualReportListByConditionsAPI,
 } from "../../apis/ReportAPICall";
+import { updateReportStatus } from '../../modules/ReportModule';
 import { NavLink } from "react-router-dom";
 import { decodeJwt } from "../../utils/tokenUtils";
 
@@ -16,10 +17,10 @@ function ReportSidebar() {
     const [routineReportIsOpen, setRoutineReportIsOpen] = useState(false);
     const [casualReportIsOpen, setCasualReportIsOpen] = useState(false);
 
+    const isReportUpdated = useSelector(state => state.reportReducer.isReportListUpdated);
+
     const routineReportList = useSelector(state => state.reportReducer.routineReportList.data);
     const casualReportList = useSelector(state => state.reportReducer.casualReportList.data);
-    console.log(routineReportList);
-    console.log(casualReportList);
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -32,12 +33,16 @@ function ReportSidebar() {
             completionStatus : 'N',
             offset : 1
         }));
+        
         dispatch(callCasualReportListByConditionsAPI({
             completionStatus : 'N',
             offset : 1
         }));
+        if (isReportUpdated) {
+          dispatch(updateReportStatus(false));
+        }
     // eslint-disable-next-line
-    }, [])
+    }, [isReportUpdated])
 
     return (
         <>
@@ -47,7 +52,9 @@ function ReportSidebar() {
                 </div>
                 <div>
                     <NavLink to={"/aurora/reports/create"}>
-                        <button className={SidebarCSS.buttons}>보고서 작성</button>
+                        <button className={SidebarCSS.buttons}>
+                            보고서 작성
+                        </button>
                     </NavLink>
                     <button className={SidebarCSS.dropDownButtons} onClick={() => setRoutineReportIsOpen(!routineReportIsOpen)}>
                         <img 

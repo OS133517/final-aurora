@@ -23,6 +23,34 @@
     padding: 10px;
 }
 
+.detailHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+}
+
+.detailHeaderTitle {
+    font-size: 2em;
+    margin: 0;
+    color: #88CFBA;
+}
+
+.greentButton {
+    background-color: #88CFBA;
+    border: none;
+    color: white;
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 13px;
+    margin-top: 7px;
+    cursor: pointer;
+}
+
 .reportType {
     font-size: 2em;
     color: #88CFBA;
@@ -55,19 +83,6 @@
     list-style: none;
 }
 
-.detailHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    width: 100%;
-}
-
-.detailHeaderTitle {
-    font-size: 1.5em;
-    margin: 0;
-}
-
 .headerButtonDiv {
     display: flex;
     gap: 10px;
@@ -92,6 +107,10 @@ button {
     font-size: 1.5em;
 }
 
+.regDate {
+    font-size: 0.5em;
+}
+
 .detailReportBody {
     padding-top: 30px;
     padding-bottom: 30px;
@@ -99,6 +118,135 @@ button {
     padding-right: 20px;
 }
 
-.regDate {
-    font-size: 0.5em;
+.commentContainer {
+    border: 5px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.commentHeader {
+    border-bottom: 3px solid #ccc;
+    padding: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+}
+
+.commentBody {
+    padding-top: 30px;
+    padding-bottom: 0px;
+    padding-left: 35px;
+    padding-right: 20px;
+}
+
+.comment {
+    display: flex;
+    /* align-items: center; */
+    align-items: flex-start; /* 수정 */
+    margin-bottom: 10px;
+}
+
+.commentInput {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 3px solid #88CFBA;
+    box-sizing: border-box;
+}
+
+.comment img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.commentContent {
+    /* max-width: 70%; */
+    flex-grow: 1;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-top: 5px; /* 수정 */
+} 
+
+.replyAuthorInfo {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    flex-shrink: 0; /* 추가 */
+}
+
+.commentAuthor {
+    font-weight: bold;
+    margin-right: 10px;
+    margin-top: 5px; /* 수정 */
+}
+
+.commentText {
+  display: flex;
+  flex-grow: 1;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.commentEdit {
+    font-size: 16px;
+    color: gray;
+    cursor: pointer;
+    margin-left: auto; 
+    margin-top: 5px; 
+}
+
+.commentEditDiv {
+    flex-shrink: 0; 
+}
+
+.replyRegisterButton {
+    background-color: #88CFBA;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+.inputDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 35px;
+    padding-right: 25px;
+    padding-bottom: 20px;
+}
+
+.commentInput {
+    width: calc(100% - 80px); 
+    padding: 8px;
+    margin: 10px 0;
+    border: 3px solid #C1C1C1;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+.detailReportInput {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 3px solid #C1C1C1;
+    box-sizing: border-box;
+}
+
+.detailReportInput:focus {
+    outline: none;
+    border-color: #88CFBA;
+}
+
+.commentInput:focus {
+    outline: none;
+    border-color: #88CFBA;
 }
