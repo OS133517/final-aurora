@@ -1,5 +1,11 @@
 .loginDiv {
-    margin: 5% auto;
+    margin: 10% auto;
+    width: 350px;
+}
+
+.loginDiv>img {
+    display: block;
+    margin: 0 auto 10%;
     width: 350px;
 }
 
@@ -14,6 +20,8 @@
     height: 40px;
     font-size: 25px;
     text-indent: 10px;
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
 }
 
 .loginForm>button {
@@ -25,15 +33,9 @@
     color: white;
     font-size: 25px;
     padding: 0;
+    border-radius: 10px;
 }
 
 .loginForm>button:hover {
     cursor: pointer;
-}
-
-.loginForm>a {
-    text-decoration: none;
-    text-align: center;
-    color: black;
-    font-size: 20px;
 }

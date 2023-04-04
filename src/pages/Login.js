@@ -59,8 +59,8 @@ function Login() {
   
     return (
         <>
-            <Header/>
             <div className={LoginCSS.loginDiv}>
+            <img src={ `${process.env.PUBLIC_URL}/aurora.png` } onClick={() => navigate("/")} alt="메인로고"/>
                 <div className={LoginCSS.loginForm}>
                     <input 
                         type="text" 

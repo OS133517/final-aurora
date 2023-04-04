@@ -2,5 +2,14 @@
     border-bottom: 1px solid #C1C1C1;
     margin-bottom: 0;
     width: 1865px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
 }
 
