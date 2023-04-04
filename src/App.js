@@ -31,6 +31,7 @@ import WorklogLayout from './layouts/WorklogLayout';
 import DayWorklogs from './pages/worklog/DayWorklogs';
 import DayWorklogDetail from './pages/worklog/DayWorklogDetail';
 import DayWorklogInsert from './pages/worklog/DayWorklogInsert';
+import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
                 <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
                 <Route path="day/insert" element={<DayWorklogInsert/>}/>
               </Route>
+              <Route path="asset-management" element={<ReservationAssetManagement/>}/>
             </Route>
           </Route>
          </Routes>
