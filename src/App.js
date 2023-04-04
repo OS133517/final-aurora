@@ -1,37 +1,41 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 import Layout from "./layouts/Layout";
-import AddBookLayout from "./layouts/AddBookLayout";
-
 import Main from "./pages/Main";
-import Approvals from "./pages/approval/Approvals";
-import ApprovalLayout from "./layouts/ApprovalLayout";
-import Pending from "./pages/approval/Pending";
-import Addresses from "./pages/addBook/Addresses";
-import ApprovalDetail from "./pages/approval/ApprovalDetail";
-import ReservationLayout from "./layouts/ReservationLayout";
 import Login from "./pages/Login";
+
+import ApprovalLayout from "./layouts/ApprovalLayout";
+import Approvals from "./pages/approval/Approvals";
+import ApprovalDetail from "./pages/approval/ApprovalDetail";
+import Pending from "./pages/approval/Pending";
+import ApprovalDraft from "./pages/approval/ApprovalDraft";
+import DraftForm from "./pages/approval/DraftForm";
+
+import AddBookLayout from "./layouts/AddBookLayout";
+import Addresses from "./pages/addBook/Addresses";
+
+import ReservationLayout from "./layouts/ReservationLayout";
+import MyReservation from "./pages/reservation/MyReservation";
+import ReservationCalendar from "./pages/reservation/ReservationCalendar";
+import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
+
 import HrmLayout from "./layouts/HrmLayout";
 import Hrm from "./pages/hrm/Hrm";
+import HrmDetail from './pages/hrm/HrmDetail';
+import HrmModify from './pages/hrm/HrmModify';
+
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
 import Reports from "./pages/report/Reports";
 import ReportRounds from "./pages/report/ReportRounds";
 import ReportRoundDetail from "./pages/report/ReportRoundDetail";
-import MyReservation from "./pages/reservation/MyReservation";
-import ReservationCalendar from "./pages/reservation/ReservationCalendar";
-import "./App.css";
-import ApprovalDraft from "./pages/approval/ApprovalDraft";
-import DraftForm from "./pages/approval/DraftForm";
-
-import HrmDetail from './pages/hrm/HrmDetail';
-import HrmModify from './pages/hrm/HrmModify';
 
 import WorklogLayout from './layouts/WorklogLayout';
 import DayWorklogs from './pages/worklog/DayWorklogs';
 import DayWorklogDetail from './pages/worklog/DayWorklogDetail';
 import DayWorklogInsert from './pages/worklog/DayWorklogInsert';
-import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
+
 
 function App() {
   return (
@@ -61,6 +65,7 @@ function App() {
                 <Route index element={<MyReservation/>}/>
                 <Route path="my-reservation" element={<MyReservation />} />
                 <Route path="assets/:assetCode" element={<ReservationCalendar />} />
+                <Route path="asset-management" element={<ReservationAssetManagement/>}/>
               </Route>
               <Route path="approval" element={<ApprovalLayout />}>
                 <Route index="approvals" element={<Approvals />} />
@@ -81,7 +86,6 @@ function App() {
                 <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
                 <Route path="day/insert" element={<DayWorklogInsert/>}/>
               </Route>
-              <Route path="asset-management" element={<ReservationAssetManagement/>}/>
             </Route>
           </Route>
          </Routes>
