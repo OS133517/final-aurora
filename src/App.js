@@ -23,6 +23,10 @@ import HrmLayout from "./layouts/HrmLayout";
 import Hrm from "./pages/hrm/Hrm";
 import HrmDetail from './pages/hrm/HrmDetail';
 import HrmModify from './pages/hrm/HrmModify';
+import HrmSignup from './pages/hrm/HrmSignup';
+
+import AttendanceLayout from './layouts/AttnedanceLayout';
+import Attendance from './pages/attendance/Attendance';
 
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
@@ -35,10 +39,6 @@ import WorklogLayout from './layouts/WorklogLayout';
 import DayWorklogs from './pages/worklog/DayWorklogs';
 import DayWorklogDetail from './pages/worklog/DayWorklogDetail';
 import DayWorklogInsert from './pages/worklog/DayWorklogInsert';
-import AttendanceLayout from './layouts/AttnedanceLayout';
-import HrmSignup from './pages/hrm/HrmSignup';
-import Attendance from './pages/attendance/Attendance';
-import "./App.css";
 
 
 function App() {
@@ -92,12 +92,12 @@ function App() {
                   <Route path="day/insert" element={<DayWorklogInsert/>}/>
                 </Route>
                 <Route path="attendance" element={<AttendanceLayout/>}>
-            <Route index element={<Attendance/>}/>
-            {/* <Route path="list" element={<Attendance category='인사 목록'/>}/> */}
-            <Route path="attnedance-detail/:memberCode" element={<Attendance category='근태 현황'/>}/>
-            <Route path="vacation-detail/:memberCode" element={<Attendance category='휴가 현황'/>}/>
-          </Route>
-        </Route>
+                  <Route index element={<Attendance/>}/>
+                  {/* <Route path="list" element={<Attendance category='인사 목록'/>}/> */}
+                  <Route path="attnedance-detail/:memberCode" element={<Attendance category='근태 현황'/>}/>
+                  <Route path="vacation-detail/:memberCode" element={<Attendance category='휴가 현황'/>}/>
+                </Route>
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
