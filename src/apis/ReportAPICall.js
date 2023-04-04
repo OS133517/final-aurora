@@ -17,7 +17,7 @@ import {
 
 export const callSelectSearchListAboutNameAPI = ({name}) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/members/search?name=${name}`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm/search?name=${name}`;
 
     return async (dispatch, getState) => {
 

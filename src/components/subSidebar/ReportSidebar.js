@@ -51,7 +51,7 @@ function ReportSidebar() {
                     <span onClick={ () => window.location.href = "/aurora/reports/summary" }>보고</span>
                 </div>
                 <div>
-                    <NavLink to={"/aurora/reports/create"}>
+                    <NavLink to={"/aurora/reports/edit"}>
                         <button className={SidebarCSS.buttons}>
                             보고서 작성
                         </button>
