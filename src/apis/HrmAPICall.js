@@ -6,7 +6,8 @@ import {
     GET_NAME_SEARCH,
     GET_TASK_SEARCH,
     POST_MEMBER_SIGN_UP,
-    PUT_MEMBER_MODIFY
+    PUT_MEMBER_MODIFY,
+    GET_CODE
  } from '../modules/HrmModule';
 
 export const CallMemberListAPI = ({currentPage}) => {
@@ -47,7 +48,7 @@ export const CallMemberListAPI = ({currentPage}) => {
 export const callMemberDetailAPI = ({memberCode}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm/${memberCode}`;
-console.log(memberCode);
+    
     return async (dispatch, getstate) => {
 
         const result = await fetch(requestURL, {
@@ -93,42 +94,44 @@ export const callMemberModifyAPI = ({memberCode, memberInfo}) => {
     }
 }
 
-// export const callMemberSignUpAPI = () => {
+export const callMemberSignUpAPI = (form) => {
+    console.log(form);
 
-//     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/auth/signup`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/auth/signup`;
 
-//     return async (dispatch, getState) => {
+    return async (dispatch, getState) => {
 
-//         const result = await fetch(requestURL, {
-//             method : "POST",
-//             headers : {
-//                 "Content-Type" : "application/json",
-//                 "Accept" : "*/*"
-//             },
-//             body : JSON.stringify({
-//                name : form.name,
-//                id : form.id,
-//                email : form.email,
-//                pwd : form.pwd,
-//                dept : form.dept,
-//                job : form.job,               
-//                phone : form.phone,               
-//                task : form.task,               
-//                img : form.img,
-//                team : form.team,
-//                gender : form.gender,
-//                birthDay : form.birthDay
+        const result = await fetch(requestURL, {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*"
+            },
+            body : JSON.stringify({
+               memberName : form.memberName,
+               memberId : form.memberId,
+               memberEmail : form.memberEmail,
+               memberPWD : form.memberPWD,
+               deptCode : form.deptCode,
+               jobCode : form.jobCode,               
+               phone : form.phone,               
+               taskCode : form.taskCode,               
+               fileCode : form.fileCode === '' ? null : form.fileCode,
+               address : form.address,
+               teamCode : form.teamCode,
+               gender : form.gender,
+               birthDay : form.birthDay
+                
+            })
+        })
+        .then(response => response.json());
 
-//             })
-//         })
-//         .then(response => response.json());
-
-//         if(result.status === 201) {
-//             console.log('[HrmAPICalls] callMemberSignUpAPI' , result);
-//             dispatch({type : POST_MEMBER_SIGN_UP, payload :result});
-//         }
-//     }
-// }
+        if(result.status === 201) {
+            console.log('[HrmAPICalls] callMemberSignUpAPI' , result);
+            dispatch({type : POST_MEMBER_SIGN_UP, payload :result});
+        }
+    }
+}
 
 export const callMemberNameSearchAPI = ({searchValue, currentPage}) => {
 
@@ -277,7 +280,30 @@ export const callMemberTaskSearchAPI = ({searchValue, currentPage}) => {
     }
 }
     
+export const callCodeAPI = () => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm/code`;
     
+    return async (dispatch, getstate) => {
+
+        const result = await fetch(requestURL, {
+             method : "GET",
+            headers : {
+                "content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken")
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[HrmAPICalls] callCodeAPI', result);
+            dispatch({type : GET_CODE, payload : result.data});
+        }
+    }
+}
+
+
 
 
 

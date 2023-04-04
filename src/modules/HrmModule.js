@@ -5,7 +5,8 @@ const initialState = {
     memberDetail : [],
     memberSignUp : [],
     memberModify : [],
-    memberMessage : []
+    memberMessage : [],
+    code : [],
 }
 
 export const GET_MEMBER_LIST = 'hrm/GET_MEMBER_LIST';
@@ -17,6 +18,7 @@ export const GET_EMAIL_SEARCH = 'hrm/GET_EMAIL_SEARCH';
 export const GET_DEPT_SEARCH = 'hrm/GET_DEPT_SEARCH';
 export const GET_JOB_SEARCH = 'hrm/GET_JOB_SEARCH';
 export const GET_TASK_SEARCH = 'hrm/GET_TASK_SEARCH';
+export const GET_CODE ='hrm/GET_CODE';
 
 const actions = createActions({
     [GET_MEMBER_LIST] : () => {},
@@ -27,7 +29,8 @@ const actions = createActions({
     [GET_EMAIL_SEARCH] : () => {},
     [GET_DEPT_SEARCH] : () => {},
     [GET_JOB_SEARCH] : () => {},
-    [GET_TASK_SEARCH] : () => {}
+    [GET_TASK_SEARCH] : () => {},
+    [GET_CODE] : () => {}
 
 });
 
@@ -59,6 +62,7 @@ const hrmReducer = handleActions({
             memberMessage : payload
         }},  
     [POST_MEMBER_SIGN_UP] : (state , { payload }) => {
+        console.log(payload);
         return {
             ...state,
             memberMessage : payload
@@ -88,7 +92,14 @@ const hrmReducer = handleActions({
         return {
             ...state,
             memberList : payload
-        }},                      
+        }},                     
+    [GET_CODE] : (state , {payload}) => {
+        console.log(payload);
+        return {
+            ...state,
+            code : payload
+        }} 
+        
 }, initialState);
 
 export default hrmReducer;

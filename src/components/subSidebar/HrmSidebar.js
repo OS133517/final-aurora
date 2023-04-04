@@ -55,7 +55,16 @@ export default function HrmSidebar() {
                         className={HrmSubSidebarCSS.NavLink}
                         style={ ({ isActive }) => isActive?  activeStyle : undefined } 
                         to={`/aurora/hrm/hrm-modify`}
-                        >관리자 메뉴</NavLink>    
+                        >인사 수정</NavLink>    
+                </div>
+                )} 
+                 {(decoded === 'ROLE_ADMIN' || decoded === 'ROLE_MANAGER') &&( 
+                <div>
+                    <NavLink 
+                        className={HrmSubSidebarCSS.NavLink}
+                        style={ ({ isActive }) => isActive?  activeStyle : undefined } 
+                        to={`/aurora/hrm/hrm-regist`}
+                        >인사 등록</NavLink>    
                 </div>
                 )} 
             </div>
