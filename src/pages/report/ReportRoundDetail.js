@@ -8,15 +8,20 @@ import { callselectReportRoundDetailAPI,
             callRegisterReportRoundReplyAPI,
             callDeleteReportRoundReplyAPI,
             callRegisterReportDetailAPI,
-            callUpdateReportDetailAPI
+            callUpdateReportDetailAPI,
+            callDeleteReportDetailAPI,
+            callUpdateReportRoundAPI,
+            callDeleteReportRoundAPI
         } from "../../apis/ReportAPICall";
-import { updateReportStatus } from '../../modules/ReportModule';
 import { decodeJwt } from "../../utils/tokenUtils";
+import { useNavigate } from 'react-router-dom';
 
 import ReportRoundDetailCSS from "./ReportRoundDetail.module.css";
 import Swal from "sweetalert2";
 
 function ReportRoundDetail() {
+
+    const navigate = useNavigate();
 
     const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const loginMember = accessToken.memberCode;
@@ -25,15 +30,27 @@ function ReportRoundDetail() {
     const dispatch = useDispatch();
     const { reportCode } = useParams();
     const { roundCode } = useParams();
-    const [isDetailReportInputVisible, setIsDetailReportInputVisible] = useState(false);
+
     const [newReplyBody, setNewReplyBody] = useState('');
     const [newReportDetailBody, setNewReportDetailBody] = useState('');
+
     const [isReplyEditing, setIsReplyEditing] = useState({});
     const [isReportDetailEditing, setIsReportDetailEditing] = useState({});
+    const [isRoundEditing, setIsRoundEditing] = useState(false);
+
     const [replyInputValue, setReplyInputValue] = useState({});
     const [detailInputValue, setDetailInputValue] = useState({});
+    const [roundInputValue, setRoundInputValue] = useState({
+        roundTitle : "",
+        roundBody : ""
+    });
+
     const [replyUpdated, setReplyUpdated] = useState(false);
     const [reportDetailUpdated, setReportDetailUpdated] = useState(false);
+    const [roundUpdated, setReportRoundUpdated] = useState(false);
+
+    const [isDetailReportInputVisible, setIsDetailReportInputVisible] = useState(false);
+    const [textAreaHeight, setTextAreaHeight] = useState({});
 
     const reportDetailList = useSelector(state => state.reportReducer.reportDetailList);
     reportDetailList && console.log("reportDetailList : " + JSON.stringify(reportDetailList));
@@ -53,7 +70,6 @@ function ReportRoundDetail() {
     const reportRoundReplyList = useSelector(state => state.reportReducer.reportRoundReplyList);
     reportRoundReplyList && console.log("reportRoundReplyList : " + JSON.stringify(reportRoundReplyList));
 
-    // const isReportUpdated = useSelector(state => state.reportReducer.isReportUpdated);
     const isInCharge = reportDTO && (loginMember == reportDTO.memberCode)
 
     useEffect(() => {
@@ -66,6 +82,15 @@ function ReportRoundDetail() {
         }))
     // eslint-disable-next-line
     }, [])
+
+    useEffect(() => {
+        if (reportRoundDetail) {
+          setRoundInputValue({
+            roundTitle: reportRoundDetail.roundTitle,
+            roundBody: reportRoundDetail.roundBody,
+          });
+        }
+    }, [reportRoundDetail]);
     
     useEffect(() => {
 
@@ -88,10 +113,69 @@ function ReportRoundDetail() {
             roundCode : roundCode
         }))
         setReplyUpdated(false);
-        // setReplyUpdated(!replyUpdated);
     // eslint-disable-next-line
     }, [replyUpdated])
       
+    // 보고회차 수정 상태 토글 함수
+    const toggleRoundEditing = () => {
+
+        if (!isRoundEditing) {
+
+            setRoundInputValue({
+            roundTitle: reportRoundDetail.roundTitle,
+            roundBody: reportRoundDetail.roundBody,
+            });
+        }
+        setIsRoundEditing((prev) => !prev);
+    };
+
+    // 보고 회차 입력값 핸들러
+    const handleRoundInputChange = (part, value) => {
+
+        setRoundInputValue((prev) => ({
+
+            ...prev,
+            [part]: value,
+        }));
+    };
+
+    // 보고 회차 수정 
+    const updateRound = (roundInputValue) => {
+
+        dispatch(callUpdateReportRoundAPI({
+            
+            reportCode : reportRoundDetail.reportCode,
+            roundCode : reportRoundDetail.roundCode,
+            roundTitle : roundInputValue.roundTitle,
+            roundBody : roundInputValue.roundBody
+        }))
+        // 수정 모드를 종료합니다.
+        setIsRoundEditing(false);
+        setReportRoundUpdated(!roundUpdated);
+    };
+
+    // 보고 회차 삭제 
+    const deleteRound = async () => {
+        
+        const result = await Swal.fire({
+
+            title: '정말 보고 회차를 삭제하시겠습니까?',
+            text: '삭제된 데이터는 복구할 수 없습니다.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소',
+        });
+        if (result.isConfirmed) {
+            
+            dispatch(callDeleteReportRoundAPI({
+
+                roundCode: reportRoundDetail.roundCode
+            }))
+            navigate(`/aurora/reports/${reportRoundDetail.reportCode}/rounds`);
+        }
+    }
+
     // 상세 보고 작성 
     const onClickRegisterReportDetailHandler = () => {
 
@@ -109,6 +193,7 @@ function ReportRoundDetail() {
     const toggleReportDetailEditing = (detailCode) => {
 
         setIsReportDetailEditing((prevState) => ({
+
             ...prevState,
             [detailCode]: !prevState[detailCode],
         }));
@@ -117,14 +202,7 @@ function ReportRoundDetail() {
     // 상세보고 수정 버튼 클릭시 핸들러 
     const handleReportDetailEditButtonClick = (detailCode, detailBody) => {
 
-        // setIsReportDetailEditing({ ...isReportDetailEditing, [detailCode]: true });
-        // setDetailInputValue({ ...detailInputValue, [detailCode]: detailBody });
-
-        // setIsReportDetailEditing((prev) => ({
-        //     ...prev,
-        //     [detailCode]: !prev[detailCode],
-        // }));
-        toggleReportDetailEditing(detailCode);
+        setIsReportDetailEditing({ ...isReportDetailEditing, [detailCode]: true });
         setDetailInputValue({ ...detailInputValue, [detailCode]: detailBody });
     };
 
@@ -141,17 +219,40 @@ function ReportRoundDetail() {
         toggleReportDetailEditing(detailCode);
         setReportDetailUpdated(!reportDetailUpdated);
     };
+    
+    // 상세보고 삭제 
+    const onClickReportDetailDeleteHandler = async (detailCode) => {
+
+        const result = await Swal.fire({
+
+            title: '정말 삭제하시겠습니까?',
+            text: '삭제된 데이터는 복구할 수 없습니다.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소',
+        });
+
+        if (result.isConfirmed) {
+            
+            dispatch(callDeleteReportDetailAPI({
+
+                detailCode : detailCode
+            }))
+            setReportDetailUpdated(!reportDetailUpdated);
+        }
+    }
 
     // 댓글 작성 함수
     const handleCreateReply = () => {
 
-        // 댓글 작성 API 호출을 추가합니다.
+        // 댓글 작성 API 호출
         dispatch(callRegisterReportRoundReplyAPI({
 
             roundCode: reportRoundDetail.roundCode,
             replyBody: newReplyBody
         }));
-        // 입력된 댓글 내용을 초기화합니다.
+        // 입력된 댓글 내용 초기화
         setNewReplyBody('');
         setReplyUpdated(!replyUpdated);
     };
@@ -166,7 +267,7 @@ function ReportRoundDetail() {
     };
 
     // 수정 버튼을 클릭했을 때 replyInputValue를 설정하고 수정 상태를 토글
-    const handleEditButtonClick = (replyCode, replyBody) => {
+    const handleReplyEditButtonClick = (replyCode, replyBody) => {
 
         setIsReplyEditing({ ...isReplyEditing, [replyCode]: true });
         setReplyInputValue({ ...replyInputValue, [replyCode]: replyBody });
@@ -175,7 +276,6 @@ function ReportRoundDetail() {
     // 댓글 수정 
     const updateReply = async (roundCode, replyCode) => {
 
-        // console.log("replyBody : " + JSON.stringify(replyBody));
         dispatch(callUpdateReportRoundReplyAPI({
 
             roundCode : roundCode,
@@ -187,19 +287,46 @@ function ReportRoundDetail() {
     };
 
     // 댓글 삭제 
-    const onClickReplyDeleteHandler = (replyCode) => {
+    const onClickReplyDeleteHandler = async (replyCode) => {
 
-        dispatch(callDeleteReportRoundReplyAPI({
+        const result = await Swal.fire({
 
-            replyCode : replyCode
-        }))
-        setReplyUpdated(!replyUpdated);
+            title: '정말 삭제하시겠습니까?',
+            text: '삭제된 데이터는 복구할 수 없습니다.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소',
+        });
+
+        if (result.isConfirmed) {
+
+            dispatch(callDeleteReportRoundReplyAPI({
+
+                replyCode : replyCode
+            }))
+            setReplyUpdated(!replyUpdated);
+        }
     }
 
     // 입력창 자동 크기 조절 
     const autoResize = (e) => {
+
         e.target.style.height = "inherit";
         e.target.style.height = `${e.target.scrollHeight}px`;
+    };
+    
+    // textarea 자동 크기 조절 
+    const handleTextAreaChange = (e, detailCode) => {
+
+        const target = document.getElementById(`detailReportTextArea-${detailCode}`);
+
+        if (target) {
+
+            const computedStyle = window.getComputedStyle(target);
+            const containerHeight = parseFloat(computedStyle.height);
+            setTextAreaHeight({ ...textAreaHeight, [detailCode]: containerHeight });
+        }
     };
 
     return (
@@ -215,13 +342,30 @@ function ReportRoundDetail() {
                         </span>
                         <div className={ReportRoundDetailCSS.headerButtonDiv}>
                             {isInCharge &&
-                                <button className={ReportRoundDetailCSS.greentButton}>
-                                    수정
+                                <button
+                                    className={ReportRoundDetailCSS.redButton}
+                                    onClick={() => {
+                                        deleteRound()
+                                    }}
+                                >
+                                    <span>삭제</span> 
                                 </button>
-                                // 수정 완료 버튼으로 삼항연산자?
                             }
-                            {/* 수정 필요 -> 책임자가 아닐때만  */}
                             {isInCharge &&
+                                <button 
+                                    className={ReportRoundDetailCSS.greentButton}
+                                    onClick={() => {
+                                        if(isRoundEditing) {
+                                            updateRound(roundInputValue);
+                                        } else {
+                                            toggleRoundEditing()
+                                        }
+                                    }}
+                                >
+                                    {isRoundEditing? "완료" : "수정"}
+                                </button>
+                            }
+                            {!isInCharge &&
                                 <button
                                     className={ReportRoundDetailCSS.greentButton}
                                     onClick={() => {
@@ -240,15 +384,45 @@ function ReportRoundDetail() {
                     </div>
                     <div style={{marginLeft:'15px'}}>
                         <p>
+                            <strong>보고 제목 : </strong>
                             <span>{reportDTO && reportDTO.reportTitle} </span>
-                            <span> / 책임자 : </span>
-                            <span>{memberDTO && memberDTO.deptName} </span>
-                            <span>{memberDTO && memberDTO.jobName} </span>
-                            <span>{memberDTO && memberDTO.memberName}</span>
                         </p>
-                        <span>
-                            {reportRoundDetail && reportRoundDetail.roundTitle}
-                        </span>
+                        <p>
+                            <strong>책임자 : </strong>
+                            <span>{memberDTO && memberDTO.deptName} </span>
+                            <span>{memberDTO && memberDTO.memberName} </span>
+                            <span>{memberDTO && memberDTO.jobName} </span>
+                        </p>
+                            <strong>회차 제목 : </strong>
+                            <input
+                                value={roundInputValue.roundTitle}
+                                readOnly={!isRoundEditing}
+                                style={{
+                                  width: `${
+                                    roundInputValue.roundTitle.length > 0
+                                      ? roundInputValue.roundTitle.length * 14
+                                      : 50
+                                  }px`
+                                }}
+                                className={!isRoundEditing ? ReportRoundDetailCSS.readOnlyInput : null}
+                                onChange={(e) => handleRoundInputChange("roundTitle", e.target.value)}
+                            />
+                        <p>
+                            <strong>회차 내용 : </strong>
+                            <input
+                                value={roundInputValue.roundBody}
+                                readOnly={!isRoundEditing}
+                                style={{
+                                  width: `${
+                                    roundInputValue.roundBody.length > 0
+                                      ? roundInputValue.roundBody.length * 14
+                                      : 50
+                                  }px`
+                                }}
+                                className={!isRoundEditing ? ReportRoundDetailCSS.readOnlyInput : null}
+                                onChange={(e) => handleRoundInputChange("roundBody", e.target.value)}
+                            />
+                        </p>
                         <br></br>
                         {/* 상세보고 작성 */}
                         {isDetailReportInputVisible && (
@@ -275,7 +449,7 @@ function ReportRoundDetail() {
                                 </button>
                             </div>
                         )}
-                        <br></br>
+                        {/* <br></br> */}
                         {/* 상세보고 목록 */}
                         {reportDetailList && reportDetailList.map((reportDetail) => (
                             <div 
@@ -289,68 +463,108 @@ function ReportRoundDetail() {
                                             &nbsp;&nbsp;{reportDetail.regDate}
                                         </span>
                                     </span>
-                                    <span>
-                                        <span
-                                            className={ReportRoundDetailCSS.commentEdit} 
-                                            onClick={() => {
-                                                if (isReportDetailEditing[reportDetail.detailCode]) {
-                                                    updateReportDetail(reportDetail.roundCode, reportDetail.detailCode, detailInputValue[reportDetail.detailCode]);
-                                                    setIsReportDetailEditing({ ...isReportDetailEditing, [reportDetail.detailCode]: false });
-                                                } else {
-                                                    handleReportDetailEditButtonClick(reportDetail.detailCode, reportDetail.detailBody);
-                                                }
-                                            }}
-                                        >
-                                            { isReportDetailEditing[reportDetail.detailCode]? "완료" : "수정" }
+                                    {reportDetail.memberCode === loginMember && (
+                                        <span>
+                                            <span
+                                                className={ReportRoundDetailCSS.commentEdit} 
+                                                onClick={() => {
+                                                    if (isReportDetailEditing[reportDetail.detailCode]) {
+                                                        updateReportDetail(reportDetail.detailCode);
+                                                    } else {
+                                                        handleReportDetailEditButtonClick(reportDetail.detailCode, reportDetail.detailBody);
+                                                    }
+                                                }}
+                                            >
+                                                { isReportDetailEditing[reportDetail.detailCode]? "완료" : "수정" }
+                                            </span>
+                                            <span>&nbsp;&nbsp;</span>
+                                            <span
+                                                className={ReportRoundDetailCSS.commentEdit}
+                                                onClick={() => {
+                                                    onClickReportDetailDeleteHandler(reportDetail.detailCode);
+                                                }}
+                                            >
+                                                삭제
+                                            </span>
                                         </span>
-                                        {/* <span
-                                            className={ReportRoundDetailCSS.commentEdit}
-                                            onClick={() => {
-                                                // if (isReportDetailEditing[reportDetail.detailCode]) {
-                                                //     updateReply(reportDetail.roundCode, reportDetail.detailCode, inputValue[reportDetail.detailCode]);
-                                                // } else {
-                                                //     // handleEditButtonClick(reportDetail.detailCode, reportDetail.detailBody);
-                                                // }
-                                                handleReportDetailEditButtonClick()
-                                            }}
-                                        >
-                                            수정
-                                        </span> */}
-                                        <span>&nbsp;&nbsp;</span>
-                                        <span
-                                            className={ReportRoundDetailCSS.commentEdit}
-                                            onClick={() => {
-                                                // onClickReportDetailDeleteHandler(reportDetail.detailCode);
-                                            }}
-                                        >
-                                            삭제
-                                        </span>
-                                    </span>
-                                    {/* <span className={ReportRoundDetailCSS.commentEdit} onClick={() => handleEditComment(reportDetail.detailCode)}>수정</span> */}
+                                    )}
                                 </div>
                                 {/* 상세보고 내용 */}
                                 <div className={ReportRoundDetailCSS.detailReportBody}>
-                                    {/* {reportDetail.detailBody} */}
-                                    {isReportDetailEditing[reportDetail.detailCode]? (
+                                    {isReportDetailEditing[reportDetail.detailCode] ? (
                                         <textarea
+                                            type="text"
+                                            // className={ReportRoundDetailCSS.commentContent}
                                             className={ReportRoundDetailCSS.detailReportTextArea}
-                                            // defaultValue={reportDetail.detailBody}
-                                            // value={detailInputValue[reportDetail.detailCode]}
-                                            value={detailInputValue[reportDetail.detailCode] || ''}
-                                            onChange={(e) =>
+                                            value={detailInputValue[reportDetail.detailCode]}
+                                            readOnly={!isReportDetailEditing[reportDetail.detailCode]}
+                                            onChange={(e) => {
                                                 setDetailInputValue({
                                                     ...detailInputValue,
-                                                    [reportDetail.detailCode]: e.target.value,
+                                                    [reportDetail.detailCode] : e.target.value,
                                                 })
-                                            }
+                                                handleTextAreaChange(e, reportDetail.detailCode);
+                                            }}
+                                            style={{ height: textAreaHeight[reportDetail.detailCode] }}
                                         />
                                     ) : (
-                                        <span
-                                            className={ReportRoundDetailCSS.detailReportSpan}
-                                        >
+                                        <span className={ReportRoundDetailCSS.detailReportContent}>
                                             {reportDetail.detailBody}
                                         </span>
                                     )}
+                                    {/* {isReportDetailEditing[reportDetail.detailCode] ? (
+                                        <input
+                                            type="text"
+                                            className={ReportRoundDetailCSS.commentContent}
+                                            value={detailInputValue[reportDetail.detailCode]}
+                                            readOnly={!isReportDetailEditing[reportDetail.detailCode]}
+                                            onChange={(e) =>
+                                                setDetailInputValue({
+                                                    ...detailInputValue,
+                                                    [reportDetail.detailCode] : e.target.value,
+                                                })
+                                            }
+                                        />
+                                        // <textarea
+                                        //     // className={ReportRoundDetailCSS.detailReportTextArea}
+                                        //     className={`${ReportRoundDetailCSS.detailReportContent} ${ReportRoundDetailCSS.detailReportTextArea}`}
+                                        //     // defaultValue={reportDetail.detailBody}
+                                        //     value={detailInputValue[reportDetail.detailCode]}
+                                        //     onChange={(e) =>
+                                        //         setDetailInputValue({
+                                        //             ...detailInputValue,
+                                        //             [reportDetail.detailCode] : e.target.value,
+                                        //         })
+                                        //     }
+                                        //     rows={detailInputValue[reportDetail.detailCode].split('\n').length || 1} // 행의 수를 입력 값에 따라 동적으로 변경합니다.
+                                        // />
+                                        // <input
+                                        //     type="text"
+                                        //     className={ReportRoundDetailCSS.detailReportTextArea}
+                                        //     value={detailInputValue[reportDetail.detailCode]}
+                                        //     onChange={(e) =>
+                                        //         setDetailInputValue({
+                                        //             ...detailInputValue,
+                                        //             [reportDetail.detailCode]: e.target.value,
+                                        //         })
+                                        //     }
+                                        // />
+                                        // <input
+                                        //     type="text"
+                                        //     className={ReportRoundDetailCSS.detailReportContent}
+                                        //     value={detailInputValue[reportDetail.detailCode]}
+                                        //     onChange={(e) =>
+                                        //         setDetailInputValue({
+                                        //             ...detailInputValue,
+                                        //             [reportDetail.detailCode]: e.target.value,
+                                        //         })
+                                        //     }
+                                        // />
+                                    ) : (
+                                        <span className={ReportRoundDetailCSS.detailReportContent}>
+                                            {reportDetail.detailBody}
+                                        </span>
+                                    )} */}
                                 </div>
                             </div>
                         ))}
@@ -375,12 +589,10 @@ function ReportRoundDetail() {
                                             </span>
                                         </div>
                                         <div className={ReportRoundDetailCSS.commentText}>
-                                            {/* <span className={ReportRoundDetailCSS.commentContent}>{reportRoundReply.replyBody}</span> */}
                                             {isReplyEditing[reportRoundReply.replyCode] ? (
                                                 <input
                                                     type="text"
                                                     className={ReportRoundDetailCSS.commentContent}
-                                                    // value={isReplyEditing[reportRoundReply.replyCode]? inputValue[reportRoundReply.replyCode] : reportRoundReply.replyBody}
                                                     value={replyInputValue[reportRoundReply.replyCode]}
                                                     readOnly={!isReplyEditing[reportRoundReply.replyCode]}
                                                     onChange={(e) => 
@@ -403,10 +615,10 @@ function ReportRoundDetail() {
                                                     <span
                                                         className={ReportRoundDetailCSS.commentEdit} 
                                                         onClick={() => {
-                                                            if (isReplyEditing[reportRoundReply.replyCode]) {
+                                                            if(isReplyEditing[reportRoundReply.replyCode]) {
                                                                 updateReply(reportRoundReply.roundCode, reportRoundReply.replyCode, replyInputValue[reportRoundReply.replyCode]);
                                                             } else {
-                                                                handleEditButtonClick(reportRoundReply.replyCode, reportRoundReply.replyBody);
+                                                                handleReplyEditButtonClick(reportRoundReply.replyCode, reportRoundReply.replyBody);
                                                             }
                                                         }}
                                                     >

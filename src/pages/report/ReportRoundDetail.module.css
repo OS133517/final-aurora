@@ -1,4 +1,5 @@
 .reportsContainer {
+    min-width: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -39,6 +40,20 @@
 
 .greentButton {
     background-color: #88CFBA;
+    border: none;
+    color: white;
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 13px;
+    margin-top: 7px;
+    cursor: pointer;
+}
+
+.redButton {
+    background-color: red;
     border: none;
     color: white;
     width: 150px;
@@ -112,40 +127,20 @@ button {
 }
 
 .detailReportBody {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-left: 35px;
-    padding-right: 20px;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
-    min-height: 100px;
-    height: auto;
+    position: relative;
+    padding: 8px 16px;
+    border-bottom: 1px solid #eee;
+    line-height: 1.5;
+    word-wrap: break-word;
 }
 
 .detailReportTextArea {
-    font-size: 1em;
-    line-height: 1.5;
-    resize: none;
-    outline: none;
-    background-color: transparent;
-    overflow: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    margin: 0;
-    box-sizing: border-box;
-    min-height: 100px;
-    height: auto;
-}
-
-.detailReportSpan {
-    display: block;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    padding: 29px 34px; 
-    margin: 0;
-    box-sizing: border-box;
-    min-height: 100px;
-    height: auto;
+    border: 1px solid #ccc;
+    resize: none; 
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden; 
+    min-height: 200px;
 }
 
 .commentContainer {
@@ -196,6 +191,7 @@ button {
     white-space: pre-wrap;
     word-wrap: break-word;
     margin-top: 5px; 
+    margin-right: 20px;
 } 
 
 .replyAuthorInfo {
@@ -230,6 +226,7 @@ button {
 
 .commentEditDiv {
     flex-shrink: 0; 
+    margin-top: 5px;
 }
 
 .replyRegisterButton {
@@ -306,4 +303,8 @@ button {
     font-weight: bold;
     font-size: 0.9rem;
     margin-left: 10px;
+}
+
+.readOnlyInput {
+    border: none;
 }

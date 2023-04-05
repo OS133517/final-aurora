@@ -14,9 +14,12 @@ import {
     POST_REPORT_DETAIL,
     POST_REPORT_ROUND_REPLY,
 
-    PUT_REPORT_ROUND_REPLY,
+    PUT_REPORT_ROUND,
     PUT_REPORT_DETAIL,
+    PUT_REPORT_ROUND_REPLY,
 
+    DELETE_REPORT_ROUND,
+    DELETE_REPORT_DETAIL,
     DELETE_REPORT_ROUND_REPLY,
 } from "../modules/ReportModule";
 
@@ -141,7 +144,7 @@ export const callRegisterReportAPI = ({formData}) => {
 
 export const callSelectReportRoundListAPI = ({reportCode, offset}) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/routine/${reportCode}/rounds?offset=${offset}`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/${reportCode}/rounds?offset=${offset}`;
 
     return async (dispatch, getState) => {
 
@@ -340,8 +343,8 @@ export const callUpdateReportDetailAPI = ({reportCode, roundCode, detailCode, de
                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
             body : JSON.stringify({
-                detailBody : detailBody,
-                detailCode : detailCode
+                detailCode : detailCode,
+                detailBody : detailBody
             })
         })
         .then(response => response.json());
@@ -349,6 +352,82 @@ export const callUpdateReportDetailAPI = ({reportCode, roundCode, detailCode, de
         if(result.status === 200) {
             console.log('[ReportAPICalls] callUpdateReportDetailAPI RESULT', result);
             dispatch({type : PUT_REPORT_DETAIL, payload : result.data});
+        }
+    };
+}
+
+export const callDeleteReportDetailAPI = ({detailCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/rounds/detail-reports/${detailCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'DELETE',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callDeleteReportDetailAPI RESULT', result);
+            dispatch({type : DELETE_REPORT_DETAIL, payload : result.data});
+        }
+    };
+}
+
+export const callUpdateReportRoundAPI = ({reportCode, roundCode, roundTitle, roundBody}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/rounds`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'PUT',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                reportCode : reportCode,
+                roundCode : roundCode,
+                roundTitle : roundTitle,
+                roundBody : roundBody
+            })
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callUpdateReportRoundAPI RESULT', result);
+            dispatch({type : PUT_REPORT_ROUND, payload : result.data});
+        }
+    };
+}
+
+export const callDeleteReportRoundAPI = ({roundCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/rounds`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'DELETE',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : roundCode
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callDeleteReportRoundAPI RESULT', result);
+            dispatch({type : DELETE_REPORT_ROUND, payload : result.data});
         }
     };
 }

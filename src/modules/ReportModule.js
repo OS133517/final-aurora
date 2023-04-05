@@ -32,9 +32,13 @@ export const POST_REPORT = 'report/POST_REGISTER_REPORT';
 export const POST_REPORT_ROUND_REPLY = 'report/POST_REGISTER_REPORT_ROUND_REPLY';
 export const POST_REPORT_DETAIL = 'report/POST_REGISTER_REPORT_DETAIL';
 
-export const PUT_REPORT_ROUND_REPLY = 'report/PUT_REPORT_ROUND_REPLY';
-export const PUT_REPORT_DETAIL = 'report/PUT_REPORT_DETAIL';
 
+export const PUT_REPORT_ROUND = 'report/PUT_REPORT_ROUND';
+export const PUT_REPORT_DETAIL = 'report/PUT_REPORT_DETAIL';
+export const PUT_REPORT_ROUND_REPLY = 'report/PUT_REPORT_ROUND_REPLY';
+
+export const DELETE_REPORT_ROUND = 'report/DELETE_REPORT_ROUND';
+export const DELETE_REPORT_DETAIL = 'report/DELETE_REPORT_DETAIL';
 export const DELETE_REPORT_ROUND_REPLY = 'report/DELETE_REPORT_ROUND_REPLY';
 
 export const UPDATE_REPORT_STATUS = "report/UPDATE_REPORT_STATUS";
@@ -50,6 +54,7 @@ export const updateReportStatus = (updated) => {
 const actions = createActions({
 
     [GET_MATCHING_MEMBERS] : () => {},
+
     [GET_REPORT_SUMMARY] : () => {},
     [GET_ROUTINE_REPORT_LIST_BY_CONDITIONS] : () => {},
     [GET_CASUAL_REPORT_LIST_BY_CONDITIONS] : () => {},
@@ -62,10 +67,13 @@ const actions = createActions({
     [POST_REPORT_DETAIL] : () => {},
     [POST_REPORT_ROUND_REPLY] : () => {},
 
-    [PUT_REPORT_ROUND_REPLY] : () => {},
+    [PUT_REPORT_ROUND] : () => {},
     [PUT_REPORT_DETAIL] : () => {},
+    [PUT_REPORT_ROUND_REPLY] : () => {},
     
-    [DELETE_REPORT_ROUND_REPLY] : () => {}
+    [DELETE_REPORT_ROUND] : () => {},
+    [DELETE_REPORT_DETAIL] : () => {},
+    [DELETE_REPORT_ROUND_REPLY] : () => {},
 });
 
 // 리듀서
@@ -76,6 +84,7 @@ const reportReducer = handleActions({
             ...state,
             matchingMembers : payload
         }},
+
     [GET_REPORT_SUMMARY] : (state, { payload }) => {
         return {
             ...state,
@@ -111,6 +120,7 @@ const reportReducer = handleActions({
             ...state,
             reportRoundReplyList : payload
         }},
+
     [POST_REPORT] : (state, { payload }) => {
         return {
             ...state,
@@ -126,12 +136,29 @@ const reportReducer = handleActions({
             ...state,
             isReportUpdated : payload,
         }},
-    [PUT_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        
+    [PUT_REPORT_ROUND] : (state, { payload }) => {
         return {
             ...state,
             isReportUpdated : payload
         }},
     [PUT_REPORT_DETAIL] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
+    [PUT_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
+
+    [DELETE_REPORT_ROUND] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
+    [DELETE_REPORT_DETAIL] : (state, { payload }) => {
         return {
             ...state,
             isReportUpdated : payload
