@@ -13,7 +13,7 @@ import { callMemberInfoForRegist, callReservationRegistAPI } from "../../apis/Re
 function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal}) {
 
     const dispatch = useDispatch();
-    const { memberCode } = jwtDecode(window.localStorage.getItem("accessToken"));
+    const { memberCode, team } = jwtDecode(window.localStorage.getItem("accessToken"));
     const thisMember = useSelector(state => state.reservationReducer.memberInfo);
     const reservationList = useSelector(state => state.reservationReducer.reservationsByDate);
 
@@ -21,7 +21,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
         reservationDate : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
         startTime : new Date(startDate),
         endTime : new Date(),
-        teamName : "",
+        teamCode : "",
         description : "",
         assetCode : assetCode,
         memberCode : memberCode
@@ -40,7 +40,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
 
         setForm({
             ...form,
-            teamName : thisMember?.teamName
+            teamCode : team
         });
     // eslint-disable-next-line
     }, [thisMember]);
@@ -232,7 +232,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
                                     type="text" 
                                     name="teamName" 
                                     id="teamName"
-                                    value={form.teamName||''}
+                                    value={thisMember?.teamName||''}
                                     disabled={true}
                                     /></td>
                         </tr>
