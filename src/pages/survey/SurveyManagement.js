@@ -4,7 +4,7 @@ import SurveysCSS from "./Surveys.module.css";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
-function Surveys() {
+function SurveyManagement() {
 
     const dispatch = useDispatch();
 
@@ -74,7 +74,7 @@ function Surveys() {
     return (
         <div className={SurveysCSS.addressesDiv}>
             <div className={SurveysCSS.addressesHeader}>
-                <span>설문 목록</span>
+                <span>설문 관리</span>
             </div>
             <div className={SurveysCSS.addressesSearch}>
                 <select name="condition" onChange={onChangeHandler}>
@@ -104,10 +104,10 @@ function Surveys() {
                             기간
                         </th>
                         <th>
-                            설문 상태
+                            진행률
                         </th>
                         <th>
-                            답변 상태
+                            설문 상태
                         </th>
                     </tr>
                 </thead>
@@ -155,4 +155,4 @@ function Surveys() {
     );
 }
 
-export default Surveys;
+export default SurveyManagement;

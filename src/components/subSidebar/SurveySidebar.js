@@ -24,7 +24,7 @@ function SurveySidebar() {
                     <span>설문</span>
                 </div>
                 <div className={SidebarCSS.sidebarBody}>
-                    <button 
+                    <button onClick={() => navigate("/aurora/survey/survey-management/regist")}
                         className={SidebarCSS.buttons} 
                         >설문 생성
                     </button>

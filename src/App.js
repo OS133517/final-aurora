@@ -11,6 +11,8 @@ import "./App.css";
 import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
 import SurveyLayout from "./layouts/SurveyLayout";
 import Surveys from "./pages/survey/Surveys";
+import SurveyManagement from "./pages/survey/SurveyManagement";
+import SurveyRegist from "./pages/survey/SurveyRegist";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
 
             <Route path="survey" element={<SurveyLayout/>}>
               <Route path="list" element={<Surveys/>}/>
+              <Route path="survey-management" element={<SurveyManagement/>}/>
+              <Route path="survey-management/regist" element={<SurveyRegist/>}/>
             </Route>
           </Route>
         </Route>

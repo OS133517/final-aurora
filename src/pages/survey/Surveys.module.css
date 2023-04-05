@@ -148,6 +148,11 @@
     height: 30px;
 }
 
+.pagingBtn:disabled {
+    background-color: #C1C1C1;
+    cursor: not-allowed;
+}
+
 .pagingBtn:hover{
     cursor: pointer;
     background-color: rgb(12, 250, 180);
