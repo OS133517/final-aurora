@@ -57,6 +57,8 @@ function ReservationAssetModal({setAssetModal}) {
             dispatch(callAssetRegistAPI({
                 form : form
             }));
+
+            setAssetModal(false);
         }
     }
 

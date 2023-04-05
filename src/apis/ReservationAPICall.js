@@ -246,7 +246,7 @@ export const callReservationRegistAPI = ({form}) => {
             body : JSON.stringify({
                 assetCode : form.assetCode,
                 memberCode : form.memberCode,
-                team : form.team,
+                teamCode : form.teamCode,
                 reservationDate : form.reservationDate,
                 startTime : new Date(form.startTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
                 endTime : new Date(form.endTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),

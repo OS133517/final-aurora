@@ -56,7 +56,7 @@ function ReservationCalendarDay({day, setSelectedDate}) {
                 <div 
                     key={item.reservationNo}
                     style={seededRandomColor(item.reservationNo)}>
-                    <span>{Array.isArray(reservationList) && `${item?.startTime.slice(0, -6)}` === `${day.year}-${`${day.month}`.length === 2? day.month:`0${day.month}`}-${`${day.date}`.length  === 2? day.date:`0${day.date}`}`? `${item.team}`:'\u00A0'}</span>
+                    <span>{Array.isArray(reservationList) && `${item?.startTime.slice(0, -6)}` === `${day.year}-${`${day.month}`.length === 2? day.month:`0${day.month}`}-${`${day.date}`.length  === 2? day.date:`0${day.date}`}`? `${item.teamName}`:'\u00A0'}</span>
                 </div>
             ))}
         </div>
