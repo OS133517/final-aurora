@@ -19,8 +19,16 @@ function EarlyWithdrawal() {
     const [isEdit, setIsEdit] = useState(false);
     const docCode = undefined;
 
+    const backEvent = () => {
+        window.history.back();
+    }
+
     return (
         <div className={earlyWithdrawalCSS.detailBox}>
+            {!isEdit ? <div></div> : <div className={earlyWithdrawalCSS.nextStep}>
+                <button> 제출 </button>
+                <button onClick={backEvent}>목록</button>
+            </div>}
             <div className={earlyWithdrawalCSS.detailView}>
                 <div className={earlyWithdrawalCSS.buttonBox}>
                 </div>
@@ -28,6 +36,7 @@ function EarlyWithdrawal() {
                     <thead>
                         <tr>
                             <td className={earlyWithdrawalCSS.detaildocName} colSpan="2">
+                                <h1>조퇴신청서</h1>
                             </td>
                         </tr>
                     </thead>
