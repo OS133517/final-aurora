@@ -112,7 +112,7 @@ function AddBookSidebar() {
                 if(tIsVisible && newTGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newTGroupName,
-                        team : loginMember.team
+                        teamCode : loginMember.team
                     }));
                 }
                 setTIsVisible(!tIsVisible);

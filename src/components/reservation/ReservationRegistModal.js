@@ -21,7 +21,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
         reservationDate : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
         startTime : new Date(startDate),
         endTime : new Date(),
-        team : "",
+        teamName : "",
         description : "",
         assetCode : assetCode,
         memberCode : memberCode
@@ -40,7 +40,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
 
         setForm({
             ...form,
-            team : thisMember?.team
+            teamName : thisMember?.teamName
         });
     // eslint-disable-next-line
     }, [thisMember]);
@@ -230,9 +230,9 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
                             <td><label htmlFor="team">소속팀</label></td>
                             <td><input 
                                     type="text" 
-                                    name="team" 
-                                    id="team"
-                                    value={form.team||''}
+                                    name="teamName" 
+                                    id="teamName"
+                                    value={form.teamName||''}
                                     disabled={true}
                                     /></td>
                         </tr>

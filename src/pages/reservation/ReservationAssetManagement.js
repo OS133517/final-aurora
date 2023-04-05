@@ -172,9 +172,9 @@ function ReservationAssetManagement() {
                             ))
                         }
                         {
-                            Array.isArray(assetList) && assetList.length === 0 && (
+                            !Array.isArray(assetList) || assetList.length === 0 && (
                                 <tr>
-                                    <td colSpan="7" style={{textAlign:"center"}}>
+                                    <td colSpan='5' style={{textAlign:"center"}}>
                                         검색 결과가 없습니다.
                                     </td>
                                 </tr>
