@@ -308,3 +308,8 @@ button {
 .readOnlyInput {
     border: none;
 }
+
+.readOnlyInput:focus {
+    outline: none;
+    border: none;
+  }

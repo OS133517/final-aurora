@@ -37,6 +37,7 @@ export const PUT_REPORT_ROUND = 'report/PUT_REPORT_ROUND';
 export const PUT_REPORT_DETAIL = 'report/PUT_REPORT_DETAIL';
 export const PUT_REPORT_ROUND_REPLY = 'report/PUT_REPORT_ROUND_REPLY';
 
+export const DELETE_REPORT = 'report/DELETE_REPORT';
 export const DELETE_REPORT_ROUND = 'report/DELETE_REPORT_ROUND';
 export const DELETE_REPORT_DETAIL = 'report/DELETE_REPORT_DETAIL';
 export const DELETE_REPORT_ROUND_REPLY = 'report/DELETE_REPORT_ROUND_REPLY';
@@ -71,6 +72,7 @@ const actions = createActions({
     [PUT_REPORT_DETAIL] : () => {},
     [PUT_REPORT_ROUND_REPLY] : () => {},
     
+    [DELETE_REPORT] : () => {},
     [DELETE_REPORT_ROUND] : () => {},
     [DELETE_REPORT_DETAIL] : () => {},
     [DELETE_REPORT_ROUND_REPLY] : () => {},
@@ -153,6 +155,11 @@ const reportReducer = handleActions({
             isReportUpdated : payload
         }},
 
+    [DELETE_REPORT] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
     [DELETE_REPORT_ROUND] : (state, { payload }) => {
         return {
             ...state,

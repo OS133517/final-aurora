@@ -5,7 +5,6 @@ import { callRoutineReportListByConditionsAPI,
 } from "../../apis/ReportAPICall";
 import { updateReportStatus } from '../../modules/ReportModule';
 import { NavLink } from "react-router-dom";
-import { decodeJwt } from "../../utils/tokenUtils";
 
 import SidebarCSS from "./SubSidebar.module.css";
 
@@ -18,7 +17,6 @@ function ReportSidebar() {
     const [casualReportIsOpen, setCasualReportIsOpen] = useState(false);
 
     const isReportUpdated = useSelector(state => state.reportReducer.isReportListUpdated);
-
     const routineReportList = useSelector(state => state.reportReducer.routineReportList.data);
     const casualReportList = useSelector(state => state.reportReducer.casualReportList.data);
 
@@ -33,7 +31,6 @@ function ReportSidebar() {
             completionStatus : 'N',
             offset : 1
         }));
-        
         dispatch(callCasualReportListByConditionsAPI({
             completionStatus : 'N',
             offset : 1
@@ -77,11 +74,9 @@ function ReportSidebar() {
                                 ))
                             }
                             {
-                                // Array.isArray(routineReportList) && routineReportList.length > 10 && 
                                 <NavLink 
                                     style={ ({isActive}) => isActive? activeStyle : undefined }
                                     to={`/aurora/reports/routines?completionStatus=N&offset=1`}
-                                    // key='all'
                                 >
                                     <span>목록 보기</span>
                                 </NavLink>
@@ -109,11 +104,9 @@ function ReportSidebar() {
                                 ))
                             }
                             {
-                                // Array.isArray(routineReportList) && routineReportList.length >= 10 && 
                                 <NavLink 
                                     style={ ({isActive}) => isActive? activeStyle : undefined }
                                     to={`/aurora/reports/casuals?completionStatus=N&offset=1`}
-                                    // key='all'
                                 >
                                     <span>목록 보기</span>
                                 </NavLink>

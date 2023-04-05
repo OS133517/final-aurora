@@ -25,7 +25,7 @@ function ReportRoundDetail() {
 
     const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const loginMember = accessToken.memberCode;
-    console.log("loginMember : " + loginMember);
+    // console.log("loginMember : " + loginMember);
 
     const dispatch = useDispatch();
     const { reportCode } = useParams();
@@ -53,22 +53,23 @@ function ReportRoundDetail() {
     const [textAreaHeight, setTextAreaHeight] = useState({});
 
     const reportDetailList = useSelector(state => state.reportReducer.reportDetailList);
-    reportDetailList && console.log("reportDetailList : " + JSON.stringify(reportDetailList));
+    // reportDetailList && console.log("reportDetailList : " + JSON.stringify(reportDetailList));
 
     // 보고 회차 상세정보 데이터 
     const reportRoundDetailData = useSelector(state => state.reportReducer.reportRoundDetailData);
+    // console.log("reportRoundDetailData : " + JSON.stringify(reportRoundDetailData));
     // 보고 상세 정보 
     const reportDTO = reportRoundDetailData && reportRoundDetailData.reportDTO;
-    reportRoundDetailData && console.log("reportDTO : " + JSON.stringify(reportDTO));
+    // reportRoundDetailData && console.log("reportDTO : " + JSON.stringify(reportDTO));
     // 보고 책임자 정보
     const memberDTO = reportRoundDetailData && reportRoundDetailData.memberDTO;
-    reportRoundDetailData && console.log("memberDTO : " + JSON.stringify(memberDTO));
+    // reportRoundDetailData && console.log("memberDTO : " + JSON.stringify(memberDTO));
     // 회차 상세 정보 
     const reportRoundDetail = reportRoundDetailData && reportRoundDetailData.reportRoundDetail;
-    reportRoundDetailData && console.log("reportRoundDetail : " + JSON.stringify(reportRoundDetail));
+    // reportRoundDetailData && console.log("reportRoundDetail : " + JSON.stringify(reportRoundDetail));
     // 회차 댓글 목록 
     const reportRoundReplyList = useSelector(state => state.reportReducer.reportRoundReplyList);
-    reportRoundReplyList && console.log("reportRoundReplyList : " + JSON.stringify(reportRoundReplyList));
+    // reportRoundReplyList && console.log("reportRoundReplyList : " + JSON.stringify(reportRoundReplyList));
 
     const isInCharge = reportDTO && (loginMember == reportDTO.memberCode)
 
@@ -149,7 +150,6 @@ function ReportRoundDetail() {
             roundTitle : roundInputValue.roundTitle,
             roundBody : roundInputValue.roundBody
         }))
-        // 수정 모드를 종료합니다.
         setIsRoundEditing(false);
         setReportRoundUpdated(!roundUpdated);
     };
@@ -173,6 +173,11 @@ function ReportRoundDetail() {
                 roundCode: reportRoundDetail.roundCode
             }))
             navigate(`/aurora/reports/${reportRoundDetail.reportCode}/rounds`);
+
+            window.history.pushState(null, "", window.location.pathname);
+            window.onpopstate = function (event) {
+                window.history.pushState(null, "", window.location.pathname);
+            };
         }
     }
 
@@ -348,7 +353,7 @@ function ReportRoundDetail() {
                                         deleteRound()
                                     }}
                                 >
-                                    <span>삭제</span> 
+                                    <span>회차 삭제</span> 
                                 </button>
                             }
                             {isInCharge &&
@@ -362,7 +367,7 @@ function ReportRoundDetail() {
                                         }
                                     }}
                                 >
-                                    {isRoundEditing? "완료" : "수정"}
+                                    {isRoundEditing? "완료" : "회차 수정"}
                                 </button>
                             }
                             {!isInCharge &&
@@ -377,7 +382,10 @@ function ReportRoundDetail() {
                                     }
                                 </button>
                             }
-                            <button className={ReportRoundDetailCSS.greentButton}>
+                            <button 
+                                className={ReportRoundDetailCSS.greentButton}
+                                onClick={() => navigate(-1)}
+                            >
                                 뒤로 가기
                             </button>
                         </div>

@@ -11,14 +11,17 @@ function RoutineReports() {
     // const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isFirstRender, setIsFirstRender] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState('N');
+
     const routineReportData = useSelector(state => state.reportReducer.routineReportList)
     const routineReportList = routineReportData.data;
-    console.log("routineReportList : " + JSON.stringify(routineReportList));
+    // console.log("routineReportList : " + JSON.stringify(routineReportList));
 
     const pageInfo = routineReportData.pageInfo;
-    console.log("pageInfo : " + JSON.stringify(pageInfo));
+    // console.log("pageInfo : " + JSON.stringify(pageInfo));
+
     const pageNumber = [];
 
     if(pageInfo) {
@@ -27,16 +30,45 @@ function RoutineReports() {
         }
     }
     
-    // 목록 조회 
+    // // 목록 조회 
+    // useEffect(() => {
+
+    //     dispatch(callRoutineReportListByConditionsAPI({
+    //         completionStatus : isCompleted,
+    //         offset : currentPage
+    //     }))
+    // // eslint-disable-next-line
+    // }, [isCompleted, currentPage])
+
+    // 첫 랜더링 시에만 실행되는 useEffect
     useEffect(() => {
 
-        dispatch(callRoutineReportListByConditionsAPI({
-            completionStatus : isCompleted,
-            offset : currentPage
-        }))
-    // eslint-disable-next-line
-    }, [isCompleted, currentPage])
+        if (isFirstRender) {
+                
+            dispatch(
+            callRoutineReportListByConditionsAPI({
+                completionStatus: isCompleted,
+                offset: currentPage,
+            })
+        );
+        setIsFirstRender(false);
+      }
+    }, [isFirstRender]); // isFirstRender를 의존성 배열에 전달
 
+    // isCompleted나 currentPage가 변경될 때 실행되는 useEffect
+    useEffect(() => {
+
+        if (!isFirstRender) {
+
+        dispatch(
+            callRoutineReportListByConditionsAPI({
+                completionStatus: isCompleted,
+                offset: currentPage,
+            })
+        );
+        }
+    }, [isCompleted, currentPage, isFirstRender]);
+    
     const onClickReportHandler = (reportCode) => {
         
         navigate(`/aurora/reports/${reportCode}/rounds`)
