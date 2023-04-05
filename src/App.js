@@ -9,6 +9,8 @@ import MyReservation from "./pages/reservation/MyReservation";
 import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import "./App.css";
 import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
+import SurveyLayout from "./layouts/SurveyLayout";
+import Surveys from "./pages/survey/Surveys";
 
 function App() {
   return (
@@ -30,6 +32,10 @@ function App() {
               <Route path="my-reservation" element={<MyReservation/>}/>
               <Route path="assets/:assetCode" element={<ReservationCalendar/>}/>
               <Route path="asset-management" element={<ReservationAssetManagement/>}/>
+            </Route>
+
+            <Route path="survey" element={<SurveyLayout/>}>
+              <Route path="list" element={<Surveys/>}/>
             </Route>
           </Route>
         </Route>
