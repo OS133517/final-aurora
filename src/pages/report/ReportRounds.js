@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
 import { callSelectReportRoundListAPI,
-            callDeleteReportAPI 
+            callDeleteReportAPI,
+            callUpdateReportAPI
         } from "../../apis/ReportAPICall";
 import { useNavigate } from 'react-router-dom';
 import { decodeJwt } from "../../utils/tokenUtils";
@@ -88,19 +89,11 @@ function ReportRounds() {
     // 보고 수정 
     const updateReport = (reportInputValue) => {
 
-        // dispatch
-        // 예시: dispatch(updateReportAPI({ reportCode, newTitle, newNotice }));
+        const formData = new FormData(); 
+        // formData.append("reportDTO", )
 
-        // dispatch(callUpdateReportRoundAPI({
-            
-        //     reportCode : reportRoundDetail.reportCode,
-        //     roundCode : reportRoundDetail.roundCode,
-        //     roundTitle : roundInputValue.roundTitle,
-        //     roundBody : roundInputValue.roundBody
-        // }))
         dispatch(callUpdateReportAPI({
-
-            
+            formData
         }))
         setIsEditing(false);
         setReportUpdated(!reportUpdated);

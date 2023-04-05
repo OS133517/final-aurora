@@ -160,6 +160,7 @@ function ReportCreate() {
         e.preventDefault();
 
         if (!validateFormData()) {
+            
             return;
         } else {
             const formData = new FormData();

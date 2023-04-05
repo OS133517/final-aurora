@@ -32,7 +32,7 @@ export const POST_REPORT = 'report/POST_REGISTER_REPORT';
 export const POST_REPORT_ROUND_REPLY = 'report/POST_REGISTER_REPORT_ROUND_REPLY';
 export const POST_REPORT_DETAIL = 'report/POST_REGISTER_REPORT_DETAIL';
 
-
+export const PUT_REPORT = 'report/PUT_REPORT';
 export const PUT_REPORT_ROUND = 'report/PUT_REPORT_ROUND';
 export const PUT_REPORT_DETAIL = 'report/PUT_REPORT_DETAIL';
 export const PUT_REPORT_ROUND_REPLY = 'report/PUT_REPORT_ROUND_REPLY';
@@ -68,6 +68,7 @@ const actions = createActions({
     [POST_REPORT_DETAIL] : () => {},
     [POST_REPORT_ROUND_REPLY] : () => {},
 
+    [PUT_REPORT] : () => {},
     [PUT_REPORT_ROUND] : () => {},
     [PUT_REPORT_DETAIL] : () => {},
     [PUT_REPORT_ROUND_REPLY] : () => {},
@@ -139,6 +140,11 @@ const reportReducer = handleActions({
             isReportUpdated : payload,
         }},
         
+    [PUT_REPORT] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
     [PUT_REPORT_ROUND] : (state, { payload }) => {
         return {
             ...state,

@@ -14,6 +14,7 @@ import {
     POST_REPORT_DETAIL,
     POST_REPORT_ROUND_REPLY,
 
+    PUT_REPORT,
     PUT_REPORT_ROUND,
     PUT_REPORT_DETAIL,
     PUT_REPORT_ROUND_REPLY,
@@ -144,6 +145,33 @@ export const callCasualReportListByConditionsAPI = ({completionStatus, offset}) 
         if(result.status === 200) {
             console.log('[ReportAPICalls] callCasualReportListByConditionsAPI RESULT', result);
             dispatch({type : GET_CASUAL_REPORT_LIST_BY_CONDITIONS, payload : result.data});
+        }
+    };
+}
+
+// 보고 수정 
+export const callUpdateReportAPI = ({formData}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'PUT',
+            headers : {
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : formData
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callUpdateReportAPI RESULT', result);
+            dispatch({type : PUT_REPORT, payload : result.data});
+
+            // 상태 변경 액션 디스패치
+            dispatch(updateReportStatus(true));
         }
     };
 }
