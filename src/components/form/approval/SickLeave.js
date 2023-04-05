@@ -7,8 +7,15 @@ function SickLeave() {
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
 
+    const backEvent = () => {
+        window.history.back();
+    }
     return (
         <div className={sickLeaveCSS.detailBox}>
+            {!isEdit ? <div></div> : <div className={sickLeaveCSS.nextStep}>
+                <button> 제출 </button>
+                <button onClick={backEvent}>목록</button>
+            </div>}
             <div className={sickLeaveCSS.detailView}>
                 <div className={sickLeaveCSS.buttonBox}>
                 </div>
@@ -16,6 +23,7 @@ function SickLeave() {
                     <thead>
                         <tr>
                             <td className={sickLeaveCSS.detaildocName} colSpan="2">
+                                <h1>병가휴직서</h1>
                             </td>
                         </tr>
                     </thead>

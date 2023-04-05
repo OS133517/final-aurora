@@ -15,6 +15,7 @@ import ReservationCalendarLayout from "./layouts/ReservationCalendarLayout";
 import "./App.css";
 import ApprovalDraft from "./pages/approval/ApprovalDraft";
 import DraftForm from "./pages/approval/DraftForm";
+import ApprovalWait from "./pages/approval/ApprovalWait";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
               <Route path="approval" element={<ApprovalLayout />}>
                 <Route index="approvals" element={<Approvals />} />
                 <Route index path="pending" element={<Pending />} />
+                <Route index path="waiting" element={<ApprovalWait />} />
                 <Route index path="draft" element={<ApprovalDraft />} />
                 <Route index path="detail/:appCode" element={<ApprovalDetail />} />
                 <Route index path="form/:docCode" element={<DraftForm />} />

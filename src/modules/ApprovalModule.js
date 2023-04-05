@@ -2,9 +2,14 @@ import { createAction, handleActions } from "redux-actions";
 
 // 초기값
 const initialState = {
-    approvalInfo :  [],
-    approvalLine : [] ,
-    pendingList : []
+    approvalInfo: [],
+    approvalLine: [],
+    pendingList: [],
+    draftapproval: [],
+    draftapprovalLine: [],
+    lineList: [],
+    completedList: [],
+    modifyLine: []
 };
 
 // 액션 상수로 정의
@@ -12,21 +17,25 @@ export const GET_APPROVALCOUNT = 'approvals/GET_APPROVALCOUNT';
 export const GET_APPROVALS = 'approvals/GET_APPROVALS';
 export const GET_PENDING = 'approvals/GET_PENDING';
 export const GET_COMPLETED = 'approvals/GET_COMPLETED';
+export const GET_WAIT = 'approvals/GET_WAIT';
 export const POST_APPROVALS = 'approvals/POST_APPROVALS';
 export const PUT_APPROVALS = 'approvals/PUT_APPROVALS';
 export const DETELE_APPROVALS = 'approvals/DETELE_APPROVALS';
 export const GET_DETAIL = 'approvals/GET_DETAIL';
+export const POST_APPROVALLINE = 'approvals/POST_APPROVALLINE';
 
 // eslint-disable-next-line
 const actions = createAction({
-    [GET_APPROVALCOUNT] : () => {},
-    [GET_APPROVALS] : () => {},
-    [GET_PENDING] : () => {},
-    [GET_COMPLETED] : () => {},
-    [POST_APPROVALS] : () => {},
-    [PUT_APPROVALS] : () => {},
-    [DETELE_APPROVALS] : () => {},
-    [GET_DETAIL] : () => {}
+    [GET_APPROVALCOUNT]: () => { },
+    [GET_APPROVALS]: () => { },
+    [GET_PENDING]: () => { },
+    [GET_COMPLETED]: () => { },
+    [POST_APPROVALS]: () => { },
+    [PUT_APPROVALS]: () => { },
+    [DETELE_APPROVALS]: () => { },
+    [GET_DETAIL]: () => { },
+    [POST_APPROVALLINE]: () => { },
+    [GET_WAIT]: () => { }
 
 });
 
@@ -35,34 +44,43 @@ const actions = createAction({
 const approvalReducer = handleActions(
     {
         [GET_APPROVALCOUNT]: (state, { payload }) => {
-            
+
             return payload;
         },
         [GET_APPROVALS]: (state, { payload }) => {
 
-            return  {
+            return {
                 ...state,
-                approvalInfo : payload
-            } 
+                approvalInfo: payload
+            };
         },
         [GET_PENDING]: (state, { payload }) => {
 
             return {
                 ...state,
-                pendingList : payload
-            } 
+                pendingList: payload
+            };
         },
         [GET_COMPLETED]: (state, { payload }) => {
 
-            return payload;
+            return {
+                ...state,
+                completedList: payload
+            };
         },
         [POST_APPROVALS]: (state, { payload }) => {
 
-            return payload;
+            return {
+                ...state,
+                draftapproval: payload
+            };
         },
         [PUT_APPROVALS]: (state, { payload }) => {
 
-            return payload;
+            return {
+                ...state,
+                modifyLine: payload
+            };
         },
         [DETELE_APPROVALS]: (state, { payload }) => {
 
@@ -74,7 +92,21 @@ const approvalReducer = handleActions(
                 ...state,
                 approvalLine: payload
             }
-        }
+        },
+        [POST_APPROVALLINE]: (state, { payload }) => {
+
+            return {
+                ...state,
+                draftapprovalLine: payload
+            }
+        },
+        [GET_WAIT]: (state, { payload }) => {
+
+            return {
+                ...state,
+                lineList: payload
+            };
+        },
 
     },
     initialState

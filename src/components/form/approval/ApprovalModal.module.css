@@ -76,9 +76,63 @@
     border: 1px solid #c1c1c1;
 }
 
+.inputBox {
+    width: 95%;
+    height: 70%;
+    margin: 10px;
+    border: 1px solid #c1c1c1;
+}
+
 .detailDescript {
     height: 592px;
     padding: 5px;
     border: 1px solid #c1c1c1;
     vertical-align: top;
+}
+
+.nextStep {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.nextStep button{
+    height: 30px;
+    width: 70px;
+    border: 1px solid #c1c1c1;
+    background-color: white;
+    cursor : pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 5px;
+}
+
+.nextStep button:hover{
+    background-color:#73b8a3;
+    color : white;
+    border: none;
+
+}
+
+.approvalLineBox {
+    border: 1px solid dodgerblue;
+    width: 30%;
+    height: 100vh;
+}
+
+.line li{
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.deletecheck {
+    width: 50px;
+    text-align: center;
+}
+
+.deletecheck button{
+    border: 1px solid #c1c1c1;
+    background-color: white;
 }

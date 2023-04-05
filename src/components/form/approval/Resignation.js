@@ -6,9 +6,16 @@ function Resignation() {
     const docCode = undefined;
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
+    const backEvent = () => {
+        window.history.back();
+    }
 
     return (
         <div className={resignationCSS.detailBox}>
+            {!isEdit ? <div></div> : <div className={resignationCSS.nextStep}>
+                <button> 제출 </button>
+                <button onClick={backEvent}>목록</button>
+            </div>}
             <div className={resignationCSS.detailView}>
                 <div className={resignationCSS.buttonBox}>
                 </div>
@@ -16,6 +23,7 @@ function Resignation() {
                     <thead>
                         <tr>
                             <td className={resignationCSS.detaildocName} colSpan="2">
+                                <h1>사직서</h1>
                             </td>
                         </tr>
                     </thead>
