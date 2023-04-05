@@ -10,10 +10,8 @@ import Addresses from "./pages/addBook/Addresses";
 import ApprovalDetail from "./pages/approval/ApprovalDetail";
 import ReservationLayout from "./layouts/ReservationLayout";
 import Login from "./pages/Login";
-import Addresses from "./pages/addBook/Addresses";
 import HrmLayout from "./layouts/HrmLayout";
 import Hrm from "./pages/hrm/Hrm";
-import Main from "./pages/Main";
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
@@ -53,7 +51,7 @@ function App() {
               <Route path="reservation" element={<ReservationLayout />}>
                 <Route index element={<MyReservation/>}/>
                 <Route path="my-reservation" element={<MyReservation />} />
-                <Route path="assets/:assetCode" element={<ReservationCalendarLayout />} />
+                <Route path="assets/:assetCode" element={<ReservationCalendar />} />
               </Route>
               <Route path="approval" element={<ApprovalLayout />}>
                 <Route index="approvals" element={<Approvals />} />
