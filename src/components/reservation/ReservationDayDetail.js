@@ -46,9 +46,7 @@ function ReservationDayDetail({assetCode, assetName, assetStatus, selectedDate})
             <div className={DetailCSS.detailHeader}>
                 <span>{`${selectedDate.startDateTime.replace('00:00:00', '')||''}   ${selectedDate.day||''}`}</span>
                 {selectedDate.day !== '토요일' && selectedDate.day !== '일요일' && assetStatus !== 'N' && <button onClick={onClickRegist} className={DetailCSS.okButton}>예약하기</button>}
-                {assetStatus === 'N' && <button className={DetailCSS.noButton}>예약불가</button>}
-                {selectedDate.day === '토요일' && <button className={DetailCSS.noButton}>예약불가</button>}
-                {selectedDate.day === '일요일' && <button className={DetailCSS.noButton}>예약불가</button>}
+                {(selectedDate.day === '토요일' || selectedDate.day === '일요일' || assetStatus === 'N') && <button className={DetailCSS.noButton}>예약불가</button>}
             </div>
             <table className={DetailCSS.contentTable}>
                 <thead className={DetailCSS.contentHead}>

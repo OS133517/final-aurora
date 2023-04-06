@@ -1,97 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SurveysCSS from "./Surveys.module.css";
+import { callAllSurveysAPICall } from "../../apis/SurveyAPICall";
+import Swal from "sweetalert2";
 
 function Surveys() {
 
     const dispatch = useDispatch();
+    const surveys = useSelector(state => state.surveyReducer.surveys);
+    const surveyList = surveys?.data;
+    const pageInfo = surveys?.pageInfo;
+    const [survey, setSurvey] = useState([]);
 
-    const [searchInput, setSearchInput]  = useState({
-        condition : "name",
-        value : ""
-    });
-    const [searchForm, setSearchForm] = useState({
-        searchCondition : "",
-        searchValue : ""
-    });
-    const [isSearching, setIsSearching] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
+    if(pageInfo) {
+        for(let i = 1; i <= pageInfo.endPage; i++) {
+            pageNumber.push(i);
+        }
+    }
     
+    useEffect(() => {
 
-    // 검색 요청 쏘기
-    const searchCall = () => {
+        dispatch(callAllSurveysAPICall({
+            currentPage : currentPage
+        }));
+    // eslint-disable-next-line
+    }, [currentPage]);
 
+    const onClickDetail = (survey) => {
+
+        if(new Date(survey.startDate) < new Date()) {
+            Swal.fire({
+                icon : 'warning',
+                text : '마감된 설문입니다.'
+            });
+
+            return;
+        } else if(false) {
+            Swal.fire({
+                icon : 'warning',
+                text : '이미 답변한 설문입니다.'
+            })
+
+            return;
+        }
+
+        setSurvey(survey);
     }
-
-    // 검색 상자 state 관리용 함수
-    const onChangeHandler = (e) => {
-
-        setSearchInput({
-            ...searchInput,
-            [e.target.name] : e.target.value
-        });
-    }
-
-    // 검색 버튼 함수
-    const onClickSearch = () => {
-
-        setIsSearching(true);
-
-        setSearchForm({
-            ...searchForm,
-            searchCondition : searchInput.condition,
-            searchValue : searchInput.value
-        });
-    }
-
-    // 전체 체크 박스 관리용 함수
-    const onClickAllCheck = (e) => {
-
-        const checkList = document.querySelectorAll(`input[type=checkBox]`);
-
-        if(e.target.id === 'all' && e.target.checked === false) {
-
-            [...checkList].filter(check => check.id !== 'all').forEach(check => check.checked = false);
-        } else if (e.target.id === 'all' && e.target.checked === true) {
-
-            [...checkList].filter(check => check.id !== 'all').forEach(check => check.checked = true);
-        } 
-    }
-
-    // 체크 박스 관리용 함수
-    const onClickCheck = (e) => {
-
-        if(e.target.type === 'checkbox') return;
-
-        const ckBox = document.querySelector(`#checkBox${e.currentTarget.id}`)
-        ckBox.checked = !ckBox.checked;
-    }
-
 
     return (
         <div className={SurveysCSS.addressesDiv}>
             <div className={SurveysCSS.addressesHeader}>
                 <span>설문 목록</span>
             </div>
-            <div className={SurveysCSS.addressesSearch}>
-                <select name="condition" onChange={onChangeHandler}>
-                    <option name="condition" value="name">이름</option>
-                    <option name="condition" value="email">이메일</option>
-                </select>
-                <input type="text" name="value" value={searchInput.value} onChange={onChangeHandler}/>
-                <button type="button" onClick={onClickSearch}>검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
-                <div className={SurveysCSS.imgDiv}>
-                    <img src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>
-                    <img src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>
-                </div>
-            </div>
             <table className={SurveysCSS.contentTable}>
                 <thead className={SurveysCSS.contentHead}>
                     <tr>
-                        <th>
-                            <input type="checkBox" id="all" onClick={onClickAllCheck}/>
-                        </th>
                         <th>
                             번호
                         </th>
@@ -111,8 +76,24 @@ function Surveys() {
                 </thead>
                 <tbody>
                     {
+                        Array.isArray(surveyList) && surveyList.map(item => (
+                            <tr key={item.surveyCode} onClick={() => onClickDetail(item)}>
+                                <td>{item.surveyCode}</td>
+                                <td>{item.surveySubject}</td>
+                                <td>{item.startDate}&nbsp;~&nbsp;{item.endDate}</td>
+                                <td>
+                                    <span style={new Date(item.startDate) >= new Date()? {backgroundColor:'#88CFBA'}:{backgroundColor:'#3F4940'}}>
+                                        {new Date(item.startDate) >= new Date()? '진행중':'마감'}
+                                    </span>
+                                </td>
+                                <td>1</td>
+                            </tr>
+                        ))
+                    }
+                    {
+                        (!Array.isArray(surveyList) || surveyList.length === 0) &&
                             <tr>
-                                <td colSpan="7" style={{textAlign:"center"}}>
+                                <td colSpan="5" style={{textAlign:"center"}}>
                                     검색 결과가 없습니다.
                                 </td>
                             </tr>
@@ -121,15 +102,16 @@ function Surveys() {
             </table>
             <div className={ SurveysCSS.pagingBtnDiv }>
                 {
-                <button 
-                    onClick={() => setCurrentPage(currentPage - 1)} 
-                    disabled={currentPage === 1}
-                    className={ SurveysCSS.pagingBtn }
-                >
-                    &lt;
-                </button>
+                    Array.isArray(surveyList) &&
+                        <button 
+                            onClick={() => setCurrentPage(currentPage - 1)} 
+                            disabled={currentPage === 1}
+                            className={ SurveysCSS.pagingBtn }
+                        >
+                            &lt;
+                        </button>
                 }
-                {/* {pageNumber.map((num) => (
+                {pageNumber.map((num) => (
                 <li key={num} onClick={() => setCurrentPage(num)}>
                     <button
                         style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
@@ -138,16 +120,17 @@ function Surveys() {
                         {num}
                     </button>
                 </li>
-                ))} */}
-                {/* {
-                <button 
-                    onClick={() => setCurrentPage(currentPage + 1)} 
-                    disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
-                    className={ SurveysCSS.pagingBtn }
-                >
-                    &gt;
-                </button>
-                } */}
+                ))}
+                {
+                    Array.isArray(surveyList) &&
+                        <button 
+                            onClick={() => setCurrentPage(currentPage + 1)} 
+                            disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
+                            className={ SurveysCSS.pagingBtn }
+                        >
+                            &gt;
+                        </button>
+                }
             </div>
         </div>
     );

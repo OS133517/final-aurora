@@ -12,7 +12,6 @@ function SurveyRegist() {
 
     const scrollRef = useRef();
     const dispatch = useDispatch();
-
     const [questions, setQuestions] = useState([{
         questionNo : 1,
         questionBody : "",
@@ -21,10 +20,12 @@ function SurveyRegist() {
             choiceBody : '' 
         }]
     }])
+    const [isSelect, setIsSelect] = useState(false);
 
     useEffect(() => {
 
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    // eslint-disable-next-line
     }, [questions.length, questions[questions.length - 1].choices]);
 
     const [form, setForm] = useState({
@@ -124,9 +125,11 @@ function SurveyRegist() {
     const setDate = (type, date) => {
 
         if(type === 'startDate') {
+            setIsSelect(true);
             setForm({
                 ...form,
-                startDate : date
+                startDate : date,
+                endDate : date
             })
         } else if(type === 'endDate') {
             setForm({
@@ -224,17 +227,21 @@ function SurveyRegist() {
                                     minDate={new Date()}
                                     closeOnScroll={true}
                                     />
-                                <span>~</span>
-                                <DatePicker
-                                    className={SurveyRegistCSS.datePicker}
-                                    locale={ko}
-                                    name="endDate"
-                                    selected={form.endDate}
-                                    value={form.endDate}
-                                    onChange={(date) => setDate("endDate", date)}
-                                    dateFormat="yyyy-MM-dd"
-                                    minDate={new Date()}
-                                    />
+                                
+                                {isSelect && 
+                                    <>
+                                        <span>~</span>
+                                        <DatePicker
+                                        className={SurveyRegistCSS.datePicker}
+                                        locale={ko}
+                                        name="endDate"
+                                        selected={form.endDate||''}
+                                        value={form.endDate||''}
+                                        onChange={(date) => setDate("endDate", date)}
+                                        dateFormat="yyyy-MM-dd"
+                                        minDate={new Date(form.startDate)}
+                                        />
+                                    </>}
                             </td>
                         </tr>
                         {questions.map((question, index) => 

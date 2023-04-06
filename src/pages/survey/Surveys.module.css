@@ -84,14 +84,6 @@
     border-collapse : collapse
 }
 
-.contentTable th input:first-child, .contentTable td input:first-child {
-    display: flex;
-    align-items: center;
-    width: 18px;
-    height: 18px;
-    margin: 0 auto;
-}
-
 .contentHead th {
     font-weight: normal;
     font-size: 16px;
@@ -100,36 +92,41 @@
     text-align: start;
     border-bottom: 1px solid #88CFBA;
 }
-.contentHead th:first-child {
-    width: 25px;
-    padding-left: 5px;
+.contentTable th:first-child, .contentTable td:first-child {
+    width: 50px;
+    text-indent: 5px;
+    text-align: center;
 }
 .contentHead th:nth-child(2) {
-    width: 175px;
+    width: 700px;
 }
 
 .contentHead th:nth-child(3) {
-    width: 235px;
+    width: 200px;
 }
 
 .contentHead th:nth-child(4) {
-    width: 600px;
-}
-
-.contentHead th:nth-child(5) {
-    width: 225px;
-}
-
-.contentHead th:nth-child(6) {
-    width: 165px;
+    width: 100px;
 }
 
 .contentHead th:last-child {
-    width: 150px;
+    width: 100px;
 }
 
 .contentTable td {
     height: 40px;
+}
+
+.contentTable td:nth-child(4)>span {
+    display: block;
+    width: 78px;
+    height: 30px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    line-height: 30px;
 }
 
 .contentTable tbody>tr:hover {
