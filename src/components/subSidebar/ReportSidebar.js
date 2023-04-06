@@ -5,12 +5,14 @@ import { callRoutineReportListByConditionsAPI,
 } from "../../apis/ReportAPICall";
 import { updateReportStatus } from '../../modules/ReportModule';
 import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 import SidebarCSS from "./SubSidebar.module.css";
 
 function ReportSidebar() {
     
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // 드롭다운 메뉴 조정용
     const [routineReportIsOpen, setRoutineReportIsOpen] = useState(false);
@@ -48,11 +50,12 @@ function ReportSidebar() {
                     <span onClick={ () => window.location.href = "/aurora/reports/summary" }>보고</span>
                 </div>
                 <div>
-                    <NavLink to={"/aurora/reports/create"}>
-                        <button className={SidebarCSS.buttons}>
-                            보고서 작성
-                        </button>
-                    </NavLink>
+                    <button 
+                        className={SidebarCSS.buttons}
+                        onClick={() => navigate('/aurora/reports/edit', { state: { isEdit: false }})}
+                    >
+                        보고서 작성
+                    </button>
                     <button className={SidebarCSS.dropDownButtons} onClick={() => setRoutineReportIsOpen(!routineReportIsOpen)}>
                         <img 
                             className={SidebarCSS.dropDownArrow} 
@@ -96,7 +99,7 @@ function ReportSidebar() {
                                 Array.isArray(casualReportList) && casualReportList.slice(0,10).map(casualReport => (
                                     <NavLink 
                                         style={ ({isActive}) => isActive? activeStyle : undefined }
-                                        to={`/aurora/reports/${casualReport.reportCode}`}
+                                        to={`/aurora/reports/casuals/${casualReport.reportCode}`}
                                         key={casualReport.reportCode}
                                     >
                                         <span id={`reportTitleSpan${casualReport.reportTitle}`}>{casualReport.reportTitle}</span>

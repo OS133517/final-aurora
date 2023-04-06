@@ -9,10 +9,30 @@ import { callselectReportRoundDetailAPI,
 import ReportRoundDetailCSS from "./ReportRoundDetail.module.css";
 import Swal from "sweetalert2";
 
-function CasualReportDetail() {
+function CasualReportDetail() { 
 
     const dispatch = useDispatch();
     const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
+    // const { reportCode } = useParams();
     console.log("reportCode : " + reportCode);
     const { roundCode } = useParams();
     console.log("roundCode : " + roundCode);

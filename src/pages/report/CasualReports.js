@@ -1,28 +1,36 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callCasualReportListByConditionsAPI } from "../../apis/ReportAPICall";
-import { decodeJwt } from "../../utils/tokenUtils";
 import { useNavigate } from 'react-router-dom';
 
 import ReportsCSS from "./Reports.module.css";
 
 function CasualReports() {
 
+    // 파람 유즈스테이트걸어서 유즈이펙트하자 
+
+
+
+
     const dispatch = useDispatch();
-    // const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const navigate = useNavigate();
+
     const [currentPage, setCurrentPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState('N');
-    const casualReportData = useSelector(state => state.reportReducer.casualReportList)
-    const casualReportList = casualReportData.data;
-    console.log("casualReportList : " + JSON.stringify(casualReportList));
 
+    const casualReportData = useSelector(state => state.reportReducer.casualReportList)
+    // console.log("casualReportData : " + JSON.stringify(casualReportData));
+    const casualReportList = casualReportData.data;
+    // console.log("casualReportList : " + JSON.stringify(casualReportList));
     const pageInfo = casualReportData.pageInfo;
-    console.log("pageInfo : " + JSON.stringify(pageInfo));
+    // console.log("pageInfo : " + JSON.stringify(pageInfo));
+
     const pageNumber = [];
 
     if(pageInfo) {
+
         for(let i = 1; i <= pageInfo.endPage; i++) {
+
             pageNumber.push(i);
         }
     }
@@ -37,10 +45,10 @@ function CasualReports() {
     // eslint-disable-next-line
     }, [isCompleted, currentPage])
 
+    // 보고 클릭시 
     const onClickReportHandler = (reportCode) => {
         
         navigate(`/aurora/reports/casuals/${reportCode}`)
-        // @GetMapping("/reports/casual/{reportCode}")
     }
 
     return (
@@ -49,18 +57,19 @@ function CasualReports() {
                 <div className={ReportsCSS.reportsHeader}>
                     보고서 확인 
                 </div>
-                <div>
-                    <span className={ReportsCSS.reportType}>비정기 보고</span>
-                </div>
+                <div className={ReportsCSS.roundsHeader}>
+                    <span className={ReportsCSS.roundsTitle}>비정기 보고 목록</span>
+                </div>{/* 보고 목록 컨테이너 */}
                 <div className={ReportsCSS.reportsDiv}>
-                    <table className={ReportsCSS.reportListTable}>
+                    {/* 보고 게시판 */}
+                    <table className={ReportsCSS.reportsTable}>
                         <thead>
                             <tr>
-                                <th>날짜</th>
-                                <th>제목</th>
-                                <th>부서</th>
-                                <th>직급</th>
-                                <th>이름</th>
+                                <th className={ReportsCSS.columnRegDate}>등록일</th>
+                                <th className={ReportsCSS.columnTitle}>제목</th>
+                                <th className={ReportsCSS.columnMemberInfo}>부서</th>
+                                <th className={ReportsCSS.columnMemberInfo}>이름</th>
+                                <th className={ReportsCSS.columnMemberInfo}>직급</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,9 +82,9 @@ function CasualReports() {
                                 >
                                     <td>{casualReport.regDate}</td>
                                     <td>{casualReport.reportTitle}</td>
-                                    <td>{casualReport.memberDTO.deptName}</td>
-                                    <td>{casualReport.memberDTO.jobName}</td>
-                                    <td>{casualReport.memberDTO.memberName}</td>
+                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.deptName}</td>
+                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.memberName}</td>
+                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.jobName}</td>
                                 </tr>
                             ))}
                         </tbody>

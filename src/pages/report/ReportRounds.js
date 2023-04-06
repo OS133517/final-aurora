@@ -19,6 +19,7 @@ function ReportRounds() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { reportCode } = useParams();
+    const [currentReportCode, setCurrentReportCode] = useState(reportCode);
     const [currentPage, setCurrentPage] = useState(1);
     const [isEditing, setIsEditing] = useState(false);
     const [reportUpdated, setReportUpdated] = useState(false);
@@ -61,7 +62,7 @@ function ReportRounds() {
         }))
         setReportUpdated(false);
     // eslint-disable-next-line
-    }, [currentPage])
+    }, [currentPage, reportCode])
 
     // 수정 모드 토글 
     const toggleEditing = () => {
@@ -86,18 +87,20 @@ function ReportRounds() {
         }));
     };
 
-    // 보고 수정 
-    const updateReport = (reportInputValue) => {
+    // 보고 수정 버튼 클릭시 이동시키기 함수대신 onClick해도 될듯 
+    // const updateReport = (reportInputValue) => {
 
-        const formData = new FormData(); 
-        // formData.append("reportDTO", )
+    //     // navigate('/aurora/reports/edit', { state: { isEdit: true, originalReportDTO: reportDTO } });
 
-        dispatch(callUpdateReportAPI({
-            formData
-        }))
-        setIsEditing(false);
-        setReportUpdated(!reportUpdated);
-    };
+    //     const formData = new FormData(); 
+    //     // formData.append("reportDTO", )
+
+    //     dispatch(callUpdateReportAPI({
+    //         formData
+    //     }))
+    //     setIsEditing(false);
+    //     setReportUpdated(!reportUpdated);
+    // };
 
     // 보고 삭제 
     const deleteReport = async () => {
@@ -137,14 +140,14 @@ function ReportRounds() {
         <>
             {reportDTO &&
                 <div className={ReportsCSS.reportsContainer}>
-                {/* {updateModalIsOn? <AddBookUpdateModal updateList={updateList} setUpdateModalIsOn={setUpdateModalIsOn}/> : null} */}
                     <div className={ReportsCSS.reportsHeader}>
                         보고서 확인 
                     </div>
                     <div className={ReportsCSS.roundsHeader}>
                         <span className={ReportsCSS.roundsTitle}>
-                            정기 보고 회차
+                            정기 보고 회차 목록
                         </span>
+                        {/* 버튼 컨테이너 */}
                         <div className={ReportsCSS.headerButtonDiv}>
                             {/* {isInCharge && */}
                                 <button
@@ -158,18 +161,15 @@ function ReportRounds() {
                                 <button 
                                     className={ReportsCSS.greentButton}
                                     onClick={() => {
-                                        if(isEditing) {
-                                            updateReport();
-                                        } else {
-                                            toggleEditing()
-                                        }
+                                        navigate('/aurora/reports/edit', { state: { isEdit: true, reportCode: reportDTO.reportCode } });
                                     }}
                                 >
-                                    {isEditing? "완료" : "보고 수정"}
+                                    보고 수정
                                 </button>
                                 <button
                                     className={ReportsCSS.greentButton}
                                     onClick={() => {
+                                        // registerReportRound();
                                         // setIsDetailReportInputVisible(!isDetailReportInputVisible);
                                     }}
                                 >
@@ -181,24 +181,13 @@ function ReportRounds() {
                             </button>
                         </div>
                     </div>
+                    {/* 보고 목록 컨테이너 */}
                     <div className={ReportsCSS.reportsDiv}>
+                        {/* 보고 정보 */}
                         <div className={ReportsCSS.reportsInfo}>
                             <p>
                                 <strong>보고 제목 : </strong>
-                                {/* {reportDTO.reportTitle} */}
-                                <input
-                                    value={reportInputValue.reportTitle}
-                                    readOnly={!isEditing}
-                                    style={{
-                                    width: `${
-                                        reportInputValue.reportTitle.length > 0
-                                        ? reportInputValue.reportTitle.length * 14
-                                        : 50
-                                    }px`
-                                    }}
-                                    className={!isEditing ? ReportsCSS.readOnlyInput : null}
-                                    onChange={(e) => handleReportInputChange("reportTitle", e.target.value)}
-                                />
+                                {reportDTO.reportTitle}
                             </p>
                             <p>
                                 <strong>책임자 : </strong>
@@ -208,22 +197,10 @@ function ReportRounds() {
                             </p>
                             <p>
                                 <strong>보고 공지 : </strong>
-                                {/* {reportDTO.reportInfo} */}
-                                <input
-                                    value={reportInputValue.reportInfo}
-                                    readOnly={!isEditing}
-                                    style={{
-                                    width: `${
-                                        reportInputValue.reportInfo.length > 0
-                                        ? reportInputValue.reportInfo.length * 14
-                                        : 50
-                                    }px`
-                                    }}
-                                    className={!isEditing ? ReportsCSS.readOnlyInput : null}
-                                    onChange={(e) => handleReportInputChange("reportInfo", e.target.value)}
-                                />
+                                {reportDTO.reportInfo}
                             </p>
                         </div>
+                        {/* 보고 게시판 */}
                         <table className={ReportsCSS.reportsTable}>
                             <thead>
                                 <tr>
@@ -252,7 +229,7 @@ function ReportRounds() {
                                                 </span>
                                             }
                                         </td>
-                                        <td className={ReportsCSS.columnRegDateTd}>{reportRound.reportedMemberCount} / {reportRound.capacity}</td>
+                                        <td className={ReportsCSS.columnTextAlignTd}>{reportRound.reportedMemberCount} / {reportRound.capacity}</td>
                                         {/* <td>{reportRound.memberDTO.deptName}</td>
                                         <td>{reportRound.memberDTO.memberName}</td>
                                         <td>{reportRound.memberDTO.jobName}</td> */}

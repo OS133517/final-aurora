@@ -3,6 +3,7 @@ import {
     GET_MATCHING_MEMBERS,
 
     GET_REPORT_SUMMARY,
+    GET_REPORT_DETAIL,
     GET_ROUTINE_REPORT_LIST_BY_CONDITIONS,
     GET_CASUAL_REPORT_LIST_BY_CONDITIONS,
     GET_REPORT_ROUND_LIST,
@@ -28,7 +29,8 @@ import {
 // 이름으로 멤버 검색 
 export const callSelectSearchListAboutNameAPI = ({name}) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/members/search?name=${name}`;
+    // const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/members/search?name=${name}`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm/search?name=${name}`;
 
     return async (dispatch, getState) => {
 
@@ -44,7 +46,7 @@ export const callSelectSearchListAboutNameAPI = ({name}) => {
 
         if(result.status === 200) {
             console.log('[ReportAPICalls] callSelectSearchListAboutNameAPI RESULT', result);
-            dispatch({type : GET_MATCHING_MEMBERS, payload : result.data});
+            dispatch({type : GET_MATCHING_MEMBERS, payload : result.data.data});
                 // dispatch({type : GET_MATCHING_MEMBERS, payload : result});
         }
     };
@@ -97,6 +99,31 @@ export const callReportSummaryAPI = () => {
         if(result.status === 200) {
             console.log('[ReportAPICalls] callReportSummaryAPI RESULT', result);
             dispatch({type : GET_REPORT_SUMMARY, payload : result.data});
+        }
+    };
+}
+
+// 보고 상세 조회 
+export const callSelectReportDetailAPI = ({reportCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/${reportCode}`;
+
+    return async (dispatch, getState) => {
+        
+        const result = await fetch(requestURL, {
+            method : 'GET',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callReportDetailAPI RESULT', result);
+            dispatch({type : GET_REPORT_DETAIL, payload : result.data});
+            // console.log("result.data : " + JSON.stringify(result.data));
         }
     };
 }

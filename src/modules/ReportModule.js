@@ -8,6 +8,7 @@ const initialState = {
     isReportReplyUpdated : false,
 
     reportSummary : [],
+    reportDetail : [],
     routineReportList : [],
     casualReportList : [],
     registReportMessage : [],
@@ -21,6 +22,7 @@ const initialState = {
 export const GET_MATCHING_MEMBERS = 'report/GET_MATCHING_MEMBERS';
 
 export const GET_REPORT_SUMMARY = 'report/GET_REPORT_SUMMARY';
+export const GET_REPORT_DETAIL = 'report/GET_REPORT_DETAIL';
 export const GET_ROUTINE_REPORT_LIST_BY_CONDITIONS = 'report/GET_ROUTINE_REPORT_LIST_BY_CONDITIONS';
 export const GET_CASUAL_REPORT_LIST_BY_CONDITIONS = 'report/GET_CASUAL_REPORT_LIST_BY_CONDITIONS';
 export const GET_REPORT_ROUND_LIST = 'report/GET_REPORT_ROUND_LIST';
@@ -57,6 +59,7 @@ const actions = createActions({
     [GET_MATCHING_MEMBERS] : () => {},
 
     [GET_REPORT_SUMMARY] : () => {},
+    [GET_REPORT_DETAIL] : () => {},
     [GET_ROUTINE_REPORT_LIST_BY_CONDITIONS] : () => {},
     [GET_CASUAL_REPORT_LIST_BY_CONDITIONS] : () => {},
     [GET_REPORT_ROUND_LIST] : () => {},
@@ -92,6 +95,11 @@ const reportReducer = handleActions({
         return {
             ...state,
             reportSummary : payload
+        }},
+    [GET_REPORT_DETAIL] : (state, { payload }) => {
+        return {
+            ...state,
+            reportDetail : payload
         }},
     [GET_ROUTINE_REPORT_LIST_BY_CONDITIONS] : (state, { payload }) => {
         return {
