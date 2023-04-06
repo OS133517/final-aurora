@@ -16,6 +16,8 @@ import "./App.css";
 import ApprovalDraft from "./pages/approval/ApprovalDraft";
 import DraftForm from "./pages/approval/DraftForm";
 import ApprovalWait from "./pages/approval/ApprovalWait";
+import MessengerList from "./pages/messenger/MessengerList";
+import MessengerLayout from "./layouts/MessengerLayout";
 
 
 function App() {
@@ -45,6 +47,9 @@ function App() {
                 <Route index path="draft" element={<ApprovalDraft />} />
                 <Route index path="detail/:appCode" element={<ApprovalDetail />} />
                 <Route index path="form/:docCode" element={<DraftForm />} />
+              </Route>
+              <Route path="messenger" element={<MessengerLayout />}>
+                <Route index="messengers" element={<MessengerList />} />
               </Route>
             </Route>
 

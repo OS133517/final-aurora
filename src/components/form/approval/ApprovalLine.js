@@ -13,7 +13,7 @@ function ApprovalLine() {
     const memberList = useSelector(state => state.memberReducer.memberList);
     const approval = useSelector(state => state.approvalReducer.draftapproval);
     // console.log('approval : ', approval);
-    // console.log('ApprovalLine : ', memberList);
+    console.log('ApprovalLine : ', memberList);
     /** navigate */
     const navigate = useNavigate();
     /** Jwt */
@@ -87,7 +87,7 @@ function ApprovalLine() {
                 <button onClick={lineSubmit}>제출</button>
             </div>
             <ul className={approvalLineCSS.line}>
-                {Array.isArray(memberList.data) && memberList.data.map(member => (
+                {Array.isArray(memberList?.data) && memberList?.data.map(member => (
                     <li key={member.memberCode} value={member.memberCode}>
                         <input type="checkbox" name='checkboxValue' checked={selectedMember.some((m) => m.memberCode === member.memberCode)}
                             onChange={(e) => checkboxHandle(e, member)} />

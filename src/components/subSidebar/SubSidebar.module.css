@@ -10,7 +10,8 @@
 
 .sideHeader {
     height: 58px;
-    border-bottom: 1px solid #C1C1C1;
+    display: flex;
+    align-items: center;
 }
 
 .sideHeader>span {
@@ -184,3 +185,50 @@
     margin-left: 50px;
 }
 
+.memberIcon {
+    display: inline-block;
+    margin-left: 2px;
+    color: white;
+    background-color: #88CFBA;
+    border-radius: 50%;
+    width: 40px; 
+    height: 40px;
+    text-align: center;
+    line-height: 40px; /* 선 높이를 아이콘을 세로로 정렬할 높이와 동일하게n */
+    overflow: hidden; /* 원 밖의 모든 항목 숨기기 */
+}
+
+h3 {
+    margin-left: 5px;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #c1c1c1;
+    padding-bottom: 10px;
+
+}
+
+.searchBox {
+    color: #c1c1c1;
+    border: 1px solid #c1c1c1;
+    display: flex;
+    border-radius: 15px;
+    width: 230px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchBox input {
+    border: none;
+    border-radius: 15px;
+    width: 190px;
+    padding-left: 5px;
+}
+
+.searchBox input:focus {
+    outline: none;
+}

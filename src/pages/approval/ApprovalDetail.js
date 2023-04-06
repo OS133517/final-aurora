@@ -26,7 +26,7 @@ function ApprovalDetail() {
     /** useSelector */
     const detailInfo = useSelector(state => state.approvalReducer.approvalLine);
     const memberInfo = useSelector(state => state.memberReducer.memberDetail);
-
+    console.log('detailInfo : ', detailInfo);
     /** useState */
     const [responseStatus, setResponseStatus] = useState(0)
 
