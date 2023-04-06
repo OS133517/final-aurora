@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SurveysCSS from "./Surveys.module.css";
-import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
 
 function Surveys() {
 

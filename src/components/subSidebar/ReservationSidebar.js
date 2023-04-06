@@ -54,6 +54,9 @@ function ReservationSidebar() {
                                                                                         key={asset.assetCode} 
                                                                                         category={asset.assetCategory}
                                                                                         assetList={assetList.filter(item => item.assetCategory === asset.assetCategory)}/>)}
+                    {Array.isArray(categoryList) && categoryList.length === 0 && <DropDownButton 
+                                                                                        category='품목 없음'
+                                                                                        />}
                 </div>
             </div>
         </>
