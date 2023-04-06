@@ -1,10 +1,17 @@
 import { ko } from "date-fns/locale";
-import SurveyRegistCSS from "./Surveys.module.css";
+import SurveyRegistCSS from "./SurveyRegist.module.css";
 import DatePicker from "react-datepicker";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { useRef } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { callSurveyRegistAPI } from "../../apis/SurveyAPICall";
 
 function SurveyRegist() {
+
+    const scrollRef = useRef();
+    const dispatch = useDispatch();
 
     const [questions, setQuestions] = useState([{
         questionNo : 1,
@@ -15,11 +22,15 @@ function SurveyRegist() {
         }]
     }])
 
+    useEffect(() => {
+
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }, [questions.length, questions[questions.length - 1].choices]);
+
     const [form, setForm] = useState({
         surveySubject : "",
         startDate : new Date(),
-        endDate : new Date(),
-        questions : questions
+        endDate : new Date()
     });
 
     const max = Math.max.apply(Math, questions.map(item => item.questionNo));
@@ -40,11 +51,26 @@ function SurveyRegist() {
         setQuestions(newQuestions);
     };
 
+    const onClickQuestionDelete = () => {
+
+        if(questions.length === 1) {
+            Swal.fire({
+                icon : 'warning',
+                text : '더 삭제할 수 없습니다.'
+            })
+
+            return;
+        }
+        questions.pop();
+
+        setNextNo(nextNo - 1);
+        setQuestions(questions);
+    }
+
     const onClickChoiceHandler = (questionNo) => {
 
         const newQuestions = questions.map(item => {
-            console.log('작동중?', item.choices);
-            console.log('작동중?', item.questionNo === questionNo?true : false);
+
             if(item.questionNo === questionNo) {
                 if(item.choices.length === 5) {
                     Swal.fire({
@@ -57,9 +83,30 @@ function SurveyRegist() {
                 item.choices = item.choices.concat({
                     choiceBody : '' 
                 })  
-                console.log('작동중? choices', item.choices);
             }
-            console.log('작동중? item', item);
+            return item;
+        });
+
+        setQuestions(newQuestions);
+    }
+
+    const onClickChoiceDelete =(questionNo) => {
+
+        const newQuestions = questions.map(item => {
+
+            if(item.questionNo === questionNo) {
+                if(item.choices.length === 1) {
+                    Swal.fire({
+                        icon : 'warning',
+                        text : '더 삭제할 수 없습니다'
+                    })
+
+                    return item;
+                }
+
+                item.choices.pop();
+                console.log(item.choices);
+            }
             return item;
         });
 
@@ -74,11 +121,57 @@ function SurveyRegist() {
         })
     }
 
-    const onChangeHandler = (e) => {
+    const setDate = (type, date) => {
 
+        if(type === 'startDate') {
+            setForm({
+                ...form,
+                startDate : date
+            })
+        } else if(type === 'endDate') {
+            setForm({
+                ...form,
+                endDate : date
+            })
+        }
+    }
+
+    const onChangeHandler = (e) => {
+        console.log(e);
+        let newQuestions;
+        
+        if(e.target.name === 'questionType') {
+
+            newQuestions = questions.map(item => {
+                if(`questionType${item.questionNo}` === e.target.id) {
+                    item.questionType = e.target.value
+                }
+                return item;
+            });
+        } else if(e.target.name === 'questionBody') {
+
+            newQuestions = questions.map(item => {
+                if(`questionBody${item.questionNo}` === e.target.id){
+                    item.questionBody = e.target.value
+                }
+                return item;
+            });
+        } 
+
+        setQuestions(newQuestions);
+    }
+
+    const onChangeChoiceHandler = (e) => {
+        
         const newQuestions = questions.map(item => {
-            if(item.questionNo === parseInt(e.target.id)) {
-                item.questionType = e.target.value
+            if(item.questionNo === parseInt(e.target.id)){
+                const newChoices = item.choices.map((choice, index) => {
+                    if(`choiceBody${index}` === e.target.name) {
+                        choice.choiceBody = e.target.value;
+                    }
+                    return choice;
+                })
+                item.choices = newChoices;
             }
             return item;
         });
@@ -86,63 +179,88 @@ function SurveyRegist() {
         setQuestions(newQuestions);
     }
 
+    const onClickSave = () => {
+
+        dispatch(callSurveyRegistAPI({
+            form : form,
+            questions : questions
+        }));
+    }
+
     return (
-        <div>
-            <div className={SurveyRegistCSS.addressesHeader}>
+        <div className={SurveyRegistCSS.surveyRegistDiv}>
+            <div className={SurveyRegistCSS.header}>
                 <span>설문 생성</span>
             </div>
-            <div>
-                <table>
+            <div className={SurveyRegistCSS.tableDiv} ref={scrollRef}>
+                <table className={SurveyRegistCSS.contentTable}>
                     <tbody>
                         <tr>
                             <td>
                                 설문 주제
                             </td>
                             <td colSpan="2">
-                                <input type="text" name="surveySubject" value={form.surveySubject} onChange={onChangeFormHandler}/>
+                                <input 
+                                    type="text" 
+                                    name="surveySubject" 
+                                    value={form.surveySubject} 
+                                    maxLength='200'
+                                    onChange={onChangeFormHandler}/>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 기간
                             </td>
-                            <td colSpan="2">
+                            <td colSpan="2" className={SurveyRegistCSS.datePickerDiv}>
                                 <DatePicker
                                     className={SurveyRegistCSS.datePicker}
                                     locale={ko}
+                                    name="startDate"
                                     selected={form.startDate}
                                     value={form.startDate}
+                                    onChange={(date) => setDate("startDate", date)}
                                     dateFormat="yyyy-MM-dd"
                                     minDate={new Date()}
+                                    closeOnScroll={true}
                                     />
-                                &nbsp;&nbsp;~&nbsp;&nbsp;
+                                <span>~</span>
                                 <DatePicker
                                     className={SurveyRegistCSS.datePicker}
                                     locale={ko}
+                                    name="endDate"
                                     selected={form.endDate}
                                     value={form.endDate}
+                                    onChange={(date) => setDate("endDate", date)}
                                     dateFormat="yyyy-MM-dd"
                                     minDate={new Date()}
                                     />
                             </td>
                         </tr>
-                        {questions.map(question => 
+                        {questions.map((question, index) => 
                             ( 
                             <>
                                 <tr key={question.questionNo}>
                                     <td>
-                                        질문 {question.questionNo}
+                                        질문 {index + 1}
                                     </td>
-                                    <td colSpan="2">
-                                        <input type="text" name="survey" value=""/>
+                                    <td colSpan="2" className={SurveyRegistCSS.questionTr}>
+                                        <input 
+                                            type="text" 
+                                            id={`questionBody${question.questionNo}`} 
+                                            name="questionBody" 
+                                            value={question.questionBody} 
+                                            maxLength='100'
+                                            onChange={onChangeHandler}/>
+                                        {index === questions.length - 1 && index !== 0 && <button onClick={() => onClickQuestionDelete(question.questionNo)} className={SurveyRegistCSS.QXButtons}>X</button>}
                                     </td>
-                                    </tr>
+                                </tr>
                                 <tr>
                                     <td>
                                         질문 타입
                                     </td>
                                     <td colSpan="2">
-                                        <select id={question.questionNo} name="questionType" value={question.questionType} onChange={onChangeHandler}>
+                                        <select id={`questionType${question.questionNo}`} name="questionType" value={question.questionType} onChange={onChangeHandler}>
                                             <option value='choice'>선택형</option>
                                             <option value='write'>서술형</option>
                                         </select>
@@ -151,16 +269,22 @@ function SurveyRegist() {
                                 {question.questionType === 'choice' &&
                                     <>
                                         {question.choices.map((choice, index) => (
-                                            <tr key={index}>
+                                            <tr key={index} className={SurveyRegistCSS.choiceTr}>
                                                 <td>
-                                                    보기 {index + 1}
+                                                    - {index + 1}번 선택지
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="survey" value={choice.choiceBody}/>
+                                                    <input 
+                                                        type="text" 
+                                                        name={`choiceBody${index}`} 
+                                                        id={question.questionNo} 
+                                                        value={choice.choiceBody}
+                                                        onChange={onChangeChoiceHandler}/>
                                                 </td>
                                                 {index === question.choices.length - 1 && 
                                                 <td>
-                                                    <button onClick={() => onClickChoiceHandler(question.questionNo)}>보기 추가</button>
+                                                    {index !== 0 && <button onClick={() => onClickChoiceDelete(question.questionNo)} className={SurveyRegistCSS.CXButtons}>X</button>}
+                                                    <button className={SurveyRegistCSS.addButtons} onClick={() => onClickChoiceHandler(question.questionNo)}> + 보기 추가</button>
                                                 </td>}
                                             </tr>
                                         ))}
@@ -170,11 +294,17 @@ function SurveyRegist() {
                             ))}
                         <tr>
                             <td colSpan="3">
-                                <button onClick={onClickQuestionHandler}>질문 추가</button>
+                                <button className={SurveyRegistCSS.addButtons} onClick={onClickQuestionHandler}> + 질문 추가</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div className={SurveyRegistCSS.buttonDiv}>
+                <div>
+                    <button>미리보기</button>
+                    <button onClick={onClickSave}>저장</button>
+                </div>
             </div>
         </div>
     );

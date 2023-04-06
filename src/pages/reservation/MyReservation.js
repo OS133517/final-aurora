@@ -150,7 +150,7 @@ function MyReservation() {
                 <div className={MyReservationCSS.myReservationHeader}>
                     <span>내 예약</span>
                     <div className={MyReservationCSS.imgDiv}>
-                        <img onClick={onClickReservationUpdate} src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>
+                        {/* <img onClick={onClickReservationUpdate} src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/> */}
                         <img onClick={onClickReservationDelete} src={process.env.PUBLIC_URL + "/reservationDelete.png"} alt="삭제"/>
                     </div>
                 </div>
@@ -197,7 +197,7 @@ function MyReservation() {
                                         {reservation.description}
                                     </td>
                                     <td>
-                                        {reservation.team}
+                                        {reservation.teamName}
                                     </td>
                                     <td>
                                         {reservation.startTime} ~ {reservation.endTime}

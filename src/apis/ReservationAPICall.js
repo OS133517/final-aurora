@@ -29,7 +29,7 @@ export const callAssetCategoryAPI = () => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callAssetCategoryAPI RESULT', result);
+            console.log('[ReservationAPICalls] callAssetCategoryAPI RESULT', result);
             dispatch({type : GET_ASSET_CATEGORY, payload : result.data});
         }
     }
@@ -51,7 +51,7 @@ export const callAllAssetsAPI = () => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callAllAssetsAPI RESULT', result);
+            console.log('[ReservationAPICalls] callAllAssetsAPI RESULT', result);
             dispatch({type : GET_ASSETS, payload : result.data});
         }
     }
@@ -79,7 +79,7 @@ export const callMyReservationAPI = ({memberCode, currentPage}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callMyReservationAPI RESULT', result);
+            console.log('[ReservationAPICalls] callMyReservationAPI RESULT', result);
             dispatch({type : GET_MY_RESERVATION, payload : result.data});
         }
     }
@@ -101,7 +101,7 @@ export const callReservationAPI = ({reservationNo}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callReservationAPI RESULT', result);
+            console.log('[ReservationAPICalls] callReservationAPI RESULT', result);
             dispatch({type : GET_RESERVATION, payload : result.data});
         }
     }
@@ -130,7 +130,7 @@ export const callReservationUpdateAPI = ({form, reservationNo}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callReservationUpdateAPI RESULT', result);
+            console.log('[ReservationAPICalls] callReservationUpdateAPI RESULT', result);
             dispatch({type : PUT_RESERVATION, payload : result});
         }
     }
@@ -155,7 +155,7 @@ export const callReservationDeleteAPI = ({reservationNos}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callReservationDeleteAPI RESULT', result);
+            console.log('[ReservationAPICalls] callReservationDeleteAPI RESULT', result);
             dispatch({type : DELETE_RESERVATION, payload : result});
         }
     }
@@ -177,7 +177,7 @@ export const callReservationsAPI = ({assetCode, startTime, endTime}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callReservationsAPI RESULT', result);
+            console.log('[ReservationAPICalls] callReservationsAPI RESULT', result);
             dispatch({type : GET_RESERVATIONS, payload : result.data});
         }
     }
@@ -199,7 +199,7 @@ export const callReservationByDateAPI = ({assetCode, startDateTime, endDateTime}
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callReservationByDateAPI RESULT', result);
+            console.log('[ReservationAPICalls] callReservationByDateAPI RESULT', result);
             dispatch({type : GET_RESERVATIONS_BY_DATE, payload : result.data});
         }
     }
@@ -221,7 +221,7 @@ export const callMemberInfoForRegist = ({memberCode}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callMemberInfoForRegist RESULT', result);
+            console.log('[ReservationAPICalls] callMemberInfoForRegist RESULT', result);
             dispatch({type : GET_MEMBER_INFO, payload : result.data});
         }
     }
@@ -253,7 +253,7 @@ export const callReservationRegistAPI = ({form}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callReservationRegistAPI RESULT', result);
+            console.log('[ReservationAPICalls] callReservationRegistAPI RESULT', result);
             dispatch({type : POST_RESERVATION, payload : result});
         }
     }
@@ -275,7 +275,7 @@ export const callAllAssetsForManagementAPI = () => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callAllAssetsForManagementAPI RESULT', result);
+            console.log('[ReservationAPICalls] callAllAssetsForManagementAPI RESULT', result);
             dispatch({type : GET_ASSETS_FOR_MANAGEMENT, payload : result.data});
         }
     }
@@ -301,7 +301,7 @@ export const callAssetStatusChangeAPI = ({assetCode, status}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callAssetStatusChangeAPI RESULT', result);
+            console.log('[ReservationAPICalls] callAssetStatusChangeAPI RESULT', result);
             dispatch({type : PUT_ASSET_STATUS, payload : result});
         }
     }
@@ -326,7 +326,7 @@ export const callAssetDeleteAPI = ({assetCodes}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callAssetDeleteAPI RESULT', result);
+            console.log('[ReservationAPICalls] callAssetDeleteAPI RESULT', result);
             dispatch({type : DELETE_ASSET, payload : result});
         }
     }
@@ -354,7 +354,7 @@ export const callAssetRegistAPI = ({form}) => {
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[AddBookAPICalls] callAssetRegistAPI RESULT', result);
+            console.log('[ReservationAPICalls] callAssetRegistAPI RESULT', result);
             dispatch({type : POST_ASSET, payload : result});
         }
     }
