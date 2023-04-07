@@ -5,22 +5,46 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { callSurveyRegistAPI } from "../../apis/SurveyAPICall";
 
 function SurveyRegist() {
 
     const scrollRef = useRef();
     const dispatch = useDispatch();
+    const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const [questions, setQuestions] = useState([{
         questionNo : 1,
         questionBody : "",
         questionType : "choice",
         choices : [{
             choiceBody : '' 
+        }, {
+            choiceBody : '' 
         }]
     }])
     const [isSelect, setIsSelect] = useState(false);
+
+    useEffect(() => {
+
+        if(surveyResult.status === 200) {
+            Swal.fire({
+                icon : 'success',
+                text : surveyResult.message,
+                confirmButtonText : '확인'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        } else if(surveyResult.status === 400) {
+            Swal.fire({
+                icon : "error",
+                text : surveyResult.message,
+                confirmButtonText : '확인'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        }
+    }, [surveyResult])
 
     useEffect(() => {
 
@@ -44,6 +68,8 @@ function SurveyRegist() {
             questionBody : "",
             questionType : "choice",
             choices : [{
+                choiceBody : '' 
+            }, {
                 choiceBody : '' 
             }]
         })
@@ -96,7 +122,7 @@ function SurveyRegist() {
         const newQuestions = questions.map(item => {
 
             if(item.questionNo === questionNo) {
-                if(item.choices.length === 1) {
+                if(item.choices.length === 2) {
                     Swal.fire({
                         icon : 'warning',
                         text : '더 삭제할 수 없습니다'

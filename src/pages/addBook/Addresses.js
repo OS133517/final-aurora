@@ -83,7 +83,7 @@ function Addresses({category = "전체 주소록"}) {
                 text : addBookDeleteResult.message,
                 confirmButtonText: '확인'
             }).then(() => {
-                    window.location.reload(true); 
+                window.location.reload(true); 
             })
         } else if(addBookDeleteResult.status === 400) {
             Swal.fire({

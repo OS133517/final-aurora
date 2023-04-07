@@ -102,8 +102,7 @@ function SurveyManagement() {
         const ckBox = document.querySelector(`#checkBox${e.currentTarget.id}`)
         ckBox.checked = !ckBox.checked;
     }
-
-
+    
     return (
         <div className={SurveysCSS.surveyDiv}>
             <div className={SurveysCSS.surveyHeader}>
@@ -158,8 +157,8 @@ function SurveyManagement() {
                                 <td>{survey.startDate}&nbsp;~&nbsp;{survey.endDate}</td>
                                 <td>{Math.floor(survey.replyStatus)} %</td>
                                 <td>
-                                    <span style={new Date(survey.endDate) <= new Date()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
-                                        {new Date(survey.endDate) <= new Date()? '마감':'진행중'}
+                                    <span style={new Date(`${survey.endDate} 18:00`).getTime() < new Date().getTime()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
+                                        {new Date(`${survey.endDate} 18:00`).getTime() < new Date().getTime()? '마감':'진행중'}
                                     </span>
                                 </td>
                             </tr>
