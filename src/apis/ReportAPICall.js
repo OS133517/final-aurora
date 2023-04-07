@@ -12,6 +12,7 @@ import {
     GET_REPORT_ROUND_REPLY_LIST,
 
     POST_REPORT,
+    POST_REPORT_ROUND,
     POST_REPORT_DETAIL,
     POST_REPORT_ROUND_REPLY,
 
@@ -225,6 +226,35 @@ export const callDeleteReportAPI = ({reportCode}) => {
 
             // 상태 변경 액션 디스패치
             dispatch(updateReportStatus(true));
+        }
+    };
+}
+
+// 보고 회차 등록
+export const callRegisterReportRoundAPI = ({reportCode, roundTitle, roundBody}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/rounds`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'POST',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                reportCode : reportCode,
+                roundTitle : roundTitle,
+                roundBody : roundBody
+            })
+        })
+        .then(response => response.json());
+
+        if(result.status === 201) {
+            console.log('[ReportAPICalls] callRegisterReportRoundAPI RESULT', result);
+            dispatch({type : POST_REPORT_ROUND, payload : result.data});
         }
     };
 }

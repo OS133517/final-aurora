@@ -31,6 +31,7 @@ export const GET_REPORT_DETAIL_LIST = 'report/GET_REPORT_DETAIL_LIST';
 export const GET_REPORT_ROUND_REPLY_LIST = 'report/GET_REPORT_ROUND_REPLY_LIST';
 
 export const POST_REPORT = 'report/POST_REGISTER_REPORT';
+export const POST_REPORT_ROUND = 'report/POST_REPORT_ROUND';
 export const POST_REPORT_ROUND_REPLY = 'report/POST_REGISTER_REPORT_ROUND_REPLY';
 export const POST_REPORT_DETAIL = 'report/POST_REGISTER_REPORT_DETAIL';
 
@@ -45,9 +46,11 @@ export const DELETE_REPORT_DETAIL = 'report/DELETE_REPORT_DETAIL';
 export const DELETE_REPORT_ROUND_REPLY = 'report/DELETE_REPORT_ROUND_REPLY';
 
 export const UPDATE_REPORT_STATUS = "report/UPDATE_REPORT_STATUS";
+
 export const updateReportStatus = (updated) => {
 
     return {
+
         type: UPDATE_REPORT_STATUS,
         payload: updated,
     };
@@ -68,6 +71,7 @@ const actions = createActions({
     [GET_REPORT_ROUND_REPLY_LIST] : () => {},
 
     [POST_REPORT] : () => {},
+    [POST_REPORT_ROUND] : () => {},
     [POST_REPORT_DETAIL] : () => {},
     [POST_REPORT_ROUND_REPLY] : () => {},
 
@@ -136,6 +140,11 @@ const reportReducer = handleActions({
         return {
             ...state,
             registReportMessage : payload,
+        }},
+    [POST_REPORT_ROUND] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload,
         }},
     [POST_REPORT_DETAIL] : (state, { payload }) => {
         return {

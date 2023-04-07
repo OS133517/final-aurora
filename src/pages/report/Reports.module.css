@@ -5,10 +5,12 @@ button {
 .reportsContainer {
     width: 100%;
     height: 100%; 
+    max-width: 100%;
 }
 
 .reportsHeader {
     width: 100%;
+    max-width: inherit;
     height: 58px;
     border-bottom: 1px solid #C1C1C1;
     font-size: 24px;
@@ -114,6 +116,8 @@ input:checked + .toggleSlider:before {
 
 .reportsInfo {
     padding-left: 40px;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .readOnlyInput {
@@ -205,4 +209,58 @@ input:checked + .toggleSlider:before {
     justify-content: center;
     position: relative;
     list-style: none;
+}
+
+.modalOverlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경색과 투명도 조절 */
+}
+
+.modal {
+    /* width: 40%; */
+    /* height: 50%; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border: #88CFBA 3px solid;
+    border-radius: 5px;
+    padding: 50px;
+}
+
+.modal h2 {
+    margin-bottom: 50px;
+}
+  
+.modal form {
+    display: flex;
+    flex-direction: column;
+    /* width: 100%; */
+}
+  
+.modal label {
+    margin-bottom: 10px;
+}
+  
+.modal input {
+    width: 300px;
+    margin-bottom: 20px;
+}
+  
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal button {
+    margin-top: 30px;
+    margin-bottom: 10px;
 }

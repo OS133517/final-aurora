@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
 import { callSelectReportRoundListAPI,
             callDeleteReportAPI,
-            callUpdateReportAPI
+            callRegisterReportRoundAPI
         } from "../../apis/ReportAPICall";
 import { useNavigate } from 'react-router-dom';
 import { decodeJwt } from "../../utils/tokenUtils";
 
 import ReportsCSS from "./Reports.module.css";
 import Swal from "sweetalert2";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 function ReportRounds() {
 
@@ -19,13 +22,12 @@ function ReportRounds() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { reportCode } = useParams();
-    const [currentReportCode, setCurrentReportCode] = useState(reportCode);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [isEditing, setIsEditing] = useState(false);
     const [reportUpdated, setReportUpdated] = useState(false);
-    const [reportInputValue, setReportInputValue] = useState({
-        reportTitle : "",
-        reportInfo : ""
+    const [reportRoundInputValue, setReportRoundInputValue] = useState({
+        roundTitle : "",
+        roundBody : ""
     });
 
     // 보고 회차 목록 데이터
@@ -62,45 +64,7 @@ function ReportRounds() {
         }))
         setReportUpdated(false);
     // eslint-disable-next-line
-    }, [currentPage, reportCode])
-
-    // 수정 모드 토글 
-    const toggleEditing = () => {
-
-        if (!isEditing) {
-
-            setReportInputValue({
-                reportTitle: reportDTO.reportTitle,
-                reportInfo: reportDTO.reportInfo,
-            });
-        }
-        setIsEditing((prev) => !prev);
-    };
-
-    // 보고 회차 입력값 핸들러
-    const handleReportInputChange = (part, value) => {
-
-        setReportInputValue((prev) => ({
-
-            ...prev,
-            [part]: value,
-        }));
-    };
-
-    // 보고 수정 버튼 클릭시 이동시키기 함수대신 onClick해도 될듯 
-    // const updateReport = (reportInputValue) => {
-
-    //     // navigate('/aurora/reports/edit', { state: { isEdit: true, originalReportDTO: reportDTO } });
-
-    //     const formData = new FormData(); 
-    //     // formData.append("reportDTO", )
-
-    //     dispatch(callUpdateReportAPI({
-    //         formData
-    //     }))
-    //     setIsEditing(false);
-    //     setReportUpdated(!reportUpdated);
-    // };
+    }, [currentPage, reportCode, reportUpdated])
 
     // 보고 삭제 
     const deleteReport = async () => {
@@ -114,7 +78,6 @@ function ReportRounds() {
             confirmButtonText: '확인',
             cancelButtonText: '취소',
         });
-
         if (result.isConfirmed) {
             
             dispatch(callDeleteReportAPI({
@@ -125,7 +88,7 @@ function ReportRounds() {
 
             window.history.pushState(null, "", window.location.pathname);
             window.onpopstate = function (event) {
-                window.history.pushState(null, "", window.location.pathname);
+            window.history.pushState(null, "", window.location.pathname);
             };
         }
     }
@@ -136,10 +99,99 @@ function ReportRounds() {
         navigate(`/aurora/reports/${reportCode}/rounds/${roundCode}`)
     }
 
+    // 보고 회차 등록 
+    const registerReportRound = () => {
+
+    }
+
+    // 모달 
+    const openModal = () => {
+
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+
+        setModalIsOpen(false);
+    };
+    
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+        // reportRoundData && console.log("reportRoundInputValue : " + JSON.stringify(reportRoundInputValue));
+
+        dispatch(callRegisterReportRoundAPI({
+            
+                reportCode : reportDTO.reportCode,
+                roundTitle : reportRoundInputValue.roundTitle,
+                roundBody : reportRoundInputValue.roundBody
+        }))
+        setReportUpdated(!reportUpdated);
+        closeModal();
+    };
+
+    const onChangeHandler = (e) => {
+
+        const { name, value } = e.target;
+    
+        setReportRoundInputValue((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
     return (
         <>
             {reportDTO &&
                 <div className={ReportsCSS.reportsContainer}>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        contentLabel="Create Report"
+                        className={ReportsCSS.modal}
+                        overlayClassName={ReportsCSS.modalOverlay}
+                    >
+                        <h2>보고 회차 작성</h2>
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="title"><strong>보고 회차 제목 : </strong></label>
+                                    <input
+                                        type="text"
+                                        name="roundTitle"
+                                        value={reportRoundInputValue.roundTitle}
+                                        onChange={onChangeHandler}
+                                        />
+                                <br />
+                            </div>
+                            <div>
+                                <label htmlFor="content"><strong>보고 회차 내용 : </strong></label>
+                                    <input
+                                        type="text"
+                                        name="roundBody"
+                                        value={reportRoundInputValue.roundBody}
+                                        onChange={onChangeHandler}
+                                        />
+                                <br />
+                            </div>    
+                            <div className={ReportsCSS.buttonContainer}>
+                                <button 
+                                    type="submit"
+                                    onClick={() => registerReportRound()}
+                                    className={ReportsCSS.greentButton}
+                                >
+                                    작성
+                                </button>
+                                <button 
+                                    type="button" 
+                                    onClick={closeModal}
+                                    className={ReportsCSS.greentButton}
+                                    style={{marginLeft: "50px"}}
+                                >
+                                    취소
+                                </button>
+                            </div>
+                        </form>
+                    </Modal>
                     <div className={ReportsCSS.reportsHeader}>
                         보고서 확인 
                     </div>
@@ -169,6 +221,7 @@ function ReportRounds() {
                                 <button
                                     className={ReportsCSS.greentButton}
                                     onClick={() => {
+                                        openModal()
                                         // registerReportRound();
                                         // setIsDetailReportInputVisible(!isDetailReportInputVisible);
                                     }}
@@ -176,7 +229,10 @@ function ReportRounds() {
                                     <span>회차 추가</span>
                                 </button>
                             {/* } */}
-                            <button className={ReportsCSS.greentButton}>
+                            <button 
+                                className={ReportsCSS.greentButton}
+                                
+                            >
                                 뒤로 가기
                             </button>
                         </div>

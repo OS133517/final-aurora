@@ -303,7 +303,6 @@ function ReportRoundDetail() {
             confirmButtonText: '확인',
             cancelButtonText: '취소',
         });
-
         if (result.isConfirmed) {
 
             dispatch(callDeleteReportRoundReplyAPI({

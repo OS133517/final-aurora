@@ -19,8 +19,8 @@ function ReportCreate() {
     const reportCode = location?.state.reportCode;
 
     const dispatch = useDispatch();
-    const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const navigate = useNavigate();
+    const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
 
     const [reportDTO, setReportDTO]  = useState({
         
@@ -70,10 +70,9 @@ function ReportCreate() {
         if (isEdit && reportDetail) {
             setReportDTO({...reportDTO, ...reportDetail.reportDTO});
             setSelectedMembers(reportDetail?.memberList || []);
-            // !isNumeric(reportDTO.reportCycle) && setCycleType("weekly");
             setCycleType((!isNumeric(reportDetail?.reportDTO?.reportCycle)) ? "weekly" : "monthly");
+            setSelectedRecipient()
             // console.log("!isNumeric(reportDTO.reportCycle) : " + JSON.stringify(!isNumeric(reportDTO.reportCycle)));
-            // console.log("cycleType : " + JSON.stringify(cycleType));
         }
     }, [reportDetail]);
 
@@ -102,7 +101,6 @@ function ReportCreate() {
     // 수신자 설정 
     useEffect(() => {
 
-        // if (matchingRecipientMembers.length === 1 && recipientInputValue === matchingRecipientMembers[0].memberName) {
         if (recipientInputValue === matchingRecipientMembers[0]?.memberName) {
             
             setSelectedRecipient(matchingRecipientMembers[0]);
@@ -128,15 +126,10 @@ function ReportCreate() {
         );
       
         if (selectedMember) {
+
           handleSelectRecipient(selectedMember);
         }
     };
-  
-    // 수신자 설정 취소 
-    // const removeRecipient = () => {
-
-    //     setSelectedRecipient(null);
-    // };
 
     // 보고자 설정 취소 
     const removeMember = (memberToRemove) => {
@@ -272,11 +265,11 @@ function ReportCreate() {
             alert("보고자 목록이 비어있습니다.");
             return false;
         }
-        // if (reportDTO.reportType == 'Casual' && )) {
+        if (reportDTO?.reportType == 'Casual' && selectedRecipient == null) {
 
-        //     alert("수신자 목록이 비어있습니다.");
-        //     return false;
-        // }
+            alert("수신자 목록이 비어있습니다.");
+            return false;
+        }
         return true;
     };
     
@@ -332,7 +325,9 @@ function ReportCreate() {
 
     // 뒤로가기 
     const handleCancel = () => {
-        navigate('/reports/summary', { replace: true });
+
+        navigate(-1);
+        // navigate('/reports/summary', { replace: true });
     };
 
     // 성공 알림 
@@ -522,8 +517,7 @@ function ReportCreate() {
                                         <td></td>
                                         <td>
                                         <datalist id="recipients">
-                                            {matchingMembers &&
-                                            matchingMembers.map((member) => (
+                                            {matchingMembers && matchingMembers.map((member) => (
                                                 <option
                                                     key={member.memberCode}
                                                     value={member.memberName}
