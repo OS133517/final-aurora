@@ -166,7 +166,7 @@ function SurveyRegist() {
     }
 
     const onChangeHandler = (e) => {
-        console.log(e);
+        
         let newQuestions;
         
         if(e.target.name === 'questionType') {
@@ -174,6 +174,11 @@ function SurveyRegist() {
             newQuestions = questions.map(item => {
                 if(`questionType${item.questionNo}` === e.target.id) {
                     item.questionType = e.target.value
+                    if(item.questionType === 'write') {
+                        item.choices = [{choiceBody : ''}];
+                    } else if(item.questionType === 'choice') {
+                        item.choices = [{choiceBody : ''}, {choiceBody : ''}];
+                    }
                 }
                 return item;
             });

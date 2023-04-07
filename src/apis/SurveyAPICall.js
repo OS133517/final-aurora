@@ -1,7 +1,8 @@
 import { POST_SURVEY,
          GET_SURVEYS,
          GET_SURVEYS_FOR_MANAGEMENT,
-         GET_SURVEYS_SEARCH } from "../modules/SurveyModule";
+         GET_SURVEYS_SEARCH,
+         POST_SURVEY_REPLY } from "../modules/SurveyModule";
 
 export const callSurveyRegistAPI = ({form, questions}) => {
 
@@ -94,6 +95,31 @@ export const callSurveySearchAPICall = ({searchCondition, searchValue, currentPa
         if(result.status === 200) {
             console.log('[SurveyAPICalls] callSurveySearchAPICall RESULT', result);
             dispatch({type : GET_SURVEYS_SEARCH, payload : result.data});
+        }
+    }
+}
+
+export const callSurveyReplyRegistAPICall = ({form, replyStatus, memberCode, surveyCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/survey/${surveyCode}?memberCode=${memberCode}&replyStatus=${replyStatus}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "POST",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                form : form
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[SurveyAPICalls] callSurveyReplyRegistAPICall RESULT', result);
+            dispatch({type : POST_SURVEY_REPLY, payload : result});
         }
     }
 }
