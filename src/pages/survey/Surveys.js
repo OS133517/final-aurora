@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SurveysCSS from "./Surveys.module.css";
 import { callAllSurveysAPICall } from "../../apis/SurveyAPICall";
 import Swal from "sweetalert2";
+import jwtDecode from "jwt-decode";
 
 function Surveys() {
 
@@ -10,6 +11,7 @@ function Surveys() {
     const surveys = useSelector(state => state.surveyReducer.surveys);
     const surveyList = surveys?.data;
     const pageInfo = surveys?.pageInfo;
+    const isLogin = jwtDecode(window.localStorage.getItem("accessToken"));
     const [survey, setSurvey] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +25,8 @@ function Surveys() {
     useEffect(() => {
 
         dispatch(callAllSurveysAPICall({
-            currentPage : currentPage
+            currentPage : currentPage,
+            memberCode : isLogin.memberCode
         }));
     // eslint-disable-next-line
     }, [currentPage]);
@@ -50,8 +53,8 @@ function Surveys() {
     }
 
     return (
-        <div className={SurveysCSS.addressesDiv}>
-            <div className={SurveysCSS.addressesHeader}>
+        <div className={SurveysCSS.surveyDiv}>
+            <div className={SurveysCSS.surveyHeader}>
                 <span>설문 목록</span>
             </div>
             <table className={SurveysCSS.contentTable}>
@@ -82,11 +85,15 @@ function Surveys() {
                                 <td>{item.surveySubject}</td>
                                 <td>{item.startDate}&nbsp;~&nbsp;{item.endDate}</td>
                                 <td>
-                                    <span style={new Date(item.startDate) >= new Date()? {backgroundColor:'#88CFBA'}:{backgroundColor:'#3F4940'}}>
-                                        {new Date(item.startDate) >= new Date()? '진행중':'마감'}
+                                    <span style={new Date(item.endDate) <= new Date()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
+                                        {new Date(item.endDate) <= new Date()? '마감':'진행중'}
                                     </span>
                                 </td>
-                                <td>1</td>
+                                <td>
+                                    <span style={item.replyStatus === 'N'? {backgroundColor:'rgb(236, 71, 71)'}:item.replyStatus === 'O'?{backgroundColor:'#3297f7'}:{backgroundColor:'#58b99c'}}>
+                                        {item.replyStatus === 'N'? '미답변':item.replyStatus === 'O'? '임시저장':'답변완료'}
+                                    </span>
+                                </td>
                             </tr>
                         ))
                     }
