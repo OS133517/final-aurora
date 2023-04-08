@@ -48,6 +48,7 @@
     background-color: rgb(221, 97, 97);
     height: 10px;
     display: block;
+    transition: all 0.4s ease-in-out;
 }
 
 .modalDiv{    

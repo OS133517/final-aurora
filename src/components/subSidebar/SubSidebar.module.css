@@ -95,10 +95,10 @@
 .dropDownMenus p {
     display: inline-block;
     line-height: 40px;
-    width: 40%;
+    width: 100%;
     margin: 0;
     cursor: pointer;
-    padding-left: 10%;
+    text-indent: 40px;
 }
 
 .dropDownMenus a {
@@ -121,24 +121,28 @@
     display: flex;
     position: absolute;
     top: 8px;
-    right: 0px;
-    width: 120px;
+    right: 0;
+    width: 50px;
     height: 25px;
     background-color: transparent;
     visibility: hidden;
     opacity: 0;
     transform : translateX(100%);
-    transition: all 0.4s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 .dropDownMenus a>div>button {
     background-color: transparent;
     color: rgb(56, 56, 56);
-    width: 40px;
+    width: 25px;
     font-size: 13px;
     height: 25px;
     border: none;
     cursor: pointer;
+}
+
+.dropDownMenus a>div>button:nth-child(3), .dropDownMenus a>div>button:nth-child(4) {
+    display: none;
 }
 
 .dropDownMenus a>div>button:hover {
@@ -173,8 +177,10 @@
     font-size: 16px;
     border: none;
     background-color: white;
-    width: 120px;
+    width: 160px;
     height: 30px;
     border-radius: 5px;
     display: none;
+    border: 1px solid #88CFBA;
+    margin-left: 30px;
 }
