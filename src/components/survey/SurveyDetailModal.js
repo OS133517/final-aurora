@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SurveyModalCSS from "./SurveyDetailModal.module.css";
 import { decodeJwt } from "../../utils/tokenUtils";
 import { useDispatch } from "react-redux";
@@ -10,11 +10,17 @@ function SurveyDetailModal({survey, setIsModalOn}) {
     const dispatch = useDispatch();
     const isLogin = decodeJwt(window.localStorage.getItem("accessToken"));
     const [form, setForm] = useState([]);
+    const [barDivWidth, setBarDivWidth] = useState(form.length / survey.questions.length * 100);
+
+    useEffect(() => {
+    // TODO - 한번 느리게 렌더링 되는거 수정하기
+        setBarDivWidth(form.length / survey.questions.length * 100);
+    }, [form.length])
 
     const onChangeInputHandler = (e) => {
 
         let answerEdit = form.filter(item => item.questionNo === e.target.name);
-        let removeIndex;
+        // let removeIndex;
         
         if(answerEdit.length !== 0) {
             if(e.target.value === null || e.target.value === '') {
@@ -40,6 +46,7 @@ function SurveyDetailModal({survey, setIsModalOn}) {
                 answerBody : e.target.value,
                 memberCode : isLogin.memberCode
             })
+           
         }
        
         setForm(answerEdit);
@@ -140,7 +147,7 @@ function SurveyDetailModal({survey, setIsModalOn}) {
             <div className={SurveyModalCSS.subHeader}>
                 기간 : {survey.startDate}&nbsp;~&nbsp;{survey.endDate}
             </div>
-            <div className={SurveyModalCSS.progressionBar}>
+            <div className={SurveyModalCSS.progressionBar} style={{width:`${barDivWidth}%`}}>
                 {'\u00A0'}
             </div>
             <div className={SurveyModalCSS.modalDiv}>
