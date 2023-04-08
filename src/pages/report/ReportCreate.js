@@ -47,6 +47,10 @@ function ReportCreate() {
     // console.log("reportDetail : " + JSON.stringify(reportDetail));
     const originalReportDTO = reportDetail && reportDetail.reportDTO;
     // console.log("originalReportDTO : " + JSON.stringify(originalReportDTO));
+    const recipient = reportDetail?.reportDTO?.memberDTO;
+    // console.log("recipient : " + JSON.stringify(recipient));
+    const originalFileList = reportDetail?.fileList;
+    // console.log("originalFileList : " + JSON.stringify(originalFileList));
 
     const daysOfMonth = Array.from({ length: 31 }, (_, i) => i + 1);
     const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -68,11 +72,17 @@ function ReportCreate() {
     useEffect(() => {
 
         if (isEdit && reportDetail) {
+
             setReportDTO({...reportDTO, ...reportDetail.reportDTO});
             setSelectedMembers(reportDetail?.memberList || []);
             setCycleType((!isNumeric(reportDetail?.reportDTO?.reportCycle)) ? "weekly" : "monthly");
-            setSelectedRecipient()
             // console.log("!isNumeric(reportDTO.reportCycle) : " + JSON.stringify(!isNumeric(reportDTO.reportCycle)));
+            if(reportDetail?.reportDTO?.reportType === 'Casual') {
+
+                setFileList(originalFileList || []);
+                // setSelectedRecipient(reportDetail.selectedRecipient || null);
+                setSelectedRecipient(recipient || null);
+            }
         }
     }, [reportDetail]);
 
@@ -576,6 +586,7 @@ function ReportCreate() {
                                                                     <button onClick={() => removeFile(index)}>X</button>
                                                                 </td>
                                                                 <td>{file.name}</td>
+                                                                {/* <td>{file.fileName}</td> */}
                                                                 <td>{(file.size / 1024).toFixed(2)} KB</td>
                                                             </tr>
                                                         ))}
