@@ -36,7 +36,18 @@ function ReservationDayDetail({assetCode, assetName, assetStatus, selectedDate})
                 return;
             })
         } else {
-            setRegistModal(!registModal);
+            console.log(selectedDate.startDateTime)
+            if(new Date(selectedDate.startDateTime).getTime() < new Date().getTime()) {
+                Swal.fire({
+                    icon : 'warning',
+                    text : '이미 지난 날입니다.',
+                    confirmButtonText : '확인'
+                })
+                
+                return;
+            } else {
+                setRegistModal(!registModal);
+            }
         }
     }
 
