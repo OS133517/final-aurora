@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SurveysCSS from "./SurveyManagement.module.css";
 import Swal from "sweetalert2";
-import { callAllSurveysForManagementAPICall, callSurveySearchAPICall } from "../../apis/SurveyAPICall";
+import { callAllSurveysForManagementAPICall, callSurveyDeleteAPI, callSurveySearchAPICall } from "../../apis/SurveyAPICall";
 
 function SurveyManagement() {
 
     const dispatch = useDispatch();
     const surveys = useSelector(state => state.surveyReducer.surveysForManagement);
+    const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const surveyList = surveys?.data;
     const pageInfo = surveys?.pageInfo;
   
@@ -27,7 +28,7 @@ function SurveyManagement() {
             pageNumber.push(i);
         }
     }
-    const [currentStatus, setCurrentStatus] = useState(true);
+    // const [currentStatus, setCurrentStatus] = useState(true);
     
     useEffect(() => {
 
@@ -38,8 +39,27 @@ function SurveyManagement() {
         } else {
             searchCall();
         }
-       
+    // eslint-disable-next-line
     }, [currentPage]);
+
+    useEffect(() => {
+            
+        if(surveyResult.status === 200) {
+            Swal.fire({
+                icon : "success",
+                text : surveyResult.message,
+                confirmButtonText: '확인'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        } else if(surveyResult.status === 400) {
+            Swal.fire({
+                icon : "error",
+                text : surveyResult.message
+            })
+        }
+    // eslint-disable-next-line
+    }, [surveyResult]);
 
     // 검색 시
     useEffect(() => {
@@ -102,6 +122,61 @@ function SurveyManagement() {
         const ckBox = document.querySelector(`#checkBox${e.currentTarget.id}`)
         ckBox.checked = !ckBox.checked;
     }
+
+    const onClickUpdate = () => {
+
+        const checkList = document.querySelectorAll(`input[type=checkBox]:not(#all)`);
+        const checkedList = [...checkList].filter(check => check.checked === true).map(item => item.id.replace("checkBox", ""));
+
+        if(checkedList.length > 1) {
+
+            Swal.fire({
+                icon : 'error',
+                text : '수정 시 한개만 선택해주세요.'
+            })
+            return;
+        } else if (checkedList.length === 0) {
+
+            Swal.fire({
+                icon : 'error',
+                text : '선택된 설문이 없습니다.'
+            })
+            return;
+        } 
+        // setSelectedNo(checkedList[0]);
+    }
+
+    // 설문 삭제 버튼 함수
+    const onClickDelete = () => {
+
+        const checkList = document.querySelectorAll(`input[type=checkBox]`);
+        const deleteList = [...checkList].filter(check => check.id !== 'all' && check.checked === true).map(item => item.id.replace("checkBox", ""));
+
+        if(deleteList.length === 0) {
+
+            Swal.fire({
+                icon : 'warning',
+                text : '선택된 설문이 없습니다.'
+            });
+
+            return;
+        }
+
+        Swal.fire({
+            icon : "warning",
+            title : `${deleteList.length} 개의 설문이 삭제됩니다.`,
+            text : "정말 삭제하시겠습니까?",
+            showCancelButton : true,
+            cancelButtonText : '취소',
+            confirmButtonText : '확인',
+        }).then((result) => {
+            if(result.isConfirmed) {
+                dispatch(callSurveyDeleteAPI({
+                    surveyCodes : deleteList
+                }));
+            } 
+        })
+    }
     
     return (
         <div className={SurveysCSS.surveyDiv}>
@@ -109,17 +184,17 @@ function SurveyManagement() {
                 <span>설문 관리</span>
             </div>
             <div className={SurveysCSS.surveySearch}>
-                <button 
+                {/* <button 
                     style={currentStatus?null:{backgroundColor:'#3F4940'}}
-                    onClick={() => setCurrentStatus(!currentStatus)}>{currentStatus? '진행중':'마감'}</button>
+                    onClick={() => setCurrentStatus(!currentStatus)}>{currentStatus? '진행중':'마감'}</button> */}
                 <select name="condition">
                     <option name="condition" value="name">주제</option>
                 </select>
                 <input type="text" name="value" value={searchInput.value} onChange={onChangeHandler}/>
                 <button type="button" onClick={onClickSearch}>검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
                 <div className={SurveysCSS.imgDiv}>
-                    <img src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>
-                    <img src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>
+                    <img onClick={onClickUpdate} src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>
+                    <img onClick={onClickDelete} src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>
                 </div>
             </div>
             <table className={SurveysCSS.contentTable}>

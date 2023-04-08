@@ -10,6 +10,7 @@ function Surveys() {
 
     const dispatch = useDispatch();
     const surveys = useSelector(state => state.surveyReducer.surveys);
+    const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const surveyList = surveys?.data;
     const pageInfo = surveys?.pageInfo;
     const isLogin = jwtDecode(window.localStorage.getItem("accessToken"));
@@ -32,6 +33,23 @@ function Surveys() {
         }));
     // eslint-disable-next-line
     }, [currentPage]);
+
+    useEffect(() => {
+
+        if(surveyResult.status === 200) {
+            Swal.fire({
+                icon : 'success',
+                text : '설문 답변 성공'
+            }).then(() => {
+                window.location.reload(true); 
+            })
+        } else if(surveyResult.status === 400) {
+            Swal.fire({
+                icon : "error",
+                text : surveyResult.message
+            })
+        }
+    }, [surveyResult])
 
     const onClickDetail = (survey) => {
 

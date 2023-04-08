@@ -1,7 +1,7 @@
 import { ko } from "date-fns/locale";
 import SurveyRegistCSS from "./SurveyRegist.module.css";
 import DatePicker from "react-datepicker";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Swal from "sweetalert2";
 import { useRef } from "react";
 import { useEffect } from "react";
@@ -277,8 +277,8 @@ function SurveyRegist() {
                         </tr>
                         {questions.map((question, index) => 
                             ( 
-                            <>
-                                <tr key={question.questionNo}>
+                            <Fragment key={question.questionNo}>
+                                <tr>
                                     <td>
                                         질문 {index + 1}
                                     </td>
@@ -328,7 +328,7 @@ function SurveyRegist() {
                                         ))}
                                     </>
                                 }
-                            </>
+                                </Fragment>
                             ))}
                         <tr>
                             <td colSpan="3">
@@ -340,7 +340,6 @@ function SurveyRegist() {
             </div>
             <div className={SurveyRegistCSS.buttonDiv}>
                 <div>
-                    <button>미리보기</button>
                     <button onClick={onClickSave}>저장</button>
                 </div>
             </div>

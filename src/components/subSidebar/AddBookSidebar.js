@@ -23,9 +23,6 @@ function AddBookSidebar() {
     // 그룹 추가 인풋창 밸류 조정용
     const [newPGroupName, setNewPGroupName] = useState("");
     const [newTGroupName, setNewTGroupName] = useState("");
-    // 그룹 관리 버튼 조정용
-    const [pManageIsOn, setPManageIsOn] = useState(false);
-    const [tManageIsOn, setTManageIsOn] = useState(false);
     // 주소록 추가 모달
     const [addBookModal, setAddBookModal] = useState(false);
 
@@ -38,11 +35,6 @@ function AddBookSidebar() {
         backgroundColor : "#73b8a3",
         color : "white"
     };
-    const manageStyle = {
-        visibility : "visible",
-        transform : "translateX(0)",
-        opacity : "1"
-    }
 
     useEffect(() => {
 
@@ -78,12 +70,10 @@ function AddBookSidebar() {
         switch(menuNum) {
             case 1: 
                 setFirstIsOpen(!firstIsOpen);
-                setTManageIsOn(false);
                 setTIsVisible(false);
                 break;
             case 2: 
                 setSecondIsOpen(!secondIsOpen); 
-                setPManageIsOn(false);
                 setPIsVisible(false);
                 break;
             case 3: 
@@ -137,7 +127,7 @@ function AddBookSidebar() {
         }
     }
 
-    const onClickGroupManage = (groupCode) => {
+    const onHoverManage = (groupCode) => {
 
         const editDiv = document.querySelector(`#group${groupCode}`);
         const input = document.querySelector(`#groupUpdateInput${groupCode}`);
@@ -268,8 +258,8 @@ function AddBookSidebar() {
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
                                         to={`/aurora/address-book/team-groups/${group.groupCode}`} 
                                         key={group.groupCode}
-                                        onMouseEnter={() => onClickGroupManage(group.groupCode)}
-                                        onMouseLeave={() => onClickGroupManage(group.groupCode)}
+                                        onMouseEnter={() => onHoverManage(group.groupCode)}
+                                        onMouseLeave={() => onHoverManage(group.groupCode)}
                                         >
                                         <input 
                                             className={SidebarCSS.groupUpdateInput}
@@ -282,12 +272,12 @@ function AddBookSidebar() {
                                             <button
                                                 className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode}
-                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare} style={{color: "#094130"}} />
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare}/>
                                             </button>
                                             <button 
                                                 className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode} 
-                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} style={{color: "#094130"}} />
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} />
                                             </button>
                                             <button 
                                                 className={`otherButtons${group.groupCode}`}
@@ -328,8 +318,8 @@ function AddBookSidebar() {
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
                                         to={`/aurora/address-book/personal-groups/${group.groupCode}`} 
                                         key={group.groupCode}
-                                        onMouseEnter={() => onClickGroupManage(group.groupCode)}
-                                        onMouseLeave={() => onClickGroupManage(group.groupCode)}
+                                        onMouseEnter={() => onHoverManage(group.groupCode)}
+                                        onMouseLeave={() => onHoverManage(group.groupCode)}
                                         >
                                         <input 
                                             className={SidebarCSS.groupUpdateInput}
@@ -342,12 +332,12 @@ function AddBookSidebar() {
                                         <button
                                                 className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode}
-                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare} style={{color: "#094130"}} />
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare} />
                                             </button>
                                             <button 
                                                 className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode} 
-                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} style={{color: "#094130"}} />
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} />
                                             </button>
                                             <button 
                                                 className={`otherButtons${group.groupCode}`}

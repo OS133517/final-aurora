@@ -2,7 +2,8 @@ import { POST_SURVEY,
          GET_SURVEYS,
          GET_SURVEYS_FOR_MANAGEMENT,
          GET_SURVEYS_SEARCH,
-         POST_SURVEY_REPLY } from "../modules/SurveyModule";
+         POST_SURVEY_REPLY,
+         DELETE_SURVEYS } from "../modules/SurveyModule";
 
 export const callSurveyRegistAPI = ({form, questions}) => {
 
@@ -120,6 +121,31 @@ export const callSurveyReplyRegistAPICall = ({form, replyStatus, memberCode, sur
         if(result.status === 200) {
             console.log('[SurveyAPICalls] callSurveyReplyRegistAPICall RESULT', result);
             dispatch({type : POST_SURVEY_REPLY, payload : result});
+        }
+    }
+}
+
+export const callSurveyDeleteAPI = ({surveyCodes}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/survey`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "DELETE",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                surveyCodes : surveyCodes
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[SurveyAPICalls] callSurveyDeleteAPI RESULT', result);
+            dispatch({type : DELETE_SURVEYS, payload : result});
         }
     }
 }

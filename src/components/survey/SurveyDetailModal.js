@@ -13,8 +13,9 @@ function SurveyDetailModal({survey, setIsModalOn}) {
     const [barDivWidth, setBarDivWidth] = useState(form.length / survey.questions.length * 100);
 
     useEffect(() => {
-    // TODO - 한번 느리게 렌더링 되는거 수정하기
+
         setBarDivWidth(form.length / survey.questions.length * 100);
+    // eslint-disable-next-line
     }, [form.length])
 
     const onChangeInputHandler = (e) => {
@@ -73,7 +74,6 @@ function SurveyDetailModal({survey, setIsModalOn}) {
                         cancelButtonColor : 'red'
                     }).then(result => {
                         if(!result.isConfirmed) {
-                            Swal.fire('취소되었습니다.');
     
                             return;
                         } else {
@@ -100,7 +100,6 @@ function SurveyDetailModal({survey, setIsModalOn}) {
                     cancelButtonColor : 'red'
                 }).then(result => {
                     if(!result.isConfirmed) {
-                        Swal.fire('취소되었습니다.');
 
                         return;
                     } else {
@@ -117,7 +116,6 @@ function SurveyDetailModal({survey, setIsModalOn}) {
                     cancelButtonColor : 'red'
                 }).then(result => {
                     if(!result.isConfirmed) {
-                        Swal.fire('취소되었습니다.');
 
                         return;
                     } else {

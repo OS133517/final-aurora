@@ -12,6 +12,7 @@ export const GET_SURVEYS = 'survey/GET_SURVEYS';
 export const GET_SURVEYS_FOR_MANAGEMENT = 'survey/GET_SURVEYS_FOR_MANAGEMENT';
 export const GET_SURVEYS_SEARCH = 'survey/GET_SURVEYS_SEARCH';
 export const POST_SURVEY_REPLY = 'survey/POST_SURVEY_REPLY';
+export const DELETE_SURVEYS = 'survey/DELETE_SURVEYS';
 
 // eslint-disable-next-line
 const actions = createActions({
@@ -19,7 +20,8 @@ const actions = createActions({
     [GET_SURVEYS] : () => {},
     [GET_SURVEYS_FOR_MANAGEMENT] : () => {},
     [GET_SURVEYS_SEARCH] : () => {},
-    [POST_SURVEY_REPLY] : () => {}
+    [POST_SURVEY_REPLY] : () => {},
+    [DELETE_SURVEYS] : () => {}
 });
 
 // 리듀서
@@ -45,6 +47,11 @@ const surveyReducer = handleActions({
             surveysForManagement : payload
         }},
     [POST_SURVEY_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            surveyResult : payload
+        }},
+    [DELETE_SURVEYS] : (state, { payload }) => {
         return {
             ...state,
             surveyResult : payload

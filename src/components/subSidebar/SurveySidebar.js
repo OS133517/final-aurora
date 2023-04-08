@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { decodeJwt } from "../../utils/tokenUtils";
 import SidebarCSS from "./SubSidebar.module.css";
 import { useNavigate } from "react-router";
 import { decodeJwt } from "../../utils/tokenUtils";
@@ -8,7 +6,6 @@ import { NavLink } from "react-router-dom";
 
 function SurveySidebar() {
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
 
@@ -24,10 +21,10 @@ function SurveySidebar() {
                     <span>설문</span>
                 </div>
                 <div className={SidebarCSS.sidebarBody}>
-                    <button onClick={() => navigate("/aurora/survey/survey-management/regist")}
+                    {loginMember && loginMember.auth[0] === 'ROLE_ADMIN'? <button onClick={() => navigate("/aurora/survey/survey-management/regist")}
                         className={SidebarCSS.buttons} 
                         >설문 생성
-                    </button>
+                    </button>:null}
                     {loginMember && loginMember.auth[0] === 'ROLE_ADMIN'? <NavLink 
                                                                                 to={"/aurora/survey/survey-management"}
                                                                                         

@@ -40,6 +40,7 @@ function ReservationAssetManagement() {
                 text : assetResult.message
             })
         }
+    // eslint-disable-next-line
     }, [assetResult]);
 
     // 전체 체크 박스 관리용 함수
@@ -172,7 +173,7 @@ function ReservationAssetManagement() {
                             ))
                         }
                         {
-                            !Array.isArray(assetList) || assetList.length === 0 && (
+                            (!Array.isArray(assetList) || assetList.length === 0) && (
                                 <tr>
                                     <td colSpan='5' style={{textAlign:"center"}}>
                                         검색 결과가 없습니다.
