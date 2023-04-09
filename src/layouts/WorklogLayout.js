@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 function WorklogLayout() {
 
     return (
-        <div className={WorklogLayoutCSS.WorklogLayout}>
+        <div className={WorklogLayoutCSS.worklogLayout}>
             <WorklogSidebar/>
             <Outlet/>
         </div>

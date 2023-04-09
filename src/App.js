@@ -16,6 +16,18 @@ import AddBookLayout from "./layouts/AddBookLayout";
 import Addresses from "./pages/addBook/Addresses";
 
 import ReservationLayout from "./layouts/ReservationLayout";
+import Login from "./pages/Login";
+import Addresses from "./pages/addBook/Addresses";
+import WorklogLayout from "./layouts/WorklogLayout";
+import DayWorklogs from "./pages/worklog/DayWorklogs";
+import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
+import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
+import WeekWorklogs from "./pages/worklog/WeekWorklogs";
+import WeekWorklogDetail from "./pages/worklog/WeekWorklogDetail";
+import WeekWorklogInsert from "./pages/worklog/WeekWorklogInsert";
+import ScheduleLayout from "./layouts/ScheduleLayout";
+import Schedules from "./pages/schedule/Schedules";
+import Main from "./pages/Main";
 import MyReservation from "./pages/reservation/MyReservation";
 import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
