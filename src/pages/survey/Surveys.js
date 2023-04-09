@@ -113,7 +113,7 @@ function Surveys() {
                                         </span>
                                     </td>
                                     <td>
-                                        <span style={item.replyStatus === 'N'? {backgroundColor:'rgb(236, 71, 71)'}:item.replyStatus === 'O'?{backgroundColor:'#3297f7'}:{backgroundColor:'#58b99c'}}>
+                                        <span style={item.replyStatus === 'N'? {backgroundColor:'rgb(236, 71, 71)'}:item.replyStatus === 'O'?{backgroundColor:'#3297f7'}:{backgroundColor:'#3F4940'}}>
                                             {item.replyStatus === 'N'? '미답변':item.replyStatus === 'O'? '임시저장':'답변완료'}
                                         </span>
                                     </td>

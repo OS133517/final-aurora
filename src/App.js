@@ -13,6 +13,7 @@ import SurveyLayout from "./layouts/SurveyLayout";
 import Surveys from "./pages/survey/Surveys";
 import SurveyManagement from "./pages/survey/SurveyManagement";
 import SurveyRegist from "./pages/survey/SurveyRegist";
+import SurveyUpdate from "./pages/survey/SurveyUpdate";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               <Route path="list" element={<Surveys/>}/>
               <Route path="survey-management" element={<SurveyManagement/>}/>
               <Route path="survey-management/regist" element={<SurveyRegist/>}/>
+              <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate/>}/>
             </Route>
           </Route>
         </Route>

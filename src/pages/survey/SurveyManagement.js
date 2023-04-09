@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import SurveysCSS from "./SurveyManagement.module.css";
 import Swal from "sweetalert2";
 import { callAllSurveysForManagementAPICall, callSurveyDeleteAPI, callSurveySearchAPICall } from "../../apis/SurveyAPICall";
+import { useNavigate } from "react-router-dom";
 
 function SurveyManagement() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const surveys = useSelector(state => state.surveyReducer.surveysForManagement);
     const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const surveyList = surveys?.data;
@@ -127,23 +129,34 @@ function SurveyManagement() {
 
         const checkList = document.querySelectorAll(`input[type=checkBox]:not(#all)`);
         const checkedList = [...checkList].filter(check => check.checked === true).map(item => item.id.replace("checkBox", ""));
+        const checkedDate = checkedList.length > 0 && surveyList.filter(survey => survey.surveyCode === checkedList[0])[0].startDate;
 
         if(checkedList.length > 1) {
 
             Swal.fire({
                 icon : 'error',
                 text : '수정 시 한개만 선택해주세요.'
-            })
+            });
             return;
         } else if (checkedList.length === 0) {
 
             Swal.fire({
                 icon : 'error',
                 text : '선택된 설문이 없습니다.'
-            })
+            });
             return;
-        } 
-        // setSelectedNo(checkedList[0]);
+        }  else if (checkedList.length === 1) {
+
+            if(new Date(`${checkedDate} 06:00`).getTime() <= new Date().getTime()) {
+                Swal.fire({
+                    icon : 'error',
+                    text : '이미 시작된 설문입니다.'
+                });
+                return;
+            } else {
+                navigate(`/aurora/survey/survey-management/update/${checkedList[0]}`)
+            }
+        }
     }
 
     // 설문 삭제 버튼 함수

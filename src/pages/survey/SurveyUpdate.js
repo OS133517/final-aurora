@@ -1,18 +1,21 @@
+import SurveyUpdateCSS from "./SurveyRegist.module.css";
 import { ko } from "date-fns/locale";
-import SurveyRegistCSS from "./SurveyRegist.module.css";
 import DatePicker from "react-datepicker";
 import { Fragment, useState } from "react";
 import Swal from "sweetalert2";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { callSurveyRegistAPI } from "../../apis/SurveyAPICall";
+import { useParams } from "react-router-dom";
+import { callSurveyForUpdateAPI, callSurveyRegistAPI, callSurveyUpdateAPI } from "../../apis/SurveyAPICall";
 
-function SurveyRegist() {
+function SurveyUpdate() {
 
+    const {surveyCode} = useParams();
     const scrollRef = useRef();
     const dispatch = useDispatch();
     const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
+    const survey = useSelector(state => state.surveyReducer.survey);
     const [questions, setQuestions] = useState([{
         questionNo : 1,
         questionBody : "",
@@ -23,7 +26,31 @@ function SurveyRegist() {
             choiceBody : '' 
         }]
     }])
-    const [isSelect, setIsSelect] = useState(false);
+    const [deleteQuestions, setDeleteQuestions] = useState([]);
+    const [newQuestions, setNewQuestions] = useState([]);
+    const [form, setForm] = useState({
+        surveyCode : "",
+        surveySubject : "",
+        startDate : new Date(),
+        endDate : new Date()
+    });
+    
+    const max = Array.isArray(questions) && Math.max.apply(Math, questions.map(item => item.questionNo));
+    const [nextNo, setNextNo] = useState(parseInt(max) + 1);
+
+    useEffect(() => {
+
+        dispatch(callSurveyForUpdateAPI({
+            surveyCode : surveyCode
+        }))
+    // eslint-disable-next-line
+    }, []);
+
+    useEffect(() => {
+
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    // eslint-disable-next-line
+    }, [Array.isArray(questions) && questions.length, Array.isArray(questions) && questions[questions.length - 1].choices]);
 
     useEffect(() => {
 
@@ -47,21 +74,18 @@ function SurveyRegist() {
     }, [surveyResult])
 
     useEffect(() => {
+        
+        setForm({
+            surveyCode : survey && survey?.surveyCode,
+            surveySubject : survey && survey?.surveySubject,
+            startDate : survey && new Date(survey?.startDate||null),
+            endDate : survey && new Date(survey?.endDate||null)
+        });
 
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    // eslint-disable-next-line
-    }, [questions.length, questions[questions.length - 1].choices]);
+        setQuestions(survey.questions);
+    }, [survey])
 
-    const [form, setForm] = useState({
-        surveySubject : "",
-        startDate : new Date(),
-        endDate : new Date()
-    });
-
-    const max = Math.max.apply(Math, questions.map(item => item.questionNo));
-    const [nextNo, setNextNo] = useState(parseInt(max) + 1);
-
-    const onClickQuestionHandler = () => {
+    const onClickQuestionAdd = () => {
 
         const newQuestions = questions.concat({
             questionNo : nextNo,
@@ -96,7 +120,7 @@ function SurveyRegist() {
 
     const onClickChoiceHandler = (questionNo) => {
 
-        const newQuestions = questions.map(item => {
+        const newOne = questions.map(item => {
 
             if(item.questionNo === questionNo) {
                 if(item.choices.length === 5) {
@@ -114,7 +138,7 @@ function SurveyRegist() {
             return item;
         });
 
-        setQuestions(newQuestions);
+        setQuestions(newOne);
     }
 
     const onClickChoiceDelete =(questionNo) => {
@@ -151,7 +175,6 @@ function SurveyRegist() {
     const setDate = (type, date) => {
 
         if(type === 'startDate') {
-            setIsSelect(true);
             setForm({
                 ...form,
                 startDate : date,
@@ -198,7 +221,7 @@ function SurveyRegist() {
     const onChangeChoiceHandler = (e) => {
         
         const newQuestions = questions.map(item => {
-            if(item.questionNo === parseInt(e.target.id)){
+            if(parseInt(item.questionNo) === parseInt(e.target.id)){
                 const newChoices = item.choices.map((choice, index) => {
                     if(`choiceBody${index}` === e.target.name) {
                         choice.choiceBody = e.target.value;
@@ -215,29 +238,29 @@ function SurveyRegist() {
 
     const onClickSave = () => {
 
-        if(!isSelect) {
+        const originalQuestionNos = survey.questions.map(question => question.questionNo);
+        const newQuestionNos = questions.filter(question => originalQuestionNos.indexOf(question.questionNo) === - 1);
+        console.log('originalQuestionNos', originalQuestionNos)
+        console.log('newQuestionNos', newQuestionNos)
 
-            Swal.fire({
-                icon : 'error',
-                text : '기간을 설정해주세요.'
-            })
+        // dispatch(callSurveyUpdateAPI({
+        //     form : form,
+        //     questions : questions.filter(question => newQuestionNos.map(item => item.questionNo).indexOf(question.questionNo) === - 1)
+        // }));
 
-            return;
-        }
-        
-        dispatch(callSurveyRegistAPI({
-            form : form,
-            questions : questions
-        }));
+        // newQuestionNos.length > 0 && dispatch(callSurveyRegistAPI({
+        //     form : form,
+        //     questions : newQuestionNos
+        // }));
     }
 
     return (
-        <div className={SurveyRegistCSS.surveyRegistDiv}>
-            <div className={SurveyRegistCSS.header}>
-                <span>설문 생성</span>
+        <div className={SurveyUpdateCSS.surveyRegistDiv}>
+            <div className={SurveyUpdateCSS.header}>
+                <span>설문 수정</span>
             </div>
-            <div className={SurveyRegistCSS.tableDiv} ref={scrollRef}>
-                <table className={SurveyRegistCSS.contentTable}>
+            <div className={SurveyUpdateCSS.tableDiv} ref={scrollRef}>
+                <table className={SurveyUpdateCSS.contentTable}>
                     <tbody>
                         <tr>
                             <td>
@@ -256,9 +279,9 @@ function SurveyRegist() {
                             <td>
                                 기간
                             </td>
-                            <td colSpan="2" className={SurveyRegistCSS.datePickerDiv}>
+                            <td colSpan="2" className={SurveyUpdateCSS.datePickerDiv}>
                                 <DatePicker
-                                    className={SurveyRegistCSS.datePicker}
+                                    className={SurveyUpdateCSS.datePicker}
                                     locale={ko}
                                     name="startDate"
                                     selected={form.startDate}
@@ -268,39 +291,35 @@ function SurveyRegist() {
                                     minDate={new Date()}
                                     closeOnScroll={true}
                                     />
-                                
-                                {isSelect && 
-                                    <>
-                                        <span>~</span>
-                                        <DatePicker
-                                        className={SurveyRegistCSS.datePicker}
-                                        locale={ko}
-                                        name="endDate"
-                                        selected={form.endDate||''}
-                                        value={form.endDate||''}
-                                        onChange={(date) => setDate("endDate", date)}
-                                        dateFormat="yyyy-MM-dd"
-                                        minDate={new Date(form.startDate)}
-                                        />
-                                    </>}
+                                    <span>~</span>
+                                    <DatePicker
+                                    className={SurveyUpdateCSS.datePicker}
+                                    locale={ko}
+                                    name="endDate"
+                                    selected={form.endDate||''}
+                                    value={form.endDate||''}
+                                    onChange={(date) => setDate("endDate", date)}
+                                    dateFormat="yyyy-MM-dd"
+                                    minDate={new Date(form.startDate)}
+                                    />
                             </td>
                         </tr>
-                        {questions.map((question, index) => 
+                        {Array.isArray(questions) && questions.map((question, index) => 
                             ( 
                             <Fragment key={question.questionNo}>
                                 <tr>
                                     <td>
                                         질문 {index + 1}
                                     </td>
-                                    <td colSpan="2" className={SurveyRegistCSS.questionTr}>
+                                    <td colSpan="2" className={SurveyUpdateCSS.questionTr}>
                                         <input 
                                             type="text" 
-                                            id={`questionBody${question.questionNo}`} 
+                                            id={`questionBody${question?.questionNo}`} 
                                             name="questionBody" 
-                                            value={question.questionBody} 
+                                            value={question?.questionBody} 
                                             maxLength='100'
                                             onChange={onChangeHandler}/>
-                                        {index === questions.length - 1 && index !== 0 && <button onClick={() => onClickQuestionDelete(question.questionNo)} className={SurveyRegistCSS.QXButtons}>X</button>}
+                                        {index === questions.length - 1 && index !== 0 && <button onClick={() => onClickQuestionDelete(question.questionNo)} className={SurveyUpdateCSS.QXButtons}>X</button>}
                                     </td>
                                 </tr>
                                 <tr>
@@ -317,7 +336,7 @@ function SurveyRegist() {
                                 {question.questionType === 'choice' &&
                                     <>
                                         {question.choices.map((choice, index) => (
-                                            <tr key={index} className={SurveyRegistCSS.choiceTr}>
+                                            <tr key={index} className={SurveyUpdateCSS.choiceTr}>
                                                 <td>
                                                     - {index + 1}번 선택지
                                                 </td>
@@ -325,14 +344,14 @@ function SurveyRegist() {
                                                     <input 
                                                         type="text" 
                                                         name={`choiceBody${index}`} 
-                                                        id={question.questionNo} 
-                                                        value={choice.choiceBody}
+                                                        id={question?.questionNo} 
+                                                        value={choice?.choiceBody||''}
                                                         onChange={onChangeChoiceHandler}/>
                                                 </td>
                                                 {index === question.choices.length - 1 && 
                                                 <td>
-                                                    {index !== 0 && <button onClick={() => onClickChoiceDelete(question.questionNo)} className={SurveyRegistCSS.CXButtons}>X</button>}
-                                                    <button className={SurveyRegistCSS.addButtons} onClick={() => onClickChoiceHandler(question.questionNo)}> + 보기 추가</button>
+                                                    {index !== 0 && <button onClick={() => onClickChoiceDelete(question.questionNo)} className={SurveyUpdateCSS.CXButtons}>X</button>}
+                                                    <button className={SurveyUpdateCSS.addButtons} onClick={() => onClickChoiceHandler(question.questionNo)}> + 보기 추가</button>
                                                 </td>}
                                             </tr>
                                         ))}
@@ -342,13 +361,13 @@ function SurveyRegist() {
                             ))}
                         <tr>
                             <td colSpan="3">
-                                <button className={SurveyRegistCSS.addButtons} onClick={onClickQuestionHandler}> + 질문 추가</button>
+                                <button className={SurveyUpdateCSS.addButtons} onClick={onClickQuestionAdd}> + 질문 추가</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div className={SurveyRegistCSS.buttonDiv}>
+            <div className={SurveyUpdateCSS.buttonDiv}>
                 <div>
                     <button onClick={onClickSave}>저장</button>
                 </div>
@@ -357,4 +376,4 @@ function SurveyRegist() {
     );
 }
 
-export default SurveyRegist
+export default SurveyUpdate;
