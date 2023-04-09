@@ -18,6 +18,7 @@ import DraftForm from "./pages/approval/DraftForm";
 import ApprovalWait from "./pages/approval/ApprovalWait";
 import MessengerList from "./pages/messenger/MessengerList";
 import MessengerLayout from "./layouts/MessengerLayout";
+import ChatRoom from "./components/form/messenger/ChatRoom";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
               </Route>
               <Route path="messenger" element={<MessengerLayout />}>
                 <Route index="messengers" element={<MessengerList />} />
+                <Route index path="detail/:roomNum" element={<ChatRoom />} />
               </Route>
             </Route>
 

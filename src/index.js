@@ -7,11 +7,11 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-library.add(faComment);
-library.add(faUser);
-library.add(faSearch);
+library.add(faComment, faPlus, faUser, faSearch);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>

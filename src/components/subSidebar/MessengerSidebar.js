@@ -6,6 +6,8 @@ import { decodeJwt } from "../../utils/tokenUtils";
 import SidebarCSS from "./SubSidebar.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { callMessengerListAPI } from "../../apis/MessengerAPICall";
+import ChatRoomAdd from "../form/messenger/ChatRoomAdd";
+import ChatRoom from "../form/messenger/ChatRoom";
 
 function MessengerSidebar() {
     /** useDispatch */
@@ -14,19 +16,22 @@ function MessengerSidebar() {
     // /** useSelector */
     // 로그인한 맴버의 이름을 가져오기 위해
     const list = useSelector(state => state.memberReducer.memberDetail);
-    const memberName = list?.memberName;
-    // console.log('memberName : ', memberName);
     const roomList = useSelector(state => state.messengerReducer.messengerList);
-    console.log('check : ', roomList);
+    /** navigate */
+    const navigate = useNavigate();
     // const waitingCount = useSelector(state => state.approvalReducer.lineList);
     // /** useState */
-    // const [open, setOpen] = useState('false');
+    const [inputChatRoom, setInputChatRoom] = useState(false);
+    const [selectedRoomNum, setSelectedRoomNum] = useState(null);
+
     // /** useNavigate */
     // const navigate = useNavigate();
     /** decode */
     const token = decodeJwt(window.localStorage.getItem('accessToken'));
     const memberCode = Number(token.memberCode);
-
+    /** 변수 */
+    const memberName = list?.memberDTO?.memberName;
+    const roomNum = roomList.map(room => room.roomNum);
     /** useEffect */
     useEffect(() => {
         const fetchData = async () => {
@@ -49,6 +54,15 @@ function MessengerSidebar() {
         //eslint-disable-next-line
     }, [memberName])
 
+    const chatRoomAddHandler = () => {
+        setInputChatRoom(!inputChatRoom)
+    }
+
+    const chatRoomHandler = (roomNum) => {
+        // <ChatRoom roomList={roomList}/>
+        console.log('클릭된 번호 : ', roomNum);
+        navigate(`/aurora/messenger/detail/${roomNum}`);
+    }
     return (
         <div className={SidebarCSS.sidebarDiv}>
             <div className={SidebarCSS.sideHeader}>
@@ -61,17 +75,29 @@ function MessengerSidebar() {
                     <input type="text" />
                 </div>
             </div>
+            <div className={SidebarCSS.bottomAdd} onClick={chatRoomAddHandler}>
+                <FontAwesomeIcon icon="plus" />
+                <span>대화방 추가</span>
+            </div>
+            {/* 모달 창 */}
+            {inputChatRoom &&
+                <div className={SidebarCSS.modalWrapper}>
+                    <div className={SidebarCSS.modalAddChat}>
+                        <ChatRoomAdd roomNum={roomNum} />
+                    </div>
+                </div>
+            }
             <div >
                 <ul className={SidebarCSS.approvalList}>
                     {
                         Array.isArray(roomList) && roomList.map((list, i) => (
-                            <li key={i}> {list?.mesName} </li>
+                            <li key={i} className={SidebarCSS.chatRoomList} onClick={() => chatRoomHandler(list.roomNum)}>
+                                {list?.mesName}
+                            </li>
                         ))
                     }
                 </ul>
-                <div>
 
-                </div>
             </div>
         </div>
     );
