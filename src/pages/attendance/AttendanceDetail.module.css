@@ -1,0 +1,154 @@
+.allContainer {
+    width: 100%;
+}
+
+.attHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    padding-left: 20px;
+  }
+
+.centerAlign > input {
+    width: 200px;
+    height: 50px;
+    font-size: 25px;
+    font-weight: 10;
+    border-style: none;
+    margin-top: 20px;
+}    
+.centerAlign {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* 높이를 원하는 값으로 설정 */
+}
+.topContent {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15%;
+}
+.topContent2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+}
+.topBox1 {
+    padding-top: 10px;
+    margin: 0 auto;
+    width: 85%;
+    height: 100px;
+    border: 1px solid #C1C1C1;
+}
+.topBox2 {
+    margin: 0 auto;
+    width: 85%;
+    height: 90px;
+    border: 1px solid #C1C1C1;;
+}
+
+.topBoxWrap1 {
+    width: 100%;
+}
+
+.topBoxWrap2 {
+    width: 100%;
+}
+
+.topContent3 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5%;
+    border-top: 1px solid #C1C1C1;
+   
+}
+
+.topContent4 {
+    margin-left: 5%;
+    margin-top: 5%;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15%;
+    /* border-bottom: 1px solid #C1C1C1; */
+    /* border-top: 1px solid #C1C1C1; */
+    
+}
+
+.table {
+    /* margin-bottom: 10px; */
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+.table2 {
+    /* margin-bottom: 10px; */
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+  }
+.table3 {
+    /* margin-bottom: 10px; */
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+  
+.table td {
+    font-size: 20px;
+    /* border: 1px solid black; */
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table2 td {
+    font-size: 16px;
+    /* border: 1px solid black; */
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table3 td {
+    font-size: 16px;
+    /* border-top: 1px solid #C1C1C1; */
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table3 tr > td{
+    /* border-top: 1px solid #C1C1C1; */
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table3 tr {
+    border-bottom: none;
+  }
+  
+.table3 tr:nth-child(2) {
+    border-top: 1px solid #C1C1C1;
+}  
+    
+.table3 tr td:last-child {
+    border-left: none;
+}
+
+.chart {
+    margin: 0 auto;
+    width: 55%;
+    height: 100%;
+
+  }

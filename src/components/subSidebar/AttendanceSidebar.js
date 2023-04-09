@@ -49,24 +49,15 @@ export default function AttendanceSidebar() {
                         >휴가 현황</NavLink> 
                          )}    
                 </div>
-              {/* {(decoded === 'ROLE_ADMIN' || decoded === 'ROLE_MANAGER') &&( 
+               {(decoded === 'ROLE_ADMIN' || decoded === 'ROLE_MANAGER') &&( 
                 <div>
                     <NavLink 
                         className={HrmSubSidebarCSS.NavLink}
                         style={ ({ isActive }) => isActive?  activeStyle : undefined } 
-                        to={`/aurora/hrm/hrm-modify`}
-                        >인사 수정</NavLink>    
+                        to={`/aurora/attendance/attendance-modify`}
+                        >근태 수정</NavLink>    
                 </div>
                 )} 
-                 {(decoded === 'ROLE_ADMIN' || decoded === 'ROLE_MANAGER') &&( 
-                <div>
-                    <NavLink 
-                        className={HrmSubSidebarCSS.NavLink}
-                        style={ ({ isActive }) => isActive?  activeStyle : undefined } 
-                        to={`/aurora/hrm/hrm-regist`}
-                        >인사 등록</NavLink>    
-                </div>
-                )}  */}
             </div>
         </>
     );

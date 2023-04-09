@@ -91,7 +91,8 @@
     padding: 0px;
     width: 100%;
     height: 200px;
-    border: 1px solid black; 
+    /* border: 1px solid black;  */
+    border: 1px solid #C1C1C1;
     border-radius: 10px;
 } 
 
@@ -127,12 +128,14 @@
 }
 
 .boxWrapper2 {
+    margin-top: 30px;
     width: 30%;
     display: flex;
     flex-direction: column;
     align-items: left;
 }
 .boxWrapper3 {
+    margin-top: 30px;
     width: 66%;
     display: flex;
     flex-direction: column;
@@ -141,9 +144,9 @@
 
 .boxWrapper > span {
     position: relative;
-    top: -20px; /* 상단에서의 위치 조절 */
-    left: 30px; /* 좌측에서의 위치 조절 */
-    font-size: 20px;
+    top: -8px; /* 상단에서의 위치 조절 */
+    left: 8px; /* 좌측에서의 위치 조절 */
+    font-size: 22px;
     font-weight: bold;
     
 }
@@ -151,14 +154,60 @@
 .Box2 {
     width: 96%;
     height: 425px;
-    border: 1px solid black;
+    border: 1px solid #C1C1C1;
     padding: 10px;
     border-radius: 10px;
+    text-align: center;
 }
+
+.img {
+    width: 70%;
+    height: 60%;
+    border: 1px solid black;
+    border-radius: 100%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
 .Box3 {
     width: 94%;
     height: 430px;
-    border: 1px solid black;
+    border: 1px solid #C1C1C1;
     padding: 10px;
     border-radius: 10px;
+}
+
+.boxWrapper2 > .Box2 > div > button{
+    margin-left: 10px;
+    box-sizing: border-box;
+    width: 93px;
+    height: 50px;
+    margin-left: 4px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.VacationButton{
+    margin-top: 34%;
+    display: block;
+    margin-left: 10px;
+    box-sizing: border-box;
+    width: 93px;
+    height: 50px;
+    margin-left: 4px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.inOutButton {
+ display: flex;
+        justify-content: center
 }
