@@ -56,33 +56,9 @@ function AddBookSidebar() {
         }// eslint-disable-next-line
     }, [groupResultMessage]);
 
-    // useEffect(() => {
-
-    //     if(groupRegistResult.status === 200) {
-            
-    //         getGroups();
-    //     } else if(groupRegistResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 추가",
-    //             text : groupRegistResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupRegistResult]);
-
-    // useEffect(() => {
-
-    //     if(groupDeleteResult.status === 200) {
-
-    //         getGroups();
-    //     } else if(groupDeleteResult.status === 400) {
-    //         Swal.fire({
-    //             icon : "error",
-    //             title : "그룹 삭제",
-    //             text : groupDeleteResult.message
-    //         })
-    //     }// eslint-disable-next-line
-    // }, [groupDeleteResult]);
+    useEffect(() => {
+        getGroups();
+    }, [])
 
     useEffect(() => {
 
@@ -114,6 +90,8 @@ function AddBookSidebar() {
                 setFirstIsOpen(!firstIsOpen);
                 setTManageIsOn(false);
                 setTIsVisible(false);
+                setTManageIsOn(false);
+                setTIsVisible(false);
                 break;
             case 2: 
                 setSecondIsOpen(!secondIsOpen); 
@@ -134,7 +112,7 @@ function AddBookSidebar() {
                 if(tIsVisible && newTGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newTGroupName,
-                        team : loginMember.team
+                        teamCode : loginMember.team
                     }));
                 }
                 setTIsVisible(!tIsVisible);
@@ -273,7 +251,7 @@ function AddBookSidebar() {
                     <button className={SidebarCSS.buttons} onClick={() => setAddBookModal(true)}>주소록 추가</button>
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(1)}>
                         <img 
-                            className={SidebarCSS.dropDownArrow} tive
+                            className={SidebarCSS.dropDownArrow} 
                             style={firstIsOpen? {transform:`rotate(90deg)`}:{}} 
                             src={process.env.PUBLIC_URL + "/arrow.png"} 
                             alt="화살표"/>공용 주소록
@@ -291,6 +269,7 @@ function AddBookSidebar() {
                                             className={SidebarCSS.groupUpdateInput}
                                             id={`groupUpdateInput${group.groupCode}`}
                                             type="text" 
+                                            maxLength='10'
                                             name="groupName"/>
                                         <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
                                         <div style={tManageIsOn? manageStyle:null}>
@@ -317,6 +296,7 @@ function AddBookSidebar() {
                                                 className={SidebarCSS.groupInsertInput} 
                                                 type="text" 
                                                 name="team" 
+                                                maxLength='10'
                                                 value={newTGroupName} 
                                                 onChange={onChangeHandler}/>}
                             {teamGroupList.length <= 4 && <p style={tIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
@@ -343,6 +323,7 @@ function AddBookSidebar() {
                                             className={SidebarCSS.groupUpdateInput}
                                             id={`groupUpdateInput${group.groupCode}`}
                                             type="text" 
+                                            maxLength='10'
                                             name="groupName"/>
                                         <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
                                         <div style={pManageIsOn? manageStyle:null}>
@@ -365,7 +346,12 @@ function AddBookSidebar() {
                                     </NavLink>
                                 ))
                             }
-                            {pIsVisible && <input type="text" name="personal" value={newPGroupName} onChange={onChangeHandler}/>}
+                            {pIsVisible && <input 
+                                                type="text"
+                                                name="personal" 
+                                                value={newPGroupName} 
+                                                maxLength='10'
+                                                onChange={onChangeHandler}/>}
                             {personalGroupList.length <= 4 && <p style={pIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
                             <p style={pManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="pGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>

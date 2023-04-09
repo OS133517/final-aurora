@@ -8,8 +8,16 @@ function LeaveApplication() {
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
 
+    const backEvent = () => {
+        window.history.back();
+    }
+
     return (
         <div className={leaveApplicationCSS.detailBox}>
+            {!isEdit ? <div></div> : <div className={leaveApplicationCSS.nextStep}>
+                <button> 제출 </button>
+                <button onClick={backEvent}>목록</button>
+            </div>}
             <div className={leaveApplicationCSS.detailView}>
                 <div className={leaveApplicationCSS.buttonBox}>
                 </div>
@@ -17,6 +25,7 @@ function LeaveApplication() {
                     <thead>
                         <tr>
                             <td className={leaveApplicationCSS.detaildocName} colSpan="2">
+                                <h1>휴가신청서</h1>
                             </td>
                         </tr>
                     </thead>

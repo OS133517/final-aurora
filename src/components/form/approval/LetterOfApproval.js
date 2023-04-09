@@ -19,8 +19,16 @@ function LetterOfApproval() {
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
 
+    const backEvent = () => {
+        window.history.back();
+    }
+
     return (
         <div className={letterOfApprovalCSS.detailBox}>
+            {!isEdit ? <div></div> : <div className={letterOfApprovalCSS.nextStep}>
+                <button> 제출 </button>
+                <button onClick={backEvent}>목록</button>
+            </div>}
             <div className={letterOfApprovalCSS.detailView}>
                 <div className={letterOfApprovalCSS.buttonBox}>
                 </div>
@@ -28,6 +36,7 @@ function LetterOfApproval() {
                     <thead>
                         <tr>
                             <td className={letterOfApprovalCSS.detaildocName} colSpan="2">
+                                <h1>조퇴신청서</h1>
                             </td>
                         </tr>
                     </thead>

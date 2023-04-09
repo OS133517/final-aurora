@@ -3,27 +3,72 @@ import { createActions, handleActions } from 'redux-actions';
 // 초기값
 const initialState = {
 
+    matchingMembers : [],
+    isReportUpdated : false,
+    isReportReplyUpdated : false,
+
     reportSummary : [],
     routineReportList : [],
-    casualReportList : []
+    casualReportList : [],
+    registReportMessage : [],
+    reportRoundData : [],
+    reportRoundDetailData : [],
+    reportDetailList : [],
+    reportRoundReplyList : [],
 };
 
 // 액션
+export const GET_MATCHING_MEMBERS = 'report/GET_MATCHING_MEMBERS';
+
 export const GET_REPORT_SUMMARY = 'report/GET_REPORT_SUMMARY';
 export const GET_ROUTINE_REPORT_LIST_BY_CONDITIONS = 'report/GET_ROUTINE_REPORT_LIST_BY_CONDITIONS';
 export const GET_CASUAL_REPORT_LIST_BY_CONDITIONS = 'report/GET_CASUAL_REPORT_LIST_BY_CONDITIONS';
+export const GET_REPORT_ROUND_LIST = 'report/GET_REPORT_ROUND_LIST';
+export const GET_REPORT_ROUND_DETAIL = 'report/GET_REPORT_ROUND_DETAIL';
+export const GET_REPORT_DETAIL_LIST = 'report/GET_REPORT_DETAIL_LIST';
+export const GET_REPORT_ROUND_REPLY_LIST = 'report/GET_REPORT_ROUND_REPLY_LIST';
+
+export const POST_REGISTER_REPORT = 'report/POST_REGISTER_REPORT';
+export const POST_REGISTER_REPORT_ROUND_REPLY = 'report/POST_REGISTER_REPORT_ROUND_REPLY';
+
+export const PUT_REPORT_ROUND_REPLY = 'report/PUT_REPORT_ROUND_REPLY';
+
+export const DELETE_REPORT_ROUND_REPLY = 'report/DELETE_REPORT_ROUND_REPLY';
+
+export const UPDATE_REPORT_STATUS = "report/UPDATE_REPORT_STATUS";
+export const updateReportStatus = (updated) => {
+
+    return {
+        type: UPDATE_REPORT_STATUS,
+        payload: updated,
+    };
+};
 
 // eslint-disable-next-line
 const actions = createActions({
 
+    [GET_MATCHING_MEMBERS] : () => {},
     [GET_REPORT_SUMMARY] : () => {},
     [GET_ROUTINE_REPORT_LIST_BY_CONDITIONS] : () => {},
-    [GET_CASUAL_REPORT_LIST_BY_CONDITIONS] : () => {}
+    [GET_CASUAL_REPORT_LIST_BY_CONDITIONS] : () => {},
+    [GET_REPORT_ROUND_LIST] : () => {},
+    [GET_REPORT_ROUND_DETAIL] : () => {},
+    [GET_REPORT_DETAIL_LIST] : () => {},
+    [GET_REPORT_ROUND_REPLY_LIST] : () => {},
+
+    [POST_REGISTER_REPORT] : () => {},
+    [POST_REGISTER_REPORT_ROUND_REPLY] : () => {},
+    [DELETE_REPORT_ROUND_REPLY] : () => {}
 });
 
 // 리듀서
 const reportReducer = handleActions({
 
+    [GET_MATCHING_MEMBERS] : (state, { payload }) => {
+        return {
+            ...state,
+            matchingMembers : payload
+        }},
     [GET_REPORT_SUMMARY] : (state, { payload }) => {
         return {
             ...state,
@@ -39,7 +84,52 @@ const reportReducer = handleActions({
             ...state,
             casualReportList : payload
         }},
+    [GET_REPORT_ROUND_LIST] : (state, { payload }) => {
+        return {
+            ...state,
+            reportRoundData : payload
+        }},
+    [GET_REPORT_ROUND_DETAIL] : (state, { payload }) => {
+        return {
+            ...state,
+            reportRoundDetailData : payload
+        }},
+    [GET_REPORT_DETAIL_LIST] : (state, { payload }) => {
+        return {
+            ...state,
+            reportDetailList : payload
+        }},
+    [GET_REPORT_ROUND_REPLY_LIST] : (state, { payload }) => {
+        return {
+            ...state,
+            reportRoundReplyList : payload
+        }},
+    [POST_REGISTER_REPORT] : (state, { payload }) => {
+        return {
+            ...state,
+            registReportMessage : payload,
+        }},
+    [POST_REGISTER_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload,
+        }},
+    [PUT_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
+    [DELETE_REPORT_ROUND_REPLY] : (state, { payload }) => {
+        return {
+            ...state,
+            isReportUpdated : payload
+        }},
 
+    [UPDATE_REPORT_STATUS]: (state, { payload }) => {
+        return {
+            ...state,
+            isReportListUpdated: payload,
+        }},
 }, initialState);
 
 export default reportReducer;

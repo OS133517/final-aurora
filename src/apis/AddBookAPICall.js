@@ -121,7 +121,7 @@ export const callGroupAddressAPI = ({groupCode, currentPage}) => {
     } 
 }
 
-export const callGroupRegistAPI = ({groupName, memberCode, team}) => {
+export const callGroupRegistAPI = ({groupName, memberCode, teamCode}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/address-book/group`;
     
@@ -137,7 +137,7 @@ export const callGroupRegistAPI = ({groupName, memberCode, team}) => {
             body : JSON.stringify({
                 groupName : groupName,
                 memberCode : memberCode,
-                team : team
+                teamCode : teamCode
             })
         }).then(response => response.json());
 

@@ -1,3 +1,8 @@
+.detailDiv {
+    overflow: scroll;
+    height: 448px;
+}
+
 .detailHeader {
     display: flex;
     box-sizing: border-box;

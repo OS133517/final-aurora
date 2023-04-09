@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callRoutineReportListByConditionsAPI,
-    callCasualReportListByConditionsAPI 
+    callCasualReportListByConditionsAPI,
 } from "../../apis/ReportAPICall";
+import { updateReportStatus } from '../../modules/ReportModule';
 import { NavLink } from "react-router-dom";
 import { decodeJwt } from "../../utils/tokenUtils";
 
@@ -16,10 +17,10 @@ function ReportSidebar() {
     const [routineReportIsOpen, setRoutineReportIsOpen] = useState(false);
     const [casualReportIsOpen, setCasualReportIsOpen] = useState(false);
 
+    const isReportUpdated = useSelector(state => state.reportReducer.isReportListUpdated);
+
     const routineReportList = useSelector(state => state.reportReducer.routineReportList.data);
     const casualReportList = useSelector(state => state.reportReducer.casualReportList.data);
-    console.log(routineReportList);
-    console.log(casualReportList);
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -32,12 +33,16 @@ function ReportSidebar() {
             completionStatus : 'N',
             offset : 1
         }));
+        
         dispatch(callCasualReportListByConditionsAPI({
             completionStatus : 'N',
             offset : 1
         }));
+        if (isReportUpdated) {
+          dispatch(updateReportStatus(false));
+        }
     // eslint-disable-next-line
-    }, [])
+    }, [isReportUpdated])
 
     return (
         <>
@@ -46,8 +51,10 @@ function ReportSidebar() {
                     <span onClick={ () => window.location.href = "/aurora/reports/summary" }>보고</span>
                 </div>
                 <div>
-                    <NavLink to={"/aurora/reports/create"}>
-                        <button className={SidebarCSS.buttons}>보고서 작성</button>
+                    <NavLink to={"/aurora/reports/edit"}>
+                        <button className={SidebarCSS.buttons}>
+                            보고서 작성
+                        </button>
                     </NavLink>
                     <button className={SidebarCSS.dropDownButtons} onClick={() => setRoutineReportIsOpen(!routineReportIsOpen)}>
                         <img 
@@ -94,7 +101,7 @@ function ReportSidebar() {
                                 Array.isArray(casualReportList) && casualReportList.slice(0,10).map(casualReport => (
                                     <NavLink 
                                         style={ ({isActive}) => isActive? activeStyle : undefined }
-                                        to={`/aurora/reports/${casualReport.reportCode}/rounds`}
+                                        to={`/aurora/reports/${casualReport.reportCode}`}
                                         key={casualReport.reportCode}
                                     >
                                         <span id={`reportTitleSpan${casualReport.reportTitle}`}>{casualReport.reportTitle}</span>
@@ -121,16 +128,3 @@ function ReportSidebar() {
 }
 
 export default ReportSidebar;
-
-            //         {/* <button className={SidebarCSS.dropDownButtons}>
-            //             {/* <div className={SidebarCSS.dropDownMenus}> */}
-            //             <NavLink 
-            //             style={ ({isActive}) => isActive? activeStyle : undefined }
-            //             to={`/aurora/reports/casuals?completionStatus=N&offset=1`}
-            //         >
-            //             {/* <span>비정기 보고</span> */}
-            //             비정기 보고
-            //             {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
-            //         </NavLink>
-            //     {/* </div> */}
-            // {/* </button> */}

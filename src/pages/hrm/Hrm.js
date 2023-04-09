@@ -119,37 +119,41 @@ export default function Hrm() {
             <div>
                 <table className={HrmCSS.contentTable}>
                     <thead className={HrmCSS.contentHead}>
-                      <tr>  
-                        <th>
-                            사번
-                        </th>
-                        <th>
-                            이름
-                        </th>
-                        <th>
-                            휴대폰
-                        </th>
-                        <th>
-                            이메일
-                        </th>
-                        <th>
-                            부서
-                        </th>
-                        <th>
-                            직급
-                        </th>
-                        <th>
-                            직무
-                        </th>
-                        <th>
-                            주소
-                        </th>
-                        <th>
-                            입사일
-                        </th>
-                        <th>
-                            재직상태
-                        </th>
+                        <tr>  
+                            <th>
+                                사번
+                            </th>
+                            <th>
+                                이름
+                            </th>
+                            <th>
+                                휴대폰
+                            </th>
+                            <th>
+                                이메일
+                            </th>
+                            <th>
+                                부서
+                            </th>
+                            <th>
+                                직급
+                            </th>
+                            <th>
+                                직무
+                            </th>
+                            <th>
+                                주소
+                            </th>
+                            <th>
+                                입사일
+                            </th>
+                            <th>
+                                재직상태
+                            </th>
+                            {location.pathname === specificUrl && (
+                            <th>
+                                수정
+                            </th>)}
                         </tr>
                     </thead>
                     <tbody>
@@ -186,11 +190,12 @@ export default function Hrm() {
                                     <td onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
                                     &nbsp;&nbsp;&nbsp;{member.status}
                                     </td>
-                                    <td>
+                                    
                                     {location.pathname === specificUrl && (
-                                      <button type="button" onClick={() =>  navigate(`/aurora/hrm/hrm-modify/${member?.memberCode}`)}>수정</button>
-                                      )}
-                                    </td>
+                                      <td>
+                                        <button type="button" onClick={() =>  navigate(`/aurora/hrm/hrm-modify/${member?.memberCode}`)}>수정</button>
+                                      </td>)}
+                                    
 
                                 </tr>
                             ))

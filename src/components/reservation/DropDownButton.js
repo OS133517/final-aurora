@@ -5,7 +5,6 @@ import SidebarCSS from "../subSidebar/SubSidebar.module.css";
 
 function DropDownButton({ category, assetList }) {
 
-    // const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     // eslint-disable-next-line
     const activeStyle = {
@@ -32,13 +31,19 @@ function DropDownButton({ category, assetList }) {
                         Array.isArray(assetList) && assetList.map(asset => (
                             <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                to={`/aurora/reservation/assets/${asset.assetCode}?name=${asset.assetName}`} 
+                                to={`/aurora/reservation/assets/${asset.assetCode}?name=${asset.assetName}&status=${asset.status}`} 
                                 key={asset.assetCode}
-                            >
+                                >
                                 <span>{asset.assetName}</span>
                             </NavLink>
                         ))
                     }
+                    {category === '예약 관리' && <NavLink 
+                                                    style = { ({ isActive }) => isActive? activeStyle : undefined }
+                                                    to={`/aurora/reservation/asset-management`} 
+                                                    >
+                                                    <span>예약 품목 관리</span>
+                                                </NavLink>}
                 </div>
             )}
         </>

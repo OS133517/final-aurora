@@ -12,33 +12,34 @@ function Pending() {
     const code = token.memberCode;
     console.log('pendingList', pendingList);
     useEffect(() => {
-        dispatch(callGetpendingAPI({memberCode : code}))
-    // eslint-disable-next-line
-    },[])
-    return(
+        dispatch(callGetpendingAPI({ memberCode: code }))
+        // eslint-disable-next-line
+    }, [])
+    return (
 
         <>
             <div className={ApprovalCSS.mainList}>
-            <div className={ApprovalCSS.subtitle}>
-                <h3>미결재</h3>
+                <div className={ApprovalCSS.subtitle}>
+                    <h3>미결재</h3>
+                </div>
+                <table className={ApprovalCSS.approvalTable}>
+                    <thead className={ApprovalCSS.theadStyle}>
+                        <tr>
+                            <td> <input type="checkBox" name="deleteCheck" value="deleteCheck" /></td>
+                            <td className={ApprovalCSS.title}>양식명</td>
+                            <td>제목</td>
+                            <td>만기일</td>
+                            <td>결재승인</td>
+                        </tr>
+                    </thead>
+                    <tbody className={ApprovalCSS.tbodyStyle}>
+                        {
+                            pendingList?.length > 0 && pendingList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval} />))
+                        }
+                    </tbody>
+                </table>
+
             </div>
-            <table className={ApprovalCSS.approvalTable}>
-                <thead className={ApprovalCSS.theadStyle}>
-                    <tr>
-                        <td className={ApprovalCSS.title}>양식명</td>
-                        <td>제목</td>
-                        <td>만기일</td>
-                        <td>결재승인</td>
-                    </tr>
-                </thead>
-                <tbody className={ApprovalCSS.tbodyStyle}>
-                    {
-                        pendingList?.length > 0 && pendingList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval}/>))
-                    }
-                </tbody>
-            </table>
-            
-        </div>
         </>
     );
 }

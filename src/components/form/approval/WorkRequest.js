@@ -5,35 +5,108 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // EditorState 처리를 위한 draft-js
 import { EditorState } from 'draft-js';
 import { useEffect, useState } from 'react';
-function WorkRequest(props) {
+import { decodeJwt } from "../../../utils/tokenUtils";
+import { useDispatch, useSelector } from 'react-redux';
+import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
+import ApprovalLine from './ApprovalLine';
 
+function WorkRequest(props) {
+    // 선언부 //
+    // 날짜 관련
+    const today = new Date();
+    const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    // 디스패치
+    const dispatch = useDispatch();
+    // 유저 정보
+    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
+    // Selector
+    const memberCode = loginMember.memberCode;
+    // url 
     const { docCode } = props;
+    const docNum = Number(docCode) + 1;
+
+    /** useState */
+    // http 상태
+    const [responseStatus, setResponseStatus] = useState(null);
+    // 입력한 데이터를 저장
+    const [form, setForm] = useState({
+        docCode: docNum,
+        appTitle: '',
+        appDescript: '',
+        appEndDate: todayString,
+        appOpen: 'n',
+
+    });
+
     /* 에디터 설정 */
     // EditorState 사용하기 위해 useState로 설정
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     const onEditorStateChange = (newEditorState) => {
         setEditorState(newEditorState);
+
+        // 에디터 현재 콘텐츠 가져오기
+        const contentState = editorState.getCurrentContent();
+        // 콘텐츠를 일반 텍스트 문자열로 변환
+        const plainText = contentState.getPlainText();
+        // 태그가 포함된 텍스트를 출력하고 싶을 때
+        // const rawContent = convertToRaw(contentState);
+        setForm({
+            ...form,
+            "appDescript": plainText
+        })
     };
+
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
 
+    /** 클릭, 변경 이벤트 처리 */
+    const submitEvent = () => {
+
+        console.log('form :', form);
+        // dispatch
+        dispatch(callPostApprovalAPI({
+            form: form
+        }, docNum, memberCode, setResponseStatus))
+
+    }
+
+    const inputValue = (e) => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        })
+        console.log('onChangeHandler : ', form);
+
+    }
+
+    const backEvent = () => {
+        window.history.back();
+    }
+
+    /** useEffect */
     useEffect(() => {
         if (docCode !== undefined) {
             setIsEdit(true);
         }
     }, [docCode]);
 
+    // console.log('responseStatus : ', responseStatus);
     return (
         <div className={workRequestCSS.detailBox}>
+            {!isEdit ? <div></div> : <div className={workRequestCSS.nextStep}>
+                <button onClick={submitEvent}> 제출 </button>
+                <button onClick={backEvent}>목록</button>
+            </div>}
             <div className={workRequestCSS.detailView}>
                 <div className={workRequestCSS.buttonBox}>
                 </div>
                 <table className={workRequestCSS.detailtable}>
                     <thead>
                         <tr>
-                            <td className={workRequestCSS.detaildocName} colSpan="2">
-                            </td>
+                            <th className={workRequestCSS.detaildocName} colSpan="2">
+                                <h1>업무협조요청서</h1>
+                            </th>
                         </tr>
                     </thead>
                     <tbody className={workRequestCSS.detailBody}>
@@ -42,7 +115,10 @@ function WorkRequest(props) {
                                 제목
                             </td>
                             <td className={workRequestCSS.description}>
-                                <input type="text" />
+                                {!isEdit ?
+                                    <input type="text" readOnly className={workRequestCSS.inputBox} name="appTitle" /> :
+                                    <input type="text" className={workRequestCSS.inputBox} name="appTitle" onChange={inputValue} />
+                                }
                             </td>
                         </tr>
                         <tr>
@@ -57,8 +133,8 @@ function WorkRequest(props) {
                                 기간
                             </td>
                             <td className={workRequestCSS.description}>
-                                {!isEdit ? <input type="date" id="startDate" name='startDate' readOnly /> : <input type="date" id="startDate" name='startDate' />}~
-                                {!isEdit ? <input type="date" id="endDate" name='endDate' readOnly /> : <input type="date" id="endDate" name='endDate' />}
+                                {!isEdit ? <input type="date" id="appStartDate" name='appStartDate' readOnly /> : <input type="date" id="appStartDate" name='appStartDate' onChange={inputValue} />}~
+                                {!isEdit ? <input type="date" id="appEndDate" name='appEndDate' readOnly /> : <input type="date" id="appEndDate" name='appEndDate' onChange={inputValue} />}
                             </td>
                         </tr>
                         <tr>
@@ -82,8 +158,13 @@ function WorkRequest(props) {
                         </tr>
                     </tbody>
                 </table>
-
+                <div className={workRequestCSS.approvalLineBox}>
+                    {responseStatus === 200 &&
+                        <ApprovalLine />
+                    }
+                </div>
             </div>
+
         </div>
 
     )

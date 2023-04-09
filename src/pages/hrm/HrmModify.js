@@ -116,6 +116,8 @@ export default function HrmModify() {
     setTextarea(memberInfo?.introduction);
   }, [memberInfo]);
 
+  
+
   useEffect(() => {
     if (memberInfo) {
       setFormValues({
