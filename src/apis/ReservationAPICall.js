@@ -228,7 +228,7 @@ export const callMemberInfoForRegist = ({memberCode}) => {
 }
 
 export const callReservationRegistAPI = ({form}) => {
-
+    console.log(form);
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reservation`;
     const TIME_ZONE = 9 * 60 * 60 * 1000; 
 
