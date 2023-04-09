@@ -51,7 +51,7 @@ function WeekWorklogInsert() {
         }));
 
         navigate("/aurora/worklog/week", { replace : true });
-        // window.location.reload();
+        window.location.reload();
     }
 
     return (

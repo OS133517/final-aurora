@@ -13,7 +13,7 @@ function WeekWorklogDetail() {
 
     const navigate = useNavigate();
 
-    const {weekWorklogCode} = useParams(); 
+    const { weekWorklogCode } = useParams(); 
 
     const weekWorklog = useSelector(state => state.weekWorklogReducer.weekWorklog);
     console.log(weekWorklog);

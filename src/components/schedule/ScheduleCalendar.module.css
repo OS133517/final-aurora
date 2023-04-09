@@ -1,0 +1,23 @@
+.dayDiv {
+    
+    cursor: pointer;
+
+    box-sizing: border-box;
+    width: 16%;
+    height: 137px;
+    border-bottom: 1px solid #c1c1c1;
+    border-right: 1px solid #c1c1c1;
+}
+
+.dayDiv:nth-child(7n), .dayDiv:nth-child(7n + 1) {
+    width: 10%;
+}
+.dayDiv:first-child {
+    width: 10%;
+}
+
+.dayDiv>span {
+    font-size: 20px;
+    padding-left: 10px;
+    font-weight: 500;
+}
