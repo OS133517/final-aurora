@@ -34,9 +34,10 @@ import HrmSignup from './pages/hrm/HrmSignup';
 
 import AttendanceLayout from './layouts/AttnedanceLayout';
 import Attendance from './pages/attendance/Attendance';
-
+import AttendanceModify from './pages/attendance/AttnedanceModify';
 import AttendanceDetail from './pages/attendance/AttendanceDetail';
 import VacationDetail from './pages/attendance/VacationDetail';
+
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
@@ -50,8 +51,7 @@ import WorklogLayout from "./layouts/WorklogLayout";
 import DayWorklogs from "./pages/worklog/DayWorklogs";
 import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
 import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
-import AttendanceModify from './pages/attendance/AttnedanceModify';
-import ApprovalWait from "./pages/approval/ApprovalWait";
+
 import MessengerList from "./pages/messenger/MessengerList";
 import MessengerLayout from "./layouts/MessengerLayout";
 import ChatRoom from "./components/form/messenger/ChatRoom";
@@ -118,9 +118,8 @@ function App() {
                 <Route path="attendance-detail/:memberCode" element={<AttendanceDetail category='근태 현황'/>}/>
                 <Route path="attendance-modify" element={<AttendanceModify category='근태 수정'/>}/>
              {/* <Route path="attendance-modify/:memberCode" element={<AttendanceModify category='근태 수정'/>}/> */}
-            <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황'/>}/>
-                
-          </Route>
+                <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황'/>}/>
+              </Route>
               <Route path="survey" element={<SurveyLayout/>}>
                 <Route path="list" element={<Surveys/>}/>
                 <Route path="survey-management" element={<SurveyManagement/>}/>

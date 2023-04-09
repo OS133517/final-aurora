@@ -1,7 +1,5 @@
 import { POST_LOGIN, GET_LIST, GET_DETAIL } from "../modules/MemberModule";
-import { POST_LOGIN, GET_LIST, GET_DETAIL } from "../modules/MemberModule";
 
-export const callLoginAPI = ({ form }) => {
 export const callLoginAPI = ({ form }) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/auth/login`;
@@ -16,15 +14,7 @@ export const callLoginAPI = ({ form }) => {
                 "Content-Type": "application/json",
                 "Accept": "*/*",
                 "Access-Control-Allow-Origin": "*"
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "*/*",
-                "Access-Control-Allow-Origin": "*"
             },
-            body: JSON.stringify({
-                memberId: form.memberId,
-                memberPWD: form.memberPWD
             body: JSON.stringify({
                 memberId: form.memberId,
                 memberPWD: form.memberPWD
@@ -34,11 +24,8 @@ export const callLoginAPI = ({ form }) => {
         console.log('[MemberAPICalls] callLoginAPI RESULT : ', result);
 
         if (result.status === 200) {
-        if (result.status === 200) {
             window.localStorage.setItem('accessToken', result.data.accessToken);
         }
-
-        dispatch({ type: POST_LOGIN, payload: result });
 
         dispatch({ type: POST_LOGIN, payload: result });
     }
