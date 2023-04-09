@@ -38,6 +38,7 @@ function CasualReportDetail() {
     // reportDetail && console.log("fileList : " + JSON.stringify(fileList));
 
     const isReporter = accessToken?.memberCode == reporterDetail?.memberCode; 
+    const isCompleted = reportDTO && reportDTO.completionStatus == 'Y';
     reportDetail && console.log("isReporter : " + JSON.stringify(isReporter));
 
     useEffect(() => {
@@ -48,7 +49,7 @@ function CasualReportDetail() {
             reportCode : reportCode
         }))
     // eslint-disable-next-line
-    }, [])
+    }, [reportCode])
 
     // 보고 삭제 
     const deleteReport = async () => {
@@ -90,22 +91,26 @@ function CasualReportDetail() {
                         </span>
                         <div className={ReportRoundDetailCSS.headerButtonDiv}>
                             {/* 보고자일때만 출력 */}
-                            <button
-                                className={ReportRoundDetailCSS.redButton}
-                                onClick={() => {
-                                    deleteReport()
-                                }}
-                            >
-                                <span>보고 삭제</span> 
-                            </button>
-                            <button 
-                                className={ReportRoundDetailCSS.greentButton}
-                                onClick={() => {
-                                    navigate('/aurora/reports/edit', { state: { isEdit: true, reportCode: reportDTO.reportCode } });
-                                }}
-                            >
-                                보고 수정
-                            </button>
+                            {!isCompleted && isReporter && 
+                                <>
+                                    <button
+                                        className={ReportRoundDetailCSS.redButton}
+                                        onClick={() => {
+                                            deleteReport()
+                                        }}
+                                    >
+                                        <span>보고 삭제</span> 
+                                    </button>
+                                    <button 
+                                        className={ReportRoundDetailCSS.greentButton}
+                                        onClick={() => {
+                                            navigate('/aurora/reports/edit', { state: { isEdit: true, reportCode: reportDTO.reportCode } });
+                                        }}
+                                    >
+                                        <span>보고 수정</span>
+                                    </button>
+                                </>
+                            }
                             <button 
                                 className={ReportRoundDetailCSS.greentButton}
                                 onClick={() => navigate(-1)}

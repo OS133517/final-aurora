@@ -48,6 +48,7 @@ function ReportRoundDetail() {
     const [replyUpdated, setReplyUpdated] = useState(false);
     const [reportDetailUpdated, setReportDetailUpdated] = useState(false);
     const [roundUpdated, setReportRoundUpdated] = useState(false);
+    // const [isCompleted, setIsCompleted] = useState('N');
 
     const [isDetailReportInputVisible, setIsDetailReportInputVisible] = useState(false);
     const [textAreaHeight, setTextAreaHeight] = useState({});
@@ -71,7 +72,9 @@ function ReportRoundDetail() {
     const reportRoundReplyList = useSelector(state => state.reportReducer.reportRoundReplyList);
     // reportRoundReplyList && console.log("reportRoundReplyList : " + JSON.stringify(reportRoundReplyList));
 
-    const isInCharge = reportDTO && (loginMember == reportDTO.memberCode)
+    const isInCharge = reportDTO && (loginMember == reportDTO.memberCode);
+    const isCompleted = reportDTO && reportDTO.completionStatus == 'Y';
+    // reportDTO && console.log("isCompleted : " + JSON.stringify(isCompleted));
 
     useEffect(() => {
 
@@ -85,7 +88,9 @@ function ReportRoundDetail() {
     }, [])
 
     useEffect(() => {
+
         if (reportRoundDetail) {
+            
           setRoundInputValue({
             roundTitle: reportRoundDetail.roundTitle,
             roundBody: reportRoundDetail.roundBody,
@@ -143,13 +148,27 @@ function ReportRoundDetail() {
     // 보고 회차 수정 
     const updateRound = (roundInputValue) => {
 
+        // roundTitle값이 NULL이거나 공백인 경우 검증
+        if (!roundInputValue.roundTitle || roundInputValue.roundTitle.trim() === "") {
+
+            warningAlert("회차 제목을 입력해주세요.");
+
+            return;
+        }
+        // roundBody값이 NULL이거나 공백인 경우 검증
+        if (!roundInputValue.roundBody || roundInputValue.roundBody.trim() === "") {
+
+            warningAlert("회차 내용을 입력해주세요.");
+
+            return;
+        }
         dispatch(callUpdateReportRoundAPI({
-            
-            reportCode : reportRoundDetail.reportCode,
-            roundCode : reportRoundDetail.roundCode,
-            roundTitle : roundInputValue.roundTitle,
-            roundBody : roundInputValue.roundBody
-        }))
+
+            reportCode: reportRoundDetail.reportCode,
+            roundCode: reportRoundDetail.roundCode,
+            roundTitle: roundInputValue.roundTitle,
+            roundBody: roundInputValue.roundBody
+        }));
         setIsRoundEditing(false);
         setReportRoundUpdated(!roundUpdated);
     };
@@ -181,18 +200,25 @@ function ReportRoundDetail() {
         }
     }
 
-    // 상세 보고 작성 
+    // 상세 보고 작성
     const onClickRegisterReportDetailHandler = () => {
 
+        // newReportDetailBody값이 NULL이거나 공백인 경우 검증
+        if (!newReportDetailBody || newReportDetailBody.trim() === "") {
+
+            warningAlert("상세보고 내용을 입력해주세요.");
+
+            return;
+        }
         dispatch(callRegisterReportDetailAPI({
 
             reportCode : reportDTO.reportCode,
             roundCode : reportRoundDetail.roundCode,
             detailBody : newReportDetailBody
-        }))
+        }));
         setNewReportDetailBody('');
         setReportDetailUpdated(!reportDetailUpdated);
-    }
+    };
 
     // 상세보고 수정 상태 토글 함수
     const toggleReportDetailEditing = (detailCode) => {
@@ -214,17 +240,24 @@ function ReportRoundDetail() {
     // 상세보고 수정 
     const updateReportDetail = async (detailCode) => {
 
+        // detailInputValue값이 NULL이거나 공백인 경우 검증
+        if (!detailInputValue[detailCode] || detailInputValue[detailCode].trim() === "") {
+
+            warningAlert("상세보고 내용을 입력해주세요.");
+
+            return;
+        }
         dispatch(callUpdateReportDetailAPI({
 
             reportCode : reportRoundDetail.reportCode,
             roundCode : reportRoundDetail.roundCode,
             detailCode : detailCode,
             detailBody : detailInputValue[detailCode]
-        }))
+        }));
         toggleReportDetailEditing(detailCode);
         setReportDetailUpdated(!reportDetailUpdated);
     };
-    
+
     // 상세보고 삭제 
     const onClickReportDetailDeleteHandler = async (detailCode) => {
 
@@ -251,6 +284,13 @@ function ReportRoundDetail() {
     // 댓글 작성 함수
     const handleCreateReply = () => {
 
+        // newReplyBody값이 NULL이거나 공백인 경우 검증
+        if (!newReplyBody || newReplyBody.trim() === "") {
+
+            warningAlert("댓글 내용을 입력해주세요.");
+
+            return;
+        }
         // 댓글 작성 API 호출
         dispatch(callRegisterReportRoundReplyAPI({
 
@@ -258,7 +298,7 @@ function ReportRoundDetail() {
             replyBody: newReplyBody
         }));
         // 입력된 댓글 내용 초기화
-        setNewReplyBody('');
+        setNewReplyBody("");
         setReplyUpdated(!replyUpdated);
     };
 
@@ -281,12 +321,19 @@ function ReportRoundDetail() {
     // 댓글 수정 
     const updateReply = async (roundCode, replyCode) => {
 
+        // replyInputValue값이 NULL이거나 공백인 경우 검증
+        if (!replyInputValue[replyCode] || replyInputValue[replyCode].trim() === "") {
+
+            warningAlert("댓글 내용을 입력해주세요.");
+
+            return;
+        }
         dispatch(callUpdateReportRoundReplyAPI({
 
             roundCode : roundCode,
             replyCode : replyCode,
             replyBody : replyInputValue[replyCode]
-        }))
+        }));
         toggleReplyEditing(replyCode);
         setReplyUpdated(!replyUpdated);
     };
@@ -333,6 +380,27 @@ function ReportRoundDetail() {
         }
     };
 
+    // 성공 알림 
+    const successAlert = (message) => {
+
+        Swal.fire({
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+        });
+    };
+
+    // 경고 실패 알림 
+    const warningAlert = (message) => {
+
+        Swal.fire({
+            icon: 'warning',
+            title: '경고',
+            text: message,
+            confirmButtonText: '확인',
+        });
+    };
+
     return (
         <>
             <div className={ReportRoundDetailCSS.reportsContainer}>
@@ -345,38 +413,38 @@ function ReportRoundDetail() {
                             정기 보고 회차 상세
                         </span>
                         <div className={ReportRoundDetailCSS.headerButtonDiv}>
-                            {isInCharge &&
-                                <button
-                                    className={ReportRoundDetailCSS.redButton}
-                                    onClick={() => {
-                                        deleteRound()
-                                    }}
-                                >
-                                    <span>회차 삭제</span> 
-                                </button>
+                            {!isCompleted && isInCharge &&
+                                <>
+                                    <button
+                                        className={ReportRoundDetailCSS.redButton}
+                                        onClick={() => {
+                                            deleteRound()
+                                        }}
+                                    >
+                                        <span>회차 삭제</span> 
+                                    </button>
+                                    <button 
+                                        className={ReportRoundDetailCSS.greentButton}
+                                        onClick={() => {
+                                            if(isRoundEditing) {
+                                                updateRound(roundInputValue);
+                                            } else {
+                                                toggleRoundEditing()
+                                            }
+                                        }}
+                                    >
+                                        {isRoundEditing? "완료" : "회차 수정"}
+                                    </button>
+                                </>
                             }
-                            {isInCharge &&
-                                <button 
-                                    className={ReportRoundDetailCSS.greentButton}
-                                    onClick={() => {
-                                        if(isRoundEditing) {
-                                            updateRound(roundInputValue);
-                                        } else {
-                                            toggleRoundEditing()
-                                        }
-                                    }}
-                                >
-                                    {isRoundEditing? "완료" : "회차 수정"}
-                                </button>
-                            }
-                            {!isInCharge &&
+                            {!isCompleted && isInCharge &&
                                 <button
                                     className={ReportRoundDetailCSS.greentButton}
                                     onClick={() => {
                                         setIsDetailReportInputVisible(!isDetailReportInputVisible);
                                     }}
                                 >
-                                    {isInCharge && !isDetailReportInputVisible?
+                                    {!isDetailReportInputVisible?
                                         <span>상세보고 작성</span> : <span>취소</span>
                                     }
                                 </button>
@@ -470,7 +538,7 @@ function ReportRoundDetail() {
                                             &nbsp;&nbsp;{reportDetail.regDate}
                                         </span>
                                     </span>
-                                    {reportDetail.memberCode === loginMember && (
+                                    {!isCompleted && reportDetail.memberCode === loginMember && (
                                         <span>
                                             <span
                                                 className={ReportRoundDetailCSS.commentEdit} 
@@ -617,7 +685,7 @@ function ReportRoundDetail() {
                                         </div>
                                         {/* 댓글 수정 삭제 버튼 */}
                                         <div className={ReportRoundDetailCSS.commentEditDiv}>
-                                            {reportRoundReply.memberCode === loginMember && (
+                                            {!isCompleted && reportRoundReply.memberCode === loginMember && (
                                                 <>
                                                     <span
                                                         className={ReportRoundDetailCSS.commentEdit} 
@@ -647,20 +715,22 @@ function ReportRoundDetail() {
                                 ))}
                             </div>
                             {/* 댓글 작성 */}
-                            <div className={ReportRoundDetailCSS.inputDiv}>
-                                <input
-                                    type="text"
-                                    className={ReportRoundDetailCSS.commentInput} 
-                                    value={newReplyBody}
-                                    onChange={(e) => setNewReplyBody(e.target.value)}
-                                />
-                                <button
-                                    className={ReportRoundDetailCSS.replyRegisterButton}
-                                    onClick={handleCreateReply}
-                                >
-                                    작성
-                                </button>
-                            </div>
+                            {!isCompleted && 
+                                <div className={ReportRoundDetailCSS.inputDiv}>
+                                    <input
+                                        type="text"
+                                        className={ReportRoundDetailCSS.commentInput} 
+                                        value={newReplyBody}
+                                        onChange={(e) => setNewReplyBody(e.target.value)}
+                                    />
+                                    <button
+                                        className={ReportRoundDetailCSS.replyRegisterButton}
+                                        onClick={handleCreateReply}
+                                    >
+                                        작성
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

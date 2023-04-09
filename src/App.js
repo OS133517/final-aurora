@@ -33,13 +33,13 @@ function App() {
                 <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록'/>}/>
               </Route>
               <Route path="reports" element={<ReportLayout/>}>
+                <Route path="routines" element={<RoutineReports/>}/>
+                <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
+                <Route path="casuals" element={<CasualReports/>}/>
                 <Route path="summary" index element={<ReportsSummary/>}/>
                 <Route path="edit" element={<ReportCreate/>}/>
-                <Route path="routines" element={<RoutineReports/>}/>
-                <Route path="casuals" element={<CasualReports/>}/>
                 <Route path="casuals/:reportCode" element={<CasualReportDetail/>}/>
                 <Route path="edit" element={<ReportCreate/>}/>
-                <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
                 <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
               </Route>
               <Route path="reservation" element={<ReservationLayout/>}>

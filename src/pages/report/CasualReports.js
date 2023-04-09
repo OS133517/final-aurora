@@ -57,13 +57,8 @@ function CasualReports() {
     // 완료여부 토글 
     const toggleCompletionStatus = () => {
 
-        if (isCompleted === "N") {
+        setIsCompleted(isCompleted === "N" ? "Y" : "N");
 
-            setIsCompleted("Y");
-        } else {
-
-            setIsCompleted("N");
-        }
         setCurrentPage(1);
     };
 
@@ -107,20 +102,28 @@ function CasualReports() {
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.isArray(casualReportList) && casualReportList.map((casualReport) => (
-                                <tr
-                                    key={casualReport.reportCode} 
-                                    id={casualReport.reportCode}
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={() => onClickReportHandler(casualReport.reportCode)}
-                                >
-                                    <td>{casualReport.regDate}</td>
-                                    <td>{casualReport.reportTitle}</td>
-                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.deptName}</td>
-                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.memberName}</td>
-                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.jobName}</td>
+                            {Array.isArray(casualReportList) && casualReportList.length > 0 ? (
+                                casualReportList.map((casualReport) => (
+                                    <tr
+                                        key={casualReport.reportCode}
+                                        id={casualReport.reportCode}
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => onClickReportHandler(casualReport.reportCode)}
+                                    >
+                                        <td>{casualReport.regDate}</td>
+                                        <td>{casualReport.reportTitle}</td>
+                                        <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.deptName}</td>
+                                        <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.memberName}</td>
+                                        <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.jobName}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: "center" }}>
+                                        조회된 비정기보고 목록이 없습니다.
+                                    </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                     {/* 페이징 버튼 */}

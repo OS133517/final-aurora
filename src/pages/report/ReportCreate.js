@@ -280,31 +280,32 @@ function ReportCreate() {
         const { reportTitle, reportInfo, reportType, reportCycle } = reportDTO;
 
         const validationMessages = [
-          { condition: !reportTitle, message: "보고 제목을 작성해주세요." },
-          { condition: !reportInfo, message: "보고 설명을 작성해주세요." },
-          { condition: !reportType, message: "보고 유형을 선택해주세요." },
-          { condition: !reportCycle, message: "보고 주기를 선택해주세요." },
-          {
-            condition: reportDTO?.reportType == "Routine" && (!memberList || memberList.length === 0),
-            message: "보고자 목록이 비어있습니다."
-          },
-          {
-            condition: reportDTO?.reportType == "Casual" && selectedRecipient == null,
-            message: "수신자 목록이 비어있습니다."
-          },
+            
+            { condition: !reportTitle, message: "보고 제목을 작성해주세요." },
+            { condition: !reportInfo, message: "보고 설명을 작성해주세요." },
+            { condition: !reportType, message: "보고 유형을 선택해주세요." },
+            { condition: !reportCycle, message: "보고 주기를 선택해주세요." },
+            {
+                condition: reportDTO?.reportType == "Routine" && (!memberList || memberList.length === 0),
+                message: "보고자 목록이 비어있습니다."
+            },
+            {
+                condition: reportDTO?.reportType == "Casual" && selectedRecipient == null,
+                message: "수신자 목록이 비어있습니다."
+            },
         ];
 
         for (const validation of validationMessages) {
 
-          if (validation.condition) {
+            if (validation.condition) {
 
-            warningAlert(validation.message);
+                warningAlert(validation.message);
 
-            return false;
-          }
+                return false;
+            }
         }
         return true;
-      };
+    };
     
     // 작성 및 수정 
     const onClickSubmit = async (e) => {
