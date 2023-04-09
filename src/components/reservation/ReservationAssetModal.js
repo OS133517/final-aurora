@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AssetModalCSS from "./ReservationAssetModal.module.css";
 import 'react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from "react-redux";

@@ -6,6 +6,7 @@ import reportReducer from './ReportModule';
 import approvalReducer from './ApprovalModule';
 import hrmReducer from './HrmModule'
 import dayWorklogReducer from './DayWorklogModule';
+import surveyReducer from './SurveyModule';
 
 const rootReducer = combineReducers({
     addBookReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     reservationReducer,
     reportReducer,
     approvalReducer,
-    dayWorklogReducer
+    dayWorklogReducer,
+    surveyReducer
 });
 
 export default rootReducer;

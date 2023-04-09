@@ -69,10 +69,10 @@ function MyReservation() {
 
         if(e.target.id === 'all' && e.target.checked === false) {
 
-            [...checkList].filter(check => check.id !== 'all').forEach(check => check.checked = false);
+            [...checkList].filter(check => check.id !== 'all' && !check.disabled).forEach(check => check.checked = false);
         } else if (e.target.id === 'all' && e.target.checked === true) {
 
-            [...checkList].filter(check => check.id !== 'all').forEach(check => check.checked = true);
+            [...checkList].filter(check => check.id !== 'all' && !check.disabled).forEach(check => check.checked = true);
         } 
     }
 
@@ -82,7 +82,9 @@ function MyReservation() {
         if(e.target.type === 'checkbox') return;
 
         const ckBox = document.querySelector(`#checkBox${e.currentTarget.id}`);
-        ckBox.checked = !ckBox.checked;
+        if(!ckBox.disabled) {
+            ckBox.checked = !ckBox.checked;
+        }
     }
 
     const onClickReservationUpdate = () => {
@@ -183,9 +185,16 @@ function MyReservation() {
                     <tbody>
                         {
                             Array.isArray(reservationList) && reservationList.map((reservation) => (
-                                <tr key={reservation.reservationNo} id={reservation.reservationNo} onClick={onClickCheck}>
+                                <tr 
+                                    key={reservation.reservationNo} 
+                                    id={reservation.reservationNo} 
+                                    onClick={onClickCheck}
+                                    style={new Date(reservation.startTime).getTime() < new Date().getTime()?{backgroundColor:'#E3E3E3', color:'black'}:null}>
                                     <td>
-                                        <input type="checkBox" id={`checkBox${reservation.reservationNo}`}/>
+                                        <input 
+                                            type="checkBox" 
+                                            id={`checkBox${reservation.reservationNo}`}
+                                            disabled={new Date(reservation.startTime).getTime() < new Date().getTime()? true:false}/>
                                     </td>
                                     <td>
                                         {reservation.assetName}
@@ -197,7 +206,7 @@ function MyReservation() {
                                         {reservation.description}
                                     </td>
                                     <td>
-                                        {reservation.team}
+                                        {reservation.teamName}
                                     </td>
                                     <td>
                                         {reservation.startTime} ~ {reservation.endTime}

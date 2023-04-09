@@ -19,6 +19,11 @@ import ReservationLayout from "./layouts/ReservationLayout";
 import MyReservation from "./pages/reservation/MyReservation";
 import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
+import SurveyLayout from "./layouts/SurveyLayout";
+import Surveys from "./pages/survey/Surveys";
+import SurveyManagement from "./pages/survey/SurveyManagement";
+import SurveyRegist from "./pages/survey/SurveyRegist";
+import SurveyUpdate from "./pages/survey/SurveyUpdate";
 
 import HrmLayout from "./layouts/HrmLayout";
 import Hrm from "./pages/hrm/Hrm";
@@ -103,6 +108,13 @@ function App() {
                 <Route path="attnedance-detail/:memberCode" element={<Attendance category='근태 현황'/>}/>
                 <Route path="vacation-detail/:memberCode" element={<Attendance category='휴가 현황'/>}/>
               </Route>
+            </Route>
+
+            <Route path="survey" element={<SurveyLayout/>}>
+              <Route path="list" element={<Surveys/>}/>
+              <Route path="survey-management" element={<SurveyManagement/>}/>
+              <Route path="survey-management/regist" element={<SurveyRegist/>}/>
+              <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate/>}/>
             </Route>
           </Route>
         </Routes>

@@ -6,6 +6,8 @@ import AddBookFormModal from "../addBook/AddBookFormModal";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { decodeJwt } from "../../utils/tokenUtils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPenToSquare, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 
 function AddBookSidebar() {
@@ -22,9 +24,6 @@ function AddBookSidebar() {
     // 그룹 추가 인풋창 밸류 조정용
     const [newPGroupName, setNewPGroupName] = useState("");
     const [newTGroupName, setNewTGroupName] = useState("");
-    // 그룹 관리 버튼 조정용
-    const [pManageIsOn, setPManageIsOn] = useState(false);
-    const [tManageIsOn, setTManageIsOn] = useState(false);
     // 주소록 추가 모달
     const [addBookModal, setAddBookModal] = useState(false);
 
@@ -37,11 +36,6 @@ function AddBookSidebar() {
         backgroundColor : "#73b8a3",
         color : "white"
     };
-    const manageStyle = {
-        visibility : "visible",
-        transform : "translateX(0)",
-        opacity : "1"
-    }
 
     useEffect(() => {
 
@@ -88,14 +82,12 @@ function AddBookSidebar() {
         switch(menuNum) {
             case 1: 
                 setFirstIsOpen(!firstIsOpen);
-                setTManageIsOn(false);
                 setTIsVisible(false);
                 setTManageIsOn(false);
                 setTIsVisible(false);
                 break;
             case 2: 
                 setSecondIsOpen(!secondIsOpen); 
-                setPManageIsOn(false);
                 setPIsVisible(false);
                 break;
             case 3: 
@@ -149,21 +141,27 @@ function AddBookSidebar() {
         }
     }
 
-    const onClickGroupManage = (e) => {
+    const onHoverManage = (groupCode) => {
 
-        switch(e.target.id) {
-            case "pGroupManage" :
-                setPManageIsOn(!pManageIsOn);
-                break;
-            case "tGroupManage" :
-                setTManageIsOn(!tManageIsOn);
-                break;
-            default :
-                break;
+        const editDiv = document.querySelector(`#group${groupCode}`);
+        const input = document.querySelector(`#groupUpdateInput${groupCode}`);
+        if(editDiv.style.visibility === 'visible') {
+
+            if(input.style.display !== 'block') {
+
+                editDiv.style.transform = "translateX(100%)";
+                editDiv.style.opacity = '0';
+                editDiv.style.visibility = 'hidden';
+            }
+        } else {
+
+            editDiv.style.transform = "translateX(0)";
+            editDiv.style.opacity = '1';
+            editDiv.style.visibility = 'visible';
         }
     }
 
-    const onClickGroupDelete = (e) => {
+    const onClickGroupDelete = (groupCode) => {
 
         Swal.fire({
             icon : 'warning',
@@ -175,23 +173,25 @@ function AddBookSidebar() {
         }).then((result) => {
             if(result.isConfirmed) {
                 dispatch(callGroupDeleteAPI({
-                    groupCode : e.target.value
+                    groupCode : groupCode
                 }))
-            } else {
-                Swal.fire('취소되었습니다.');
             }
         })
     }
 
-    const onClickGroupUpdate = (e) => {
+    const onClickGroupUpdate = (groupCode) => {
 
-        const input = document.querySelector(`#groupUpdateInput${e.target.value}`);
-        const nameSpan = document.querySelector(`#groupNameSpan${e.target.value}`);
+        const input = document.querySelector(`#groupUpdateInput${groupCode}`);
+        const nameSpan = document.querySelector(`#groupNameSpan${groupCode}`);
+        const theseButtons = document.querySelectorAll(`.theseButtons${groupCode}`);
+        const otherButtons = document.querySelectorAll(`.otherButtons${groupCode}`);
 
         if(input.style.display !== 'block') {
 
             input.style.display = 'block';
             nameSpan.style.display = 'none';
+            [...theseButtons].map(button => button.style.display = 'none');
+            [...otherButtons].map(button => button.style.display = 'block');
         } else {
 
             if(input.value.trim().length === 0) {
@@ -209,7 +209,7 @@ function AddBookSidebar() {
             }).then(result => {
                 if(result.isConfirmed) {
                     dispatch(callGroupUpdateAPI({
-                        groupCode : e.target.value,
+                        groupCode : groupCode,
                         groupName : input.value
                     }));
                 } else {
@@ -219,12 +219,17 @@ function AddBookSidebar() {
 
             input.style.display = 'none';
             nameSpan.style.display = 'block';
+            [...theseButtons].map(button => button.style.display = 'block');
+            [...otherButtons].map(button => button.style.display = 'none');
         }
     }
 
-    const onClickCancel = (tOrP, e) => {
-        const input = document.querySelector(`#groupUpdateInput${e.target.value}`);
-        const nameSpan = document.querySelector(`#groupNameSpan${e.target.value}`);
+    const onClickCancel = (tOrP, groupCode) => {
+
+        const input = document.querySelector(`#groupUpdateInput${groupCode}`);
+        const nameSpan = document.querySelector(`#groupNameSpan${groupCode}`);
+        const theseButtons = document.querySelectorAll(`.theseButtons${groupCode}`);
+        const otherButtons = document.querySelectorAll(`.otherButtons${groupCode}`);
 
         switch(tOrP) {
             case 't' :
@@ -238,6 +243,9 @@ function AddBookSidebar() {
             default :
                 return;
         }
+
+        [...theseButtons].map(button => button.style.display = 'block');
+        [...otherButtons].map(button => button.style.display = 'none');
     }
 
     return (
@@ -264,6 +272,8 @@ function AddBookSidebar() {
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
                                         to={`/aurora/address-book/team-groups/${group.groupCode}`} 
                                         key={group.groupCode}
+                                        onMouseEnter={() => onHoverManage(group.groupCode)}
+                                        onMouseLeave={() => onHoverManage(group.groupCode)}
                                         >
                                         <input 
                                             className={SidebarCSS.groupUpdateInput}
@@ -272,21 +282,26 @@ function AddBookSidebar() {
                                             maxLength='10'
                                             name="groupName"/>
                                         <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
-                                        <div style={tManageIsOn? manageStyle:null}>
+                                        <div id={`group${group.groupCode}`}>
                                             <button
+                                                className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode}
-                                                onClick={(e) => {e.preventDefault(); onClickGroupUpdate(e);}}
-                                                >수정
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare}/>
                                             </button>
                                             <button 
+                                                className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode} 
-                                                onClick={(e) => {e.preventDefault(); onClickGroupDelete(e);}}
-                                                >삭제
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} />
                                             </button>
                                             <button 
+                                                className={`otherButtons${group.groupCode}`}
                                                 value={group.groupCode} 
-                                                onClick={(e) => {e.preventDefault(); onClickCancel('t', e);}}
-                                                >X
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faCheck} />
+                                            </button>
+                                            <button 
+                                                className={`otherButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon  onClick={(e) => {e.preventDefault(); onClickCancel('t', group.groupCode);}} icon={faXmark} />
                                             </button>
                                         </div>
                                     </NavLink>
@@ -300,7 +315,6 @@ function AddBookSidebar() {
                                                 value={newTGroupName} 
                                                 onChange={onChangeHandler}/>}
                             {teamGroupList.length <= 4 && <p style={tIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
-                            <p style={tManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="tGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
@@ -318,6 +332,8 @@ function AddBookSidebar() {
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
                                         to={`/aurora/address-book/personal-groups/${group.groupCode}`} 
                                         key={group.groupCode}
+                                        onMouseEnter={() => onHoverManage(group.groupCode)}
+                                        onMouseLeave={() => onHoverManage(group.groupCode)}
                                         >
                                         <input 
                                             className={SidebarCSS.groupUpdateInput}
@@ -326,21 +342,26 @@ function AddBookSidebar() {
                                             maxLength='10'
                                             name="groupName"/>
                                         <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
-                                        <div style={pManageIsOn? manageStyle:null}>
-                                            <button
+                                        <div id={`group${group.groupCode}`}>
+                                        <button
+                                                className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode}
-                                                onClick={(e) => {e.preventDefault(); onClickGroupUpdate(e);}}
-                                                >수정
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare} />
                                             </button>
                                             <button 
+                                                className={`theseButtons${group.groupCode}`}
                                                 value={group.groupCode} 
-                                                onClick={(e) => {e.preventDefault(); onClickGroupDelete(e);}}
-                                                >삭제
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} />
                                             </button>
                                             <button 
+                                                className={`otherButtons${group.groupCode}`}
                                                 value={group.groupCode} 
-                                                onClick={(e) => {e.preventDefault(); onClickCancel('p', e);}}
-                                                >X
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faCheck} />
+                                            </button>
+                                            <button 
+                                                className={`otherButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon  onClick={(e) => {e.preventDefault(); onClickCancel('p', group.groupCode);}} icon={faXmark} />
                                             </button>
                                         </div>
                                     </NavLink>
@@ -353,7 +374,6 @@ function AddBookSidebar() {
                                                 maxLength='10'
                                                 onChange={onChangeHandler}/>}
                             {personalGroupList.length <= 4 && <p style={pIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
-                            <p style={pManageIsOn? {backgroundColor:'#73b8a3', color:'white'}:null} id="pGroupManage" onClick={onClickGroupManage}>그룹 관리</p>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
@@ -369,10 +389,6 @@ function AddBookSidebar() {
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
                                 to={"/aurora/address-book/addresses"}
                                 >전체 주소록</NavLink>
-                            {/* <NavLink 
-                                style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                to={"/address-book/team-addresses"}
-                                >팀 주소록</NavLink> */}
                         </div>
                     )}
                 </div>

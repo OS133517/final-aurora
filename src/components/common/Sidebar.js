@@ -6,8 +6,9 @@ function Sidebar() {
     const navigate = useNavigate();
     
     const activeStyle = { borderLeft : "7px solid orange"};
-    const sidebarMenus = ["home", "mail", "address-book", "board", "calendar", "toDo", "worklog", "attendance", "approval", 
-                            "hrm", "reports/summary", "reservation"];
+
+    const sidebarMenus = ["home", "mail", "address-book", "board", "calendar", "toDo", "worklog", "innOut", "approval", 
+                            "hrm", "report", "reservation", "survey"];
 
     return (
         <div className={SidebarCSS.sidebarDiv}>

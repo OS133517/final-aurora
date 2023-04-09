@@ -31,12 +31,8 @@ function AddBookFormModal({setAddBookModal}) {
                     title : "주소록 추가",
                     text : addBookRegistResult.message,
                     confirmButtonText: '확인'
-                }).then((result) => {
-                    if(result.isConfirmed) {
-                        window.location.reload(true); 
-                    } else {
-                        window.location.reload(true); 
-                    }
+                }).then(() => {
+                    window.location.reload(true); 
                 })
             } else if (addBookRegistResult.state === 400){
                 Swal.fire({
