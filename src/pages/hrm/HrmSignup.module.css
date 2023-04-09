@@ -1,3 +1,6 @@
+.allContainer {
+  width: 100%;
+}
 .hrmHeader {
     width: 100%;
     height: 58px;
@@ -14,7 +17,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 80%;
     padding: 0 10px;
   }
   .formContainer {

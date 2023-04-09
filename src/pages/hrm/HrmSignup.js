@@ -111,6 +111,7 @@ export default function HrmSignup() {
 
     return (
         <>
+        <div className={HrmSignupCSS.allContainer}>
         <div className={HrmSignupCSS.hrmHeader}>
          <span>인사 등록</span>
        </div>
@@ -242,6 +243,7 @@ export default function HrmSignup() {
             <button className={HrmSignupCSS.button} type="submit">회원가입</button>
             </form>
       </div>
+    </div>
     </div>
   </>
 

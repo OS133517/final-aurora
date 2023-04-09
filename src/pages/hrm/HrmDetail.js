@@ -4,7 +4,9 @@ import { useParams } from 'react-router-dom';
 
 import { decodeJwt } from '../../utils/tokenUtils';
 import HrmDetailCSS from './HrmDetail.module.css';
-import { callMemberDetailAPI, callMemberModifyAPI } from '../../apis/HrmAPICall';
+import { callMemberDetailAPI,
+         callMemberModifyAPI 
+        } from '../../apis/HrmAPICall';
 
 export default function HrmDetail() {
     const dispatch = useDispatch();

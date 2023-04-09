@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { decodeJwt } from "../../utils/tokenUtils";
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CallMemberListAPI,
          callMemberDeptSearchAPI,
@@ -6,32 +8,60 @@ import { CallMemberListAPI,
          callMemberJobSearchAPI,
          callMemberNameSearchAPI,
          callMemberTaskSearchAPI
-     }
-      from '../../apis/HrmAPICall';
-import HrmCSS from "./Hrm.module.css";
-import { decodeJwt } from "../../utils/tokenUtils";
-import { useLocation, useNavigate } from 'react-router-dom';
+     } 
+     from '../../apis/HrmAPICall';
+import AttendanceModifyCSS from "./AttendanceModify.module.css"
+import Swal from "sweetalert2";
+import { callModifyAttendance } from '../../apis/AttendanceAPICall';
 
-export default function Hrm() {
+export default function AttendanceModify() {
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const hrm = useSelector(state => state.hrmReducer.memberList);
-    // const member = useSelector(state => state.hrmReducer.memberDetail)
     const memberList = hrm?.data;
     const pageInfo = hrm?.pageInfo;
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
-    // const memberCode = loginMember.memberCode;
     const location = useLocation();
     const specificUrl = "/aurora/hrm/hrm-modify";
     console.log('hrm', hrm);
     console.log('memberList', memberList);
-    // console.log('memberList.memberCode', memberList.memberCode);
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
 
     const [category , setCategory] = useState('name');
     const [searchValue, setSearchValue] = useState('');
+
+    const openModal = async (member) => {
+        const { value: form } = await Swal.fire({
+          title: '근태 수정',
+          html: `
+          <label><input type="radio" name="attendance" id="earlyOff" class="swal2-radio"> 조기퇴근</label>
+          <label><input type="radio" name="attendance" id="tardy" class="swal2-radio"> 지각</label><br>
+          <label><input type="radio" name="attendance" id="truancy" class="swal2-radio"> 무단결근</label>
+          <label><input type="radio" name="attendance" id="absence" class="swal2-radio"> 결근</label>
+          `,
+          focusConfirm: false,
+          preConfirm: () => {
+            const attendance = {
+                tardy: document.getElementById('tardy').checked ? 'Y' : 'N',
+                earlyOff: document.getElementById('earlyOff').checked ? 'Y' : 'N',
+                truancy: document.getElementById('truancy').checked ? 'Y' : 'N',
+                absence: document.getElementById('absence').checked ? 'Y' : 'N',
+              };
+        
+              return attendance;
+            },
+          });
+    
+        if (form) {
+          dispatch(callModifyAttendance({ memberCode: member.memberCode, form }));
+          Swal.fire('수정되었습니다!', '', 'success');
+        }
+      };
+    
+    
 
       useEffect(() => {
 
@@ -44,15 +74,7 @@ export default function Hrm() {
 
        
       },[currentPage]);
-        
-      
-      
-    //   const onClickLink = (num) => {
-    //     console.log(num);
-    //     navigate(`/aurora/hrm/hrm-detail/${num}`);
-    //   };
-
-    const handleCategoryChange = (e) => {
+      const handleCategoryChange = (e) => {
         setCategory(e.target.value);
     };
 
@@ -61,18 +83,12 @@ export default function Hrm() {
     };
         
 
-    // useEffect(() => {
-
-    //     searchCall();
-    //     setCurrentPage(1);
-    // // eslint-disable-next-line
-    // }, [searchForm])
-
+  
     const onClickSearch = () => {
         switch (category) {
             case 'name':
                 dispatch(callMemberNameSearchAPI({
-                    searchValue : searchValue ,
+                    searchValue : searchValue,
                      currentPage : currentPage
                     }));
                 
@@ -108,11 +124,11 @@ export default function Hrm() {
     }
     return (
         <>
-        <div className={HrmCSS.hrmDiv}>
-            <div className={HrmCSS.hrmHeader}>
-                <span>인사 목록</span>
+        <div className={AttendanceModifyCSS.attModifyDiv}>
+            <div className={AttendanceModifyCSS.attModifyHeader}>
+                <span>근태 수정</span>
             </div>
-            <div className={HrmCSS.hrmSearch}>
+            <div className={AttendanceModifyCSS.attModifySearch}>
                 <select value={category} onChange={handleCategoryChange}>
                     <option value="name">이름</option>
                     <option value="dept">부서</option>
@@ -124,8 +140,8 @@ export default function Hrm() {
                 <button type="button" onClick={onClickSearch}>검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
             </div>
             <div>
-                <table className={HrmCSS.contentTable}>
-                    <thead className={HrmCSS.contentHead}>
+                <table className={AttendanceModifyCSS.contentTable}>
+                    <thead className={AttendanceModifyCSS.contentHead}>
                         <tr>  
                             <th>
                                 사번
@@ -157,51 +173,46 @@ export default function Hrm() {
                             <th>
                                 재직상태
                             </th>
-                            {location.pathname === specificUrl && (
-                            <th>
-                                수정
-                            </th>)}
+                           
                         </tr>
                     </thead>
                     <tbody>
                         {
                             Array.isArray(memberList) && memberList.map((member) => (
-                                <tr key={member?.memberCode} id={member?.memberCode}>
-                                    <td  onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                <tr key={member?.memberCode} id={member?.memberCode} onClick={() => openModal(member)}>
+                                    <td >
                                     &nbsp;&nbsp;&nbsp;{member.memberCode}
                                     </td>
-                                    <td  onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.memberName}
                                     </td>
-                                    <td  onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.phone}
                                     </td>
-                                    <td onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.memberEmail}
                                     </td>
-                                    <td onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.deptName}
                                     </td>
-                                    <td onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.jobName}
                                     </td>
-                                    <td  onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.taskName}
                                     </td>
-                                    <td onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.address}
                                     </td>
-                                    <td onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                         {member.memberHireDate}
                                     </td>
-                                    <td onClick={() =>  navigate(`/aurora/hrm/hrm-detail/${member?.memberCode}`)}>
+                                    <td>
                                     &nbsp;&nbsp;&nbsp;{member.status}
                                     </td>
-                                    
-                                    {location.pathname === specificUrl && (
-                                      <td>
+                                    {/* <td>
                                         <button type="button" onClick={() =>  navigate(`/aurora/hrm/hrm-modify/${member?.memberCode}`)}>수정</button>
-                                      </td>)}
+                                    </td> */}
                                     
 
                                 </tr>
@@ -217,12 +228,12 @@ export default function Hrm() {
                         }
                      </tbody>
                 </table>
-                <div className={ HrmCSS.pagingBtnDiv }>
+                <div className={ AttendanceModifyCSS.pagingBtnDiv }>
                 { Array.isArray(memberList) &&
                 <button 
                     onClick={() => setCurrentPage(currentPage - 1)} 
                     disabled={currentPage === 1}
-                    className={ HrmCSS.pagingBtn }
+                    className={ AttendanceModifyCSS.pagingBtn }
                 >
                     &lt;
                 </button>
@@ -231,7 +242,7 @@ export default function Hrm() {
                 <li key={num} onClick={() => setCurrentPage(num)}>
                     <button
                         style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                        className={ HrmCSS.pagingBtn }
+                        className={ AttendanceModifyCSS.pagingBtn }
                     >
                         {num}
                     </button>
@@ -241,7 +252,7 @@ export default function Hrm() {
                 <button 
                     onClick={() => setCurrentPage(currentPage + 1)} 
                     disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
-                    className={ HrmCSS.pagingBtn }
+                    className={ AttendanceModifyCSS.pagingBtn }
                 >
                     &gt;
                 </button>
@@ -249,7 +260,9 @@ export default function Hrm() {
             </div>
             </div>
         </div>
+   
         </>
     );
 }
+
 

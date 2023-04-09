@@ -35,6 +35,8 @@ import HrmSignup from './pages/hrm/HrmSignup';
 import AttendanceLayout from './layouts/AttnedanceLayout';
 import Attendance from './pages/attendance/Attendance';
 
+import AttendanceDetail from './pages/attendance/AttendanceDetail';
+import VacationDetail from './pages/attendance/VacationDetail';
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
@@ -48,6 +50,7 @@ import WorklogLayout from "./layouts/WorklogLayout";
 import DayWorklogs from "./pages/worklog/DayWorklogs";
 import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
 import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
+import AttendanceModify from './pages/attendance/AttnedanceModify';
 
 
 function App() {
@@ -107,9 +110,12 @@ function App() {
               <Route path="attendance" element={<AttendanceLayout/>}>
                 <Route index element={<Attendance/>}/>
                 {/* <Route path="list" element={<Attendance category='인사 목록'/>}/> */}
-                <Route path="attnedance-detail/:memberCode" element={<Attendance category='근태 현황'/>}/>
-                <Route path="vacation-detail/:memberCode" element={<Attendance category='휴가 현황'/>}/>
-              </Route>
+                <Route path="attendance-detail/:memberCode" element={<AttendanceDetail category='근태 현황'/>}/>
+                <Route path="attendance-modify" element={<AttendanceModify category='근태 수정'/>}/>
+             {/* <Route path="attendance-modify/:memberCode" element={<AttendanceModify category='근태 수정'/>}/> */}
+            <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황'/>}/>
+                
+          </Route>
               <Route path="survey" element={<SurveyLayout/>}>
                 <Route path="list" element={<Surveys/>}/>
                 <Route path="survey-management" element={<SurveyManagement/>}/>
