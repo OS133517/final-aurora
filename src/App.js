@@ -71,6 +71,7 @@ function App() {
                 <Route path="routines" element={<RoutineReports/>}/>
                 <Route path="casuals" element={<CasualReports/>}/>
                 <Route path="casuals/:reportCode" element={<CasualReportDetail/>}/>
+                <Route path="edit" element={<ReportCreate/>}/>
                 <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
                 <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
               </Route>

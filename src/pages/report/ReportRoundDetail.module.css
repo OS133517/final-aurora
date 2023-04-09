@@ -1,34 +1,43 @@
 .reportsContainer {
     width: 100%;
-    display: flex;
-    flex-direction: column;
+    height: 100%; 
+    max-width: 100%;
 }
 
 .reportsHeader {
     width: 100%;
+    max-width: inherit;
     height: 58px;
     border-bottom: 1px solid #C1C1C1;
     font-size: 24px;
     font-weight: bold;
     color: #88CFBA;
     line-height: 58px;
-    text-indent: 20px;
+    text-indent: 40px;
     align-self: flex-start;
 }
 
 .reportsDiv {
-    width: 80%; 
+    width: 90%; 
+    max-width: inherit;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding-top: 15px;
+    padding-left: 40px;
+    padding-bottom: 10px;
 }
 
 .detailHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
     width: 100%;
+    max-width: inherit;
+}
+
+.textRow {
+    margin-bottom: 16px;
+    white-space: nowrap;
 }
 
 .detailHeaderTitle {
@@ -39,6 +48,20 @@
 
 .greentButton {
     background-color: #88CFBA;
+    border: none;
+    color: white;
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 13px;
+    margin-top: 7px;
+    cursor: pointer;
+}
+
+.redButton {
+    background-color: red;
     border: none;
     color: white;
     width: 150px;
@@ -112,10 +135,20 @@ button {
 }
 
 .detailReportBody {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-left: 35px;
-    padding-right: 20px;
+    position: relative;
+    padding: 8px 16px;
+    border-bottom: 1px solid #eee;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.detailReportTextArea {
+    border: 1px solid #ccc;
+    resize: none; 
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden; 
+    min-height: 200px;
 }
 
 .commentContainer {
@@ -142,8 +175,7 @@ button {
 
 .comment {
     display: flex;
-    /* align-items: center; */
-    align-items: flex-start; /* 수정 */
+    align-items: flex-start;
     margin-bottom: 10px;
 }
 
@@ -163,24 +195,24 @@ button {
 }
 
 .commentContent {
-    /* max-width: 70%; */
     flex-grow: 1;
     white-space: pre-wrap;
     word-wrap: break-word;
-    margin-top: 5px; /* 수정 */
+    margin-top: 5px; 
+    margin-right: 20px;
 } 
 
 .replyAuthorInfo {
     display: flex;
     align-items: center;
     margin-right: 10px;
-    flex-shrink: 0; /* 추가 */
+    flex-shrink: 0;
 }
 
 .commentAuthor {
     font-weight: bold;
     margin-right: 10px;
-    margin-top: 5px; /* 수정 */
+    margin-top: 5px; 
 }
 
 .commentText {
@@ -202,6 +234,7 @@ button {
 
 .commentEditDiv {
     flex-shrink: 0; 
+    margin-top: 5px;
 }
 
 .replyRegisterButton {
@@ -249,4 +282,65 @@ button {
 .commentInput:focus {
     outline: none;
     border-color: #88CFBA;
+}
+
+.detailReportInput {
+    resize: none;
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    min-height: 100px; 
+}
+
+.detailReportRegisterDiv {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.detailReportRegisterButton {
+    margin-top: 10px;
+    width: 70px;
+    background-color: #88CFBA;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+.readOnlyInput {
+    border: none;
+}
+
+.readOnlyInput:focus {
+    outline: none;
+    border: none;
+}
+
+.fileImg {
+    width: 16px;
+    height: 16px;
+}
+
+ul {
+    list-style-type: none; 
+    padding: 0;
+    padding-left: 16px;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+li span {
+    display: flex;
+    align-items: center; 
+    cursor: pointer;
 }

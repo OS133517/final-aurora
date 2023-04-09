@@ -2,47 +2,59 @@
     display: flex;
     width: 100%;
 }
+
 .content {
     margin: 2%;
 }
+
 .reportType {
     font-size: 2em;
     color: #88CFBA;
 }
+
 .routineBox {
     margin-top: 20px;
     margin-bottom: 50px;
     display: flex;
 }
+
 .routineReport {
     margin-right: 2%;
     width: 450px;
-    height: 280px;
-    /* height: 100%; */
+    height: 350px;
     border: #C1C1C1 solid 3px;
     border-radius: 5px;
     position: relative;
 }
+
 .noticeContainer {
-    position: relative;
-    height: 100%; 
-    width: 100%; 
-}
-.notice {
-    color: #C1C1C1;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.5em;
-    white-space: nowrap; /* 줄바꿈 방지 */
 }
+
+.notice {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    color: #C1C1C1;
+    font-size: 1.5em;
+    white-space: nowrap; 
+}
+
+
 .routineReportHeader {
     height: 13%;
     padding-left: 10px;
     font-size: 1.5em;
     border-bottom: #C1C1C1 solid 3px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
+
 .routineReportBody {
     padding: 3%;
     /* padding-left: 3%;
@@ -67,7 +79,7 @@ a {
     border: #C1C1C1 solid 3px;
     border-radius: 5px;
     width: 1000px;
-    height: 230px;
+    height: 260px;
     margin-top: 20px;
     padding-top: 1em;
     /* padding-left: 1em; */
@@ -78,7 +90,7 @@ a {
 }
 .casualReportDiv {
     margin-left: 1%;
-    width: 49%;
+    width: 60%;
     display: inline-block;
     /* border: red solid 1px; */
     /* border-collapse: collapse; */
@@ -254,4 +266,52 @@ a {
     justify-content: center;
     position: relative;
     list-style: none;
+}
+
+.reportTable {
+    width: 450px;
+    border-collapse: collapse;
+}
+  
+.reportTableRow {
+    display: table-row;
+}
+  
+.reportTableCell {
+    display: table-cell;
+    padding: 8px;
+    /* border: 1px solid #ccc; */
+}
+  
+.reportTitle {
+    width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+  
+.smallCell {
+    width: 13%;
+    font-size: 0.8em;
+}
+
+.reportTitleText {
+    display: inline-block;
+    max-width: 40ch; /* 한글 기준 20글자로 설정 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+  
+.fixedHeightRow {
+    height: 16px;
+}
+
+.reportTitleText {
+    display: inline-block;
+    width: 200px; /* 20자 기준 너비 설정 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

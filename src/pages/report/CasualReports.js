@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callCasualReportListByConditionsAPI } from "../../apis/ReportAPICall";
-import { decodeJwt } from "../../utils/tokenUtils";
 import { useNavigate } from 'react-router-dom';
 
 import ReportsCSS from "./Reports.module.css";
@@ -9,20 +8,24 @@ import ReportsCSS from "./Reports.module.css";
 function CasualReports() {
 
     const dispatch = useDispatch();
-    // const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
     const navigate = useNavigate();
+
     const [currentPage, setCurrentPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState('N');
-    const casualReportData = useSelector(state => state.reportReducer.casualReportList)
-    const casualReportList = casualReportData.data;
-    console.log("casualReportList : " + JSON.stringify(casualReportList));
 
+    const casualReportData = useSelector(state => state.reportReducer.casualReportList)
+    // console.log("casualReportData : " + JSON.stringify(casualReportData));
+    const casualReportList = casualReportData.data;
+    // console.log("casualReportList : " + JSON.stringify(casualReportList));
     const pageInfo = casualReportData.pageInfo;
-    console.log("pageInfo : " + JSON.stringify(pageInfo));
+    // console.log("pageInfo : " + JSON.stringify(pageInfo));
+
     const pageNumber = [];
 
     if(pageInfo) {
+
         for(let i = 1; i <= pageInfo.endPage; i++) {
+
             pageNumber.push(i);
         }
     }
@@ -30,18 +33,39 @@ function CasualReports() {
     // 목록 조회 
     useEffect(() => {
 
+        updateUrl();
+
         dispatch(callCasualReportListByConditionsAPI({
             completionStatus : isCompleted,
             offset : currentPage
         }))
     // eslint-disable-next-line
-    }, [isCompleted, currentPage])
+    }, [currentPage, isCompleted])
 
+    const updateUrl = () => {
+
+        const updatedUrl = `/aurora/reports/casuals?completionStatus=${isCompleted}&offset=${currentPage}`;
+        navigate(updatedUrl);
+    };
+
+    // 보고 클릭시 
     const onClickReportHandler = (reportCode) => {
         
         navigate(`/aurora/reports/casuals/${reportCode}`)
-        // @GetMapping("/reports/casual/{reportCode}")
     }
+
+    // 완료여부 토글 
+    const toggleCompletionStatus = () => {
+
+        if (isCompleted === "N") {
+
+            setIsCompleted("Y");
+        } else {
+
+            setIsCompleted("N");
+        }
+        setCurrentPage(1);
+    };
 
     return (
         <>
@@ -49,18 +73,37 @@ function CasualReports() {
                 <div className={ReportsCSS.reportsHeader}>
                     보고서 확인 
                 </div>
-                <div>
-                    <span className={ReportsCSS.reportType}>비정기 보고</span>
+                <div className={ReportsCSS.roundsHeader}>
+                    <span className={ReportsCSS.roundsTitle}>비정기 보고 목록</span>
+                    {/* 버튼 컨테이너 */}
+                    <div className={ReportsCSS.headerButtonDiv}>
+                        {/* 완료된 보고 조회하기 */}
+                        {isCompleted == 'N'?
+                            <span>완료된 보고 조회하기</span> :
+                            <span>미완료된 보고 조회하기</span> 
+                        }
+                        <label 
+                            className={ReportsCSS.toggleSwitch}
+                        >
+                            <input 
+                                type="checkbox" 
+                                onClick={() => toggleCompletionStatus()}/
+                            >         
+                            <span className={ReportsCSS.toggleSlider}></span>
+                        </label>
+                    </div>
                 </div>
+                {/* 보고 목록 컨테이너 */}
                 <div className={ReportsCSS.reportsDiv}>
-                    <table className={ReportsCSS.reportListTable}>
+                    {/* 보고 게시판 */}
+                    <table className={ReportsCSS.reportsTable}>
                         <thead>
                             <tr>
-                                <th>날짜</th>
-                                <th>제목</th>
-                                <th>부서</th>
-                                <th>직급</th>
-                                <th>이름</th>
+                                <th className={ReportsCSS.columnRegDate}>등록일</th>
+                                <th className={ReportsCSS.columnTitle}>제목</th>
+                                <th className={ReportsCSS.columnMemberInfo}>부서</th>
+                                <th className={ReportsCSS.columnMemberInfo}>이름</th>
+                                <th className={ReportsCSS.columnMemberInfo}>직급</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,42 +116,46 @@ function CasualReports() {
                                 >
                                     <td>{casualReport.regDate}</td>
                                     <td>{casualReport.reportTitle}</td>
-                                    <td>{casualReport.memberDTO.deptName}</td>
-                                    <td>{casualReport.memberDTO.jobName}</td>
-                                    <td>{casualReport.memberDTO.memberName}</td>
+                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.deptName}</td>
+                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.memberName}</td>
+                                    <td className={ReportsCSS.columnTextAlignTd}>{casualReport.memberDTO.jobName}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    <div className={ ReportsCSS.pagingBtnDiv }>
-                        { Array.isArray(casualReportList) &&
-                            <button 
-                                onClick={() => setCurrentPage(currentPage - 1)} 
-                                disabled={currentPage === 1}
-                                className={ ReportsCSS.pagingBtn }
-                            >
-                                &lt;
-                            </button>
-                        }
-                        {pageNumber.map((num) => (
-                            <li key={num} onClick={() => setCurrentPage(num)}>
+                    {/* 페이징 버튼 */}
+                    <div className={ReportsCSS.pagingBtnDiv}>
+                        {Array.isArray(casualReportList) && (
+                            <>
                                 <button
-                                    style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                                    className={ ReportsCSS.pagingBtn }
+                                    onClick={() => setCurrentPage(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className={ReportsCSS.pagingBtn}    
                                 >
-                                    {num}
+                                    &lt;
                                 </button>
-                            </li>
-                        ))}
-                        { Array.isArray(casualReportList) &&
-                            <button 
-                                onClick={() => setCurrentPage(currentPage + 1)} 
-                                disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
-                                className={ ReportsCSS.pagingBtn }
-                            >
-                                &gt;
-                            </button>
-                        }
+                                {pageNumber.map((num) => (
+                                    <li 
+                                        key={num} 
+                                        onClick={() => setCurrentPage(num)}
+                                    >
+                                        <button
+                                            style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
+                                            className={ReportsCSS.pagingBtn}
+                                        >
+                                            {num}
+                                        </button>
+                                    </li>
+                                ))}
+                                <button
+                                    onClick={() => setCurrentPage(currentPage + 1)}
+                                    disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
+                                    className={ReportsCSS.pagingBtn}
+                                >
+                                    &gt;
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

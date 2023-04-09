@@ -1,52 +1,81 @@
-import { useLocation } from 'react-router-dom';
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
-import { callselectReportRoundDetailAPI,
-            callSelectReportDetailListByRoundCodeAPI } from "../../apis/ReportAPICall";
+import { useNavigate } from 'react-router-dom';
+import { decodeJwt } from "../../utils/tokenUtils";
+import { callSelectReportDetailAPI,
+            callDeleteReportAPI 
+        } from "../../apis/ReportAPICall";
 
 import ReportRoundDetailCSS from "./ReportRoundDetail.module.css";
 import Swal from "sweetalert2";
 
-function CasualReportDetail() {
+function CasualReportDetail() { 
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
+
     const { reportCode } = useParams();
-    console.log("reportCode : " + reportCode);
-    const { roundCode } = useParams();
-    console.log("roundCode : " + roundCode);
+    // console.log("reportCode : " + reportCode);
 
-    const reportDetailList = useSelector(state => state.reportReducer.reportDetailList);
-    reportDetailList && console.log("reportDetailList : " + JSON.stringify(reportDetailList));
+    const reportDetail = useSelector(state => state.reportReducer.reportDetail);
+    // reportDetail && console.log("casualReportDetail : " + JSON.stringify(reportDetail));
 
-    const reportRoundDetailData = useSelector(state => state.reportReducer.reportRoundDetailData);
-    reportRoundDetailData && console.log("reportRoundDetailData : " + JSON.stringify(reportRoundDetailData));
-    // const reportRoundDTO = reportRoundDetailData.reportRoundDTO;
-    // reportRoundDetailData && console.log("reportRoundDTO : " + JSON.stringify(reportRoundDTO));
-    const memberDTO = reportRoundDetailData.memberDTO;
-    reportRoundDetailData && console.log("memberDTO : " + JSON.stringify(memberDTO));
-    const reportRoundDetail = reportRoundDetailData.reportRoundDetail;
-    reportRoundDetailData && console.log("reportRoundDetail : " + JSON.stringify(reportRoundDetail));
-    const reportDTO = reportRoundDetailData.reportDTO;
-    reportRoundDetailData && console.log("reportDTO : " + JSON.stringify(reportDTO));
+    // const reportRoundDetailData = useSelector(state => state.reportReducer.reportRoundDetailData);
+    // reportRoundDetailData && console.log("reportRoundDetailData : " + JSON.stringify(reportRoundDetailData));
+    // // const reportRoundDTO = reportRoundDetailData.reportRoundDTO;
+    // // reportRoundDetailData && console.log("reportRoundDTO : " + JSON.stringify(reportRoundDTO));
+    // const memberDTO = reportDetail.memberDTO;
+    // reportDetail && console.log("memberDTO : " + JSON.stringify(memberDTO));
+    // const reportRoundDetail = reportRoundDetailData.reportRoundDetail;
+    // reportRoundDetailData && console.log("reportRoundDetail : " + JSON.stringify(reportRoundDetail));
+    const reportDTO = reportDetail.reportDTO;
+    // reportDetail && console.log("reportDTO : " + JSON.stringify(reportDTO));
+    const reporterDetail = reportDetail.reporterDetail;
+    // reportDetail && console.log("reporterDetail : " + JSON.stringify(reporterDetail));
+    const fileList = reportDetail.fileList;
+    // reportDetail && console.log("fileList : " + JSON.stringify(fileList));
+
+    const isReporter = accessToken?.memberCode == reporterDetail?.memberCode; 
+    reportDetail && console.log("isReporter : " + JSON.stringify(isReporter));
 
     useEffect(() => {
 
         // 회차 상세 조회 
-        dispatch(callselectReportRoundDetailAPI({
+        dispatch(callSelectReportDetailAPI({
 
-            reportCode : reportCode,
-            roundCode : roundCode
-        }))
-        // 상세 보고 목록 조회 
-        dispatch(callSelectReportDetailListByRoundCodeAPI({
-
-            reportCode : reportCode,
-            roundCode : roundCode
+            reportCode : reportCode
         }))
     // eslint-disable-next-line
     }, [])
+
+    // 보고 삭제 
+    const deleteReport = async () => {
+
+        const result = await Swal.fire({
+
+            title: '정말 보고를 완료하시겠습니까?',
+            text: '완료된 보고는 수정할 수 없습니다.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소',
+        });
+        if (result.isConfirmed) {
+            
+            dispatch(callDeleteReportAPI({
+
+                reportCode : reportCode
+            }))
+            navigate(`/aurora/reports/casuals?completionStatus=N&offset=1`)
+
+            window.history.pushState(null, "", window.location.pathname);
+            window.onpopstate = function (event) {
+            window.history.pushState(null, "", window.location.pathname);
+            };
+        }
+    }
 
     return (
         <>
@@ -57,68 +86,94 @@ function CasualReportDetail() {
                 <div className={ReportRoundDetailCSS.reportsDiv}>
                     <div className={ReportRoundDetailCSS.detailHeader}>
                         <span className={ReportRoundDetailCSS.detailHeaderTitle}>
-                            비정기보고 상세 조회 페이지
+                            비정기보고 상세 조회
                         </span>
                         <div className={ReportRoundDetailCSS.headerButtonDiv}>
-                            <button>
-                                수정
+                            {/* 보고자일때만 출력 */}
+                            <button
+                                className={ReportRoundDetailCSS.redButton}
+                                onClick={() => {
+                                    deleteReport()
+                                }}
+                            >
+                                <span>보고 삭제</span> 
                             </button>
-                            <button>
-                                삭제
+                            <button 
+                                className={ReportRoundDetailCSS.greentButton}
+                                onClick={() => {
+                                    navigate('/aurora/reports/edit', { state: { isEdit: true, reportCode: reportDTO.reportCode } });
+                                }}
+                            >
+                                보고 수정
                             </button>
-                            <button>
-                                확인
+                            <button 
+                                className={ReportRoundDetailCSS.greentButton}
+                                onClick={() => navigate(-1)}
+                            >
+                                뒤로 가기
                             </button>
                         </div>
                     </div>
+                        <br></br>
                     <div style={{marginLeft:'15px'}}>
-                        <p>
-                            <span>{reportDTO && reportDTO.reportTitle} </span>
-                            <span> / 책임자 : </span>
-                            <span>{memberDTO && memberDTO.deptName} </span>
-                            <span>{memberDTO && memberDTO.jobName} </span>
-                            <span>{memberDTO && memberDTO.memberName}</span>
-                        </p>
-                        <span>
-                            {reportRoundDetail && reportRoundDetail.roundTitle}
-                        </span>
+                        {/* 보고 정보 */}
+                        <div>
+                            <p>
+                                <strong>보고 제목 : </strong>
+                                <span>{reportDTO && reportDTO.reportTitle} </span>
+                            </p>
+                            <p>
+                                <strong>보고자 : </strong>
+                                <span>
+                                    {reporterDetail && 
+                                        <span>{reporterDetail.deptName} {reporterDetail.memberName} {reporterDetail.jobName}</span>
+                                        // <span>{reportDTO?.memberDTO?.deptName} {reportDTO?.memberDTO?.memberName} {reportDTO?.memberDTO?.jobName}</span>
+                                    } 
+                                </span>
+                            </p>
+                            <p>
+                                <strong>보고 일시 : </strong>
+                                <span>{reportDTO && reportDTO.regDate} </span>
+                            </p>
+                            <p>
+                                <strong>보고 정보 : </strong>
+                                <span>{reportDTO && reportDTO.reportInfo} </span>
+                            </p>
+                        </div>
                         <br></br>
-                        <br></br>
-                        {/* 상세보고 목록 */}
-                        {reportDetailList && reportDetailList.map((reportDetail) => (
-                            <div className={ReportRoundDetailCSS.detailReportContainer}>
-                                <div className={ReportRoundDetailCSS.detailReportHeader}>
-                                    <span>
-                                        {reportDetail.memberName} {reportDetail.jobName}
-                                        <span className={ReportRoundDetailCSS.regDate}>
-                                            &nbsp;&nbsp;{reportDetail.regDate}
-                                        </span>
-                                        {/* <span>수정</span> */}
-                                        <button>수정</button>
-                                    </span>
-                                </div>
-                                <div className={ReportRoundDetailCSS.detailReportBody}>
-                                    {reportDetail.detailBody}
-                                </div>
+                        {/* 첨부파일 */}
+                        <div 
+                            className={ReportRoundDetailCSS.detailReportContainer}
+                            key={reportDetail.detailCode}
+                        >
+                            {/* 첨부파일 목록 */}
+                            <div className={ReportRoundDetailCSS.detailReportHeader}>
+                                첨부 파일
                             </div>
-                        ))}
-                        <div className={ReportRoundDetailCSS.commentContainer}>
-                            <div className={ReportRoundDetailCSS.commentHeader}>댓글</div>
-                            <div className={ReportRoundDetailCSS.commentBody}>
-                                {/* 댓글 리스트 출력 */}
-                                <div className={ReportRoundDetailCSS.comment}>
-                                    {/* 작성자사진  */}
-                                    {/* <img src={}/> */}
-                                    작성자 
-                                    댓글내용 // 수정 / 댓글
-                                </div>
-                                <div className={ReportRoundDetailCSS.commentInputDiv}>
-                                    <span>사진</span>
-                                    <input
-                                        type='text'
-                                    />
-                                    <button>작성</button>
-                                </div>
+                            <div>
+                                {fileList && fileList.length === 0? 
+                                <ul>
+                                    <li>첨부된 파일이 없습니다.</li> 
+                                </ul> : 
+                                <ul>
+                                    {fileList?.map((file, index) => (
+                                        <li 
+                                            key={index}
+                                        >
+                                            <span 
+                                                // onClick={() => downloadFile(file.filePath)}
+                                            >
+                                            <img 
+                                                src={'/fileIcon.png'}
+                                                className={ReportRoundDetailCSS.fileImg}
+                                            /> 
+                                            &nbsp;
+                                                {file.fileOriginName} ({file.fileSize})
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+                                }
                             </div>
                         </div>
                     </div>

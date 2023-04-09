@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%; /* 상위 div의 높이를 설정해야 중앙 정렬이 가능합니다 */
+    height: 100%; 
 }
 
 .reportCreateHeader {
@@ -33,7 +33,6 @@
 }
 
 .formTable {
-    /* border: 1px solid black; */
     width: 100%;
     border-collapse: collapse;
 }
@@ -43,7 +42,6 @@
 }
 
 .form-table td {
-    /* width: 30%; */
     text-align: left;
     padding: 5px;
 }
@@ -79,7 +77,6 @@
 }
 
 .underBarInput {
-    /* width: 300px; */
     width: 100%;
     border: none;
     border-bottom: 3px solid #C1C1C1;
@@ -88,19 +85,22 @@
     font-size: 1.5em;
 }
 
+.underBarInput:focus {
+    outline: none;
+    border-color: #88CFBA;
+}
+
 .boxInput {
     border: 3px solid #C1C1C1;
-    /* width: 300px; */
     width: 100%;
     height: 150px;
     resize: none;
     box-sizing: border-box;
 }
 
-.highlighted {
+.boxInput:focus {
     outline: none;
     border-color: #88CFBA;
-    box-shadow: 0 0 0 2px #4a90e2;
 }
 
 .fileTableContainer {
@@ -121,4 +121,20 @@
   
 .fileTabled-table th {
     background-color: #f2f2f2;
+}
+
+.deleteButton {
+    margin-left: 5px;
+    background: red;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    color: white;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
 }
