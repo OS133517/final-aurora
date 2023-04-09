@@ -31,6 +31,7 @@ function ReportCreate() {
         reportCycle: "1"
     });
     const [fileList, setFileList] = useState([]);
+    const [serverFileList, setServerFileList] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [selectedMembers, setSelectedMembers] = useState([]);
     const [memberList, setMemberList] = useState([]);
@@ -45,7 +46,7 @@ function ReportCreate() {
     // console.log("matchingMembers : " + JSON.stringify(matchingMembers));
     const reportDetail = useSelector(state => state.reportReducer.reportDetail);
     // console.log("reportDetail : " + JSON.stringify(reportDetail));
-    const originalReportDTO = reportDetail && reportDetail.reportDTO;
+    // const originalReportDTO = reportDetail && reportDetail.reportDTO;
     // console.log("originalReportDTO : " + JSON.stringify(originalReportDTO));
     const recipient = reportDetail?.reportDTO?.memberDTO;
     // console.log("recipient : " + JSON.stringify(recipient));
@@ -67,11 +68,28 @@ function ReportCreate() {
         }
     }, []);
 
-
     // 수정모드일때 값 세팅 
     useEffect(() => {
 
-        if (isEdit && reportDetail) {
+        if(!isEdit) {
+
+            setReportDTO({
+                memberCode: accessToken.memberCode || "",
+                reportTitle: "",
+                reportInfo: "",
+                reportType: "Routine",
+                reportCycle: "1"
+            });
+            setFileList([]);
+            setInputValue("");
+            setSelectedMembers([]);
+            setMemberList([]);
+            setCycleType("monthly");
+            setRecipientInputValue("");
+            setSelectedRecipient(null);
+            setMatchingRecipientMembers([]);
+        }
+        if(isEdit && reportDetail) {
 
             setReportDTO({...reportDTO, ...reportDetail.reportDTO});
             setSelectedMembers(reportDetail?.memberList || []);
@@ -79,12 +97,13 @@ function ReportCreate() {
             // console.log("!isNumeric(reportDTO.reportCycle) : " + JSON.stringify(!isNumeric(reportDTO.reportCycle)));
             if(reportDetail?.reportDTO?.reportType === 'Casual') {
 
-                setFileList(originalFileList || []);
+                // setFileList(originalFileList || []);
                 // setSelectedRecipient(reportDetail.selectedRecipient || null);
+                setServerFileList(originalFileList || []);
                 setSelectedRecipient(recipient || null);
             }
         }
-    }, [reportDetail]);
+    }, [reportDetail, isEdit]);
 
     useEffect(() => {
 
@@ -239,49 +258,53 @@ function ReportCreate() {
         setFileList(fileList.filter((_, i) => i !== index));
     };
 
+    // 기존 파일중 삭제 
+    const removeServerFile = (index) => {
+
+        const newServerFileList = [...serverFileList];
+
+        newServerFileList.splice(index, 1);
+        setServerFileList(newServerFileList);
+    };
+
     // 파일 전체 삭제 
     const removeAllFiles = () => {
 
         setFileList([]);
+        setServerFileList([]);
     };
     
     // 입력 검사 
     const validateFormData = () => {
 
         const { reportTitle, reportInfo, reportType, reportCycle } = reportDTO;
-      
-        if (!reportTitle) {
 
-          alert("보고 제목을 작성해주세요.");
-          return false;
-        }
-        if (!reportInfo) {
+        const validationMessages = [
+          { condition: !reportTitle, message: "보고 제목을 작성해주세요." },
+          { condition: !reportInfo, message: "보고 설명을 작성해주세요." },
+          { condition: !reportType, message: "보고 유형을 선택해주세요." },
+          { condition: !reportCycle, message: "보고 주기를 선택해주세요." },
+          {
+            condition: reportDTO?.reportType == "Routine" && (!memberList || memberList.length === 0),
+            message: "보고자 목록이 비어있습니다."
+          },
+          {
+            condition: reportDTO?.reportType == "Casual" && selectedRecipient == null,
+            message: "수신자 목록이 비어있습니다."
+          },
+        ];
 
-          alert("보고 설명을 작성해주세요.");
-          return false;
-        }
-        if (!reportType) {
+        for (const validation of validationMessages) {
 
-          alert("보고 유형을 선택해주세요.");
-          return false;
-        }
-        if (!reportCycle) {
+          if (validation.condition) {
 
-          alert("보고 주기를 선택해주세요.");
-          return false;
-        }
-        if (reportDTO?.reportType == 'Routine' && (!memberList || memberList.length === 0)) {
+            warningAlert(validation.message);
 
-            alert("보고자 목록이 비어있습니다.");
             return false;
-        }
-        if (reportDTO?.reportType == 'Casual' && selectedRecipient == null) {
-
-            alert("수신자 목록이 비어있습니다.");
-            return false;
+          }
         }
         return true;
-    };
+      };
     
     // 작성 및 수정 
     const onClickSubmit = async (e) => {
@@ -315,7 +338,7 @@ function ReportCreate() {
                 dispatch(callRegisterReportAPI({
                     formData
                 }))
-                alert('보고서를 성공적으로 작성했습니다.');
+                successAlert('보고서를 성공적으로 작성했습니다.');
                 navigate('/aurora/reports/summary', { replace: true });
                 // window.location.reload();
         
@@ -324,12 +347,23 @@ function ReportCreate() {
                 console.log('fileList : ', fileList);
             } else {
 
+                const preservedFileCodeList = serverFileList.map(file => file.fileCode);
+                formData.append("preservedFileCodeList", JSON.stringify(preservedFileCodeList))
+                
                 // 보고 수정 
                 dispatch(callUpdateReportAPI({
+
                     formData
                 }))
-                alert("보고서를 성공적으로 수정했습니다."); 
+                successAlert("보고서를 성공적으로 수정했습니다."); 
+                
+                if (reportDTO.reportType === 'Routine') {
+                    navigate(`/aurora/reports/${reportDTO.reportCode}/rounds`);
+                } else if (reportDTO.reportType === 'Casual') {
+                    navigate(`/aurora/reports/casuals/${reportDTO.reportCode}`);
+                }
             }
+
         }
     };
 
@@ -485,9 +519,11 @@ function ReportCreate() {
                                         <td>
                                             <datalist id="members">
                                                 {matchingMembers && matchingMembers.map((member) => (
-                                                    <option key={member.memberCode} value={member.memberName}>
-                                                        {member.memberName}
-                                                    </option>
+                                                    <option 
+                                                        key={member.memberCode} 
+                                                        value={member.memberName}
+                                                        label={`${member.deptName} ${member.jobName}`}
+                                                    />
                                                 ))}
                                             </datalist>
                                             <div>
@@ -528,11 +564,11 @@ function ReportCreate() {
                                         <td>
                                         <datalist id="recipients">
                                             {matchingMembers && matchingMembers.map((member) => (
-                                                <option
-                                                    key={member.memberCode}
+                                                <option 
+                                                    key={member.memberCode} 
                                                     value={member.memberName}
                                                     label={`${member.deptName} ${member.jobName}`}
-                                                ></option>
+                                                />
                                             ))}
                                         </datalist>
                                         <div>
@@ -580,6 +616,16 @@ function ReportCreate() {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        {serverFileList.map((file, index) => (
+                                                            <tr key={file.fileCode}>
+                                                                <td>
+                                                                    <button onClick={() => removeServerFile(index)}>X</button>
+                                                                </td>
+                                                                <td>{file.fileOriginName}</td>
+                                                                <td>{(file.fileSize)} </td>
+                                                            </tr>
+                                                        ))
+                                                        }
                                                         {fileList.map((file, index) => (
                                                             <tr key={index}>
                                                                 <td>

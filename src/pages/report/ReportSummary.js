@@ -48,7 +48,13 @@ function ReportSummary() {
                                     <div className={ReportSummaryCSS.routineReportBody}>
                                         <table className={ReportSummaryCSS.reportTable}>
                                             <tbody>
-                                                {
+                                                {routineList.length === 0 ? (
+                                                    <tr>
+                                                        <td colSpan="2" className={ReportSummaryCSS.notice}>
+                                                            조회된 보고 회차 내역이 없습니다.
+                                                        </td>
+                                                    </tr>
+                                                ) : (
                                                     routineList.map((routineReport) => (
                                                         <tr key={routineReport.roundCode} id={routineReport.roundCode} className={ReportSummaryCSS.fixedHeightRow}>
                                                             <td className={ReportSummaryCSS.reportTitleCell}>
@@ -56,10 +62,10 @@ function ReportSummary() {
                                                                     <span className={ReportSummaryCSS.reportTitleText}>{routineReport.roundTitle}</span>
                                                                 </NavLink>
                                                             </td>
-                                                        <td className={ReportSummaryCSS.memberInfoCell}>{routineReport.reportedMemberCount} / {routineReport.capacity}</td>
+                                                            <td className={ReportSummaryCSS.memberInfoCell}>{routineReport.reportedMemberCount} / {routineReport.capacity}</td>
                                                         </tr>
                                                     ))
-                                                }
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>
@@ -67,14 +73,13 @@ function ReportSummary() {
                             )
                         ))
                     }
-                    
-                    {!routineList1 || routineList1.length === 0 ?
+                    {!routineList1 &&
                         <div className={ReportSummaryCSS.routineReport}>
                             <span className={ReportSummaryCSS.notice}>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 정기보고<br/>내역이 없습니다.
                             </span>
-                        </div> : null
+                        </div>
                     }
                 </div>
                 {/* 비정기 보고 */}

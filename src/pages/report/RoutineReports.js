@@ -11,11 +11,11 @@ function RoutineReports() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
+    // const location = useLocation();
     
     const [currentPage, setCurrentPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState('N');
-    const [isFirstRender, setIsFirstRender] = useState(true);
+    // const [isFirstRender, setIsFirstRender] = useState(true);
 
     // 정기보고 데이터 
     const routineReportData = useSelector(state => state.reportReducer.routineReportList)
@@ -41,14 +41,12 @@ function RoutineReports() {
 
         updateUrl();
 
-        dispatch(
-            callRoutineReportListByConditionsAPI({
+        dispatch(callRoutineReportListByConditionsAPI({
 
-                completionStatus: isCompleted,
-                offset: currentPage,
-            })
-        );
-      }, [currentPage, isCompleted, dispatch]);
+            completionStatus: isCompleted,
+            offset: currentPage,
+        }));
+      }, [currentPage, isCompleted]);
 
     const updateUrl = () => {
 
@@ -85,10 +83,7 @@ function RoutineReports() {
                     <span className={ReportsCSS.roundsTitle}>정기 보고 목록</span>
                     {/* 버튼 컨테이너 */}
                     <div className={ReportsCSS.headerButtonDiv}>
-                        {/* 완료된 보고 조회하기
-                        <button className={ReportsCSS.greentButton}>
-                            ㅇ
-                        </button> */}
+                        {/* 완료된 보고 조회하기 */}
                         {isCompleted == 'N'?
                             <span>완료된 보고 조회하기</span> :
                             <span>미완료된 보고 조회하기</span> 
@@ -142,12 +137,15 @@ function RoutineReports() {
                                 <button
                                     onClick={() => setCurrentPage(currentPage - 1)}
                                     disabled={currentPage === 1}
-                                    className={ReportsCSS.pagingBtn}
+                                    className={ReportsCSS.pagingBtn}    
                                 >
                                     &lt;
                                 </button>
                                 {pageNumber.map((num) => (
-                                    <li key={num} onClick={() => setCurrentPage(num)}>
+                                    <li 
+                                        key={num} 
+                                        onClick={() => setCurrentPage(num)}
+                                    >
                                         <button
                                             style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
                                             className={ReportsCSS.pagingBtn}

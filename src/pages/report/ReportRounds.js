@@ -22,6 +22,7 @@ function ReportRounds() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { reportCode } = useParams();
+    
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [reportUpdated, setReportUpdated] = useState(false);
@@ -231,7 +232,7 @@ function ReportRounds() {
                             {/* } */}
                             <button 
                                 className={ReportsCSS.greentButton}
-                                
+                                onClick={() => navigate(-1)}
                             >
                                 뒤로 가기
                             </button>
