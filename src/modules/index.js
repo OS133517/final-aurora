@@ -9,9 +9,6 @@ import dayWorklogReducer from './DayWorklogModule';
 import surveyReducer from './SurveyModule';
 import attendanceReducer from './AttendanceModule';
 import messengerReducer from './MessengerModule';
-import dayWorklogReducer from './DayWorklogModule';
-import memberReducer from './MemberModule';
-import reservationReducer from './ReservationModule';
 import weekWorklogReducer from './WeekWorklogModule';
 import scheduleReducer from './ScheduleModule';
 

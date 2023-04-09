@@ -1,4 +1,4 @@
-import { POST_LOGIN, GET_LIST, GET_DETAIL } from "../modules/MemberModule";
+import { POST_LOGIN, GET_LIST, GET_DETAIL, GET_MEMEBER_INFO } from "../modules/MemberModule";
 
 export const callLoginAPI = ({ form }) => {
 
@@ -99,5 +99,39 @@ export const callMemberDetailAPI = ({ memberCode }) => {
             console.error("callMemberListAPI 에서 오류 발생 : ", error);
         }
 
+    }
+}
+
+export const callMemberInfoAPI = ({memberCode}) => {
+    console.log(memberCode);
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/worklogs/days/member/${memberCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "GET",
+            headers: {
+                "Content-Type" : "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            },
+
+            // body : JSON.stringify({
+            //     memberCode : memberCode,
+            //     morningDayContent : form.get("morningDayContent"),
+            //     morningDayNote : form.get("morningDayNote"),
+            //     afternoonDayContent : form.get("afternoonDayContent"),
+            //     afternoonDayNote : form.get("afternoonDayNote"),
+            //     daySpecialNote : form.get("daySpecialNote")
+                
+            // })
+            })
+        .then(response => response.json());
+
+        if(result.status === 200){
+            console.log('[callMemberInfoAPI] callDayWorklogDetailAPI SUCCESS' + result);
+            dispatch({ type: GET_MEMEBER_INFO, payload: result.data });
+        }
     }
 }

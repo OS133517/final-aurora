@@ -15,19 +15,10 @@ import ApprovalWait from "./pages/approval/ApprovalWait";
 import AddBookLayout from "./layouts/AddBookLayout";
 import Addresses from "./pages/addBook/Addresses";
 
-import ReservationLayout from "./layouts/ReservationLayout";
-import Login from "./pages/Login";
-import Addresses from "./pages/addBook/Addresses";
-import WorklogLayout from "./layouts/WorklogLayout";
-import DayWorklogs from "./pages/worklog/DayWorklogs";
-import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
-import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
-import WeekWorklogs from "./pages/worklog/WeekWorklogs";
-import WeekWorklogDetail from "./pages/worklog/WeekWorklogDetail";
-import WeekWorklogInsert from "./pages/worklog/WeekWorklogInsert";
 import ScheduleLayout from "./layouts/ScheduleLayout";
 import Schedules from "./pages/schedule/Schedules";
-import Main from "./pages/Main";
+
+import ReservationLayout from "./layouts/ReservationLayout";
 import MyReservation from "./pages/reservation/MyReservation";
 import ReservationCalendar from "./pages/reservation/ReservationCalendar";
 import ReservationAssetManagement from "./pages/reservation/ReservationAssetManagement";
@@ -63,6 +54,9 @@ import WorklogLayout from "./layouts/WorklogLayout";
 import DayWorklogs from "./pages/worklog/DayWorklogs";
 import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
 import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
+import WeekWorklogs from "./pages/worklog/WeekWorklogs";
+import WeekWorklogDetail from "./pages/worklog/WeekWorklogDetail";
+import WeekWorklogInsert from "./pages/worklog/WeekWorklogInsert";
 
 import MessengerList from "./pages/messenger/MessengerList";
 import MessengerLayout from "./layouts/MessengerLayout";
@@ -123,6 +117,9 @@ function App() {
                 <Route path="day" element={<DayWorklogs/>}/>
                 <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
                 <Route path="day/insert" element={<DayWorklogInsert/>}/>
+                <Route path="week" element={<WeekWorklogs/>}/>
+                <Route path="week/:weekWorklogCode" element={<WeekWorklogDetail/>}/>
+                <Route path="week/insert" element={<WeekWorklogInsert/>}/>
               </Route>
               <Route path="attendance" element={<AttendanceLayout/>}>
                 <Route index element={<Attendance/>}/>
@@ -141,6 +138,9 @@ function App() {
               <Route path="messenger" element={<MessengerLayout />}>
                 <Route index="messengers" element={<MessengerList />} />
                 <Route index path="detail/:roomNum" element={<ChatRoom />} />
+              </Route>
+              <Route path="calendar" element={<ScheduleLayout/>}>
+                <Route path="month" element={<Schedules/>}></Route>
               </Route>
             </Route>
           </Route>

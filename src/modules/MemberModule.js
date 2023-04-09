@@ -11,13 +11,14 @@ const initialState = {
 export const POST_LOGIN = 'member/POST_LOGIN';
 export const GET_LIST = 'member/GET_LIST';
 export const GET_DETAIL = 'member/GET_DETAIL';
+export const GET_MEMEBER_INFO = 'member/GET_MEMEBER_INFO';
 
 // eslint-disable-next-line
 const actions = createActions({
     [POST_LOGIN]: () => { },
     [GET_LIST]: () => { },
-    [GET_DETAIL]: () => { }
-
+    [GET_DETAIL]: () => { },
+    [GET_MEMEBER_INFO] : () => {}
 });
 
 // 리듀서
@@ -39,9 +40,10 @@ const memberReducer = handleActions({
             ...state,
             memberDetail: payload
         }
-    }
-
-
+    },
+    [GET_MEMEBER_INFO] : (state, { payload }) => {
+        return payload
+        }
 }, initialState)
 
 export default memberReducer;
