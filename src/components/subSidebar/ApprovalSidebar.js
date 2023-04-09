@@ -31,7 +31,6 @@ function ApprovalSidebar() {
         // eslint-disable-next-line
     }, [])
     return (
-
         <div className={SidebarCSS.sidebarDiv}>
             <div className={SidebarCSS.sideHeader}>
                 <span>결재 대기</span>

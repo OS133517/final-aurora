@@ -5,7 +5,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // EditorState 처리를 위한 draft-js
 import { EditorState } from 'draft-js';
 import { useEffect, useState } from 'react';
-import { decodeJwt } from '../../../utils/tokenUtils';
+import { decodeJwt } from "../../../utils/tokenUtils";
 import { useDispatch, useSelector } from 'react-redux';
 import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
 import ApprovalLine from './ApprovalLine';

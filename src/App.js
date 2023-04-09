@@ -51,6 +51,10 @@ import DayWorklogs from "./pages/worklog/DayWorklogs";
 import DayWorklogDetail from "./pages/worklog/DayWorklogDetail";
 import DayWorklogInsert from "./pages/worklog/DayWorklogInsert";
 import AttendanceModify from './pages/attendance/AttnedanceModify';
+import ApprovalWait from "./pages/approval/ApprovalWait";
+import MessengerList from "./pages/messenger/MessengerList";
+import MessengerLayout from "./layouts/MessengerLayout";
+import ChatRoom from "./components/form/messenger/ChatRoom";
 
 
 function App() {
@@ -90,6 +94,7 @@ function App() {
                 <Route index="approvals" element={<Approvals />} />
                 <Route index path="pending" element={<Pending />} />
                 <Route index path="waiting" element={<ApprovalWait />} />
+                <Route index path="waiting" element={<ApprovalWait />} />
                 <Route index path="draft" element={<ApprovalDraft />} />
                 <Route index path="detail/:appCode" element={<ApprovalDetail />} />
                 <Route index path="form/:docCode" element={<DraftForm />} />
@@ -121,6 +126,10 @@ function App() {
                 <Route path="survey-management" element={<SurveyManagement/>}/>
                 <Route path="survey-management/regist" element={<SurveyRegist/>}/>
                 <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate/>}/>
+              </Route>
+              <Route path="messenger" element={<MessengerLayout />}>
+                <Route index="messengers" element={<MessengerList />} />
+                <Route index path="detail/:roomNum" element={<ChatRoom />} />
               </Route>
             </Route>
           </Route>

@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import addBookReducer from './AddBookModule';
 import memberReducer from './MemberModule';
 import reservationReducer from './ReservationModule';
@@ -8,6 +8,7 @@ import hrmReducer from './HrmModule'
 import dayWorklogReducer from './DayWorklogModule';
 import surveyReducer from './SurveyModule';
 import attendanceReducer from './AttendanceModule';
+import messengerReducer from './MessengerModule';
 
 const rootReducer = combineReducers({
     addBookReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     reservationReducer,
     reportReducer,
     approvalReducer,
+    messengerReducer,
     dayWorklogReducer,
     surveyReducer,
     attendanceReducer

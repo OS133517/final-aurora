@@ -22,12 +22,12 @@ function Approvals() {
         // eslint-disable-next-line
     }, [])
     const writeMember = lastList;
-    for (const list of lastList) {
-        console.log('for of 문 :', list);
-    }
+    // for (const list of lastList) {
+    //     console.log('for of 문 :', list);
+    // }
     /** evnet */
-    console.log('lastList', writeMember);
-    console.log('code', code);
+    // console.log('lastList', writeMember);
+    // console.log('code', code);
 
     return (
         <div className={ApprovalCSS.mainList}>
@@ -47,7 +47,7 @@ function Approvals() {
                 </thead>
                 <tbody className={ApprovalCSS.tbodyStyle}>
                     {
-                        Array.isArray(lastList) && lastList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval} />))
+                        lastList.length > 0 && lastList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval} />))
                     }
                 </tbody>
             </table>
