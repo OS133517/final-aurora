@@ -83,8 +83,6 @@ function AddBookSidebar() {
             case 1: 
                 setFirstIsOpen(!firstIsOpen);
                 setTIsVisible(false);
-                setTManageIsOn(false);
-                setTIsVisible(false);
                 break;
             case 2: 
                 setSecondIsOpen(!secondIsOpen); 
