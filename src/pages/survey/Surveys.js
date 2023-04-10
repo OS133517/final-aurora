@@ -142,14 +142,13 @@ function Surveys() {
                             </button>
                     }
                     {pageNumber.map((num) => (
-                    <li key={num} onClick={() => setCurrentPage(num)}>
-                        <button
-                            style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                            className={ SurveysCSS.pagingBtn }
-                        >
-                            {num}
-                        </button>
-                    </li>
+                    <button
+                        key={num} onClick={() => setCurrentPage(num)}
+                        style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
+                        className={ SurveysCSS.pagingBtn }
+                    >
+                        {num}
+                    </button>
                     ))}
                     {
                         Array.isArray(surveyList) &&
