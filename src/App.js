@@ -39,6 +39,7 @@ function App() {
             </Route>
 
             <Route path="survey" element={<SurveyLayout/>}>
+              <Route index element={<Surveys/>}/>
               <Route path="list" element={<Surveys/>}/>
               <Route path="survey-management" element={<SurveyManagement/>}/>
               <Route path="survey-management/regist" element={<SurveyRegist/>}/>

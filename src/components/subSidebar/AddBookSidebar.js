@@ -84,7 +84,7 @@ function AddBookSidebar() {
     }
 
     const onClickInsert = (onOff) => {
-
+        
         switch(onOff) {
             case 't' :
                 if(tIsVisible && newTGroupName.trim().length !== 0) {

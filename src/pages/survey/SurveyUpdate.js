@@ -64,6 +64,7 @@ function SurveyUpdate() {
                 window.location.reload(true); 
             })
         }
+    // eslint-disable-next-line
     }, [surveyResult])
 
     useEffect(() => {
@@ -272,6 +273,7 @@ function SurveyUpdate() {
             if(item.questionBody === null || item.questionBody === '') {
                 emptyOnes.push(index)
             }
+            return item;
         })
 
         questions.map(item => {
@@ -279,7 +281,9 @@ function SurveyUpdate() {
                 if(item2.choiceBody === null || item2.choiceBody === '') {
                     choices++;
                 }
+                return item2;
             })
+            return item;
         });
 
         if(form.surveySubject === null || form.surveySubject === '') {
