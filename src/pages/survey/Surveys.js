@@ -60,10 +60,10 @@ function Surveys() {
             });
 
             return;
-        } else if(survey.replyStatus === 'Y') {
+        } else if(new Date(`${survey.startDate} 06:00`).getTime() > new Date().getTime()) {
             Swal.fire({
                 icon : 'warning',
-                text : '이미 답변한 설문입니다.'
+                text : '아직 답변할 수 없습니다.'
             })
 
             return;
@@ -108,8 +108,8 @@ function Surveys() {
                                     <td>{item.surveySubject}</td>
                                     <td>{item.startDate}&nbsp;~&nbsp;{item.endDate}</td>
                                     <td>
-                                        <span style={new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
-                                            {new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? '마감':'진행중'}
+                                        <span style={new Date(`${survey.startDate} 06:00`).getTime() > new Date().getTime()?{backgroundColor:'#3297f7'}:new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
+                                            {new Date(`${survey.startDate} 06:00`).getTime() > new Date().getTime()? '진행 전':new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? '마감':'진행중'}
                                         </span>
                                     </td>
                                     <td>

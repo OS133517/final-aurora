@@ -5,7 +5,10 @@ import { POST_SURVEY,
          POST_SURVEY_REPLY,
          DELETE_SURVEYS,
          GET_SURVEY,
-         PUT_SURVEY } from "../modules/SurveyModule";
+         PUT_SURVEY,
+         DELETE_QUESTIONS,
+         GET_SURVEY_REPLY_DETAIL, 
+         INIT_ACTION} from "../modules/SurveyModule";
 
 export const callSurveyRegistAPI = ({form, questions}) => {
 
@@ -175,7 +178,7 @@ export const callSurveyForUpdateAPI = ({surveyCode}) => {
     }
 }
 
-export const callSurveyUpdateAPI = ({form, questions}) => {
+export const callSurveyUpdateAPI = ({form}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/survey`;
     const TIME_ZONE = 9 * 60 * 60 * 1000; 
@@ -193,8 +196,7 @@ export const callSurveyUpdateAPI = ({form, questions}) => {
                 surveyCode : form.surveyCode,
                 surveySubject : form.surveySubject,
                 startDate : new Date(form.startDate.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
-                endDate : new Date(form.endDate.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
-                questions : questions
+                endDate : new Date(form.endDate.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5)
             })
         }).then(response => response.json());
 
@@ -204,3 +206,58 @@ export const callSurveyUpdateAPI = ({form, questions}) => {
         }
     }
 }
+
+export const callQuestionDeleteAPI = ({questionNos}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/survey/questions`;
+    
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "DELETE",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify({
+                questionNos : questionNos
+            })
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[SurveyAPICalls] callQuestionDeleteAPI RESULT', result);
+            dispatch({type : DELETE_QUESTIONS, payload : result});
+        }
+    }
+}
+
+export const callSruveyReplyDetailAPI = ({surveyCode, memberCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/survey/member/${memberCode}?surveyCode=${surveyCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        }).then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[SurveyAPICalls] callSruveyReplyDetailAPI RESULT', result);
+            dispatch({type : GET_SURVEY_REPLY_DETAIL, payload : result.data});
+        }
+    }
+}
+
+export function callInitAction() {
+    console.log('이거 되는건가?');
+    return {
+      type: INIT_ACTION,
+      payload : ''
+    };
+  }

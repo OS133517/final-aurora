@@ -290,8 +290,6 @@ function Addresses({category = "전체 주소록"}) {
                 dispatch(callAddBookDeleteAPI({
                     addBookNos : deleteList
                 }));
-            } else {
-                Swal.fire('취소되었습니다.');
             }
         })
     }
