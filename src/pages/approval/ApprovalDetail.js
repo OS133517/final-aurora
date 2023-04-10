@@ -80,6 +80,7 @@ function ApprovalDetail() {
 
     // 결재상태가 변경될 때 마다 approvalLineStatus배열에 저장
     useEffect(() => {
+        // const const
         if (detailInfo?.approvalLine) {
             // appStatus 상태들만 모아둔 배열
             const newApprovalLineStatus = detailInfo.approvalLine.map(line => line.appStatus);
@@ -97,16 +98,15 @@ function ApprovalDetail() {
                     appCode: paramAppCode.appCode,
                     appStatus: 'w'
                 }));
-            } else if (approvalLineStatus.some(status => status === "y")) {
+            } else if (approvalLineStatus.some(status => status === "y") && approvalLineStatus.some(status => status === "n")) {
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'p'
                 }));
             }
         }
-        console.log('approvalLineStatus', approvalLineStatus);
         //eslint-disable-next-line
-    }, [detailInfo?.approvalLine, approvalLineStatus]);
+    }, [detailInfo?.approvalLine]);
 
     useEffect(() => {
         if (responseStatus === 200) {

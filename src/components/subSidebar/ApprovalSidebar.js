@@ -59,7 +59,7 @@ function ApprovalSidebar() {
                         <>
                             <ul className={SidebarCSS.approvalList}>
                                 <li>
-                                    <NavLink to="/aurora/approval/pending" className={SidebarCSS.approvalItem}>미결재</NavLink>
+                                    <NavLink to="/aurora/approval/pending" className={SidebarCSS.approvalItem}>진행중</NavLink>
                                 </li>
                                 <li>
                                     <NavLink className={SidebarCSS.approvalItem}>결재완료</NavLink>
