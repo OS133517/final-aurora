@@ -50,6 +50,16 @@ export default function AttendanceModify() {
                 truancy: document.getElementById('truancy').checked ? 'Y' : 'N',
                 absence: document.getElementById('absence').checked ? 'Y' : 'N',
               };
+
+              if (
+                attendance.tardy === "N" &&
+                attendance.earlyOff === "N" &&
+                attendance.truancy === "N" &&
+                attendance.absence === "N"
+              ) {
+                Swal.showValidationMessage("근태를 선택해 주세요.");
+                return;
+              }
         
               return attendance;
             },
