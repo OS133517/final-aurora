@@ -19,7 +19,7 @@ export default function Attendance() {
     const dispatch = useDispatch();
     const attendanceStatus = useSelector(state => state.attendanceReducer.attendanceStats);
     const monthTime = useSelector(state => state.attendanceReducer.workHours);
-    const remainVacation = useSelector(state => state.attendanceReducer.vacation);
+    const remainVacation = useSelector(state => state.attendanceReducer?.vacation);
     const memberInfo = useSelector(state => state.hrmReducer?.memberDetail);
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
     const memberCode = loginMember.memberCode;
@@ -43,7 +43,7 @@ export default function Attendance() {
     console.log("workStatus", workStatus);
     console.log("attendanceStatus" ,attendanceStatus);
     console.log("monthTime", monthTime);
-    console.log("remainVacation", remainVacation);
+    remainVacation && console.log("remainVacation", remainVacation);
   
     const navLinkRef = useRef();
     
@@ -246,7 +246,7 @@ export default function Attendance() {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{remainVacation.REMAIN_VACATION}</td>
+                                        <td>{remainVacation?.REMAIN_VACATION}</td>
                                         <div>
                                         <button type='button' className={AttendanceCSS.VacationButton} onClick={handleClick}>휴가신청</button>
                                         <NavLink

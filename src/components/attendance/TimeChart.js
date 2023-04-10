@@ -85,4 +85,3 @@ export default function TimeChart({ hours, hours2}) {
 
       return <Bar data={data} options={options} />;
     };
-

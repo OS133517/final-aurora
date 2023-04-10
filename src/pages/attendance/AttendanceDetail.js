@@ -53,7 +53,7 @@ export default function AttendanceDetail() {
     
 
     //이번주 총 근무 시간
-    const totalWeek = workHoursDetail.worked_minutes_this_week;
+    const totalWeek = workHoursDetail?.worked_minutes_this_week;
     console.log("totalWeek", totalWeek);
     const totalWeekHours = Math.floor(totalWeek / 60);
     const totalWeekMinutes = totalWeek % 60;
@@ -61,21 +61,21 @@ export default function AttendanceDetail() {
     console.log("totalWorkedWeek" ,totalWorkedWeek);
 
     //이번주 초과 
-    const extraWeek = workHoursDetail.extra_worked_minutes;
+    const extraWeek = workHoursDetail?.extra_worked_minutes;
     console.log("extraWeek", extraWeek);
     const extraWeekHours = Math.floor(extraWeek / 60);
     const extraWeekMinutes = extraWeek % 60;
     const extraWorkedWeek = `${extraWeekHours||0}시간 ${extraWeekMinutes||0}분`;
 
     //이번주 잔여
-    const remainWeek = workHoursDetail.remaining_minutes;
+    const remainWeek = workHoursDetail?.remaining_minutes;
     console.log("remainWeek", remainWeek);
     const remainWeekHours = Math.floor(remainWeek / 60);
     const remainWeekMinutes = remainWeek % 60;
     const remainWorkedWeek = `${remainWeekHours||0}시간 ${remainWeekMinutes||0}분`;
 
     //이번달 누적
-    const totalMonth = workHoursDetail.worked_minutes_this_month;
+    const totalMonth = workHoursDetail?.worked_minutes_this_month;
     console.log("totalMonth", totalMonth);
     const totalMonthHours = Math.floor(totalMonth / 60);
     const totalMonthMinutes = totalMonth % 60;
@@ -85,8 +85,8 @@ export default function AttendanceDetail() {
       const date = e.target.value;
       setSelectedDate(date);
 
-      setWorkStart(workHours.WORK_TIME);
-      setWorkEnd(workHours.OFF_TIME);
+      setWorkStart(workHours?.WORK_TIME);
+      setWorkEnd(workHours?.OFF_TIME);
     };
 
     useEffect(() => {
