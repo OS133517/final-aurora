@@ -178,7 +178,7 @@ export const callSurveyForUpdateAPI = ({surveyCode}) => {
     }
 }
 
-export const callSurveyUpdateAPI = ({form, questions}) => {
+export const callSurveyUpdateAPI = ({form}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/survey`;
     const TIME_ZONE = 9 * 60 * 60 * 1000; 
@@ -196,8 +196,7 @@ export const callSurveyUpdateAPI = ({form, questions}) => {
                 surveyCode : form.surveyCode,
                 surveySubject : form.surveySubject,
                 startDate : new Date(form.startDate.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
-                endDate : new Date(form.endDate.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
-                questions : questions
+                endDate : new Date(form.endDate.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5)
             })
         }).then(response => response.json());
 

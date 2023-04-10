@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { callQuestionDeleteAPI, callSurveyForUpdateAPI, callSurveyRegistAPI, callSurveyUpdateAPI } from "../../apis/SurveyAPICall";
 
 function SurveyUpdate() {
@@ -14,6 +14,7 @@ function SurveyUpdate() {
     const {surveyCode} = useParams();
     const scrollRef = useRef();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const survey = useSelector(state => state.surveyReducer.survey);
     const [questions, setQuestions] = useState([{
@@ -26,8 +27,6 @@ function SurveyUpdate() {
             choiceBody : '' 
         }]
     }]);
-    const [deleteQuestions, setDeleteQuestions] = useState([]);
-    const [deleteChoices, setDeleteChoices] = useState([]);
     const [form, setForm] = useState({
         surveyCode : "",
         surveySubject : "",
@@ -55,13 +54,7 @@ function SurveyUpdate() {
     useEffect(() => {
 
         if(surveyResult.status === 200) {
-            Swal.fire({
-                icon : 'success',
-                text : surveyResult.message,
-                confirmButtonText : '확인'
-            }).then(() => {
-                window.location.reload(true); 
-            })
+            navigate("/aurora/survey/survey-management", { replace: true});
         } else if(surveyResult.status === 400) {
             Swal.fire({
                 icon : "error",
@@ -106,7 +99,7 @@ function SurveyUpdate() {
     };
 
     // 질문 삭제 버튼
-    const onClickQuestionDelete = () => {
+    const onClickQuestionDelete = (questionNo) => {
 
         if(questions.length === 1) {
             Swal.fire({
@@ -116,10 +109,11 @@ function SurveyUpdate() {
 
             return;
         }
-        questions.pop();
+
+        const deleteQuestions = questions.filter(item => item.questionNo !== questionNo);
 
         setNextNo(nextNo + 1);
-        setQuestions(questions);
+        setQuestions(deleteQuestions);
     }
 
     // 질문 추가 버튼
@@ -128,14 +122,6 @@ function SurveyUpdate() {
         const newOne = questions.map(item => {
 
             if(item.questionNo === questionNo) {
-                if(item.choices.length === 5) {
-                    Swal.fire({
-                        icon : 'warning',
-                        text : '최대 보기 수 입니다.'
-                    })
-
-                    return item;
-                }
                 item.choices = item.choices.concat({
                     choiceBody : '' 
                 })  
@@ -246,23 +232,88 @@ function SurveyUpdate() {
         setQuestions(newQuestions);
     }
 
+    // 자동 생성 버튼
+    const onClickAutoButton = (questionNo, amount) => {
+
+        let newQuestions = questions.map(item => {
+                if(item.questionNo === questionNo) {
+                    switch(amount) {
+                        case 2 : 
+                            item.choices = [{choiceBody : '아니오'}, {choiceBody : '예'}];
+                            break;
+                        case 3 : 
+                            item.choices = [{choiceBody : '그렇지 않다.'}, {choiceBody : '보통이다'}, {choiceBody : '그렇다'}];
+                            break;
+                        case 4 :
+                            item.choices = [{choiceBody : '매우 아니다.'}, {choiceBody : '조금 아니다.'}, {choiceBody : '조금 그렇다.'}, {choiceBody : '매우 그렇다'}];
+                            break;
+                        case 5 :
+                            item.choices = [{choiceBody : '매우 아니다.'}, {choiceBody : '조금 아니다.'}, {choiceBody : '보통이다.'},  {choiceBody : '조금 그렇다.'}, {choiceBody : '매우 그렇다'}];
+                            break;
+                        default : break;
+                    }
+                }
+                return item;
+            });
+        
+        setQuestions(newQuestions);
+    }
+
     // 설문 수정 버튼
     const onClickSave = () => {
 
         const originalQuestionNos = survey.questions.map(question => question.questionNo);
         const newQuestionNos = questions.filter(question => originalQuestionNos.indexOf(question.questionNo) === - 1);
         const deleteQuestionNos = originalQuestionNos.filter(original => questions.map(newOne => newOne.questionNo).indexOf(original) === - 1);
-        const remainQuestions = questions.filter(question => newQuestionNos.map(item => item.questionNo).indexOf(question.questionNo) === - 1).filter(question => deleteQuestionNos.indexOf(question.questionNo) === - 1);
-        const updateQuestions = [];
-        console.log('questions', questions.map(item => item.questionNo));
-        console.log('originalQuestionNos', originalQuestionNos);
-        console.log('newQuestionNos', newQuestionNos);
-        console.log('deleteQuestionNos', deleteQuestionNos);
-        console.log('remainQuestions',  remainQuestions);
+        const emptyOnes = [];   
+        let choices = 0;
+
+        questions.map((item, index) => {
+            if(item.questionBody === null || item.questionBody === '') {
+                emptyOnes.push(index)
+            }
+        })
+
+        questions.map(item => {
+            item.choices.map(item2 => {
+                if(item2.choiceBody === null || item2.choiceBody === '') {
+                    choices++;
+                }
+            })
+        });
+
+        if(form.surveySubject === null || form.surveySubject === '') {
+
+            Swal.fire({
+                icon : 'error',
+                text : '설문 주제를 적어주세요.'
+            })
+
+            return;
+        }
+
+        if(emptyOnes.length > 0) {
+
+            Swal.fire({
+                icon : 'error',
+                text : `${emptyOnes.map(item => item + 1)} 번 질문을 입력하세요.`
+            })
+
+            return;
+        }
+
+        if(choices !== 0) {
+
+            Swal.fire({
+                icon : 'error',
+                text : `빈 선택지가 있습니다.`
+            })
+
+            return;
+        }
 
         dispatch(callSurveyUpdateAPI({
-            form : form,
-            questions : updateQuestions
+            form : form
         }));
 
         newQuestionNos.length > 0 && dispatch(callSurveyRegistAPI({
@@ -337,10 +388,11 @@ function SurveyUpdate() {
                                             type="text" 
                                             id={`questionBody${question?.questionNo}`} 
                                             name="questionBody" 
-                                            value={question?.questionBody} 
+                                            value={question?.questionBody}
                                             maxLength='100'
+                                            disabled={question.questionNo > 0?true:false}
                                             onChange={onChangeHandler}/>
-                                        {index === questions.length - 1 && index !== 0 && <button onClick={() => onClickQuestionDelete(question.questionNo)} className={SurveyUpdateCSS.QXButtons}>X</button>}
+                                        <button onClick={() => onClickQuestionDelete(question.questionNo)} className={SurveyUpdateCSS.QXButtons}>X</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -348,10 +400,22 @@ function SurveyUpdate() {
                                         질문 타입
                                     </td>
                                     <td colSpan="2">
-                                        <select id={`questionType${question.questionNo}`} name="questionType" value={question.questionType} onChange={onChangeHandler}>
+                                        <select 
+                                            id={`questionType${question.questionNo}`} 
+                                            name="questionType" 
+                                            value={question.questionType} 
+                                            disabled={question.questionNo > 0?true:false}
+                                            onChange={onChangeHandler}>
                                             <option value='choice'>선택형</option>
                                             <option value='write'>서술형</option>
                                         </select>
+                                        {question.questionType === 'choice' && question.questionNo < 0 &&
+                                            <>
+                                                <button className={SurveyUpdateCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 2)}>2 개</button>
+                                                <button className={SurveyUpdateCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 3)}>3 개</button>
+                                                <button className={SurveyUpdateCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 4)}>4 개</button>
+                                                <button className={SurveyUpdateCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 5)}>5 개</button>
+                                            </>}
                                     </td>
                                 </tr>
                                 {question.questionType === 'choice' &&
@@ -367,12 +431,14 @@ function SurveyUpdate() {
                                                         name={`choiceBody${index}`} 
                                                         id={question?.questionNo} 
                                                         value={choice?.choiceBody||''}
+                                                        maxLength='50'
+                                                        disabled={question.questionNo > 0?true:false}
                                                         onChange={onChangeChoiceHandler}/>
                                                 </td>
                                                 {index === question.choices.length - 1 && 
                                                 <td>
-                                                    {index !== 0 && <button onClick={() => onClickChoiceDelete(question.questionNo)} className={SurveyUpdateCSS.CXButtons}>X</button>}
-                                                    <button className={SurveyUpdateCSS.addButtons} onClick={() => onClickChoiceHandler(question.questionNo)}> + 보기 추가</button>
+                                                    {index !== 0 && question.questionNo < 0 && <button onClick={() => onClickChoiceDelete(question.questionNo)} className={SurveyUpdateCSS.CXButtons}>X</button>}
+                                                    {question.questionNo < 0 && <button className={SurveyUpdateCSS.addButtons} onClick={() => onClickChoiceHandler(question.questionNo)}> + 보기 추가</button>}
                                                 </td>}
                                             </tr>
                                         ))}

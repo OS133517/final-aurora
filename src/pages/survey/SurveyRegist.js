@@ -7,11 +7,13 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callSurveyRegistAPI } from "../../apis/SurveyAPICall";
+import { useNavigate } from "react-router";
 
 function SurveyRegist() {
 
     const scrollRef = useRef();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const [questions, setQuestions] = useState([{
         questionNo : 1,
@@ -33,7 +35,7 @@ function SurveyRegist() {
                 text : surveyResult.message,
                 confirmButtonText : '확인'
             }).then(() => {
-                window.location.reload(true); 
+                navigate("/aurora/survey/survey-management", { replace: true});
             })
         } else if(surveyResult.status === 400) {
             Swal.fire({
@@ -99,14 +101,6 @@ function SurveyRegist() {
         const newQuestions = questions.map(item => {
 
             if(item.questionNo === questionNo) {
-                if(item.choices.length === 5) {
-                    Swal.fire({
-                        icon : 'warning',
-                        text : '최대 보기 수 입니다.'
-                    })
-
-                    return item;
-                }
                 item.choices = item.choices.concat({
                     choiceBody : '' 
                 })  
@@ -241,11 +235,59 @@ function SurveyRegist() {
 
     const onClickSave = () => {
 
+        const emptyOnes = [];
+        let choices = 0;
+
+        questions.map((item, index) => {
+            if(item.questionBody === null || item.questionBody === '') {
+                emptyOnes.push(index)
+            }
+        })
+
+        questions.map(item => {
+            item.choices.map(item2 => {
+                if(item2.choiceBody === null || item2.choiceBody === '') {
+                    choices++;
+                }
+            })
+        });
+        console.log(choices);
+
+        if(form.surveySubject === null || form.surveySubject === '') {
+
+            Swal.fire({
+                icon : 'error',
+                text : '설문 주제를 적어주세요.'
+            })
+
+            return;
+        }
+
         if(!isSelect) {
 
             Swal.fire({
                 icon : 'error',
                 text : '기간을 설정해주세요.'
+            })
+
+            return;
+        }
+
+        if(emptyOnes.length > 0) {
+
+            Swal.fire({
+                icon : 'error',
+                text : `${emptyOnes.map(item => item + 1)} 번 질문을 입력하세요.`
+            })
+
+            return;
+        }
+
+        if(choices !== 0) {
+
+            Swal.fire({
+                icon : 'error',
+                text : `빈 선택지가 있습니다.`
             })
 
             return;
@@ -360,6 +402,7 @@ function SurveyRegist() {
                                                         name={`choiceBody${index}`} 
                                                         id={question.questionNo} 
                                                         value={choice.choiceBody}
+                                                        maxLength='50'
                                                         onChange={onChangeChoiceHandler}/>
                                                 </td>
                                                 {index === question.choices.length - 1 && 
