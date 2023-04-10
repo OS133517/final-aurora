@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import SidebarCSS from "./SubSidebar.module.css";
 
 function WorklogSidebar() {
@@ -8,6 +8,7 @@ function WorklogSidebar() {
     // 드롭다운 메뉴 조정용
     const [firstIsOpen, setFirstIsOpen] = useState(false);
     const [secondIsOpen, setSecondIsOpen] = useState(false);
+    const navigate = useNavigate();
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -46,9 +47,8 @@ function WorklogSidebar() {
                             style = { ({ isActive }) => isActive? activeStyle : undefined }
                             to={"/aurora/worklog/day"}
                             >일일 업무일지</NavLink>
-                        <NavLink className={SidebarCSS.buttons}
-                        style={ ({ isActive }) => isActive? activeStyle : undefined }
-                        to={"/aurora/worklog/day/insert"}>일일업무 추가</NavLink>
+                        <button className={SidebarCSS.buttons}
+                        onClick={() => navigate("/aurora/worklog/day/insert")}>일일업무 추가</button>
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
@@ -64,9 +64,8 @@ function WorklogSidebar() {
                             style = { ({ isActive }) => isActive? activeStyle : undefined }
                             to={"/aurora/worklog/week"}
                             >주간 업무일지</NavLink>
-                        <NavLink className={SidebarCSS.buttons}
-                        style={ ({ isActive }) => isActive? activeStyle : undefined }
-                        to={"/aurora/worklog/week/insert"}>주간업무 추가</NavLink>
+                        <button className={SidebarCSS.buttons}
+                        onClick={() => navigate("/aurora/worklog/week/insert")}>주간업무 추가</button>
                         </div>
                         )}
                 </div>
