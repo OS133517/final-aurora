@@ -1,0 +1,90 @@
+.vacationDiv {
+    width: 100%;
+  
+}
+
+.vacationHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 20px;
+}
+
+.topContentWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-top: 13%;
+}
+
+.topContentTitle {
+    position: absolute;
+    top: -10%;
+    left: 13%;
+}
+
+.topContainer {
+    width: 100%;
+    height: 27%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.lowContainer {
+    width: 100%;
+    height: 37%;
+    
+}
+
+.topContent {
+    border: 1px solid black;
+    width: 75%;
+    height: 60%;
+    margin: 0 auto;
+    position: relative;
+
+   
+}
+
+.buttonWrapper {
+    position: absolute;
+    right: 200px;
+    bottom: 60px;
+}
+
+.VacationButton{
+    margin-top: 34%;
+    display: block;
+    margin-left: 10px;
+    box-sizing: border-box;
+    width: 93px;
+    height: 50px;
+    margin-left: 4px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.inBox {
+    width: 25%;
+    border: 1px solid black;
+    height: 120px;
+
+}
+
+.topBox {
+    margin-top: 3%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
