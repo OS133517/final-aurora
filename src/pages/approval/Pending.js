@@ -25,7 +25,6 @@ function Pending() {
                 <table className={ApprovalCSS.approvalTable}>
                     <thead className={ApprovalCSS.theadStyle}>
                         <tr>
-                            <td> <input type="checkBox" name="deleteCheck" value="deleteCheck" /></td>
                             <td className={ApprovalCSS.title}>양식명</td>
                             <td>제목</td>
                             <td>만기일</td>

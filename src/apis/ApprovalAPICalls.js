@@ -6,8 +6,6 @@ import { GET_APPROVALS, GET_PENDING, GET_COMPLETED, GET_DETAIL, POST_APPROVALS, 
 // 최근 미결재 서류 목록 출력
 export const callGetApprovalsAPI = ({ memberCode }) => {
   //임시 
-  console.log('callGetApprovalsAPI', memberCode);
-  console.log('callGetApprovalsAPI', typeof memberCode);
   const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/approvals/${memberCode}`;
 
   return async (dispatch, getState) => {
@@ -34,6 +32,7 @@ export const callGetApprovalsAPI = ({ memberCode }) => {
   };
 }
 
+// 결재 상세정보 출력
 export const callApprovalDetailAPI = ({ appCode }) => {
 
   const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/approvals/detail/${appCode}`;
@@ -228,7 +227,7 @@ export const callPutApprovalLine = ({ appCode, approvalDTO, appStatus }, setResp
         })
       })
       setResponseStatus(response.status);
-
+      console.log('확인', response.status);
       const result = await response.json();
 
       console.log('[callPutApprovalLine] RESULT', result);
@@ -241,10 +240,46 @@ export const callPutApprovalLine = ({ appCode, approvalDTO, appStatus }, setResp
   }
 
 }
+// 결재 서류 상태 수정
+export const callPutApprovalAPI = ({ appCode, appStatus }) => {
+  const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/approvals/${appCode}`;
+  try {
 
+    //eslint-disable-next-line
+    const token = "Bearer " + window.localStorage.getItem("accessToken");
+    return async (dispatch, getState) => {
+
+      const response = await fetch(requestURL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "*/*",
+          "Authorization": token
+        },
+        body: JSON.stringify({
+          appCode: appCode,
+          appStatus: appStatus
+
+        })
+      })
+
+      const result = await response.json();
+
+      console.log('[callPutApprovalAPI] RESULT', result);
+    }
+
+  } catch (error) {
+    console.error("callPutApprovalAPI 에서 오류 발생 : ", error);
+  }
+
+}
+
+// 결재 서류 삭제
 export const callDeleteApprovalAPI = ({ appCode }) => {
   const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/approvals/${appCode}`;
   try {
+
+    //eslint-disable-next-line
     const token = "Bearer " + window.localStorage.getItem("accessToken");
     return async (dispatch, getState) => {
 
