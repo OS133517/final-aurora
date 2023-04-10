@@ -110,9 +110,7 @@ function ReservationAssetManagement() {
                 dispatch(callAssetDeleteAPI({
                     assetCodes : deleteList
                 }));
-            } else {
-                Swal.fire('취소되었습니다.');
-            }
+            } 
         })
     }
 
