@@ -241,7 +241,7 @@ function SurveyManagement() {
                                     <input type="checkBox" id={`checkBox${survey.surveyCode}`}/>
                                 </td>
                                 <td>{survey.surveyCode}</td>
-                                <td>{survey.surveySubject}</td>
+                                <td onClick={(e) => {e.preventDefault(); navigate(`/aurora/survey/survey-management/${survey.surveyCode}`);}}>{survey.surveySubject}</td>
                                 <td>{survey.startDate}&nbsp;~&nbsp;{survey.endDate}</td>
                                 <td>{Math.floor(survey.replyStatus)} %</td>
                                 <td>
