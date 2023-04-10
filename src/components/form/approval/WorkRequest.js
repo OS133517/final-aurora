@@ -9,6 +9,7 @@ import { decodeJwt } from "../../../utils/tokenUtils";
 import { useDispatch, useSelector } from 'react-redux';
 import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
 import ApprovalLine from './ApprovalLine';
+import { callMemberDetailAPI } from '../../../apis/MemberAPICall';
 
 function WorkRequest(props) {
     // 선언부 //
@@ -24,7 +25,8 @@ function WorkRequest(props) {
     // url 
     const { docCode } = props;
     const docNum = Number(docCode) + 1;
-
+    /** useSelector */
+    const memberName = useSelector(state => state.memberReducer.memberDetail);
     /** useState */
     // http 상태
     const [responseStatus, setResponseStatus] = useState(null);
@@ -33,8 +35,10 @@ function WorkRequest(props) {
         docCode: docNum,
         appTitle: '',
         appDescript: '',
+        appStartDate: todayString,
         appEndDate: todayString,
-        appOpen: 'n',
+        appStatus: 'n',
+        appOpen: 'n'
 
     });
 
@@ -63,7 +67,6 @@ function WorkRequest(props) {
     /** 클릭, 변경 이벤트 처리 */
     const submitEvent = () => {
 
-        console.log('form :', form);
         // dispatch
         dispatch(callPostApprovalAPI({
             form: form
@@ -84,6 +87,11 @@ function WorkRequest(props) {
         window.history.back();
     }
 
+    useEffect(() => {
+        dispatch(callMemberDetailAPI({ memberCode: memberCode }));
+        //eslint-disable-next-line
+    }, []);
+
     /** useEffect */
     useEffect(() => {
         if (docCode !== undefined) {
@@ -91,7 +99,7 @@ function WorkRequest(props) {
         }
     }, [docCode]);
 
-    // console.log('responseStatus : ', responseStatus);
+    // console.log('memberName : ', memberName);
     return (
         <div className={workRequestCSS.detailBox}>
             {!isEdit ? <div></div> : <div className={workRequestCSS.nextStep}>
@@ -126,6 +134,7 @@ function WorkRequest(props) {
                                 작성자
                             </td>
                             <td className={workRequestCSS.description}>
+                                {memberName?.memberDTO?.memberName}
                             </td>
                         </tr>
                         <tr>
