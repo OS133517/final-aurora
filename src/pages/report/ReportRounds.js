@@ -30,6 +30,7 @@ function ReportRounds() {
         roundTitle : "",
         roundBody : ""
     });
+    const [key, setKey] = useState(window.location.pathname);
 
     // 보고 회차 목록 데이터
     const reportRoundData = useSelector(state => state.reportReducer.reportRoundData);
@@ -49,14 +50,18 @@ function ReportRounds() {
     if(pageInfo) {
 
         for(let i = 1; i <= pageInfo.endPage; i++) {
+
             pageNumber.push(i);
         }
     }
 
-    const isInCharge = reportDTO && (loginMember == reportDTO.memberCode)
+    const isInCharge = reportDTO && (loginMember == reportDTO.memberCode);
+    const isCompleted = reportDTO && reportDTO.completionStatus == 'Y';
 
     // 목록 조회 
     useEffect(() => {
+
+        updateUrl();
 
         dispatch(callSelectReportRoundListAPI({
 
@@ -66,6 +71,30 @@ function ReportRounds() {
         setReportUpdated(false);
     // eslint-disable-next-line
     }, [currentPage, reportCode, reportUpdated])
+
+    // url 변경 감지 렌더링
+    useEffect(() => {
+
+        const onLocationChange = () => {
+            setKey(window.location.pathname);
+        };
+    
+        window.addEventListener('popstate', onLocationChange);
+        window.addEventListener('pushState', onLocationChange);
+    
+        return () => {
+            
+            window.removeEventListener('popstate', onLocationChange);
+            window.removeEventListener('pushState', onLocationChange);
+        };
+    }, []);
+
+    const updateUrl = () => {
+
+        const updatedUrl = `/aurora/reports/${reportCode}/rounds?offset=${currentPage}`;
+
+        navigate(updatedUrl);
+    };
 
     // 보고 삭제 
     const deleteReport = async () => {
@@ -100,11 +129,6 @@ function ReportRounds() {
         navigate(`/aurora/reports/${reportCode}/rounds/${roundCode}`)
     }
 
-    // 보고 회차 등록 
-    const registerReportRound = () => {
-
-    }
-
     // 모달 
     const openModal = () => {
 
@@ -116,21 +140,34 @@ function ReportRounds() {
         setModalIsOpen(false);
     };
     
+    // 보고 회차 작성 
     const handleSubmit = async (e) => {
 
         e.preventDefault();
-        // reportRoundData && console.log("reportRoundInputValue : " + JSON.stringify(reportRoundInputValue));
+    
+        // roundTitle값이 NULL이거나 공백인 경우 검증
+        if (!reportRoundInputValue.roundTitle || reportRoundInputValue.roundTitle.trim() === "") {
 
+            warningAlert("보고 회차 제목을 입력해주세요.");
+            return;
+        }
+        // roundBody값이 NULL이거나 공백인 경우 검증
+        if (!reportRoundInputValue.roundBody || reportRoundInputValue.roundBody.trim() === "") {
+
+            warningAlert("보고 회차 내용을 입력해주세요.");
+            return;
+        }
         dispatch(callRegisterReportRoundAPI({
-            
-                reportCode : reportDTO.reportCode,
-                roundTitle : reportRoundInputValue.roundTitle,
-                roundBody : reportRoundInputValue.roundBody
-        }))
+
+            reportCode: reportDTO.reportCode,
+            roundTitle: reportRoundInputValue.roundTitle,
+            roundBody: reportRoundInputValue.roundBody
+        }));
         setReportUpdated(!reportUpdated);
         closeModal();
     };
 
+    // 보고 회차 생성 입력값 체인지핸들러 
     const onChangeHandler = (e) => {
 
         const { name, value } = e.target;
@@ -139,6 +176,27 @@ function ReportRounds() {
             ...prevState,
             [name]: value
         }));
+    };
+
+    // 성공 알림 
+    const successAlert = (message) => {
+
+        Swal.fire({
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+        });
+    };
+
+    // 경고 실패 알림 
+    const warningAlert = (message) => {
+
+        Swal.fire({
+            icon: 'warning',
+            title: '경고',
+            text: message,
+            confirmButtonText: '확인',
+        });
     };
 
     return (
@@ -177,7 +235,6 @@ function ReportRounds() {
                             <div className={ReportsCSS.buttonContainer}>
                                 <button 
                                     type="submit"
-                                    onClick={() => registerReportRound()}
                                     className={ReportsCSS.greentButton}
                                 >
                                     작성
@@ -202,40 +259,40 @@ function ReportRounds() {
                         </span>
                         {/* 버튼 컨테이너 */}
                         <div className={ReportsCSS.headerButtonDiv}>
-                            {/* {isInCharge && */}
-                                <button
-                                    className={ReportsCSS.redButton}
-                                    onClick={() => {
-                                        deleteReport()
-                                    }}
-                                >
-                                    <span>보고 완료</span> 
-                                </button>
-                                <button 
-                                    className={ReportsCSS.greentButton}
-                                    onClick={() => {
-                                        navigate('/aurora/reports/edit', { state: { isEdit: true, reportCode: reportDTO.reportCode } });
-                                    }}
-                                >
-                                    보고 수정
-                                </button>
-                                <button
-                                    className={ReportsCSS.greentButton}
-                                    onClick={() => {
-                                        openModal()
-                                        // registerReportRound();
-                                        // setIsDetailReportInputVisible(!isDetailReportInputVisible);
-                                    }}
-                                >
-                                    <span>회차 추가</span>
-                                </button>
-                            {/* } */}
-                            <button 
+                            {!isCompleted && isInCharge &&
+                                <>
+                                    <button
+                                        className={ReportsCSS.redButton}
+                                        onClick={() => {
+                                            deleteReport()
+                                        }}
+                                    >
+                                        <span>보고 완료</span> 
+                                    </button>
+                                    <button 
+                                        className={ReportsCSS.greentButton}
+                                        onClick={() => {
+                                            navigate('/aurora/reports/edit', { state: { isEdit: true, reportCode: reportDTO.reportCode } });
+                                        }}
+                                    >
+                                        <span>보고 수정</span> 
+                                    </button>
+                                    <button
+                                        className={ReportsCSS.greentButton}
+                                        onClick={() => {
+                                            openModal()
+                                        }}
+                                    >
+                                        <span>회차 추가</span>
+                                    </button>
+                                </>
+                            } 
+                            {/* <button 
                                 className={ReportsCSS.greentButton}
-                                onClick={() => navigate(-1)}
+                                onClick={() => navigate(-2)}
                             >
                                 뒤로 가기
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                     {/* 보고 목록 컨테이너 */}
@@ -269,7 +326,7 @@ function ReportRounds() {
                                     <th>직급</th> */}
                                 </tr>
                             </thead>
-                            <tbody>
+                            {/* <tbody>
                                 {Array.isArray(reportRoundList) && reportRoundList.map((reportRound) => (
                                     <tr
                                         key={reportRound.roundCode} 
@@ -287,42 +344,76 @@ function ReportRounds() {
                                             }
                                         </td>
                                         <td className={ReportsCSS.columnTextAlignTd}>{reportRound.reportedMemberCount} / {reportRound.capacity}</td>
-                                        {/* <td>{reportRound.memberDTO.deptName}</td>
-                                        <td>{reportRound.memberDTO.memberName}</td>
-                                        <td>{reportRound.memberDTO.jobName}</td> */}
                                     </tr>
                                 ))}
+                            </tbody> */}
+                            <tbody>
+                                {Array.isArray(reportRoundList) && reportRoundList.length > 0 ? (
+                                    reportRoundList.map((reportRound) => (
+                                    <tr
+                                        key={reportRound.roundCode}
+                                        id={reportRound.roundCode}
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() =>
+                                            onClickRoundHandler(reportRound.reportCode, reportRound.roundCode)
+                                        }
+                                    >
+                                        <td>{reportRound.regDate}</td>
+                                        <td>
+                                        {reportRound.roundTitle}
+                                        {reportRound.replyCount != 0 && (
+                                            <span className={ReportsCSS.replyCount}>
+                                                &nbsp;[{reportRound.replyCount}]
+                                            </span>
+                                        )}
+                                        </td>
+                                        <td className={ReportsCSS.columnTextAlignTd}>
+                                            {reportRound.reportedMemberCount} / {reportRound.capacity}
+                                        </td>
+                                    </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={3} style={{ textAlign: "center" }}>
+                                            조회된 정기보고 회차 목록이 없습니다.
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
-                        <div className={ ReportsCSS.pagingBtnDiv }>
-                            { Array.isArray(reportRoundList) &&
-                                <button 
-                                    onClick={() => setCurrentPage(currentPage - 1)} 
-                                    disabled={currentPage === 1}
-                                    className={ ReportsCSS.pagingBtn }
-                                >
-                                    &lt;
-                                </button>
-                            }
-                            {pageNumber.map((num) => (
-                                <li key={num} onClick={() => setCurrentPage(num)}>
+                        {/* 페이징 버튼 */}
+                        <div className={ReportsCSS.pagingBtnDiv}>
+                            {Array.isArray(reportRoundList) && (
+                                <>
                                     <button
-                                        style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                                        className={ ReportsCSS.pagingBtn }
+                                        onClick={() => setCurrentPage(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className={ReportsCSS.pagingBtn}    
                                     >
-                                        {num}
+                                        &lt;
                                     </button>
-                                </li>
-                            ))}
-                            { Array.isArray(reportRoundList) &&
-                                <button 
-                                    onClick={() => setCurrentPage(currentPage + 1)} 
-                                    disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
-                                    className={ ReportsCSS.pagingBtn }
-                                >
-                                    &gt;
-                                </button>
-                            }
+                                    {pageNumber.map((num) => (
+                                        <li 
+                                            key={num} 
+                                            onClick={() => setCurrentPage(num)}
+                                        >
+                                            <button
+                                                style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
+                                                className={ReportsCSS.pagingBtn}
+                                            >
+                                                {num}
+                                            </button>
+                                        </li>
+                                    ))}
+                                    <button
+                                        onClick={() => setCurrentPage(currentPage + 1)}
+                                        disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
+                                        className={ReportsCSS.pagingBtn}
+                                    >
+                                        &gt;
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

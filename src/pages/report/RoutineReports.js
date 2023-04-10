@@ -11,20 +11,16 @@ function RoutineReports() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // const location = useLocation();
     
     const [currentPage, setCurrentPage] = useState(1);
     const [isCompleted, setIsCompleted] = useState('N');
-    // const [isFirstRender, setIsFirstRender] = useState(true);
+    const [key, setKey] = useState(window.location.pathname);
 
-    // 정기보고 데이터 
-    const routineReportData = useSelector(state => state.reportReducer.routineReportList)
+    const routineReportData = useSelector(state => state.reportReducer.routineReportList); // 정기보고 데이터 
     // console.log("routineReportData : " + JSON.stringify(routineReportData));
-    // 정기보고 목록 
-    const routineReportList = routineReportData.data;
+    const routineReportList = routineReportData.data; // 정기보고 목록 
     // console.log("routineReportList : " + JSON.stringify(routineReportList));
-    // 정기보고 페이지 정보 
-    const pageInfo = routineReportData.pageInfo;
+    const pageInfo = routineReportData.pageInfo; // 정기보고 페이지 정보 
     // console.log("pageInfo : " + JSON.stringify(pageInfo));
 
     const pageNumber = [];
@@ -37,6 +33,7 @@ function RoutineReports() {
         }
     }
 
+    // 페이지 번호, 완료 토글 여부에 따라 렌더링
     useEffect(() => {
 
         updateUrl();
@@ -48,9 +45,29 @@ function RoutineReports() {
         }));
       }, [currentPage, isCompleted]);
 
+    // url 변경 감지 렌더링
+    useEffect(() => {
+
+        const onLocationChange = () => {
+
+            setKey(window.location.pathname);
+        };
+    
+        window.addEventListener('popstate', onLocationChange);
+        window.addEventListener('pushState', onLocationChange);
+    
+        return () => {
+
+            window.removeEventListener('popstate', onLocationChange);
+            window.removeEventListener('pushState', onLocationChange);
+        };
+    }, []);
+
+    // URL 변경 
     const updateUrl = () => {
 
         const updatedUrl = `/aurora/reports/routines?completionStatus=${isCompleted}&offset=${currentPage}`;
+
         navigate(updatedUrl);
     };
     
@@ -63,13 +80,8 @@ function RoutineReports() {
     // 완료여부 토글 
     const toggleCompletionStatus = () => {
 
-        if (isCompleted === "N") {
+        setIsCompleted(isCompleted === "N" ? "Y" : "N");
 
-            setIsCompleted("Y");
-        } else {
-
-            setIsCompleted("N");
-        }
         setCurrentPage(1);
     };
 
@@ -107,27 +119,31 @@ function RoutineReports() {
                             <tr>
                                 <th className={ReportsCSS.columnRegDate}>등록일</th>
                                 <th className={ReportsCSS.columnTitle}>제목</th>
-                                {/* <th className={ReportsCSS.columnStatus}>보고 현황</th> */}
                                 {/* <th>부서</th>
                                 <th>이름</th>
                                 <th>직급</th> */}
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.isArray(routineReportList) && routineReportList.map((routineReport) => (
-                                <tr
-                                    key={routineReport.reportCode} 
-                                    id={routineReport.reportCode}
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={() => onClickReportHandler(routineReport.reportCode)}
-                                >
-                                    <td>{routineReport.regDate}</td>
-                                    <td>{routineReport.reportTitle}</td>
-                                    {/* <td>{reportRound.memberDTO.deptName}</td>
-                                    <td>{reportRound.memberDTO.memberName}</td>
-                                    <td>{reportRound.memberDTO.jobName}</td> */}
-                                </tr>
-                            ))}
+                                {Array.isArray(routineReportList) && routineReportList.length > 0 ? (
+                                    routineReportList.map((routineReport) => (
+                                        <tr
+                                            key={routineReport.reportCode}
+                                            id={routineReport.reportCode}
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => onClickReportHandler(routineReport.reportCode)}
+                                        >
+                                            <td>{routineReport.regDate}</td>
+                                            <td>{routineReport.reportTitle}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={2} style={{ textAlign: "center" }}>
+                                            조회된 정기보고 목록이 없습니다.
+                                        </td>
+                                    </tr>
+                                )}
                         </tbody>
                     </table>
                     {/* 페이징 버튼 */}
