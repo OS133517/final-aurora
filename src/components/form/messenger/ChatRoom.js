@@ -38,14 +38,12 @@ function ChatRoom() {
 
     const sendMessage = () => {
         if (connected) {
-            console.log('sendMessage in', clientRef);
 
             const msg = {
                 memberCode: loginCode, // 로그인한 사용자의 코드로 변경하세요.
                 messageDescript: message,
                 messageTime: new Date(),
             };
-            console.log('snedMessage msg : ', msg);
             clientRef.current.sendMessage('/pub/chat', JSON.stringify(msg));
             setMessage('');
         } else {
@@ -54,10 +52,10 @@ function ChatRoom() {
 
     };
 
-    console.log('clientRef ', clientRef.current);
     return (
         <div className={messengerCSS.messengerRoom}>
             <div>
+                <p>메시지 창 뜨는 지 확인 용</p>
                 {messages.map((msg, index) => (
                     <div key={index}>
                         <span>{msg.memberCode}: </span>
@@ -66,7 +64,7 @@ function ChatRoom() {
                 ))}
                 {/* url : webSocket의 엔드포인트  */}
                 <SockJsClient url="http://localhost:8090/ws-stomp"
-                    topics={['/sub  /topic/messages']}
+                    topics={['/topic/messages']}
                     onConnect={onConnected}
                     onDisconnect={() => {
                         console.log('disconnected');
