@@ -20,7 +20,6 @@ function WorkRequest(props) {
     const dispatch = useDispatch();
     // 유저 정보
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
-    // Selector
     const memberCode = loginMember.memberCode;
     // url 
     const { docCode } = props;
@@ -64,6 +63,20 @@ function WorkRequest(props) {
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
 
+
+
+    useEffect(() => {
+        dispatch(callMemberDetailAPI({ memberCode: memberCode }));
+        //eslint-disable-next-line
+    }, []);
+
+    /** useEffect */
+    useEffect(() => {
+        if (docCode !== undefined) {
+            setIsEdit(true);
+        }
+    }, [docCode]);
+
     /** 클릭, 변경 이벤트 처리 */
     const submitEvent = () => {
 
@@ -79,26 +92,12 @@ function WorkRequest(props) {
             ...form,
             [e.target.name]: e.target.value
         })
-        console.log('onChangeHandler : ', form);
 
     }
 
     const backEvent = () => {
         window.history.back();
     }
-
-    useEffect(() => {
-        dispatch(callMemberDetailAPI({ memberCode: memberCode }));
-        //eslint-disable-next-line
-    }, []);
-
-    /** useEffect */
-    useEffect(() => {
-        if (docCode !== undefined) {
-            setIsEdit(true);
-        }
-    }, [docCode]);
-
     // console.log('memberName : ', memberName);
     return (
         <div className={workRequestCSS.detailBox}>

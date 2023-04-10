@@ -63,7 +63,8 @@ function ApprovalForm({ approve: { appCode, documentDTO, appTitle, appEndDate, a
                     {appStatus === 'n' || appStatus === 'N' ? <span> 대기 </span> :
                         appStatus === 'y' || appStatus === 'Y' ? <span> 승인 </span> :
                             appStatus === 'w' || appStatus === 'W' ? <span> 거절 </span> :
-                                <span> 진행 </span>}
+                                appStatus === 'p' || appStatus === 'P' ? <span> 진행 </span> : null}
+
                 </td>
                 <td className={approvalModalCSS.deletecheck}> <button onClick={deleteHandler}> 삭제 </button> </td>
             </tr>

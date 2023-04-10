@@ -48,10 +48,25 @@ function ApprovalDetail() {
     const firstNStatus = detailInfo?.approvalLine?.find(line => line.appStatus === 'n');
     /** @param approvalMember 승인할 유저의 코드*/
     const approvalMemberCode = firstNStatus?.memberDTO?.memberCode;
-    // console.log('first', approvalMemberCode);
+    // 날짜 계산
+    const startDate = new Date(detailInfo?.detailApproval?.appStartDate);
+    const endDate = new Date(detailInfo?.detailApproval?.appEndDate);
 
-    // console.log('(find 메서드)승인할 유저의 DTO : ', firstNStatus?.memberDTO);
-    // console.log('승인할 유저의 코드 : ', approvalMemberCode);
+    let currentDate = startDate;
+    let differenceInDays = 0;
+
+    while (currentDate <= endDate) {
+        // getDay 각 요일을 숫자로 표현 일요일은 0, 토요일은 6
+        const dayOfWeek = currentDate.getDay();
+
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            differenceInDays++;
+        }
+        // 다음 날짜로 이동 
+        currentDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+    }
+    // 일로 계산
+    console.log('differenceInDays : ', differenceInDays);
     /** useEffect */
     // 결재 상세조회 , 결재, 결재선
     useEffect(() => {
@@ -80,25 +95,43 @@ function ApprovalDetail() {
 
     // 결재상태가 변경될 때 마다 approvalLineStatus배열에 저장
     useEffect(() => {
-        // const const
-        if (detailInfo?.approvalLine) {
-            // appStatus 상태들만 모아둔 배열
-            const newApprovalLineStatus = detailInfo.approvalLine.map(line => line.appStatus);
+        const calculateApprovalLineStatus = () => {
+            if (detailInfo?.approvalLine) {
+
+                return detailInfo.approvalLine.map(line => line.appStatus);
+            }
+            return null;
+        };
+        const newApprovalLineStatus = calculateApprovalLineStatus();
+        if (newApprovalLineStatus && JSON.stringify(newApprovalLineStatus) !== JSON.stringify(approvalLineStatus)) {
+
             setApprovalLineStatus(newApprovalLineStatus);
         }
-
+        //eslint-disable-next-line
+    }, [detailInfo?.approvalLine]);
+    console.log('detailInfo : ', detailInfo);
+    useEffect(() => {
         if (approvalLineStatus) {
-            if (approvalLineStatus.every(status => status === "y")) {
+            if (approvalLineStatus.every(status => status === "n")) {
+                console.log("Dispatching with appStatus: 'n'");
+                dispatch(callPutApprovalAPI({
+                    appCode: paramAppCode.appCode,
+                    appStatus: 'n'
+                }));
+            } else if (approvalLineStatus.every(status => status === "y")) {
+                console.log("Dispatching with appStatus: 'y'");
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'y'
                 }));
             } else if (approvalLineStatus.some(status => status === "w")) {
+                console.log("Dispatching with appStatus: 'w'");
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'w'
                 }));
             } else if (approvalLineStatus.some(status => status === "y") && approvalLineStatus.some(status => status === "n")) {
+                console.log("Dispatching with appStatus: 'p'");
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'p'
@@ -106,7 +139,7 @@ function ApprovalDetail() {
             }
         }
         //eslint-disable-next-line
-    }, [detailInfo?.approvalLine]);
+    }, [approvalLineStatus]);
 
     useEffect(() => {
         if (responseStatus === 200) {
@@ -173,6 +206,18 @@ function ApprovalDetail() {
                             </td>
                             <td className={approvalDetailCSS.description}>
                                 {memberName && <label>{memberName}</label>}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className={approvalDetailCSS.detailTitle}>
+                                기간
+                            </td>
+                            <td className={approvalDetailCSS.description}>
+                                {memberName &&
+                                    <label>
+                                        {detailInfo?.detailApproval?.appStartDate} ~ { }
+                                        {detailInfo?.detailApproval?.appEndDate}
+                                    </label>}
                             </td>
                         </tr>
                         <tr>

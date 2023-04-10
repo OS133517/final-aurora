@@ -24,6 +24,14 @@ function ApprovalSidebar() {
         navigate('/aurora/approval/draft');
     }
 
+    const pendingListHandler = () => {
+        navigate("/aurora/approval")
+    }
+
+    const waitingListHandler = () => {
+        navigate("/aurora/approval/waiting")
+    }
+
     useEffect(() => {
         dispatch(callGetApprovalsAPI({ memberCode: memberCode }));
         dispatch(callGetwaitingAPI({ memberCode: memberCode }));
@@ -38,11 +46,11 @@ function ApprovalSidebar() {
             <div >
                 <button className={SidebarCSS.buttons} onClick={cilckMakeApproval}>서류 작성</button>
                 <div className={SidebarCSS.checked}>
-                    <div className={SidebarCSS.count}>
+                    <div className={SidebarCSS.count} onClick={pendingListHandler}>
                         <h1>{Array.isArray(list) && list.length}</h1>
                         <label>결재 대기</label>
                     </div>
-                    <div className={SidebarCSS.count}>
+                    <div className={SidebarCSS.count} onClick={waitingListHandler}>
                         <h1>{waitingCount.length}</h1>
                         <label>결재 요청</label>
                     </div>

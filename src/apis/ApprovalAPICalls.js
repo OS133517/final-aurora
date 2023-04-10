@@ -23,7 +23,7 @@ export const callGetApprovalsAPI = ({ memberCode }) => {
       })
         .then(response => response.json());
 
-      console.log('[callGetApprovalsAPI] RESULT : ', result);
+      // console.log('[callGetApprovalsAPI] RESULT : ', result);
 
       dispatch({ type: GET_APPROVALS, payload: result.data });
     } catch (error) {
@@ -50,7 +50,7 @@ export const callApprovalDetailAPI = ({ appCode }) => {
         },
       }).then((response) => response.json());
 
-      console.log("[callApprovalDetailAPI] RESULT :", result);
+      // console.log("[callApprovalDetailAPI] RESULT :", result);
 
       dispatch({ type: GET_DETAIL, payload: result.data });
     } catch (error) {
@@ -80,7 +80,7 @@ export const callGetpendingAPI = ({ memberCode }) => {
       })
         .then(response => response.json());
 
-      console.log('[callGetpendingAPI] RESULT : ', result);
+      // console.log('[callGetpendingAPI] RESULT : ', result);
 
       dispatch({ type: GET_PENDING, payload: result.data });
     }
@@ -120,7 +120,7 @@ export const callPostApprovalAPI = ({ form }, docNum, memberCode, setResponseSta
       setResponseStatus(response.status);
       const result = await response.json();
 
-      console.log('[callPostApprovalAPI] RESULT : ', result);
+      // console.log('[callPostApprovalAPI] RESULT : ', result);
 
       dispatch({ type: POST_APPROVALS, payload: result.data })
 
@@ -163,7 +163,7 @@ export const callPostApprovalLineAPI = (appCode, selectedMember, setResponseStat
       setResponseStatus(response.status);
 
       const result = await response.json();
-      console.log("[callApprovalDetailAPI] RESULT :", result);
+      // console.log("[callApprovalDetailAPI] RESULT :", result);
 
       dispatch({ type: POST_APPROVALLINE, payload: result.data })
 
@@ -194,7 +194,7 @@ export const callGetwaitingAPI = ({ memberCode }) => {
       })
         .then(response => response.json());
 
-      console.log('[callGetwaitingAPI] RESULT : ', result);
+      // console.log('[callGetwaitingAPI] RESULT : ', result);
 
       dispatch({ type: GET_WAIT, payload: result.data });
     }
@@ -230,7 +230,7 @@ export const callPutApprovalLine = ({ appCode, approvalDTO, appStatus }, setResp
       console.log('확인', response.status);
       const result = await response.json();
 
-      console.log('[callPutApprovalLine] RESULT', result);
+      // console.log('[callPutApprovalLine] RESULT', result);
 
       dispatch({ type: PUT_APPROVALS, payload: result.data });
     }
@@ -265,7 +265,7 @@ export const callPutApprovalAPI = ({ appCode, appStatus }) => {
 
       const result = await response.json();
 
-      console.log('[callPutApprovalAPI] RESULT', result);
+      // console.log('[callPutApprovalAPI] RESULT', result);
     }
 
   } catch (error) {
@@ -289,7 +289,7 @@ export const callDeleteApprovalAPI = ({ appCode }) => {
 
       const result = await response.json();
 
-      console.log('[callDeleteApprovalAPI] RESULT', result);
+      // console.log('[callDeleteApprovalAPI] RESULT', result);
     }
 
   } catch (error) {

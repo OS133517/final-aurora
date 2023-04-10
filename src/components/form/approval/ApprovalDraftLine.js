@@ -73,18 +73,10 @@ function ApprovalLine() {
             navigate("/aurora/approval");
         });
     }
-    // else {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "오류",
-    //         text: "결재 라인 등록 중 오류가 발생했습니다.",
-    //     });
-    // }
-    console.log('responseStatus : ', responseStatus);
 
     return (
         <div>
-            <div>
+            <div className={approvalLineCSS.submitBox}>
                 <button onClick={lineSubmit}>제출</button>
             </div>
             <ul className={approvalLineCSS.line}>
