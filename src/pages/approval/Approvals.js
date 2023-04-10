@@ -22,12 +22,9 @@ function Approvals() {
         // eslint-disable-next-line
     }, [])
     const writeMember = lastList;
-    // for (const list of lastList) {
-    //     console.log('for of 문 :', list);
-    // }
+
     /** evnet */
-    // console.log('lastList', writeMember);
-    // console.log('code', code);
+    console.log('lastList', writeMember);
 
     return (
         <div className={ApprovalCSS.mainList}>

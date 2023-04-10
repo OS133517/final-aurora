@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { decodeJwt } from "../../../utils/tokenUtils";
 import { useDispatch, useSelector } from 'react-redux';
 import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
-import ApprovalLine from './ApprovalLine';
+import ApprovalDraftLine from './ApprovalDraftLine';
 import { callMemberDetailAPI } from '../../../apis/MemberAPICall';
 
 function WorkRequest(props) {
@@ -169,7 +169,7 @@ function WorkRequest(props) {
                 </table>
                 <div className={workRequestCSS.approvalLineBox}>
                     {responseStatus === 200 &&
-                        <ApprovalLine />
+                        <ApprovalDraftLine />
                     }
                 </div>
             </div>
