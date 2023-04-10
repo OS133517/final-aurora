@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { callSurveyForUpdateAPI, callSurveyRegistAPI, callSurveyUpdateAPI } from "../../apis/SurveyAPICall";
+import { callQuestionDeleteAPI, callSurveyForUpdateAPI, callSurveyRegistAPI, callSurveyUpdateAPI } from "../../apis/SurveyAPICall";
 
 function SurveyUpdate() {
 
@@ -17,7 +17,7 @@ function SurveyUpdate() {
     const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const survey = useSelector(state => state.surveyReducer.survey);
     const [questions, setQuestions] = useState([{
-        questionNo : 1,
+        questionNo : -1,
         questionBody : "",
         questionType : "choice",
         choices : [{
@@ -25,9 +25,9 @@ function SurveyUpdate() {
         }, {
             choiceBody : '' 
         }]
-    }])
+    }]);
     const [deleteQuestions, setDeleteQuestions] = useState([]);
-    const [newQuestions, setNewQuestions] = useState([]);
+    const [deleteChoices, setDeleteChoices] = useState([]);
     const [form, setForm] = useState({
         surveyCode : "",
         surveySubject : "",
@@ -35,8 +35,8 @@ function SurveyUpdate() {
         endDate : new Date()
     });
     
-    const max = Array.isArray(questions) && Math.max.apply(Math, questions.map(item => item.questionNo));
-    const [nextNo, setNextNo] = useState(parseInt(max) + 1);
+    const min = Array.isArray(questions) && Math.min.apply(Math, questions.map(item => item.questionNo));
+    const [nextNo, setNextNo] = useState(parseInt(min) - 1);
 
     useEffect(() => {
 
@@ -75,16 +75,19 @@ function SurveyUpdate() {
 
     useEffect(() => {
         
-        setForm({
-            surveyCode : survey && survey?.surveyCode,
-            surveySubject : survey && survey?.surveySubject,
-            startDate : survey && new Date(survey?.startDate||null),
-            endDate : survey && new Date(survey?.endDate||null)
+        survey && setForm({
+            surveyCode : survey?.surveyCode,
+            surveySubject : survey?.surveySubject,
+            startDate : new Date(survey?.startDate||null),
+            endDate : new Date(survey?.endDate||null)
         });
 
-        setQuestions(survey.questions);
+        Array.isArray(survey.questions) && setQuestions([
+            ...survey.questions
+        ]);
     }, [survey])
 
+    // 질문 추가 버튼
     const onClickQuestionAdd = () => {
 
         const newQuestions = questions.concat({
@@ -98,10 +101,11 @@ function SurveyUpdate() {
             }]
         })
 
-        setNextNo(nextNo + 1);
+        setNextNo(nextNo - 1);
         setQuestions(newQuestions);
     };
 
+    // 질문 삭제 버튼
     const onClickQuestionDelete = () => {
 
         if(questions.length === 1) {
@@ -114,10 +118,11 @@ function SurveyUpdate() {
         }
         questions.pop();
 
-        setNextNo(nextNo - 1);
+        setNextNo(nextNo + 1);
         setQuestions(questions);
     }
 
+    // 질문 추가 버튼
     const onClickChoiceHandler = (questionNo) => {
 
         const newOne = questions.map(item => {
@@ -141,6 +146,7 @@ function SurveyUpdate() {
         setQuestions(newOne);
     }
 
+    // 선택지 삭제 버튼
     const onClickChoiceDelete =(questionNo) => {
 
         const newQuestions = questions.map(item => {
@@ -164,6 +170,7 @@ function SurveyUpdate() {
         setQuestions(newQuestions);
     }
 
+    // 설문 주제 관리
     const onChangeFormHandler = (e) => {
 
         setForm({
@@ -172,6 +179,7 @@ function SurveyUpdate() {
         })
     }
 
+    // 날짜 선택 관리
     const setDate = (type, date) => {
 
         if(type === 'startDate') {
@@ -188,6 +196,7 @@ function SurveyUpdate() {
         }
     }
 
+    // 질문 input 관리
     const onChangeHandler = (e) => {
         
         let newQuestions;
@@ -218,6 +227,7 @@ function SurveyUpdate() {
         setQuestions(newQuestions);
     }
 
+    // 선택지 input 내용 관리
     const onChangeChoiceHandler = (e) => {
         
         const newQuestions = questions.map(item => {
@@ -236,22 +246,33 @@ function SurveyUpdate() {
         setQuestions(newQuestions);
     }
 
+    // 설문 수정 버튼
     const onClickSave = () => {
 
         const originalQuestionNos = survey.questions.map(question => question.questionNo);
         const newQuestionNos = questions.filter(question => originalQuestionNos.indexOf(question.questionNo) === - 1);
-        console.log('originalQuestionNos', originalQuestionNos)
-        console.log('newQuestionNos', newQuestionNos)
+        const deleteQuestionNos = originalQuestionNos.filter(original => questions.map(newOne => newOne.questionNo).indexOf(original) === - 1);
+        const remainQuestions = questions.filter(question => newQuestionNos.map(item => item.questionNo).indexOf(question.questionNo) === - 1).filter(question => deleteQuestionNos.indexOf(question.questionNo) === - 1);
+        const updateQuestions = [];
+        console.log('questions', questions.map(item => item.questionNo));
+        console.log('originalQuestionNos', originalQuestionNos);
+        console.log('newQuestionNos', newQuestionNos);
+        console.log('deleteQuestionNos', deleteQuestionNos);
+        console.log('remainQuestions',  remainQuestions);
 
-        // dispatch(callSurveyUpdateAPI({
-        //     form : form,
-        //     questions : questions.filter(question => newQuestionNos.map(item => item.questionNo).indexOf(question.questionNo) === - 1)
-        // }));
+        dispatch(callSurveyUpdateAPI({
+            form : form,
+            questions : updateQuestions
+        }));
 
-        // newQuestionNos.length > 0 && dispatch(callSurveyRegistAPI({
-        //     form : form,
-        //     questions : newQuestionNos
-        // }));
+        newQuestionNos.length > 0 && dispatch(callSurveyRegistAPI({
+            form : form,
+            questions : newQuestionNos
+        }));
+
+        deleteQuestionNos.length > 0 && dispatch(callQuestionDeleteAPI({
+            questionNos : deleteQuestionNos
+        }));
     }
 
     return (

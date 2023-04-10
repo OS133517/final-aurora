@@ -213,6 +213,32 @@ function SurveyRegist() {
         setQuestions(newQuestions);
     }
 
+    const onClickAutoButton = (questionNo, amount) => {
+
+        let newQuestions = questions.map(item => {
+                if(item.questionNo === questionNo) {
+                    switch(amount) {
+                        case 2 : 
+                            item.choices = [{choiceBody : '아니오'}, {choiceBody : '예'}];
+                            break;
+                        case 3 : 
+                            item.choices = [{choiceBody : '그렇지 않다.'}, {choiceBody : '보통이다'}, {choiceBody : '그렇다'}];
+                            break;
+                        case 4 :
+                            item.choices = [{choiceBody : '매우 아니다.'}, {choiceBody : '조금 아니다.'}, {choiceBody : '조금 그렇다.'}, {choiceBody : '매우 그렇다'}];
+                            break;
+                        case 5 :
+                            item.choices = [{choiceBody : '매우 아니다.'}, {choiceBody : '조금 아니다.'}, {choiceBody : '보통이다.'},  {choiceBody : '조금 그렇다.'}, {choiceBody : '매우 그렇다'}];
+                            break;
+                        default : break;
+                    }
+                }
+                return item;
+            });
+        
+        setQuestions(newQuestions);
+    }
+
     const onClickSave = () => {
 
         if(!isSelect) {
@@ -312,6 +338,13 @@ function SurveyRegist() {
                                             <option value='choice'>선택형</option>
                                             <option value='write'>서술형</option>
                                         </select>
+                                        {question.questionType === 'choice' && 
+                                            <>
+                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 2)}>2 개</button>
+                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 3)}>3 개</button>
+                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 4)}>4 개</button>
+                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 5)}>5 개</button>
+                                            </>}
                                     </td>
                                 </tr>
                                 {question.questionType === 'choice' &&
