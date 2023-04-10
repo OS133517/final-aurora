@@ -85,7 +85,7 @@
 .approvalLineBox {
     border: 1px solid #c1c1c1;
     width: 40vh;
-    height: 87vh;
+    height: 65vh;
     display: inline-block;
     margin-top: 170px;
     position: relative;
@@ -95,12 +95,11 @@
     display: flex;
     width: 65%;
     padding-bottom: 10px;
-    border-right: 1px solid #c1c1c1;
     border-bottom: 1px solid #c1c1c1;
 }
 /* 결재선 상태 CSS */
 .checkOkCircle {
-    width: 50px;
+    width: 70px;
     height: 25px;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
@@ -116,7 +115,7 @@
 }
 
   .checkWaitCircle {
-    width: 50px;
+    width: 70px;
     height: 25px;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
@@ -132,7 +131,7 @@
   }
 
   .checkDenyCircle {
-    width: 50px;
+    width: 70px;
     height: 25px;
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
@@ -155,6 +154,10 @@
     padding-left: 5px;
     position: relative;
   }
+  .lineBox span{
+    
+    width: 55px;
+  }
 
   .titleBox {
     display: flex;
@@ -174,7 +177,7 @@
     height: 50px;
     background-color: gray;
     position: absolute;
-    right: 39px;
+    right: 34px;
     top: 28px;
     display: inline-block;
   }
@@ -185,7 +188,7 @@
     height: 50px;
     background-color: green;
     position: absolute;
-    right: 39px;
+    right: 34px;
     top: 28px;
     display: inline-block;
   }
@@ -196,7 +199,7 @@
     height: 50px;
     background-color: red;
     position: absolute;
-    right: 39px;
+    right: 34px;
     top: 28px;
     display: inline-block;
   }

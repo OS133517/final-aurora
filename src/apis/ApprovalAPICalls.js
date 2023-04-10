@@ -111,7 +111,9 @@ export const callPostApprovalAPI = ({ form }, docNum, memberCode, setResponseSta
         body: JSON.stringify({
           appTitle: form.appTitle,
           appDescript: form.appDescript,
+          appStartDate: form.appStartDate,
           appEndDate: form.appEndDate,
+          appStatus: form.appStatus,
           appOpen: form.appOpen,
           memberDTO: { memberCode: memberCode }
         })

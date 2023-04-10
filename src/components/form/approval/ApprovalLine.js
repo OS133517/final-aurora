@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 function ApprovalLine() {
 
+
     /** Selector */
     const memberList = useSelector(state => state.memberReducer.memberList);
     const approval = useSelector(state => state.approvalReducer.draftapproval);
@@ -17,8 +18,8 @@ function ApprovalLine() {
     /** navigate */
     const navigate = useNavigate();
     /** Jwt */
-    //eslint-disable-next-line
     const loginMember = decodeJwt(window.localStorage.getItem('accessToken'));
+    const loginCode = loginMember.memberCode;
     // console.log('loginMember : ', loginMember);
 
     /** useState */
@@ -87,13 +88,15 @@ function ApprovalLine() {
                 <button onClick={lineSubmit}>제출</button>
             </div>
             <ul className={approvalLineCSS.line}>
-                {Array.isArray(memberList?.data) && memberList?.data.map(member => (
-                    <li key={member.memberCode} value={member.memberCode}>
-                        <input type="checkbox" name='checkboxValue' checked={selectedMember.some((m) => m.memberCode === member.memberCode)}
-                            onChange={(e) => checkboxHandle(e, member)} />
-                        {member.memberName}
-                    </li>
-                ))}
+                {Array.isArray(memberList?.data) && memberList?.data
+                    .filter((member) => member.memberCode !== loginCode)
+                    .map(member => (
+                        <li key={member.memberCode} value={member.memberCode}>
+                            <input type="checkbox" name='checkboxValue' checked={selectedMember.some((m) => m.memberCode === member.memberCode)}
+                                onChange={(e) => checkboxHandle(e, member)} />
+                            {member.memberName}
+                        </li>
+                    ))}
             </ul>
         </div>
     )

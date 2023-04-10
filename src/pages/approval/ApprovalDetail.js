@@ -26,7 +26,7 @@ function ApprovalDetail() {
     /** useSelector */
     const detailInfo = useSelector(state => state.approvalReducer.approvalLine);
     const memberInfo = useSelector(state => state.memberReducer.memberDetail);
-    console.log('detailInfo : ', detailInfo);
+    console.log('memberInfo : ', memberInfo);
     /** useState */
     const [responseStatus, setResponseStatus] = useState(0)
 
@@ -38,15 +38,15 @@ function ApprovalDetail() {
     const memberCode = detailInfo?.detailApproval?.memberDTO?.memberCode;
 
     /** @param memberName 작성한 유저의 이름*/
-    const memberName = memberInfo?.memberName;
+    const memberName = memberInfo?.memberDTO?.memberName;
 
     /** @param firstNStatus appStatus가 n인 첫번째 배열 값*/
     const firstNStatus = detailInfo?.approvalLine?.find(line => line.appStatus === 'n');
 
     /** @param approvalMember 승인할 유저의 코드*/
     const approvalMemberCode = firstNStatus?.memberDTO?.memberCode;
-    console.log('(find 메서드)승인할 유저의 DTO : ', firstNStatus?.memberDTO);
-    console.log('승인할 유저의 코드 : ', approvalMemberCode);
+    // console.log('(find 메서드)승인할 유저의 DTO : ', firstNStatus?.memberDTO);
+    // console.log('승인할 유저의 코드 : ', approvalMemberCode);
     /** useEffect */
     useEffect(() => {
         const fetchData = async () => {
