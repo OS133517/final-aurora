@@ -6,7 +6,7 @@ import { callMemberDetailAPI } from "../../apis/MemberAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
 import Swal from 'sweetalert2';
 import approvalDetailCSS from "./Approvals.module.css"
-import { callPutVacationAPI } from "../../apis/AttendanceAPICall";
+import { callPostVacationUseAPI } from "../../apis/VacationAPICall";
 
 function ApprovalDetail() {
 
@@ -24,14 +24,16 @@ function ApprovalDetail() {
     const dispatch = useDispatch();
 
     /** useSelector */
+    // 
     const detailInfo = useSelector(state => state.approvalReducer.approvalLine);
     const memberInfo = useSelector(state => state.memberReducer.memberDetail);
-
+    console.log('detailINfo : ', detailInfo);
     /** useState */
     // CALLAPI에서 응답 상태를 가져옴
     const [responseStatus, setResponseStatus] = useState(0)
     // 결재상태 변경 여부
     const [approvalLineStatus, setApprovalLineStatus] = useState([]);
+
 
     /** 변수 */
     /** @param documentDTO 문서 DTO*/
@@ -59,12 +61,12 @@ function ApprovalDetail() {
     // 문서코드가 휴가 문서 일 때 
     if (docCode === 8) {
         /** 휴가일수 주말 제외 */
-        const differenceInDay = window.localStorage.getItem('differenceInDays');
+        // const differenceInDay = window.localStorage.getItem('differenceInDays');
 
-        // appStatus 가 승인일때 differenceInDay를 휴가 API에 파라미터로 추가하여 호출
-        if (vacation === 'y') {
-            dispatch(callPutVacationAPI({ day: differenceInDay }));
-        }
+        // // appStatus 가 승인일때 differenceInDay를 휴가 API에 파라미터로 추가하여 호출
+        // if (vacation === 'y') {
+        //     dispatch(callPostVacationUseAPI({ form }, memberCode));
+        // }
 
 
     }

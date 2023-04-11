@@ -11,6 +11,7 @@ import attendanceReducer from './AttendanceModule';
 import messengerReducer from './MessengerModule';
 import weekWorklogReducer from './WeekWorklogModule';
 import scheduleReducer from './ScheduleModule';
+import vacationReducer from './VacationModule';
 
 const rootReducer = combineReducers({
     addBookReducer,
@@ -23,9 +24,9 @@ const rootReducer = combineReducers({
     dayWorklogReducer,
     surveyReducer,
     attendanceReducer,
-    dayWorklogReducer,
     weekWorklogReducer,
-    scheduleReducer
+    scheduleReducer,
+    vacationReducer
 });
 
 export default rootReducer;
