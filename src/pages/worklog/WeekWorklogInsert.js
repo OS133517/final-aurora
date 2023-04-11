@@ -55,10 +55,14 @@ function WeekWorklogInsert() {
     }
 
     return (
-        <div>
-            <div className={ WeekWorklogInsertCSS.DetailDiv }>
-                <div className={ WeekWorklogInsertCSS.weekWorklogsHeader }>주간 업무일지 작성</div>
-                <div className={ WeekWorklogInsertCSS.descriptionDiv }>주간 업무일지</div>    
+        <div className={ WeekWorklogInsertCSS.detailDiv }>
+            <div className={ WeekWorklogInsertCSS.weekWorklogsHeader }>
+                주간 업무일지 작성
+            </div>
+            <div className={ WeekWorklogInsertCSS.descriptionDiv }>
+                <div>
+                    주간 업무일지
+                </div>
                 <table className={ WeekWorklogInsertCSS.descriptionTable }>
                     <thead>
                         <tr>
@@ -69,21 +73,28 @@ function WeekWorklogInsert() {
                         </tr>
                         <tr>
                             <td>부서</td>
-                            <th></th>
+                            <td></td>
                             <td>직급</td>
-                            <th></th>
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>금일 사항</td></tr>
+                        <tr>
+                            <td className={WeekWorklogInsertCSS.titleTd} colSpan='4'>
+                                <div className={WeekWorklogInsertCSS.squares}>
+                                        {'\u00A0'}
+                                </div>
+                                금일 사항
+                            </td>
+                        </tr>
                         <tr>
                             <td></td>
-                            <td>업무내용</td>
+                            <td colSpan='3'>업무내용</td>
                         </tr>
                         <tr>
                             <td>월</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='monContent'
                                     placeholder='오전 업무 내용'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
@@ -93,8 +104,8 @@ function WeekWorklogInsert() {
                         </tr>
                         <tr>
                             <td>화</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='tuesContent'
                                     placeholder='오후 업무 비고'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
@@ -104,8 +115,8 @@ function WeekWorklogInsert() {
                         </tr>
                         <tr>
                             <td>수</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='wedContent'
                                     placeholder='오후 업무 비고'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
@@ -115,8 +126,8 @@ function WeekWorklogInsert() {
                         </tr>
                         <tr>
                             <td>목</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='thurContent'
                                     placeholder='오후 업무 비고'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
@@ -126,8 +137,8 @@ function WeekWorklogInsert() {
                         </tr>
                         <tr>
                             <td>금</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='friContent'
                                     placeholder='오후 업무 비고'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
@@ -135,21 +146,30 @@ function WeekWorklogInsert() {
                                     />
                             </td>
                         </tr>
-                        <tr><td>비고</td></tr>
                         <tr>
                             <td>
-                                <input
+                                비고
+                            </td>
+                            <td colSpan='3'>
+                                <textarea
                                     name='weekNote'
-                                    placeholder='오후 업무 비고'
+                                    placeholder='비고'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
                                     onChange={ onChangeHandler }
                                     />
                             </td>
                         </tr>
-                        <tr> <td>특이 사항</td></tr>
                         <tr> 
-                            <td>
-                                <input
+                            <td className={WeekWorklogInsertCSS.titleTd} colSpan='4'>
+                                <div className={WeekWorklogInsertCSS.squares}>
+                                        {'\u00A0'}
+                                </div>
+                                특이 사항
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan='4'>
+                                <textarea
                                     name='weekSpecialNote'
                                     placeholder='특이 사항'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
@@ -157,23 +177,22 @@ function WeekWorklogInsert() {
                                     />
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
-            </div>
-            <div className={ WeekWorklogInsertCSS.weekWorklogButtonDiv }>
-                <button        
-                    onClick={ () => navigate(-1) }            
-                >
-                    돌아가기
-                </button>
-                <button       
-                    onClick={() =>  onClickWeekWorklogInsertHandler() }             
-                >
-                    등록하기
-                </button>
-            </div>          
-        </div>  
+                <div className={ WeekWorklogInsertCSS.weekWorklogButtonDiv }>
+                    <button        
+                        onClick={ () => navigate(-1) }            
+                    >
+                        돌아가기
+                    </button>
+                    <button       
+                        onClick={() =>  onClickWeekWorklogInsertHandler() }             
+                    >
+                        등록하기
+                    </button>
+                </div>    
+            </div> 
+        </div>
     )
 }
 
