@@ -1,0 +1,86 @@
+.boxWrapper2 {
+    margin-top: 30px;
+    margin-left: 30px;
+    width: 95%;
+}
+
+.Box2 {
+    width: 100%;
+    height: 700px;
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    height: 14%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.header>div:first-child {
+    font-weight: bold;
+}
+
+.graphDiv {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}   
+
+.footer {
+    display: flex;
+    font-size: 20px;
+    position: relative;
+    line-height: 50px;
+    justify-content: center;
+}
+
+.footer button{
+    box-sizing: border-box;
+    width: 100px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.footer>div {
+    position: absolute;
+    right: 10px;
+}
+
+.ulBox ul{
+    display: flex;
+    cursor: pointer;
+    border-bottom: 1px solid #c1c1c1;
+}
+
+.draftList {
+    border: 1px solid #c1c1c1;
+    border-top-right-radius: 10px;
+}
+
+.draftClickList {
+    border: 1px solid #c1c1c1;
+    border-top-right-radius: 10px;
+    background-color: #88CFBA;
+    color: white;
+}
+
+.viewDiv{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
