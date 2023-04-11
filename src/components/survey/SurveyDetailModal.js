@@ -16,7 +16,6 @@ function SurveyDetailModal({survey, setIsModalOn}) {
     useEffect(() => {
 
         if(survey.replyStatus === 'O' || survey.replyStatus === 'Y') {
-            console.log('임시저장해씀!!', survey.surveyCode);
             dispatch(callSruveyReplyDetailAPI({
                 surveyCode : survey.surveyCode,
                 memberCode : isLogin.memberCode
@@ -28,6 +27,7 @@ function SurveyDetailModal({survey, setIsModalOn}) {
                 dispatch(callInitAction());
             }
         }
+    // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
@@ -42,6 +42,7 @@ function SurveyDetailModal({survey, setIsModalOn}) {
             ...surveyReply
         ]);
         Array.isArray(surveyReply) && setAnswers();
+    // eslint-disable-next-line
     }, [surveyReply])
 
     const setAnswers = () => {
