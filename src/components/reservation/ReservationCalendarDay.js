@@ -21,7 +21,7 @@ function ReservationCalendarDay({day, setSelectedDate}) {
     // Array.isArray(reservationList) && console.log('reservationBar'.reservationBar);
     const setDate =() => {
 
-        setSelectedDate && setSelectedDate({
+        setSelectedDate({
             ...setSelectedDate,
             startDateTime : new Date(startDateTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
             endDateTime : new Date(endDateTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
@@ -51,9 +51,7 @@ function ReservationCalendarDay({day, setSelectedDate}) {
             className={ReservationCalendarDayCSS.dayDiv} 
             style={day.day === '일요일'? {color : 'red', backgroundColor : '#e9e9e9'}:day.day === '토요일'? {color : 'blue', backgroundColor : '#e9e9e9'}:{color : 'black'}}
             onClick={() => setDate()}>
-            <div style={new Date().toDateString() === new Date(startDateTime).toDateString()?{color:'white',backgroundColor:'#88CFBA'}:null}>
-                <span>{day.date}</span>
-            </div>
+            <span style={new Date().toDateString() === new Date(startDateTime).toDateString()?{color:'white',backgroundColor:'#88CFBA'}:null}>{day.date}</span>
             {day.day !== '일요일' && day.day !== '토요일' && Array.isArray(reservationBar) && reservationBar.map(item => (
                 <div 
                     key={item.reservationNo}

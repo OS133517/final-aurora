@@ -60,10 +60,10 @@ function Surveys() {
             });
 
             return;
-        } else if(new Date(`${survey.startDate} 06:00`).getTime() > new Date().getTime()) {
+        } else if(survey.replyStatus === 'Y') {
             Swal.fire({
                 icon : 'warning',
-                text : '아직 답변할 수 없습니다.'
+                text : '이미 답변한 설문입니다.'
             })
 
             return;
@@ -72,8 +72,7 @@ function Surveys() {
         setSurvey(survey);
         setIsModalOn(true);
     }
-    Array.isArray(surveyList) && console.log(new Date(surveyList[0].startDate + ' 06:00'));
-    console.log(new Date());
+
     return (
         <>
             {isModalOn? <SurveyDetailModal survey={survey} setIsModalOn={setIsModalOn}/>:null}
@@ -109,8 +108,8 @@ function Surveys() {
                                     <td>{item.surveySubject}</td>
                                     <td>{item.startDate}&nbsp;~&nbsp;{item.endDate}</td>
                                     <td>
-                                        <span style={new Date(`${item.startDate} 06:00`).getTime() > new Date().getTime()?{backgroundColor:'#3297f7'}:new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
-                                            {new Date(`${item.startDate} 06:00`).getTime() > new Date().getTime()? '진행 전':new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? '마감':'진행중'}
+                                        <span style={new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
+                                            {new Date(`${item.endDate} 18:00`).getTime() < new Date().getTime()? '마감':'진행중'}
                                         </span>
                                     </td>
                                     <td>

@@ -28,7 +28,6 @@ import Surveys from "./pages/survey/Surveys";
 import SurveyManagement from "./pages/survey/SurveyManagement";
 import SurveyRegist from "./pages/survey/SurveyRegist";
 import SurveyUpdate from "./pages/survey/SurveyUpdate";
-import SurveyDetail from "./pages/survey/SurveyDetail";
 
 import HrmLayout from "./layouts/HrmLayout";
 import Hrm from "./pages/hrm/Hrm";
@@ -132,12 +131,10 @@ function App() {
                 <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황' />} />
               </Route>
               <Route path="survey" element={<SurveyLayout />}>
-                <Route index element={<Surveys/>}/>
                 <Route path="list" element={<Surveys />} />
                 <Route path="survey-management" element={<SurveyManagement />} />
                 <Route path="survey-management/regist" element={<SurveyRegist />} />
                 <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate />} />
-                <Route path="survey-management/:surveyCode" element={<SurveyDetail />} />
               </Route>
               <Route path="messenger" element={<MessengerLayout />}>
                 <Route index="messengers" element={<MessengerList />} />

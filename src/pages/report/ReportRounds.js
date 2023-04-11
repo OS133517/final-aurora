@@ -393,14 +393,17 @@ function ReportRounds() {
                                         &lt;
                                     </button>
                                     {pageNumber.map((num) => (
-                                        <button
-                                           key={num} 
-                                           onClick={() => setCurrentPage(num)}
-                                           style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
-                                           className={ReportsCSS.pagingBtn}
+                                        <li 
+                                            key={num} 
+                                            onClick={() => setCurrentPage(num)}
                                         >
-                                           {num}
-                                        </button>
+                                            <button
+                                                style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
+                                                className={ReportsCSS.pagingBtn}
+                                            >
+                                                {num}
+                                            </button>
+                                        </li>
                                     ))}
                                     <button
                                         onClick={() => setCurrentPage(currentPage + 1)}

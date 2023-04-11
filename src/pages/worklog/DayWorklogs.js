@@ -48,6 +48,7 @@ function DayWorklogs() {
                 <div className={ DayWorklogsCSS.dayWorklogsHeader }>일일 업무일지</div>
                 <table className={ DayWorklogsCSS.contentTable }>
                     <thead className={ DayWorklogsCSS.contentHead }>
+                        
                         <tr>
                             <th>
                                 번호
@@ -73,9 +74,9 @@ function DayWorklogs() {
                                     <td>
                                         {dayWorklog.dayReportingDate}
                                     </td>
-                                    {/* <td>
-                                        {loginMember.}
-                                    </td> */}
+                                    <td>
+                                        {/* {loginMember.} */}
+                                    </td>
                                 </tr>
                             ))
                         }
@@ -93,14 +94,14 @@ function DayWorklogs() {
                     </button>
                     }
                     {pageNumber.map((num) => (
-                    <button
-                        key={num} 
-                        onClick={() => setCurrentPage(num)}
-                        style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
-                        className={DayWorklogsCSS.pagingBtn}
+                    <li key={num} onClick={() => setCurrentPage(num)}>
+                        <button
+                            style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
+                            className={ DayWorklogsCSS.pagingBtn }
                         >
-                        {num}
-                    </button>
+                            {num}
+                        </button>
+                    </li>
                     ))}
                     { Array.isArray(dayWorklogList) &&
                     <button 

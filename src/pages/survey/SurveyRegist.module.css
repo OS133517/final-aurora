@@ -123,19 +123,6 @@
     font-size: 20px;
 }
 
-.autoBtns {
-    background-color: #88CFBA;
-    box-sizing: border-box;
-    border: none;
-    color: white;
-    font-size: 16px;
-    width: 60px;
-    height: 30px;
-    margin-left: 10px;
-    margin-right: 5px;
-    border-radius: 10px;
-}
-
 .buttonDiv {
     position: relative;
     display: flex;

@@ -44,7 +44,7 @@ function Approvals() {
                 </thead>
                 <tbody className={ApprovalCSS.tbodyStyle}>
                     {
-                        Array.isArray(lastList) && lastList?.length > 0 && lastList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval} />))
+                        lastList.length > 0 && lastList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval} />))
                     }
                 </tbody>
             </table>

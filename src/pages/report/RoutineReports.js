@@ -158,14 +158,17 @@ function RoutineReports() {
                                     &lt;
                                 </button>
                                 {pageNumber.map((num) => (
-                                    <button
+                                    <li 
                                         key={num} 
                                         onClick={() => setCurrentPage(num)}
-                                        style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
-                                        className={ReportsCSS.pagingBtn}
                                     >
-                                    {num}
-                                    </button>
+                                        <button
+                                            style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
+                                            className={ReportsCSS.pagingBtn}
+                                        >
+                                            {num}
+                                        </button>
+                                    </li>
                                 ))}
                                 <button
                                     onClick={() => setCurrentPage(currentPage + 1)}

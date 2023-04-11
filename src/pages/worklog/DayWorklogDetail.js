@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import DayWorklogDetailCSS from './DayWorklogDetail.module.css';
+import DayWorklogInsertCSS from './DayWorklogInsert.module.css'
 import { callDayWorklogDetailAPI } from '../../apis/DayWorklogAPICall';
 import { callDayWorklogUpdateAPI } from '../../apis/DayWorklogAPICall';
 import { callDayWorklogDeleteAPI } from '../../apis/DayWorklogAPICall';
@@ -93,14 +94,10 @@ function DayWorklogDetail() {
 
     
     return (
-        <div className={ DayWorklogDetailCSS.detailDiv }>
-            <div className={ DayWorklogDetailCSS.dayWorklogsHeader }>
-                일일 업무일지
-            </div>
-            <div className={ DayWorklogDetailCSS.descriptionDiv }>
-                <div>
-                    일일 업무일지
-                </div>
+        <div>
+            <div className={ DayWorklogDetailCSS.DetailDiv }>
+                <div className={ DayWorklogDetailCSS.dayWorklogsHeader }>일일 업무일지</div>
+                <div className={ DayWorklogDetailCSS.descriptionDiv }>일일 업무일지</div>    
                 <table className={ DayWorklogDetailCSS.descriptionTable }>
                     <thead>
                         <tr>
@@ -117,117 +114,108 @@ function DayWorklogDetail() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colSpan='4' className={DayWorklogDetailCSS.titleTd}>
-                                <div className={DayWorklogDetailCSS.squares}>
-                                    {'\u00A0'}
-                                </div>
-                                금일 사항
-                            </td>
-                        </tr>
+                        <tr><td>금일 사항</td></tr>
                         <tr>
                             <td></td>
-                            <td colSpan='2'>업무내용</td>
+                            <td>업무내용</td>
                             <td>비고</td>
                         </tr>
                         <tr>
                             <td>오전</td>
-                            <td colSpan='2'>
+                            <td>
                                 {/* { dayWorklog.morningDayContent || ''} */}
-                                <textarea
+                                <input
                                     name='morningDayContent'
-                                    className={ DayWorklogDetailCSS.dayWorklogInfoInput }
+                                    className={ DayWorklogInsertCSS.dayWorklogInfoInput }
                                     value={ (!modifyMode ? dayWorklog.morningDayContent : form.morningDayContent) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
+                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                             <td>
                                 {/* { dayWorklog.morningDayNote || ''} */}
-                                <textarea
+                                <input
                                     name='morningDayNote'
-                                    className={ DayWorklogDetailCSS.dayWorklogInfoInput }
+                                    className={ DayWorklogInsertCSS.dayWorklogInfoInput }
                                     value={ (!modifyMode ? dayWorklog.morningDayNote : form.morningDayNote) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
+                                    style={ !modifyMode ? { backgroundColor: '#c9c9c9'} : null}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <td>오후</td>
-                            <td colSpan='2'>
+                            <td>
                                 {/* { dayWorklog.afternoonDayContent || ''} */}
-                                <textarea
+                                <input
                                     name='afternoonDayContent'
-                                    className={ DayWorklogDetailCSS.dayWorklogInfoInput }
+                                    className={ DayWorklogInsertCSS.dayWorklogInfoInput }
                                     value={ (!modifyMode ? dayWorklog.afternoonDayContent : form.afternoonDayContent) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
+                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                             <td>
                                 {/* { dayWorklog.afternoonDayNote || ''} */}
-                                <textarea
+                                <input
                                     name='afternoonDayNote'
-                                    className={ DayWorklogDetailCSS.dayWorklogInfoInput }
+                                    className={ DayWorklogInsertCSS.dayWorklogInfoInput }
                                     value={ (!modifyMode ? dayWorklog.afternoonDayNote : form.afternoonDayNote) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
+                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
-                        <tr>  
-                            <td colSpan='4' className={DayWorklogDetailCSS.titleTd}>
-                                <div className={DayWorklogDetailCSS.squares}>
-                                    {'\u00A0'}
-                                </div>
-                                특이 사항
-                            </td>
-                        </tr>
+                    <tr><td>특이 사항</td></tr>
                         <tr>
-                            <td colSpan='4'>
+                            <td>
                         {/* { dayWorklog.daySpecialNote || ''} */}
-                                <textarea
+                                <input
                                     name='daySpecialNote'
-                                    className={ DayWorklogDetailCSS.dayWorklogInfoInput }
+                                    className={ DayWorklogInsertCSS.dayWorklogInfoInput }
                                     value={ (!modifyMode ? dayWorklog.daySpecialNote : form.daySpecialNote) || ''}
                                     onChange={ onChangeHandler }
-                                    disabled={ modifyMode ? false : true }
+                                    readOnly={ modifyMode ? false : true }
+                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
                     </tbody>
                 </table>
-            </div>  
+            </div>   
             <div className={ DayWorklogDetailCSS.dayWorklogButtonDiv }>
-            <button        
-                onClick={ () => navigate(-1) }            
-            >
-                돌아가기
-            </button>
-            {!modifyMode &&
-                <button       
-                    onClick={ onClickModifyModeHandler }             
+                <button        
+                    onClick={ () => navigate(-1) }            
                 >
-                    수정하기
+                    돌아가기
                 </button>
-            }
-            {modifyMode &&
-                <button       
-                    onClick={ onClickDayWorklogUpdateHandler }             
-                >
-                    저장하기
-                </button>
-            }
-            {!modifyMode &&
-                <button       
-                    onClick={ onClickDayWorklogDeleteHandler }             
-                >
-                    삭제하기
-                </button>
+                {!modifyMode &&
+                    <button       
+                        onClick={ onClickModifyModeHandler }             
+                    >
+                        수정하기
+                    </button>
+                }
+                {modifyMode &&
+                    <button       
+                        onClick={ onClickDayWorklogUpdateHandler }             
+                    >
+                        저장하기
+                    </button>
+                }
+                {!modifyMode &&
+                    <button       
+                        onClick={ onClickDayWorklogDeleteHandler }             
+                    >
+                        삭제하기
+                    </button>
                 }
             </div>                 
-        </div>   
+        </div>
     )
 }
 

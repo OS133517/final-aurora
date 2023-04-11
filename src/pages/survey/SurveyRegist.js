@@ -7,13 +7,11 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callSurveyRegistAPI } from "../../apis/SurveyAPICall";
-import { useNavigate } from "react-router";
 
 function SurveyRegist() {
 
     const scrollRef = useRef();
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const surveyResult = useSelector(state => state.surveyReducer.surveyResult);
     const [questions, setQuestions] = useState([{
         questionNo : 1,
@@ -35,7 +33,7 @@ function SurveyRegist() {
                 text : surveyResult.message,
                 confirmButtonText : '확인'
             }).then(() => {
-                navigate("/aurora/survey/survey-management", { replace: true});
+                window.location.reload(true); 
             })
         } else if(surveyResult.status === 400) {
             Swal.fire({
@@ -46,7 +44,6 @@ function SurveyRegist() {
                 window.location.reload(true); 
             })
         }
-    // eslint-disable-next-line
     }, [surveyResult])
 
     useEffect(() => {
@@ -102,6 +99,14 @@ function SurveyRegist() {
         const newQuestions = questions.map(item => {
 
             if(item.questionNo === questionNo) {
+                if(item.choices.length === 5) {
+                    Swal.fire({
+                        icon : 'warning',
+                        text : '최대 보기 수 입니다.'
+                    })
+
+                    return item;
+                }
                 item.choices = item.choices.concat({
                     choiceBody : '' 
                 })  
@@ -208,90 +213,13 @@ function SurveyRegist() {
         setQuestions(newQuestions);
     }
 
-    const onClickAutoButton = (questionNo, amount) => {
-
-        let newQuestions = questions.map(item => {
-                if(item.questionNo === questionNo) {
-                    switch(amount) {
-                        case 2 : 
-                            item.choices = [{choiceBody : '아니오'}, {choiceBody : '예'}];
-                            break;
-                        case 3 : 
-                            item.choices = [{choiceBody : '그렇지 않다.'}, {choiceBody : '보통이다'}, {choiceBody : '그렇다'}];
-                            break;
-                        case 4 :
-                            item.choices = [{choiceBody : '매우 아니다.'}, {choiceBody : '조금 아니다.'}, {choiceBody : '조금 그렇다.'}, {choiceBody : '매우 그렇다'}];
-                            break;
-                        case 5 :
-                            item.choices = [{choiceBody : '매우 아니다.'}, {choiceBody : '조금 아니다.'}, {choiceBody : '보통이다.'},  {choiceBody : '조금 그렇다.'}, {choiceBody : '매우 그렇다'}];
-                            break;
-                        default : break;
-                    }
-                }
-                return item;
-            });
-        
-        setQuestions(newQuestions);
-    }
-
     const onClickSave = () => {
-
-        const emptyOnes = [];
-        let choices = 0;
-
-        questions.map((item, index) => {
-            if(item.questionBody === null || item.questionBody === '') {
-                emptyOnes.push(index)
-            }
-            return item;
-        })
-
-        questions.map(item => {
-            item.choices.map(item2 => {
-                if(item2.choiceBody === null || item2.choiceBody === '') {
-                    choices++;
-                }
-                return item2;
-            })
-            return item;
-        });
-        console.log(choices);
-
-        if(form.surveySubject === null || form.surveySubject === '') {
-
-            Swal.fire({
-                icon : 'error',
-                text : '설문 주제를 적어주세요.'
-            })
-
-            return;
-        }
 
         if(!isSelect) {
 
             Swal.fire({
                 icon : 'error',
                 text : '기간을 설정해주세요.'
-            })
-
-            return;
-        }
-
-        if(emptyOnes.length > 0) {
-
-            Swal.fire({
-                icon : 'error',
-                text : `${emptyOnes.map(item => item + 1)} 번 질문을 입력하세요.`
-            })
-
-            return;
-        }
-
-        if(choices !== 0) {
-
-            Swal.fire({
-                icon : 'error',
-                text : `빈 선택지가 있습니다.`
             })
 
             return;
@@ -384,13 +312,6 @@ function SurveyRegist() {
                                             <option value='choice'>선택형</option>
                                             <option value='write'>서술형</option>
                                         </select>
-                                        {question.questionType === 'choice' && 
-                                            <>
-                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 2)}>2 개</button>
-                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 3)}>3 개</button>
-                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 4)}>4 개</button>
-                                                <button className={SurveyRegistCSS.autoBtns} onClick={() => onClickAutoButton(question.questionNo, 5)}>5 개</button>
-                                            </>}
                                     </td>
                                 </tr>
                                 {question.questionType === 'choice' &&
@@ -406,7 +327,6 @@ function SurveyRegist() {
                                                         name={`choiceBody${index}`} 
                                                         id={question.questionNo} 
                                                         value={choice.choiceBody}
-                                                        maxLength='50'
                                                         onChange={onChangeChoiceHandler}/>
                                                 </td>
                                                 {index === question.choices.length - 1 && 

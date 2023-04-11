@@ -31,7 +31,7 @@ function MessengerSidebar() {
     const memberCode = Number(token.memberCode);
     /** 변수 */
     const memberName = list?.memberDTO?.memberName;
-    const roomNum = Array.isArray(roomList) && roomList.map(room => room.roomNum);
+    const roomNum = roomList.map(room => room.roomNum);
     /** useEffect */
     useEffect(() => {
         const fetchData = async () => {
