@@ -87,10 +87,14 @@ function WeekWorklogDetail() {
     }
 
     return (
-        <div>
-            <div className={ WeekWorklogDetailCSS.DetailDiv }>
-                <div className={ WeekWorklogDetailCSS.weekWorklogsHeader }>주간 업무일지</div>
-                <div className={ WeekWorklogDetailCSS.descriptionDiv }>주간 업무일지</div>    
+        <div className={ WeekWorklogDetailCSS.detailDiv }>
+            <div className={ WeekWorklogDetailCSS.weekWorklogsHeader }>
+                주간 업무일지
+            </div>
+            <div className={ WeekWorklogDetailCSS.descriptionDiv }>
+                <div>
+                    주간 업무일지
+                </div>
                 <table className={ WeekWorklogDetailCSS.descriptionTable }>
                     <thead>
                         <tr>
@@ -101,111 +105,120 @@ function WeekWorklogDetail() {
                         </tr>
                         <tr>
                             <td>부서</td>
-                            <th></th>
+                            <td></td>
                             <td>직급</td>
-                            <th></th>
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>금일 사항</td></tr>
+                        <tr>
+                            <td className={WeekWorklogDetailCSS.titleTd} colSpan='4'>
+                                <div className={WeekWorklogDetailCSS.squares}>
+                                        {'\u00A0'}
+                                </div>
+                                금일 사항
+                            </td>
+                        </tr>
                         <tr>
                             <td></td>
-                            <td>업무내용</td>
+                            <td colSpan='3'>업무내용</td>
                         </tr>
                         <tr>
                             <td>월</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='monContent'
                                     className={ WeekWorklogDetailCSS.weekWorklogInfoInput }
                                     value={ (!modifyMode ? weekWorklog.monContent : form.monContent) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <td>화</td>
-                            <td>
-                            <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='tuesContent'
                                     className={ WeekWorklogDetailCSS.weekWorklogInfoInput }
                                     value={ (!modifyMode ? weekWorklog.tuesContent : form.tuesContent) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: '#c9c9c9'} : null}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <td>수</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='wedContent'
                                     className={ WeekWorklogDetailCSS.weekWorklogInfoInput }
                                     value={ (!modifyMode ? weekWorklog.wedContent : form.wedContent) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <td>목</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='thurContent'
                                     className={ WeekWorklogDetailCSS.weekWorklogInfoInput }
                                     value={ (!modifyMode ? weekWorklog.thurContent : form.thurContent) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
                         <tr>
                             <td>금</td>
-                            <td>
-                                <input
+                            <td colSpan='3'>
+                                <textarea
                                     name='friContent'
                                     className={ WeekWorklogDetailCSS.weekWorklogInfoInput }
                                     value={ (!modifyMode ? weekWorklog.friContent : form.friContent) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
-                        <tr><td>비고</td></tr>
                         <tr>
                             <td>
-                                <input
+                                비고
+                            </td>
+                            <td colSpan='3'>
+                                <textarea
                                     name='weekNote'
                                     className={ WeekWorklogDetailCSS.weekWorklogInfoInput }
                                     value={ (!modifyMode ? weekWorklog.weekNote : form.weekNote) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
-                        <tr><td>특이 사항</td></tr>
+                        <tr>   
+                            <td className={WeekWorklogDetailCSS.titleTd} colSpan='4'>
+                                <div className={WeekWorklogDetailCSS.squares}>
+                                        {'\u00A0'}
+                                </div>
+                                특이 사항
+                            </td>
+                        </tr>
                         <tr>
-                            <td>
-                                <input
+                            <td colSpan='4'>
+                                <textarea
                                     name='weekSpecialNote'
                                     className={ WeekWorklogDetailCSS.weekWorklogInfoInput }
                                     value={ (!modifyMode ? weekWorklog.weekSpecialNote : form.weekSpecialNote) || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                             </td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>  
             <div className={ WeekWorklogDetailCSS.weekWorklogButtonDiv }>
                 <button        
                     onClick={ () => navigate(-1) }            
@@ -233,7 +246,7 @@ function WeekWorklogDetail() {
                         삭제하기
                     </button>
                 }
-            </div>                    
+            </div>    
         </div>
     );
 }

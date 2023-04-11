@@ -73,9 +73,9 @@ function DayWorklogs() {
                                     <td>
                                         {dayWorklog.dayReportingDate}
                                     </td>
-                                    <td>
-                                        {/* {loginMember.} */}
-                                    </td>
+                                    {/* <td>
+                                        {loginMember.}
+                                    </td> */}
                                 </tr>
                             ))
                         }

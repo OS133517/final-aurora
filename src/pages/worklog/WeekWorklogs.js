@@ -79,7 +79,6 @@ function WeekWorklogs() {
                         }
                     </tbody>
                 </table>
-
                 <div className={ WeekWorklogsCSS.pagingBtnDiv }>
                     { Array.isArray(weekWorklogList) &&
                     <button 

@@ -29,7 +29,7 @@
     border-bottom: 1px solid #88CFBA;
 }
 .contentTable th:first-child, .contentTable td:first-child {
-    width: 50px;
+    width: 5%;
     text-indent: 5px;
     text-align: center;
 }
