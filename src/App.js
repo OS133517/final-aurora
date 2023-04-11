@@ -41,6 +41,15 @@ import AttendanceModify from './pages/attendance/AttnedanceModify';
 import AttendanceDetail from './pages/attendance/AttendanceDetail';
 import VacationDetail from './pages/attendance/VacationDetail';
 
+import MailLayout from "./layouts/MailLayout";
+import Inbox from './pages/mail/Inbox';
+import Sent from './pages/mail/Sent';
+import Spam from './pages/mail/Spam';
+import Trash from './pages/mail/Trash';
+// import Statistics from './pages/mail/Statistics';
+import Compose from './pages/mail/Compose';
+import MailDetail from './pages/mail/MailDetail';
+
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
@@ -77,6 +86,15 @@ function App() {
                 <Route path="addresses" element={<Addresses category='전체 주소록' />} />
                 <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록' />} />
                 <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록' />} />
+              </Route>
+              <Route path="mails" element={<MailLayout />}>
+                <Route index element={<Inbox />} />
+                <Route path="sent" element={<Sent />} />
+                <Route path="spam" element={<Spam />} />
+                <Route path="trash" element={<Trash />} />
+                {/* <Route path="statistics" element={<Statistics />} /> */}
+                <Route path="compose" element={<Compose />} />
+                <Route path=":folder/:id" element={<MailDetail />} />
               </Route>
               <Route path="reports" element={<ReportLayout/>}>
                 <Route path="routines" element={<RoutineReports/>}/>

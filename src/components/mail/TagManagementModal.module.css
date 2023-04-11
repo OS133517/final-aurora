@@ -1,0 +1,149 @@
+.tagModalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.tagModalContainer {
+    position: absolute;
+    height: 500px;
+    width: 600px;
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 5px 5px 8px 1px gray;
+    z-index: 1000;
+}
+
+.tagModalHeader {
+    background-color: #88CFBA;
+    height: 80px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: white;
+    font-size: 32px;
+    line-height: 80px;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.tagModalBody {
+    height: 340px;
+    width: 100%;
+    border-bottom: 1px solid black;
+    padding-top: 10px;
+}
+
+.tagModalBody table {
+    margin-left: 50px;
+}
+
+.tagModalBody td:nth-child(2n - 1) {
+    font-size: 16px;
+    text-align: start;
+    width: 90px;
+}
+
+.tagModalBody input,
+.tagModalBody select {
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 350px;
+    height: 32px;
+    font-size: 16px;
+    text-indent: 10px;
+}
+
+.tagModalBody span:hover {
+    cursor: pointer;
+}
+
+.tagModalFooter {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.tagModalFooter button {
+    width: 125px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: #88CFBA;
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.tagCreation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.iconSelection {
+    display: flex;
+}
+
+.tagNameInput {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.addTagBtn {
+    width: 100px;
+    height: 32px;
+    margin-left: 20px;
+    background-color: #88CFBA;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tagList {
+    padding: 20px;
+}
+
+.tagItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.iconDisplay {
+    width: 32px;
+    height: 32px;
+}
+
+.tagName {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.editTagBtn,
+.deleteTagBtn {
+    width: 60px;
+    height: 32px;
+    margin-left: 10px;
+    background-color: #88CFBA;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}

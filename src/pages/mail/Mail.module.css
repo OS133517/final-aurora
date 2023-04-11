@@ -1,0 +1,276 @@
+.container {
+    width: 100%;
+    height: 100%; 
+    max-width: 100%;
+}
+
+.titleHeader {
+    width: 100%;
+    max-width: inherit;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 40px;
+}
+
+/* 검색바 */
+.searchBar {
+    width: 100%;
+    height: 63px;
+    border-bottom: 1px solid #C1C1C1;
+
+    line-height: 58px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+.searchBar > select {
+    box-sizing: border-box;
+    width: 140px;
+    height: 32px;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid #C1C1C1;
+    border-right: none;
+    padding-left: 10px;
+    font-size: 16px;
+}
+.searchBar > input {
+    box-sizing: border-box;
+    width: 600px;
+    height: 32px;
+    border-radius: 0 10px 10px 0;
+    border: 1px solid #C1C1C1;
+    font-size: 16px;
+}
+.searchBar > button {
+    box-sizing: border-box;
+    width: 93px;
+    height: 32px;
+    margin-left: 8px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+.addressesSearch > div {
+    position: absolute;
+    right: 10px;
+    height: 58px;
+    line-height: 58px;
+    padding-top: 10px;
+}
+
+/* 필터 */
+/* .filterSettings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    z-index: 1; /* 필터 div를 상위로 배치합니다. */
+.filterSettings {
+    position: absolute;
+    top: 90%;
+    left: 54%;
+    right: 0;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+.filterSettings label {
+    display: flex;
+    align-items: center;
+}
+.filterSettings input[type="checkbox"] {
+    margin-right: 8px;
+}
+.dropdownTagSelector {
+    min-width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.datePickerContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.datePickerContainer label {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+.datePickerContainer img {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+}
+/* .filterSettings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filterSettings label {
+    display: flex;
+    align-items: center;
+}
+
+.filterSettings input[type="checkbox"] {
+    margin-right: 8px;
+} */
+/* .filterContainer {
+    width: 200px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid #C1C1C1;
+    padding: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.filterContainer > * {
+    margin-bottom: 8px;
+}
+.filterContainer label {
+    display: flex;
+    align-items: center;
+}
+.filterContainer input[type="checkbox"] {
+    margin-right: 8px;
+} */
+
+/* 메일 리스트 테이블 */
+.mailTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.mailTable .header {
+    display: flex;
+    align-items: center; 
+    gap: 16px; 
+}
+.mailTable .header span {
+    margin-right: 16px;
+}
+.mailTable th,
+.mailTable td {
+    padding: 4px;
+    padding-left: 8px;
+    text-align: left;
+    border-bottom: 1px solid #C1C1C1;
+    vertical-align: middle; 
+}
+.mailTable th {
+    height: 2em;
+    font-size: 20px;
+    color: #88CFBA;
+}
+.mailTable td {
+    line-height: 1.5; /* 텍스트 라인 간격 조절 */
+    max-height: 1.5em; /* 한 줄 높이로 제한 */
+    overflow: hidden; /* 셀을 벗어나는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 긴 텍스트를 자르고 생략 부호 표시 */
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+}
+.mailTable .narrow {
+    width: 1%;
+    white-space: nowrap;
+}
+.mailTable .wide {
+    width: 100%;
+}
+.mailTable .date {
+    text-align: right;
+}
+.textOverflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+.centerText {
+    text-align: center;
+    width: 100%;
+}
+
+/* 로딩 스피너  */
+@keyframes spinner {
+
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 로딩 스피너 위치 및 크기 조절 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+.loadingSpinner img {
+    /* 로딩 스피너 애니메이션 적용 */
+    animation: spinner 1s linear infinite;
+}
+
+/* 페이징 div */
+.pagingBtn {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #00CAA6;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+.pagingBtn:hover{
+    cursor: pointer;
+    background-color: rgb(12, 250, 180);
+}
+.pagingBtn:disabled {
+    background-color: #C1C1C1;
+    cursor: not-allowed;
+}
+.disalbedPagingButton {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #C1C1C1;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+.pagingBtnDiv {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    list-style: none;
+}
