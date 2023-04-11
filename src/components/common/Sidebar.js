@@ -5,7 +5,7 @@ function Sidebar() {
 
     const activeStyle = { borderLeft : "7px solid orange"};
 
-    const sidebarMenus = ["home", "mail", "address-book", "calendar", "toDo", "worklog", "innOut", "approval", 
+    const sidebarMenus = ["home", "mail", "address-book", "calendar", "worklog", "innOut", "approval", 
                             "hrm", "report", "reservation", "survey"];
 
     return (
