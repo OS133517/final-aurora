@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { callGetpendingAPI } from '../../apis/ApprovalAPICalls';
+import { callGetCompeletedAPI } from '../../apis/ApprovalAPICalls';
 import ApprovalForm from '../../components/form/approval/ApprovalForm';
 import { decodeJwt } from '../../utils/tokenUtils';
 import ApprovalCSS from './Approvals.module.css'
 
-function Pending() {
+function Completed() {
     const dispatch = useDispatch();
-    const pendingList = useSelector(state => state.approvalReducer.pendingList);
+    const completedList = useSelector(state => state.approvalReducer.completedList);
     const token = decodeJwt(window.localStorage.getItem('accessToken'));
     const code = token.memberCode;
-    console.log('pendingList', pendingList);
+    console.log('completedList', completedList);
     useEffect(() => {
-        dispatch(callGetpendingAPI({ memberCode: code }))
+        dispatch(callGetCompeletedAPI({ memberCode: code }))
         // eslint-disable-next-line
     }, [])
     return (
@@ -34,7 +34,7 @@ function Pending() {
                     </thead>
                     <tbody className={ApprovalCSS.tbodyStyle}>
                         {
-                            pendingList?.length > 0 && pendingList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval} />))
+                            completedList?.length > 0 && completedList.map((approval) => (<ApprovalForm key={approval.appCode} approve={approval} />))
                         }
                     </tbody>
                 </table>
@@ -44,4 +44,4 @@ function Pending() {
     );
 }
 
-export default Pending;
+export default Completed;

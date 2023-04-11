@@ -33,7 +33,7 @@ function DraftForm() {
                 break;
             case 6: setDraftComponent(<LetterOfApproval />);
                 break;
-            case 7: setDraftComponent(<LeaveApplication />);
+            case 7: setDraftComponent(<LeaveApplication docCode={docCode} />);
                 break;
             default:
                 break;

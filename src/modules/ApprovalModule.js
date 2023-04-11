@@ -9,7 +9,8 @@ const initialState = {
     draftapprovalLine: [],
     lineList: [],
     completedList: [],
-    modifyLine: []
+    modifyLine: [],
+    modifyStatus: []
 };
 
 // 액션 상수로 정의
@@ -23,6 +24,7 @@ export const PUT_APPROVALS = 'approvals/PUT_APPROVALS';
 export const DETELE_APPROVALS = 'approvals/DETELE_APPROVALS';
 export const GET_DETAIL = 'approvals/GET_DETAIL';
 export const POST_APPROVALLINE = 'approvals/POST_APPROVALLINE';
+export const PUT_APPROVALS_STATUS = 'approvals/PUT_APPROVALS_STATUS';
 
 // eslint-disable-next-line
 const actions = createAction({
@@ -35,7 +37,8 @@ const actions = createAction({
     [DETELE_APPROVALS]: () => { },
     [GET_DETAIL]: () => { },
     [POST_APPROVALLINE]: () => { },
-    [GET_WAIT]: () => { }
+    [GET_WAIT]: () => { },
+    [PUT_APPROVALS_STATUS]: () => { }
 
 });
 
@@ -107,6 +110,13 @@ const approvalReducer = handleActions(
                 lineList: payload
             };
         },
+        [PUT_APPROVALS_STATUS]: (state, { payload }) => {
+
+            return {
+                ...state,
+                modifyStatus: payload
+            }
+        }
 
     },
     initialState

@@ -3,7 +3,6 @@ import approvalModalCSS from "./ApprovalModal.module.css";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { callDeleteApprovalAPI } from "../../../apis/ApprovalAPICalls";
-import { useEffect, useState } from "react";
 
 
 function ApprovalForm({ approve: { appCode, documentDTO, appTitle, appEndDate, appStatus } }) {
@@ -18,10 +17,6 @@ function ApprovalForm({ approve: { appCode, documentDTO, appTitle, appEndDate, a
     // 결재승인 상태 
 
     /** useEffect */
-    useEffect(() => {
-        // dispatch(callPostApprovalLineAPI);
-
-    }, [])
 
     /** event */
     const onClickModal = () => {
@@ -55,7 +50,7 @@ function ApprovalForm({ approve: { appCode, documentDTO, appTitle, appEndDate, a
     return (
         <>
             <tr className={approvalModalCSS.approvalList}>
-                <td className={approvalModalCSS.approvalList}>{documentDTO.docName}</td>
+                <td className={approvalModalCSS.approvalList}>{documentDTO?.docName}</td>
                 <td onClick={onClickModal} className={approvalModalCSS.link}>{appTitle}</td>
                 {/* <td className={approvalModalCSS.approvalList}>{appEndDate}</td> */}
                 <td className={approvalModalCSS.approvalList}>{appEndDate}</td>
@@ -63,7 +58,8 @@ function ApprovalForm({ approve: { appCode, documentDTO, appTitle, appEndDate, a
                     {appStatus === 'n' || appStatus === 'N' ? <span> 대기 </span> :
                         appStatus === 'y' || appStatus === 'Y' ? <span> 승인 </span> :
                             appStatus === 'w' || appStatus === 'W' ? <span> 거절 </span> :
-                                <span> 진행 </span>}
+                                appStatus === 'p' || appStatus === 'P' ? <span> 진행 </span> : null}
+
                 </td>
                 <td className={approvalModalCSS.deletecheck}> <button onClick={deleteHandler}> 삭제 </button> </td>
             </tr>
