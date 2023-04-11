@@ -5,6 +5,7 @@ import { decodeJwt } from '../../../utils/tokenUtils';
 import leaveApplicationCSS from './ApprovalModal.module.css';
 import ApprovalDraftLine from './ApprovalDraftLine';
 import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
+import { callPostVacationAPI, callPostVacationUseAPI } from '../../../apis/VacationAPICall';
 
 //휴가 신청서
 function LeaveApplication(props) {
@@ -19,7 +20,6 @@ function LeaveApplication(props) {
     const memberName = useSelector(state => state.memberReducer.memberDetail);
     const { docCode } = props;
     const docNum = Number(docCode) + 1;
-
     /** useState */
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
@@ -36,6 +36,7 @@ function LeaveApplication(props) {
         appOpen: 'n'
 
     });
+
     /** useEffect */
     useEffect(() => {
         if (docCode !== undefined) {
@@ -66,7 +67,7 @@ function LeaveApplication(props) {
         currentDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
     }
     // 일로 계산
-    console.log('differenceInDays : ', differenceInDays);
+    // console.log('differenceInDays : ', differenceInDays);
 
 
     const backEvent = () => {
@@ -75,10 +76,16 @@ function LeaveApplication(props) {
     const submitEvent = () => {
 
         // dispatch
+        // 결재서류
         dispatch(callPostApprovalAPI({
             form: form
         }, docNum, memberCode, setResponseStatus))
+        // 휴가 신청 서류 일때
+        if (docNum === 8) {
+            console.log('callPostVacationAPI 조건문 호출');
+            dispatch(callPostVacationAPI({ memberCode: memberCode }));
 
+        }
         // localStorage 저장
         if (localStorage.getItem('differenceInDays') !== null) {
             // localstorage에 저장되어 있는 differenceInDays를 정수형으로 변환하고 10진수로 한다.
@@ -93,6 +100,13 @@ function LeaveApplication(props) {
             ...form,
             [e.target.name]: e.target.value
         })
+        if (e.target.checked) {
+            setForm({
+                ...form,
+                [e.target.name]: e.target.value
+            })
+        }
+
         console.log('onChangeHandler : ', form);
 
     }
@@ -141,6 +155,7 @@ function LeaveApplication(props) {
                             <td className={leaveApplicationCSS.description}>
                                 {!isEdit ? <input type="date" id="appStartDate" name='appStartDate' readOnly /> : <input type="date" id="appStartDate" name='appStartDate' onChange={inputValue} />}~
                                 {!isEdit ? <input type="date" id="appEndDate" name='appEndDate' readOnly /> : <input type="date" id="appEndDate" name='appEndDate' onChange={inputValue} />}
+                                {!isEdit ? <input type="checkbox" id="appDescript" name='appDescript' readOnly /> : <input type="checkbox" id="appDescript" name='appDescript' onChange={inputValue} />} 반차
                             </td>
                         </tr>
 
@@ -148,11 +163,11 @@ function LeaveApplication(props) {
                 </table>
                 <div className={leaveApplicationCSS.approvalLineBox}>
                     {responseStatus === 200 &&
-                        <ApprovalDraftLine />
+                        <ApprovalDraftLine docNum={docNum} />
                     }
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }
