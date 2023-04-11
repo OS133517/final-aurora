@@ -132,6 +132,7 @@ function App() {
                 <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황' />} />
               </Route>
               <Route path="survey" element={<SurveyLayout />}>
+                <Route index element={<Surveys/>}/>
                 <Route path="list" element={<Surveys />} />
                 <Route path="survey-management" element={<SurveyManagement />} />
                 <Route path="survey-management/regist" element={<SurveyRegist />} />
