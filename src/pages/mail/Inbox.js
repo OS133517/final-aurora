@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { decodeJwt } from "../../utils/tokenUtils";
 import { Dropdown, DropdownButton, Button } from "react-bootstrap";
+import { useRef } from "react";
 import { callSelectMailListByConditionsAPI,
             callUpdateImportantStatusAPI,
             callSelectNewMailListAPI,
@@ -10,6 +11,7 @@ import { callSelectMailListByConditionsAPI,
             // 태그 
             callRegisterTagsAPI,
             callSelectTagsAPI,
+            callRegisterBlackListAPI,
         } from "../../apis/MailAPICall";
 
 import MailCSS from './Mail.module.css'
@@ -24,31 +26,34 @@ function Inbox() {
     const navigate = useNavigate();
     const accessToken = decodeJwt(window.localStorage.getItem("accessToken"));
 
+    const [updateTagTrigger, setUpdateTagTrigger] = useState(false);
     const [selectedMails, setSelectedMails] = useState([]);
-    // const [selectedEmails, setSelectedEmails] = useState([]);
     const [mailUpdated, setMailUpdated] = useState(false); 
     const [allMailsSelected, setAllMailsSelected] = useState(false); // 전체 선택 
     const [isLoading, setIsLoading] = useState(false);
     // 검색 
-    const [showFilter, setShowFilter] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [importantStatus, setImportantStatus] = useState(false);
     const [searchTag, setSearchTag] = useState(null);
     const [searchInput, setSearchInput] = useState({ type: "", value: "" });
     // 태그 
-    const [tagName, setTagName] = useState('');
-    const [tagColor, setTagColor] = useState('');
+    const [selectedTagFilter, setSelectedTagFilter] = useState(null);
+    // const [tagName, setTagName] = useState('');
+    // const [tagColor, setTagColor] = useState('');
     const [tags, setTags] = useState([]);
     const [showTagModal, setShowTagModal] = useState(false); // 태그 모달 
+    // 필터
+    const [filterOpen, setFilterOpen] = useState(false);
+    const filterRef = useRef(null);
     // 페이징 
     const [currentPage, setCurrentPage] = useState(1);
 
     const mailData = useSelector(state => state.mailReducer.mailData);
     // // console.log("mailList : " + JSON.stringify(mailList));
-    const mailList = mailData?.data; // 정기보고 목록 
+    const mailList = mailData?.data; 
     // // console.log("routineReportList : " + JSON.stringify(routineReportList));
-    const pageInfo = mailData?.pageInfo; // 정기보고 페이지 정보 
+    const pageInfo = mailData?.pageInfo;
     // // console.log("pageInfo : " + JSON.stringify(pageInfo));
     const tagList = useSelector(state => state.mailReducer.tagList);
     // console.log("tagList : " + JSON.stringify(tagList));
@@ -72,7 +77,6 @@ function Inbox() {
             recipients: accessToken.memberEmail,
             deleteStatus: "N",
         };
-
         if (searchTag) {
 
             searchParams.tagCode = searchTag;
@@ -101,6 +105,27 @@ function Inbox() {
         setMailUpdated(false);
     }, [mailUpdated]);
 
+    // 필터밖 클릭시 
+    useEffect(() => {
+
+        const handleClickOutside = (event) => {
+
+            if (
+                filterRef.current &&
+                !filterRef.current.contains(event.target) &&
+                !event.target.closest(".filter-container")
+            ) {
+                setFilterOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+    
+        return () => {
+
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     // 검색 입력 값 
     const onChangeHandler = (e) => {
 
@@ -109,14 +134,20 @@ function Inbox() {
 
     // 필터 토글 
     const handleFilterClick = () => {
-
-        setShowFilter(!showFilter);
+        
+        setFilterOpen(!filterOpen);
     };
   
     // 태그 선택 
-    const handleTagSelect = (tagCode) => {
+    const handleTagFilterChange = (tagCode) => {
 
-        setSearchTag(tagCode);
+        setSelectedTagFilter(tagCode);
+    };
+
+    // 태그 업데이트 관리 함수 
+    const handleTagUpdate = () => {
+
+        setUpdateTagTrigger(!updateTagTrigger);
     };
   
     // 중요 상태 검색 
@@ -169,6 +200,16 @@ function Inbox() {
         setMailUpdated(!mailUpdated);
     };
 
+    // 스팸차단 
+    const registerBlackList = () => {
+
+        dispatch(callRegisterBlackListAPI({
+
+            emails : selectedMails.map((mail) => mail.senderEmail),
+        }));
+        setMailUpdated(!mailUpdated);
+    }
+
     // 메일 선택 
     const handleMailSelection = (mail) => {
 
@@ -197,36 +238,6 @@ function Inbox() {
         setAllMailsSelected(!allMailsSelected);
     };
 
-    // 태그 생성 
-    const registerTag = () => {
-
-        dispatch(callRegisterTagsAPI({
-
-            tagName : tagName,
-            tagColor : tagColor
-        }))
-    }
-
-    // 태그 수정 
-    // const updateTag = (tagCode, updatedTagName, updatedTagColor) => {
-
-    //     dispatch(
-
-    //         callUpdateTagAPI({
-
-    //             tagCode : tagCode,
-    //             tagName : updatedTagName,
-    //             tagColor : updatedTagColor,
-    //         })
-    //     );
-    // };
-    
-    // 태그 삭제 
-    // const deleteTag = (tagCode) => {
-
-    //     dispatch(callDeleteTagAPI(tagId));
-    // };
-
     // 성공 알림 
     const successAlert = (message) => {
 
@@ -249,8 +260,19 @@ function Inbox() {
     };
 
     // 모달 관리 
-    const toggleTagModal = () => {
+    // const toggleTagModal = () => {
 
+    //     setShowTagModal((prev) => !prev);
+    // };
+    const toggleTagModal = () => { // 집 모니터가 커서 생기는 문제일 수 있음 - 모달창 생성시 스크롤 내려가는 문제 
+
+        if (!showTagModal) {
+
+            document.body.style.overflow = "hidden";
+        } else {
+
+            document.body.style.overflow = "auto";
+        }
         setShowTagModal((prev) => !prev);
     };
 
@@ -260,9 +282,6 @@ function Inbox() {
                 <div className={MailCSS.titleHeader}>
                     <span>받은 메일함 (안 읽은 갯수) / {pageInfo?.totalCount}</span>
                 </div>
-                {/* <div className={MailCSS.searchBar}>
-                    <span>검색 종류 : 검색 입력창 검색버튼 필터?(태그, 날짜)</span>
-                </div> */}
                 <div className={MailCSS.searchBar}>
                     <select 
                         name="condition" 
@@ -289,15 +308,26 @@ function Inbox() {
                     <button onClick={() => handleFilterClick()}>
                         필터
                     </button>
-                    {showFilter && (
-                        <div className={MailCSS.filterSettings}>
-                            <DropdownButton 
+                    {filterOpen && (
+                        // <div className={MailCSS.filterSettings} ref={filterRef}>
+                        <div className={`${MailCSS.filterSettings} filter-container`} ref={filterRef}>
+                            <div className="tagFilterContainer">
+                                {tagList?.map((tag) => (
+                                    <div
+                                        key={tag.tagCode}
+                                        className={selectedTagFilter === tag.tagCode ? "tagFilterSelected" : "tagFilter"}
+                                        onClick={() => handleTagFilterChange(tag.tagCode)}
+                                    >
+                                        {tag.tagName}
+                                    </div>
+                                ))}
+                            </div>
+                            {/* <DropdownButton 
                                 id="dropdown-tag-selector" 
                                 title="태그 선택"
                                 className={MailCSS.dropdownTagSelector}
                             >
-                                {tags.map((tag) => (
-                                    // <Dropdown.Item key={tag.tagCode} onClick={() => handleTagSelect(tag.tagCode)}>
+                                {tagList.map((tag) => (
                                     <Dropdown.Item key={tag.tagCode} onClick={() => setSearchTag(tag.tagCode)}>
                                         <img
                                             src={`/mail/tags/${tag.tagColor}.png`}
@@ -307,57 +337,21 @@ function Inbox() {
                                         {tag.tagName}
                                     </Dropdown.Item>
                                 ))}
-                            </DropdownButton>
-
-                            {/* <div className="date-picker-container"> */}
-                            {/* <div className={MailCSS.datePickerContainer}>
-                                <label htmlFor="startDate">
-                                    <span>시작일</span>
-                                    <img src={"/mail/calendar.png"} alt="calendar" />
-                                </label>
-                                <DatePicker
-                                    id="startDate"
-                                    selected={startDate}
-                                    onChange={(date) => setStartDate(date)}
-                                    dateFormat="yyyy-MM-dd"
-                                />
-                            </div>
-                            <div className={MailCSS.datePickerContainer}>
-                                <label htmlFor="endDate">
-                                    <span>종료일</span>
-                                    <img src={"/mail/calendar.png"} alt="calendar" />
-                                </label>
-                                <DatePicker
-                                    id="endDate"
-                                    selected={endDate}
-                                    onChange={(date) => setEndDate(date)}
-                                    dateFormat="yyyy-MM-dd"
-                                />
-                            </div> */}
+                            </DropdownButton> */}
                             <div style={{ whiteSpace: 'nowrap' }}>시작일</div>
                             <DatePicker
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
                                 dateFormat="yyyy-MM-dd"
-                                placeholderText="---- -- --"
+                                placeholderText="yyyy-MM-dd"
                             />
                             <div style={{ whiteSpace: 'nowrap' }}>종료일</div>
                             <DatePicker
                                 selected={endDate}
                                 onChange={(date) => setEndDate(date)}
                                 dateFormat="yyyy-MM-dd"
-                                placeholderText="---- -- --"
+                                placeholderText="yyyy-MM-dd"
                             />
-                            {/* <DatePicker
-                                selected={startDate}
-                                onChange={(date) => setStartDate(date)}
-                                dateFormat="yyyy-MM-dd"
-                            />
-                            <DatePicker
-                                selected={endDate}
-                                onChange={(date) => setEndDate(date)}
-                                dateFormat="yyyy-MM-dd"
-                            /> */}
                             <label>
                                 <input
                                     type="checkbox"
@@ -394,7 +388,8 @@ function Inbox() {
                                             삭제
                                         </span>
                                         <span
-                                            style={{cursor: "not-allowed"}}
+                                            style={{cursor: "pointer"}}
+                                            onClick={() => registerBlackList()}
                                         >
                                             스팸차단
                                         </span>
@@ -406,7 +401,8 @@ function Inbox() {
                                             태그관리
                                         </span> */}
                                         <span style={{cursor: 'pointer'}}>
-                                                <TagManagementModal onClose={() => toggleTagModal()} />
+                                            {/* <TagManagementModal onClose={() => toggleTagModal()} /> */}
+                                            <TagManagementModal onUpdate={handleTagUpdate} />
                                         </span>
                                         <span 
                                             style={{cursor: 'pointer'}}

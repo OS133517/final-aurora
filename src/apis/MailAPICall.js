@@ -136,10 +136,10 @@ export const callRegisterTagsAPI = ({tagName, tagColor}) => {
                 "Accept" : "*/*",
                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
-            body : {
+            body : JSON.stringify({
                 tagName : tagName,
                 tagColor : tagColor
-            }
+            }) 
         })
         .then(response => response.json());
 
@@ -188,11 +188,11 @@ export const callUpdateTagsAPI = ({tagCode, tagName, tagColor}) => {
                 "Accept" : "*/*",
                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
-            body : {
+            body : JSON.stringify({
                 tagCode : tagCode,
                 tagName : tagName,
                 tagColor : tagColor
-            }
+            }) 
         })
         .then(response => response.json());
 
@@ -241,9 +241,9 @@ export const callRegisterBlackListAPI = ({emails}) => {
                 "Accept" : "*/*",
                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             },
-            body : {
-                emails : emails
-            }
+            body: JSON.stringify({
+                emails: emails,
+            }),
         })
         .then(response => response.json());
 

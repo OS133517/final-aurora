@@ -8,17 +8,25 @@ import { callRegisterTagsAPI,
         } from "../../apis/MailAPICall";
 
 import TagManagementModalCSS from "./TagManagementModal.module.css";
+import Swal from "sweetalert2";
 
-function TagManagerModal() {
+function TagManagerModal(props) {
+
+    const { onUpdate } = props;
 
     const dispatch = useDispatch();
 
     const [show, setShow] = useState(false);
     const [tagUpdated, setTagUpdated] = useState(false); 
+    const [selectedTag, setSelectedTag] = useState(null);
+    // 태그 등록
     const [newTagName, setNewTagName] = useState('');
     const [newTagColor, setNewTagColor] = useState('');
-    const [input, setInput] = useState({ id: "", value: "" }); // 태그 목록중 태그 각 입력칸의 값 
-    const [inputColor, setInputColor] = useState({ id: "", value: "" }); // 태그 목록중 태그의 아이콘 클릭시 나타난 목록중 클릭된 값 
+    // 태그 수정 
+    // const [input, setInput] = useState({ tagCode: "", value: "" }); // 태그 목록중 태그 각 입력칸의 값 
+    // const [inputColor, setInputColor] = useState({ tagCode: "", value: "" }); // 태그 목록중 태그의 아이콘 클릭시 나타난 목록중 클릭된 값 
+    const [input, setInput] = useState({ tagCode: "", value: "", color: "" }); // 태그 목록중 태그 각 입력칸의 값
+    const [colorPickerVisible, setColorPickerVisible] = useState({ tagCode: "", visible: false });
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -32,6 +40,7 @@ function TagManagerModal() {
         setTagUpdated(false);
     }, [tagUpdated]);
 
+    // 태그 등록 
     const registerTags = () => {
 
         if (newTagName !== "" && newTagColor !== "") {
@@ -44,48 +53,109 @@ function TagManagerModal() {
             setNewTagName('');
             setNewTagColor('');
             setTagUpdated(!tagUpdated);
-        }
-    }
-
-    const updateTags = () => {
-
-        // dispatch(callRegisterTagsAPI({
+            onUpdate();
+        } else if(newTagName == "") {
             
-        //     tagName : input,
-        //     tagColor : inputColor
-        // }));
-        // setTagUpdated(!tagUpdated);
-        if (input.id !== "" && input.value !== "") {
-            dispatch(callUpdateTagsAPI({
-                tagCode: input.id,
-                tagName: input.value,
-                tagColor: inputColor.value
-            }));
-            setInput({ id: "", value: "" });
-            setInputColor({ id: "", value: "" });
-            setTagUpdated(!tagUpdated);
+            warningAlert("태그명을 입력해주세요.")
+        } else {
+            
+            warningAlert("태그 색상을 선택해주세요.")
         }
     }
 
-    const inputChangeHandler = (event, tagCode) => {
+    // 태그 수정 
+    const updateTags = (tagCode) => {
 
-        setInput({ id: tagCode, value: event.target.value });
-    }
+        const existingTag = tagList.find((tag) => tag.tagCode === tagCode);
     
-    const selectTagColor = (color, tagCode) => {
+        const updatedInput = {
 
-        setInputColor({ id: tagCode, value: color });
-        updateTags();
-    }
+            ...input,
+            value: input.value === "" ? existingTag.tagName : input.value,
+            color: input.color === "" ? existingTag.tagColor : input.color,
+        };
+        if (updatedInput.value !== "") {
 
+            dispatch(callUpdateTagsAPI({
+
+                tagCode: tagCode,
+                tagName: updatedInput.value,
+                tagColor: updatedInput.color,
+            }));
+            setInput({ tagCode: "", value: "", color: "" });
+            setTagUpdated(!tagUpdated);
+            onUpdate();
+        } else {
+
+            warningAlert("태그명을 입력해주세요.");
+        }
+    };
+
+    // 수정 입력값 변경 핸들러 
+    const handleInputChange = (event, tagCode) => {
+
+        setInput({ ...input, tagCode: tagCode, value: event.target.value });
+    };
+
+    // 색상 선택 함수
+    const selectTagColor = (tagCode, newColor) => {
+
+        setInput((prevState) => ({
+
+            ...prevState,
+            tagCode: tagCode,
+            color: newColor,
+        }));
+    };
+  
+    // 수정 버튼 클릭 이벤트 처리 함수
+    const handleUpdateButtonClick = () => {
+
+            updateTags(input.tagCode);
+            setColorPickerVisible({ tagCode: "", visible: false });
+    };
+    
+    // 색상 변경 박스 토글 
+    const toggleColorPicker = (tagCode) => {
+
+        setColorPickerVisible((prevState) => ({
+
+            tagCode: prevState.tagCode === tagCode && prevState.visible ? "" : tagCode,
+            visible: prevState.tagCode === tagCode ? !prevState.visible : true,
+        }));
+    };
+
+    // 태그 삭제 
     const deleteTags = (tagCode) => {
 
-        dispatch(callRegisterTagsAPI({
+        dispatch(callDeleteTagsAPI({
             
             tagCode : tagCode
         }));
         setTagUpdated(!tagUpdated);
+        onUpdate();
     }
+
+    // 성공 알림 
+    const successAlert = (message) => {
+
+        Swal.fire({
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+        });
+    };
+
+    // 경고 실패 알림 
+    const warningAlert = (message) => {
+
+        Swal.fire({
+            icon: 'warning',
+            title: '경고',
+            text: message,
+            confirmButtonText: '확인',
+        });
+    };
 
     return (
         <>
@@ -107,7 +177,7 @@ function TagManagerModal() {
                                                 style={{
                                                     width: "32px",
                                                     height: "32px",
-                                                    border: newTagColor === color ? "2px solid black" : "none"
+                                                    border: newTagColor === color ? "2px solid red" : "none"
                                                 }}
                                                 type='image'
                                                 src={`/mail/tags/${color}.png`}
@@ -124,14 +194,13 @@ function TagManagerModal() {
                                     />
                                     <button 
                                         className={TagManagementModalCSS.addTagBtn}
-                                        onClick={registerTags}
+                                        onClick={() => registerTags()}
                                     >
                                         태그 추가
                                     </button>
                                 </div>
                                 {/* 태그 리스트 */}
-                                <div className={TagManagementModalCSS.tagList}>
-                                    {/* 태그 항목 예시 */}
+                                {/* <div className={TagManagementModalCSS.tagList}>
                                     {tagList?.map((tag) => (
                                         <div key={tag.tagCode} className={TagManagementModalCSS.tagItem}>
                                             <div className={TagManagementModalCSS.iconDisplay}>
@@ -152,14 +221,60 @@ function TagManagerModal() {
                                             <input
                                                 type="text"
                                                 className={TagManagementModalCSS.tagName}
-                                                value={tag.tagName}
-                                                onChange={(e) => inputChangeHandler(e, tag.tagCode)}
+                                                value={input.tagCode === tag.tagCode? input.value : tag.tagName}
+                                                onChange={(event) => handleInputChange(event, tag.tagCode)}
                                             />
-                                            <button className={TagManagementModalCSS.editTagBtn} onClick={updateTags}>수정</button>
+                                            <button className={TagManagementModalCSS.editTagBtn} onClick={handleUpdateButtonClick}>수정</button>
                                             <button className={TagManagementModalCSS.deleteTagBtn} onClick={() => deleteTags(tag.tagCode)}>X</button>
                                         </div>
                                     ))}
-                                </div>
+                                </div> */}
+                                {/* 태그 리스트 */}
+                                    <div className={TagManagementModalCSS.tagList}> 
+                                    {tagList?.map((tag) => (
+                                        <div key={tag.tagCode} className={TagManagementModalCSS.tagItem}>
+                                        <div className={TagManagementModalCSS.iconDisplay}>
+                                            {['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'].map((color) => (
+                                            <input
+                                                key={color}
+                                                style={{
+                                                    width: "32px",
+                                                    height: "32px",
+                                                    display: tag.tagColor === color ? 'inline-block' : 'none'
+                                                }}
+                                                type='image'
+                                                src={`/mail/tags/${color}.png`}
+                                                onClick={() => toggleColorPicker(tag.tagCode)}
+                                            />
+                                            ))}
+                                            {colorPickerVisible.tagCode === tag.tagCode && colorPickerVisible.visible && (
+                                            <div className={TagManagementModalCSS.colorPicker} style={{ display: 'flex', flexDirection: 'row' }}>
+                                                {['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'].map((color) => (
+                                                <input
+                                                    key={color}
+                                                    style={{
+                                                    width: "32px",
+                                                    height: "32px",
+                                                    }}
+                                                    type='image'
+                                                    src={`/mail/tags/${color}.png`}
+                                                    onClick={() => selectTagColor(tag.tagCode, color)}
+                                                />
+                                                ))}
+                                            </div>
+                                            )}
+                                        </div>
+                                        <input
+                                            type="text"
+                                            className={TagManagementModalCSS.tagName}
+                                            value={input.tagCode === tag.tagCode ? input.value : tag.tagName}
+                                            onChange={(event) => handleInputChange(event, tag.tagCode)}
+                                        />
+                                        <button className={TagManagementModalCSS.editTagBtn} onClick={() => updateTags(tag.tagCode)}>수정</button>
+                                        <button className={TagManagementModalCSS.deleteTagBtn} onClick={() => deleteTags(tag.tagCode)}>X</button>
+                                        </div>
+                                    ))}
+                                    </div>
                             </div>
                             <div className={TagManagementModalCSS.tagModalFooter}>
                                 <button onClick={() => handleClose()}>닫기</button>
