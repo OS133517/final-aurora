@@ -90,6 +90,37 @@ export const callGetpendingAPI = ({ memberCode }) => {
   }
 }
 
+// 최근 완료 서류 목록 출력
+export const callGetCompeletedAPI = ({ memberCode }) => {
+  console.log('memberCode', memberCode)
+  //임시 
+  const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/approvals/completed/${memberCode}`;
+
+  return async (dispatch, getState) => {
+    try {
+      const token = "Bearer " + window.localStorage.getItem("accessToken");
+      // 클라이언트 fetch mode : no-cors 사용시 application/json 방식으로 요청이 불가능
+      // 서버에서 cors 허용을 해주어야 함
+      const result = await fetch(requestURL, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "*/*",
+          "Authorization": token
+        }
+      })
+        .then(response => response.json());
+
+      // console.log('[callGetpendingAPI] RESULT : ', result);
+
+      dispatch({ type: GET_COMPLETED, payload: result.data });
+    }
+    catch (error) {
+      console.error("callGetpendingAPI 에서 오류 발생 : ", error);
+    };
+  }
+}
+
 // 결재서류 등록`
 export const callPostApprovalAPI = ({ form }, docNum, memberCode, setResponseStatus) => {
 
@@ -249,7 +280,7 @@ export const callPutApprovalAPI = ({ appCode, appStatus }) => {
     const token = "Bearer " + window.localStorage.getItem("accessToken");
     return async (dispatch, getState) => {
 
-      const response = await fetch(requestURL, {
+      const result = await fetch(requestURL, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -262,9 +293,9 @@ export const callPutApprovalAPI = ({ appCode, appStatus }) => {
 
         })
       })
+        .then(response => response.json());
 
-      const result = await response.json();
-
+      dispatch({ type: PUT_APPROVALS, payload: result.data });
       // console.log('[callPutApprovalAPI] RESULT', result);
     }
 
@@ -286,7 +317,7 @@ export const callDeleteApprovalAPI = ({ appCode }) => {
       const response = await fetch(requestURL, {
         method: "DELETE"
       })
-
+      //eslint-disable-next-line
       const result = await response.json();
 
       // console.log('[callDeleteApprovalAPI] RESULT', result);

@@ -61,6 +61,7 @@ import WeekWorklogInsert from "./pages/worklog/WeekWorklogInsert";
 import MessengerList from "./pages/messenger/MessengerList";
 import MessengerLayout from "./layouts/MessengerLayout";
 import ChatRoom from "./components/form/messenger/ChatRoom";
+import Completed from "./pages/approval/Completed";
 
 
 function App() {
@@ -78,69 +79,69 @@ function App() {
                 <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록' />} />
                 <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록' />} />
               </Route>
-              <Route path="reports" element={<ReportLayout/>}>
-                <Route path="routines" element={<RoutineReports/>}/>
-                <Route path=":reportCode/rounds" element={<ReportRounds/>}/>
-                <Route path="casuals" element={<CasualReports/>}/>
-                <Route path="summary" index element={<ReportsSummary/>}/>
-                <Route path="edit" element={<ReportCreate/>}/>
-                <Route path="casuals/:reportCode" element={<CasualReportDetail/>}/>
-                <Route path="edit" element={<ReportCreate/>}/>
-                <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail/>}/>
+              <Route path="reports" element={<ReportLayout />}>
+                <Route path="routines" element={<RoutineReports />} />
+                <Route path=":reportCode/rounds" element={<ReportRounds />} />
+                <Route path="casuals" element={<CasualReports />} />
+                <Route path="summary" index element={<ReportsSummary />} />
+                <Route path="edit" element={<ReportCreate />} />
+                <Route path="casuals/:reportCode" element={<CasualReportDetail />} />
+                <Route path="edit" element={<ReportCreate />} />
+                <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail />} />
               </Route>
               <Route path="reservation" element={<ReservationLayout />}>
-                <Route index element={<MyReservation/>}/>
-                <Route index element={<MyReservation/>}/>
+                <Route index element={<MyReservation />} />
+                <Route index element={<MyReservation />} />
                 <Route path="my-reservation" element={<MyReservation />} />
                 <Route path="assets/:assetCode" element={<ReservationCalendar />} />
-                <Route path="asset-management" element={<ReservationAssetManagement/>}/>
+                <Route path="asset-management" element={<ReservationAssetManagement />} />
                 <Route path="assets/:assetCode" element={<ReservationCalendar />} />
               </Route>
               <Route path="approval" element={<ApprovalLayout />}>
                 <Route index="approvals" element={<Approvals />} />
                 <Route index path="pending" element={<Pending />} />
                 <Route index path="waiting" element={<ApprovalWait />} />
-                <Route index path="waiting" element={<ApprovalWait />} />
+                <Route index path="compeleted" element={<Completed />} />
                 <Route index path="draft" element={<ApprovalDraft />} />
                 <Route index path="detail/:appCode" element={<ApprovalDetail />} />
                 <Route index path="form/:docCode" element={<DraftForm />} />
               </Route>
-              <Route path="hrm" element={<HrmLayout/>}>
-                <Route index element={<Hrm/>}/>
-                <Route path="list" element={<Hrm category='인사 목록'/>}/>
-                <Route path="hrm-detail/:memberCode" element={<HrmDetail category='인사 정보'/>}/>
-                <Route path="hrm-modify" element={<Hrm category='인사 수정'/>}/>
-                <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정'/>}/>
-                <Route path="hrm-regist" element={<HrmSignup category='인사 등록'/>}/>
+              <Route path="hrm" element={<HrmLayout />}>
+                <Route index element={<Hrm />} />
+                <Route path="list" element={<Hrm category='인사 목록' />} />
+                <Route path="hrm-detail/:memberCode" element={<HrmDetail category='인사 정보' />} />
+                <Route path="hrm-modify" element={<Hrm category='인사 수정' />} />
+                <Route path="hrm-modify/:memberCode" element={<HrmModify category='인사 수정' />} />
+                <Route path="hrm-regist" element={<HrmSignup category='인사 등록' />} />
               </Route>
-              <Route path="worklog" element={<WorklogLayout/>}>
-                <Route path="day" element={<DayWorklogs/>}/>
-                <Route path="day/:dayWorklogCode" element={<DayWorklogDetail/>}/>
-                <Route path="day/insert" element={<DayWorklogInsert/>}/>
-                <Route path="week" element={<WeekWorklogs/>}/>
-                <Route path="week/:weekWorklogCode" element={<WeekWorklogDetail/>}/>
-                <Route path="week/insert" element={<WeekWorklogInsert/>}/>
+              <Route path="worklog" element={<WorklogLayout />}>
+                <Route path="day" element={<DayWorklogs />} />
+                <Route path="day/:dayWorklogCode" element={<DayWorklogDetail />} />
+                <Route path="day/insert" element={<DayWorklogInsert />} />
+                <Route path="week" element={<WeekWorklogs />} />
+                <Route path="week/:weekWorklogCode" element={<WeekWorklogDetail />} />
+                <Route path="week/insert" element={<WeekWorklogInsert />} />
               </Route>
-              <Route path="attendance" element={<AttendanceLayout/>}>
-                <Route index element={<Attendance/>}/>
+              <Route path="attendance" element={<AttendanceLayout />}>
+                <Route index element={<Attendance />} />
                 {/* <Route path="list" element={<Attendance category='인사 목록'/>}/> */}
-                <Route path="attendance-detail/:memberCode" element={<AttendanceDetail category='근태 현황'/>}/>
-                <Route path="attendance-modify" element={<AttendanceModify category='근태 수정'/>}/>
-             {/* <Route path="attendance-modify/:memberCode" element={<AttendanceModify category='근태 수정'/>}/> */}
-                <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황'/>}/>
+                <Route path="attendance-detail/:memberCode" element={<AttendanceDetail category='근태 현황' />} />
+                <Route path="attendance-modify" element={<AttendanceModify category='근태 수정' />} />
+                {/* <Route path="attendance-modify/:memberCode" element={<AttendanceModify category='근태 수정'/>}/> */}
+                <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황' />} />
               </Route>
-              <Route path="survey" element={<SurveyLayout/>}>
-                <Route path="list" element={<Surveys/>}/>
-                <Route path="survey-management" element={<SurveyManagement/>}/>
-                <Route path="survey-management/regist" element={<SurveyRegist/>}/>
-                <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate/>}/>
+              <Route path="survey" element={<SurveyLayout />}>
+                <Route path="list" element={<Surveys />} />
+                <Route path="survey-management" element={<SurveyManagement />} />
+                <Route path="survey-management/regist" element={<SurveyRegist />} />
+                <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate />} />
               </Route>
               <Route path="messenger" element={<MessengerLayout />}>
                 <Route index="messengers" element={<MessengerList />} />
                 <Route index path="detail/:roomNum" element={<ChatRoom />} />
               </Route>
-              <Route path="calendar" element={<ScheduleLayout/>}>
-                <Route path="month" element={<Schedules/>}></Route>
+              <Route path="calendar" element={<ScheduleLayout />}>
+                <Route path="month" element={<Schedules />}></Route>
               </Route>
             </Route>
           </Route>

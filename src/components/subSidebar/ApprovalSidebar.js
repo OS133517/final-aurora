@@ -10,7 +10,7 @@ function ApprovalSidebar() {
     //eslint-disable-next-line
     const dispatch = useDispatch();
     /** useSelector */
-    const list = useSelector(state => state.approvalReducer.approvalInfo);
+    const list = useSelector(state => state.approvalReducer.pendingList);
     const waitingCount = useSelector(state => state.approvalReducer.lineList);
     /** useState */
     const [open, setOpen] = useState('false');
@@ -70,7 +70,7 @@ function ApprovalSidebar() {
                                     <NavLink to="/aurora/approval/pending" className={SidebarCSS.approvalItem}>진행중</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink className={SidebarCSS.approvalItem}>결재완료</NavLink>
+                                    <NavLink to="/aurora/approval/compeleted" className={SidebarCSS.approvalItem}>결재완료</NavLink>
                                 </li>
                                 <li>
                                     <NavLink to="/aurora/approval/waiting" className={SidebarCSS.approvalItem}>요청대기</NavLink>

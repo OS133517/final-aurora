@@ -48,6 +48,27 @@ function LeaveApplication(props) {
         //eslint-disable-next-line
     }, [])
 
+    // 날짜 계산
+    const startDate = new Date(form?.appStartDate);
+    const endDate = new Date(form?.appEndDate);
+    // console.log('startDate : ', startDate, ' endDate : ', endDate);
+    let currentDate = startDate;
+    let differenceInDays = 0;
+
+    while (currentDate <= endDate) {
+        // getDay 각 요일을 숫자로 표현 일요일은 0, 토요일은 6
+        const dayOfWeek = currentDate.getDay();
+
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            differenceInDays++;
+        }
+        // 다음 날짜로 이동 
+        currentDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+    }
+    // 일로 계산
+    console.log('differenceInDays : ', differenceInDays);
+
+
     const backEvent = () => {
         window.history.back();
     }
@@ -58,6 +79,13 @@ function LeaveApplication(props) {
             form: form
         }, docNum, memberCode, setResponseStatus))
 
+        // localStorage 저장
+        if (localStorage.getItem('differenceInDays') !== null) {
+            // localstorage에 저장되어 있는 differenceInDays를 정수형으로 변환하고 10진수로 한다.
+            differenceInDays = parseInt(localStorage.getItem('differenceInDays'), 10);
+        } else {
+            localStorage.setItem('differenceInDays', differenceInDays);
+        }
     }
 
     const inputValue = (e) => {

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { callApprovalDetailAPI, callPutApprovalAPI, callPutApprovalLine } from "../../apis/ApprovalAPICalls";
 import { callMemberDetailAPI } from "../../apis/MemberAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
 import Swal from 'sweetalert2';
 import approvalDetailCSS from "./Approvals.module.css"
+import { callPutVacationAPI } from "../../apis/AttendanceAPICall";
 
 function ApprovalDetail() {
 
@@ -14,7 +15,7 @@ function ApprovalDetail() {
 
     /** useLocation */
     // approvalForm 컴포넌트에서 documentDTO을 가져오기 위한 hook
-    const location = useLocation();
+    // const location = useLocation();
 
     /** useParams */
     const paramAppCode = useParams("appCode");
@@ -35,9 +36,15 @@ function ApprovalDetail() {
     /** 변수 */
     /** @param documentDTO 문서 DTO*/
     const docName = detailInfo?.detailApproval?.documentDTO?.docName;
+
     /** @param loginCode 로그인한 유저의 코드*/
     const loginCode = loginMember.memberCode;
 
+    /** @param docCode 휴가 문서 여부 확인*/
+    const docCode = detailInfo?.detailApproval?.documentDTO?.docCode;
+
+    /** @param vacation 상태코드 확인*/
+    const vacation = detailInfo?.detailApproval?.documentDTO?.appStatus;
     /** @param memberCode 작성한 유저의 코드*/
     const memberCode = detailInfo?.detailApproval?.memberDTO?.memberCode;
 
@@ -48,26 +55,21 @@ function ApprovalDetail() {
     const firstNStatus = detailInfo?.approvalLine?.find(line => line.appStatus === 'n');
     /** @param approvalMember 승인할 유저의 코드*/
     const approvalMemberCode = firstNStatus?.memberDTO?.memberCode;
-    // 날짜 계산
-    const startDate = new Date(detailInfo?.detailApproval?.appStartDate);
-    const endDate = new Date(detailInfo?.detailApproval?.appEndDate);
 
-    let currentDate = startDate;
-    let differenceInDays = 0;
+    // 문서코드가 휴가 문서 일 때 
+    if (docCode === 8) {
+        /** 휴가일수 주말 제외 */
+        const differenceInDay = window.localStorage.getItem('differenceInDays');
 
-    while (currentDate <= endDate) {
-        // getDay 각 요일을 숫자로 표현 일요일은 0, 토요일은 6
-        const dayOfWeek = currentDate.getDay();
-
-        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-            differenceInDays++;
+        // appStatus 가 승인일때 differenceInDay를 휴가 API에 파라미터로 추가하여 호출
+        if (vacation === 'y') {
+            dispatch(callPutVacationAPI({ day: differenceInDay }));
         }
-        // 다음 날짜로 이동 
-        currentDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+
+
     }
-    // 일로 계산
-    console.log('differenceInDays : ', differenceInDays);
     /** useEffect */
+    // 휴가 일 경우 
     // 결재 상세조회 , 결재, 결재선
     useEffect(() => {
         const fetchData = async () => {
@@ -109,29 +111,31 @@ function ApprovalDetail() {
         }
         //eslint-disable-next-line
     }, [detailInfo?.approvalLine]);
-    console.log('detailInfo : ', detailInfo);
+
+    // console.log('detailInfo : ', detailInfo);
+    // 결재선의 결재 종류에 따라 리스트에 보여질 상태 변경
     useEffect(() => {
         if (approvalLineStatus) {
             if (approvalLineStatus.every(status => status === "n")) {
-                console.log("Dispatching with appStatus: 'n'");
+                // console.log("Dispatching with appStatus: 'n'");
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'n'
                 }));
             } else if (approvalLineStatus.every(status => status === "y")) {
-                console.log("Dispatching with appStatus: 'y'");
+                // console.log("Dispatching with appStatus: 'y'");
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'y'
                 }));
             } else if (approvalLineStatus.some(status => status === "w")) {
-                console.log("Dispatching with appStatus: 'w'");
+                // console.log("Dispatching with appStatus: 'w'");
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'w'
                 }));
             } else if (approvalLineStatus.some(status => status === "y") && approvalLineStatus.some(status => status === "n")) {
-                console.log("Dispatching with appStatus: 'p'");
+                // console.log("Dispatching with appStatus: 'p'");
                 dispatch(callPutApprovalAPI({
                     appCode: paramAppCode.appCode,
                     appStatus: 'p'
