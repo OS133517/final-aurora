@@ -21,7 +21,7 @@ function ReservationCalendarDay({day, setSelectedDate}) {
     // Array.isArray(reservationList) && console.log('reservationBar'.reservationBar);
     const setDate =() => {
 
-        setSelectedDate({
+        setSelectedDate && setSelectedDate({
             ...setSelectedDate,
             startDateTime : new Date(startDateTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),
             endDateTime : new Date(endDateTime.getTime() + TIME_ZONE).toISOString().replace('T', ' ').slice(0, -5),

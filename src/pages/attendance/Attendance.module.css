@@ -76,7 +76,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around; 
-  }
+}
 
 .boxContainer2 {
     width: 100%;
@@ -84,7 +84,7 @@
     display: flex;
     justify-content: space-between; 
     margin-left:2%;
-  }  
+}  
 
 .box {
     margin-left: 0%;
