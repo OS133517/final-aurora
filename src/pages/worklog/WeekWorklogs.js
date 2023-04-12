@@ -4,6 +4,7 @@ import { decodeJwt } from "../../utils/tokenUtils";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callWeekWorklogListAPI } from "../../apis/WeekWorklogAPICall";
+import { callMemberInfoAPI } from '../../apis/MemberAPICall';
 
 function WeekWorklogs() {
 
@@ -12,11 +13,21 @@ function WeekWorklogs() {
     const dispatch = useDispatch();
 
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
+
+    const memberInfo = useSelector(state => state.memberReducer.memberInfo);
     
     const weekWorklogs = useSelector(state => state.weekWorklogReducer.weekWorklog);
     console.log('weekWorklogs : ', weekWorklogs);
     
     const weekWorklogList = weekWorklogs?.data;
+
+    useEffect (() => {
+        console.log("weekWorklogs.memberCode" + weekWorklogs.memberCode);
+        dispatch(callMemberInfoAPI({
+            memberCode : loginMember.memberCode
+        }));
+    },[weekWorklogs]
+    );
     
     const pageInfo = weekWorklogs?.pageInfo;
     
@@ -56,12 +67,12 @@ function WeekWorklogs() {
                             <th>
                                 작성일
                             </th>
-                            {/* <th>
+                            <th>
                                 직급
                             </th>
                             <th>
                                 부서
-                            </th> */}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +84,12 @@ function WeekWorklogs() {
                                     </td>
                                     <td>
                                         {weekWorklog.weekReportingDate}
+                                    </td>
+                                    <td>
+                                        { memberInfo.deptName }
+                                    </td>
+                                    <td>
+                                        { memberInfo.jobName }
                                     </td>
                                 </tr>
                             ))

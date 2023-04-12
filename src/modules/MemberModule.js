@@ -2,7 +2,8 @@ import { createActions, handleActions } from "redux-actions";
 
 // 초기값
 const initialState = {
-    memberLogin : []
+    memberLogin : [],
+    memberInfo : []
 };
 
 // 액션
@@ -22,8 +23,10 @@ const memberReducer = handleActions({
             memberLogin : payload
         }},
         [GET_MEMEBER_INFO] : (state, { payload }) => {
-            return payload
-            }
+            return {
+                ...state,
+                memberInfo : payload
+        }}
 }, initialState)
 
 export default memberReducer;

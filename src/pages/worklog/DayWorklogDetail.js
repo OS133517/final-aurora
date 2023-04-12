@@ -7,6 +7,7 @@ import { callDayWorklogDetailAPI } from '../../apis/DayWorklogAPICall';
 import { callDayWorklogUpdateAPI } from '../../apis/DayWorklogAPICall';
 import { callDayWorklogDeleteAPI } from '../../apis/DayWorklogAPICall';
 import { callMemberInfoAPI } from '../../apis/MemberAPICall';
+import { decodeJwt } from '../../utils/tokenUtils';
 
 function DayWorklogDetail() {
 
@@ -15,8 +16,12 @@ function DayWorklogDetail() {
     const navigate = useNavigate();
     
     const {dayWorklogCode} = useParams(); // 패스배리어블을 쓰면 유즈파람을 쓴다??
+    
+    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
 
     const dayWorklog = useSelector(state => state.dayWorklogReducer.dayWorklog);
+
+    const memberInfo = useSelector(state => state.memberReducer.memberInfo);
 
     const [modifyMode, setModifyMode] = useState(false);
 
@@ -25,12 +30,12 @@ function DayWorklogDetail() {
     //DB에 없는 내용은 멤버코드에 담겨있다.
     //그거는 토큰에 멤버코드를 담아놔서 꺼내쓸수 있따. token.memberCode 를 이용해서 사용할 수 있음??
     
-    const memberInfo = useSelector(state => state.memberReducer);
+    // const memberInfo = useSelector(state => state.memberReducer);
     
     useEffect (() => {
         console.log("dayWorklog.memberCode" + dayWorklog.memberCode);
         dispatch(callMemberInfoAPI({
-            memberCode : dayWorklog.memberCode
+            memberCode : loginMember.memberCode
         }));
     },[dayWorklog]
     );
@@ -106,6 +111,7 @@ function DayWorklogDetail() {
                             <td>작성자</td>
                             <td>{ memberInfo.memberName || '' }</td>
                         </tr>
+                         
                         <tr>
                             <td>부서</td>
                             <td>{ memberInfo.deptName || '' }</td>
@@ -195,14 +201,14 @@ function DayWorklogDetail() {
                 </button>
                 {!modifyMode &&
                     <button       
-                        onClick={ onClickModifyModeHandler }             
+                        onClick={() =>  onClickModifyModeHandler() }            
                     >
                         수정하기
                     </button>
                 }
                 {modifyMode &&
                     <button       
-                        onClick={ onClickDayWorklogUpdateHandler }             
+                        onClick={() => onClickDayWorklogUpdateHandler() }             
                     >
                         저장하기
                     </button>

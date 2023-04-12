@@ -1,21 +1,22 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { callScheduleDetailAPI } from '../../apis/ScheduleAPICall';
 import { callScheduleUpdateAPI } from '../../apis/ScheduleAPICall';
 import { callScheduleDeleteAPI } from '../../apis/ScheduleAPICall';
+import ScheduleDetailModalCSS from "./ScheduleDetailModal.module.css";
 
-function ScheduleDetailModal() {
+function ScheduleDetailModal({ scheduleCode, setScheduleDetailModal }) {
 
     const dispatch = useDispatch();
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    // const { scheduleCode } = useParams();
-
-    const scheduleList = useSelector(state => state.scheduleReducer.schedule);
+    const schedule = useSelector(state => state.scheduleReducer.scheduleDetail);
     
-    const [ScheduleInsertModal, setScheduleInsertModal] = useState(false);
+    // const [ScheduleDetailModal, setScheduleDetailModal] = useState(false);
+    // const scheduleCode = useSelector(state => state.scheduleReducer.mySchedule);
+    console.log("schedule : " + schedule);
 
     const [modifyMode, setModifyMode] = useState(false);
 
@@ -23,10 +24,22 @@ function ScheduleDetailModal() {
 
     useEffect (() => {
         dispatch(callScheduleDetailAPI({
-            scheduleCode :scheduleCode
+            scheduleCode : scheduleCode
         }));
-    },[]
-    )
+    },[] )
+
+    useEffect(() => {
+        setForm({
+            scheduleCode : schedule.scheduleCode,
+            scheduleName : schedule.scheduleName,
+            scheduleStartDay : schedule.scheduleStartDay,
+            scheduleEndDay : schedule.scheduleEndDay,
+            schedulePlace : schedule.schedulePlace,
+            scheduleContent : schedule.scheduleContent,
+        });
+    }, [schedule])
+   
+    console.log("scheduleCode : " + scheduleCode);
 
     const onChangeHandler = (e) => {
         setForm({
@@ -35,61 +48,57 @@ function ScheduleDetailModal() {
         });
     }
 
+    const onClickModalOff = (e) => {
+
+        if(e.target.className.includes("modalBackground")) {
+            setScheduleDetailModal(false);
+        }
+    };
+
     const onClickScheduleUpdateHandler = () => {
 
         const formData = new FormData();
 
         formData.append("scheduleCode", scheduleCode);
-        formData.append("scheduleCategoryCode", form.scheduleCategoryCode);
         formData.append("scheduleName", form.scheduleName);
         formData.append("scheduleStartDay", form.scheduleStartDay);
         formData.append("scheduleEndDay", form.scheduleEndDay);
-        formData.append("scheduleStartTime", form.scheduleStartTime);
-        formData.append("scheduleEndTime", form.scheduleEndTime);
         formData.append("schedulePlace", form.schedulePlace);
         formData.append("scheduleContent", form.scheduleContent);
+    
+        dispatch(callScheduleUpdateAPI({
+            form : formData
+        }));
+
+        navigate("/aurora/calendar/month", { replace : true });
+        window.location.reload();
     }
-
-    dispatch(callScheduleUpdateAPI({
-        form : formData
-    }));
-
-    // navigate("/aurora/schedule", { replace : true });
-    // window.location.reload();
 
     const onClickScheduleDeleteHandler = () => {
 
+        console.log("deletescheduleCode : " + scheduleCode)
         dispatch(callScheduleDeleteAPI({
             scheduleCode : scheduleCode
         }));
 
-        // navigate("/aurora/schedule", { replace : true });
-        // window.location.reload();
+        console.log("delete" + scheduleCode)
+        navigate("/aurora/calendar/month", { replace : true });
+        window.location.reload();
     }
-
+    
     const onClickModifyModeHandler = () => {
-
         setModifyMode(true);
-        setForm({
-            scheduleCategoryCode : schedule.scheduleCategoryCode,
-            scheduleName : schedule.scheduleName,
-            scheduleStartDay : schedule.scheduleStartDay,
-            scheduleEndDay : schedule.scheduleEndDay,
-            scheduleStartTime : schedule.scheduleStartTime,
-            scheduleEndTime : schedule.scheduleEndTime,
-            schedulePlace : schedule.schedulePlace,
-            scheduleContent : schedule.scheduleContent,
-        });
+        
     }
 
     return (
-        <div className={ScheduleInsertModalCSS.modalBackground} onClick={onClickModalOff}>
-            <div className={ScheduleInsertModalCSS.modalContainer}>
-                <div className={ScheduleInsertModalCSS.header}>
+        <div className={ScheduleDetailModalCSS.modalBackground} onClick={onClickModalOff}>
+            <div className={ScheduleDetailModalCSS.modalContainer}>
+                <div className={ScheduleDetailModalCSS.header}>
                     일정
-                    <button onClick={() => setScheduleInsertModal(false)}>X</button>
+                    <button className={ScheduleDetailModalCSS.xbutton} onClick={() => setScheduleDetailModal(false)}>X</button>
                 </div>
-                <div className={ScheduleInsertModalCSS.modalDiv}>
+                <div className={ScheduleDetailModalCSS.modalDiv}>
                     <table>
                         <tbody>
                             <tr>
@@ -97,121 +106,91 @@ function ScheduleDetailModal() {
                                 <td>
                                 <input
                                     name='scheduleName'
-                                    className={ ScheduleInsertModalCSS.scheduleDetailInfoInput }
-                                    value={ (!modifyMode ? schedule.scheduleName : form.scheduleName) || ''}
+                                    className={ ScheduleDetailModalCSS.scheduleDetailInfoInput }
+                                    value={form.scheduleName}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                                 </td>
                             </tr>
                             <tr>
-                                <td><label htmlFor="scheduleStartDay">일시</label></td>
-                                <td><input 
-                                        type="text" 
+                                <td><label htmlFor="scheduleDay">일시</label></td>
+                                <td className={ScheduleDetailModalCSS.scheduleDay}>
+                                    <input
+                                        type="date" 
                                         name="scheduleStartDay" 
-                                        id="scheduleStartDay" 
+                                        className={ ScheduleDetailModalCSS.scheduleDetailInfoInput}
                                         value={form.scheduleStartDay}
-                                        onChange={onChangeHandler}/>
-                                        ~
-                                        <input 
-                                        type="text" 
-                                        name="scheduleEndDay" 
-                                        id="scheduleEndDay" 
+                                        onChange={onChangeHandler}
+                                        readOnly={ modifyMode ? false : true }
+                                    />
+                                &nbsp;~&nbsp;
+                                    <input
+                                        type="date" 
+                                        name="scheduleEndDay"
+                                        className={ ScheduleDetailModalCSS.scheduleDetailInfoInput}
                                         value={form.scheduleEndDay}
-                                        onChange={onChangeHandler}/></td>
+                                        onChange={onChangeHandler}
+                                        readOnly={ modifyMode ? false : true }
+                                    /> 
+                                </td>
                             </tr>
+                            
                             <tr>
-                                <td><label htmlFor="scheduleStartDay">시간</label></td>
-                                <td><input 
-                                        type="text" 
-                                        name="schduleStartTime" 
-                                        id="schduleStartTime" 
-                                        value={form.scheduleStartDay}
-                                        onChange={onChangeHandler}/>
-                                        ~
-                                        <input 
-                                        type="text" 
-                                        name="schduleEndTime" 
-                                        id="schduleEndTime" 
-                                        value={form.schduleEndTime}
-                                        onChange={onChangeHandler}/></td>
-                            </tr>
-                            <tr>
-                                <td><label htmlFor="schdulePlace">일정명</label></td>
+                                <td><label htmlFor="schdulePlace">장소</label></td>
                                 <td>
                                 <input
-                                    name='schdulePlace'
-                                    className={ ScheduleInsertModalCSS.scheduleDetailInfoInput }
-                                    value={ (!modifyMode ? schedule.schdulePlace : form.schdulePlace) || ''}
+                                    name='schedulePlace'
+                                    className={ ScheduleDetailModalCSS.scheduleDetailInfoInput }
+                                    value={ form.schedulePlace}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                                 </td>
                             </tr>
                             <tr>
                                 <td><label htmlFor="schduleContent">내용</label></td>
                                 <td>
-                                <input
-                                    name='schduleContent'
-                                    className={ ScheduleInsertModalCSS.scheduleDetailInfoInput }
-                                    value={ (!modifyMode ? schedule.schduleContent : form.schduleContent) || ''}
+                                <textarea 
+                                    name='scheduleContent'
+                                    className={ ScheduleDetailModalCSS.scheduleContentInfoInput }
+                                    value={form.scheduleContent}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
-                                    style={ !modifyMode ? { backgroundColor: 'gray'} : null}
                                 />
                                 </td>
                             </tr>
                             
-                            {/* <tr>
-                                <td>그룹</td>
-                                <td>
-                                    <select name="groupCode" onChange={onChangeHandler} value={form.groupCode}>
-                                        <option value="requireSelect">그룹 선택</option>
-                                    {
-                                        Array.isArray(teamGroupList) && teamGroupList.map(group => (
-                                        <option key={group.groupCode} value={group.groupCode}>팀 그룹 - {group.groupName}</option>
-                                        ))
-                                    }
-                                    {
-                                        Array.isArray(personalGroupList) && personalGroupList.map(group => (
-                                        <option key={group.groupCode} value={group.groupCode}>개인 그룹 - {group.groupName}</option>
-                                        ))
-                                    }
-                                    </select>
-                                </td>
-                            </tr> */}
                         </tbody>
                     </table>
                 </div>
-                <div className={ WeekWorklogDetailCSS.weekWorklogButtonDiv }>
-                <button        
-                    onClick={ () => navigate(-1) }            
-                >
-                    돌아가기
-                </button>
-                {!modifyMode &&
-                    <button       
-                        onClick={ onClickModifyModeHandler }             
+                <div className={ ScheduleDetailModalCSS.buttonDiv }>
+                    <button        
+                        onClick={ () => setScheduleDetailModal(false) }            
                     >
-                        수정하기
+                        돌아가기
                     </button>
-                }
-                {modifyMode &&
-                    <button       
-                        onClick={ onClickWeekWorklogUpdateHandler }             
-                    >
-                        저장하기
-                    </button>
-                }
-                {!modifyMode &&
-                    <button       
-                        onClick={ onClickWeekWorklogDeleteHandler }             
-                    >
-                        삭제하기
-                    </button>
-                }
+                    {!modifyMode &&
+                        <button       
+                            onClick={ onClickModifyModeHandler }             
+                        >
+                            수정하기
+                        </button>
+                    }
+                    {modifyMode &&
+                        <button       
+                            onClick={ onClickScheduleUpdateHandler }             
+                        >
+                            저장하기
+                        </button>
+                    }
+                    {!modifyMode &&
+                        <button       
+                            onClick={ onClickScheduleDeleteHandler }             
+                        >
+                            삭제하기
+                        </button>
+                    }
                 </div>     
             </div>
         </div>

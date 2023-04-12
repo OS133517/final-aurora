@@ -4,6 +4,7 @@ import DayWorklogsCSS from "./DayWorklogs.module.css";
 import { callDayWorklogListAPI } from "../../apis/DayWorklogAPICall";
 import { useNavigate } from "react-router-dom";
 import { decodeJwt } from "../../utils/tokenUtils";
+import { callMemberInfoAPI } from '../../apis/MemberAPICall';
 
 function DayWorklogs() {
 
@@ -12,11 +13,25 @@ function DayWorklogs() {
     const dispatch = useDispatch();
 
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
+
+    const memberInfo = useSelector(state => state.memberReducer.memberInfo);
     
     const dayWorklogs = useSelector(state => state.dayWorklogReducer.dayWorklog);
     console.log('dayWorklogs : ', dayWorklogs);
     
     const dayWorklogList = dayWorklogs?.data;
+
+    const dayWorklog = useSelector(state => state.dayWorklogReducer.dayWorklog);
+
+    
+    
+    useEffect (() => {
+        console.log("dayWorklog.memberCode" + dayWorklog.memberCode);
+        dispatch(callMemberInfoAPI({
+            memberCode : loginMember.memberCode
+        }));
+    },[dayWorklog]
+    );
     
     const pageInfo = dayWorklogs?.pageInfo;
     
@@ -40,6 +55,7 @@ function DayWorklogs() {
     
     const onClickDayWorklogHandler = (dayWorklogCode) => {
         navigate(`/aurora/worklog/day/${ dayWorklogCode }`, { replace : false });
+        window.location.reload();
     }
 
     return (
@@ -56,12 +72,12 @@ function DayWorklogs() {
                             <th>
                                 작성일
                             </th>
-                            {/* <th>
+                            <th>
                                 부서
                             </th>
                             <th>
                                 직급
-                            </th> */}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,7 +91,10 @@ function DayWorklogs() {
                                         {dayWorklog.dayReportingDate}
                                     </td>
                                     <td>
-                                        {/* {loginMember.} */}
+                                        { memberInfo.deptName }
+                                    </td>
+                                    <td>
+                                        { memberInfo.jobName }
                                     </td>
                                 </tr>
                             ))
