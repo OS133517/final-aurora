@@ -5,7 +5,8 @@ import { decodeJwt } from '../../../utils/tokenUtils';
 import leaveApplicationCSS from './ApprovalModal.module.css';
 import ApprovalDraftLine from './ApprovalDraftLine';
 import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
-import { callPostVacationAPI, callPostVacationUseAPI } from '../../../apis/VacationAPICall';
+import { callPostVacationAPI } from '../../../apis/VacationAPICall';
+import { callSelectUsedcAPI } from '../../../apis/AttendanceAPICall';
 
 //휴가 신청서
 function LeaveApplication(props) {
@@ -18,6 +19,8 @@ function LeaveApplication(props) {
     const memberCode = loginMember.memberCode;
     /** useSelector */
     const memberName = useSelector(state => state.memberReducer.memberDetail);
+    const restVacation = useSelector(state => state.attendanceReducer.vacation);
+    console.log('restVacation', restVacation);
     const { docCode } = props;
     const docNum = Number(docCode) + 1;
     /** useState */
@@ -45,7 +48,10 @@ function LeaveApplication(props) {
     }, [docCode]);
 
     useEffect(() => {
+        // 멤버 찾기 
         dispatch(callMemberDetailAPI({ memberCode: memberCode }));
+        // 휴가테이블에서 잔여 휴가가 없으면 디폴드(12)로 값 넘김
+        dispatch(callSelectUsedcAPI({ memberCode: memberCode }));
         //eslint-disable-next-line
     }, [])
 
