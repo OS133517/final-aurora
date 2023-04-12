@@ -113,7 +113,9 @@ function SurveyUpdate() {
 
         const deleteQuestions = questions.filter(item => item.questionNo !== questionNo);
 
-        setNextNo(nextNo + 1);
+        if(deleteQuestions.length === questions.length) {
+            setNextNo(nextNo + 1);
+        }
         setQuestions(deleteQuestions);
     }
 
