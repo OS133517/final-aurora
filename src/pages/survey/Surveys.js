@@ -72,8 +72,7 @@ function Surveys() {
         setSurvey(survey);
         setIsModalOn(true);
     }
-    Array.isArray(surveyList) && console.log(new Date(surveyList[0].startDate + ' 06:00'));
-    console.log(new Date());
+    
     return (
         <>
             {isModalOn? <SurveyDetailModal survey={survey} setIsModalOn={setIsModalOn}/>:null}
@@ -103,7 +102,7 @@ function Surveys() {
                     </thead>
                     <tbody>
                         {
-                            Array.isArray(surveyList) && surveyList.map(item => (
+                            Array.isArray(surveyList) && surveyList.length !== 0 && surveyList.map(item => (
                                 <tr key={item.surveyCode} onClick={() => onClickDetail(item)}>
                                     <td>{item.surveyCode}</td>
                                     <td>{item.surveySubject}</td>
