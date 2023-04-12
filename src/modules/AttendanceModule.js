@@ -27,6 +27,13 @@ const initialState = {
         ABSENCE: 0
     },
     vacation: {
+        vacationNo: 0,
+        remainingVacation: 0,
+        usedVacation: 0
+    },
+
+    vacationUsed: {
+        vacationNo: 0,
         remainingVacation: 0,
         usedVacation: 0
     },
@@ -104,7 +111,7 @@ const attendanceReducer = handleActions({
     [GET_SELECT_USED_VACATION]: (state, { payload }) => {
         return {
             ...state,
-            vacation: payload
+            vacationUsed: payload
         }
     },
     [GET_SELECT_WORK_STATUS]: (state, { payload }) => {

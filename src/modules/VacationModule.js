@@ -6,6 +6,7 @@ import { createActions, handleActions } from "redux-actions";
 const initialState = {
     vacationRegister: [],
     vacationUse: [],
+    firstNo: []
 
 };
 
@@ -13,13 +14,15 @@ const initialState = {
 export const POST_VACATION = 'vacation/POST_VACATION';
 export const POST_VACATION_USE = 'vacation/POST_VACATION_USE';
 export const PUT_VACATION = 'vacation/PUT_VACATION';
+export const GET_VACATION = 'vacation/GET_VACATION';
 
 
 // eslint-disable-next-line
 const actions = createActions({
     [POST_VACATION]: () => { },
     [POST_VACATION_USE]: () => { },
-    [PUT_VACATION]: () => { }
+    [PUT_VACATION]: () => { },
+    [GET_VACATION]: () => { }
 
 });
 
@@ -41,6 +44,12 @@ const vacationReducer = handleActions({
         return {
             ...state,
             vacationDay: payload
+        }
+    },
+    [GET_VACATION]: (state, { payload }) => {
+        return {
+            ...state,
+            firstNo: payload
         }
     }
 

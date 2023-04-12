@@ -35,25 +35,25 @@ function ApprovalLine(props) {
     // 휴가 시작, 종료일
     const [startDate, setStartDate] = useState(null);
     const [appEndDate, setAppEndDate] = useState(null);
+    const [descript, setDescript] = useState(0);
 
     //use vacation에 들어 갈 데이터
     const [form, setForm] = useState({
         vacationNo: 0,
         vacationStartDate: startDate,
         vacationEndDate: appEndDate,
-        isHalfDay: 0
+        isHalfDay: descript
     });
 
     if (docNum === 8) {
-        if (approval.appDescript === 'on') {
-            setForm(prevForm => ({
-                ...prevForm,
-                isHalfDay: 1
-            }));
 
-        }
+        // setForm(prevForm => ({
+        //     ...prevForm,
+        //     isHalfDay: approval.appDescript
+        // }));
     }
-    // console.log('form : ', form);
+    console.log('form : ', form);
+    console.log('approval : ', approval);
 
     /** dispatch */
     const dispatch = useDispatch();
@@ -76,6 +76,7 @@ function ApprovalLine(props) {
         if (approval) {
             setStartDate(approval.appStartDate);
             setAppEndDate(approval.appEndDate);
+            setDescript(approval.appDescript);
         }
     }, [approval]);
     // 시작일, 종료일이 바뀔 때마다 form useSate에 저장
@@ -84,7 +85,7 @@ function ApprovalLine(props) {
             vacationNo: vacation ? vacation.VACATION_NO : null,
             vacationStartDate: startDate,
             vacationEndDate: appEndDate,
-            isHalfDay: form.isHalfDay,
+            isHalfDay: descript,
         });
         //eslint-disable-next-line
     }, [startDate, appEndDate]);

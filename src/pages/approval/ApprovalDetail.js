@@ -6,7 +6,8 @@ import { callMemberDetailAPI } from "../../apis/MemberAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
 import Swal from 'sweetalert2';
 import approvalDetailCSS from "./Approvals.module.css"
-import { callPostVacationUseAPI } from "../../apis/VacationAPICall";
+import { callGetVacationAPI, callUpdateRemainVacationAPI } from "../../apis/VacationAPICall";
+import { callSelectUsedcAPI } from "../../apis/AttendanceAPICall";
 
 function ApprovalDetail() {
 
@@ -24,18 +25,19 @@ function ApprovalDetail() {
     const dispatch = useDispatch();
 
     /** useSelector */
-    // 
+    const vacationInfo = useSelector(state => state.vacationReducer.firstNo);
     const detailInfo = useSelector(state => state.approvalReducer.approvalLine);
     const memberInfo = useSelector(state => state.memberReducer.memberDetail);
-    console.log('detailINfo : ', detailInfo);
+    // 휴가 사용일 수 
+    const useDay = useSelector(state => state.attendanceReducer.vacationUsed);
     /** useState */
     // CALLAPI에서 응답 상태를 가져옴
     const [responseStatus, setResponseStatus] = useState(0)
     // 결재상태 변경 여부
     const [approvalLineStatus, setApprovalLineStatus] = useState([]);
-
-
-    /** 변수 */
+    const [vacationNo, setVacationNo] = useState(0);
+    console.log('vacationNo : ', vacationNo);
+    /** 사용자 정의 변수 */
     /** @param documentDTO 문서 DTO*/
     const docName = detailInfo?.detailApproval?.documentDTO?.docName;
 
@@ -45,38 +47,31 @@ function ApprovalDetail() {
     /** @param docCode 휴가 문서 여부 확인*/
     const docCode = detailInfo?.detailApproval?.documentDTO?.docCode;
 
-    /** @param vacation 상태코드 확인*/
-    const vacation = detailInfo?.detailApproval?.documentDTO?.appStatus;
     /** @param memberCode 작성한 유저의 코드*/
     const memberCode = detailInfo?.detailApproval?.memberDTO?.memberCode;
 
     /** @param memberName 작성한 유저의 이름*/
     const memberName = memberInfo?.memberDTO?.memberName;
 
+    /** @param vacation 상태코드 확인*/
+    const vacation = detailInfo?.detailApproval?.appStatus;
+
     /** @param firstNStatus appStatus가 n인 첫번째 배열 값*/
     const firstNStatus = detailInfo?.approvalLine?.find(line => line.appStatus === 'n');
     /** @param approvalMember 승인할 유저의 코드*/
     const approvalMemberCode = firstNStatus?.memberDTO?.memberCode;
 
-    // 문서코드가 휴가 문서 일 때 
-    if (docCode === 8) {
-        /** 휴가일수 주말 제외 */
-        // const differenceInDay = window.localStorage.getItem('differenceInDays');
-
-        // // appStatus 가 승인일때 differenceInDay를 휴가 API에 파라미터로 추가하여 호출
-        // if (vacation === 'y') {
-        //     dispatch(callPostVacationUseAPI({ form }, memberCode));
-        // }
 
 
-    }
     /** useEffect */
+
     // 휴가 일 경우 
     // 결재 상세조회 , 결재, 결재선
     useEffect(() => {
         const fetchData = async () => {
 
             await dispatch(callApprovalDetailAPI({ appCode: paramAppCode.appCode }));
+
         };
 
         fetchData();
@@ -89,6 +84,7 @@ function ApprovalDetail() {
 
             if (memberCode) {
                 await dispatch(callMemberDetailAPI({ memberCode: memberCode }));
+                await dispatch(callGetVacationAPI({ memberCode: memberCode }));
 
             }
         };
@@ -96,6 +92,10 @@ function ApprovalDetail() {
         fetchMemberData();
         //eslint-disable-next-line
     }, [memberCode]);
+
+    useEffect(() => {
+        setVacationNo(vacationInfo?.VACATION_NO);
+    }, [vacationInfo]);
 
     // 결재상태가 변경될 때 마다 approvalLineStatus배열에 저장
     useEffect(() => {
@@ -117,6 +117,7 @@ function ApprovalDetail() {
     // console.log('detailInfo : ', detailInfo);
     // 결재선의 결재 종류에 따라 리스트에 보여질 상태 변경
     useEffect(() => {
+        // 결재 상태 변경
         if (approvalLineStatus) {
             if (approvalLineStatus.every(status => status === "n")) {
                 // console.log("Dispatching with appStatus: 'n'");
@@ -143,20 +144,40 @@ function ApprovalDetail() {
                     appStatus: 'p'
                 }));
             }
+
+            // 문서코드가 휴가 문서 일 때 
+            if (docCode === 8) {
+                dispatch(callSelectUsedcAPI({ memberCode }));
+                // appStatus 가 승인일때 
+                if (vacation === 'y') {
+                    dispatch(callSelectUsedcAPI({ memberCode }));
+
+                }
+
+            }
         }
         //eslint-disable-next-line
     }, [approvalLineStatus]);
 
     useEffect(() => {
-        if (responseStatus === 200) {
-            Swal.fire({
-                icon: "success",
-                title: "성공",
-                text: "결재 라인이 성공적으로 등록되었습니다.",
-            }).then(() => {
-                window.location.reload();
-            });
-        }
+
+        const updateAndReload = async () => {
+
+            if (responseStatus === 200) {
+                await dispatch(callUpdateRemainVacationAPI(memberCode, useDay.usedDay, vacationNo));
+
+                Swal.fire({
+                    icon: "success",
+                    title: "성공",
+                    text: "결재 라인이 성공적으로 등록되었습니다.",
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
+
+        };
+        updateAndReload();
+
     }, [responseStatus]);
     /** event */
     // 이전 페이지로 이동하기 위해
@@ -228,7 +249,7 @@ function ApprovalDetail() {
                         </tr>
                         <tr>
                             <td colSpan="2" className={approvalDetailCSS.detailDescript}>
-                                {detailInfo?.detailApproval?.appDescript}
+                                {docCode !== 8 ? detailInfo?.detailApproval?.appDescript : '  '}
                             </td>
                         </tr>
                     </tbody>

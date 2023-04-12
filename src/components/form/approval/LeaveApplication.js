@@ -6,7 +6,7 @@ import leaveApplicationCSS from './ApprovalModal.module.css';
 import ApprovalDraftLine from './ApprovalDraftLine';
 import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
 import { callPostVacationAPI } from '../../../apis/VacationAPICall';
-import { callSelectUsedcAPI } from '../../../apis/AttendanceAPICall';
+import { callSelectVacationAPI } from '../../../apis/AttendanceAPICall';
 
 //휴가 신청서
 function LeaveApplication(props) {
@@ -20,14 +20,18 @@ function LeaveApplication(props) {
     /** useSelector */
     const memberName = useSelector(state => state.memberReducer.memberDetail);
     const restVacation = useSelector(state => state.attendanceReducer.vacation);
-    console.log('restVacation', restVacation);
+
+
+    /** 사용자 지정 변수 */
     const { docCode } = props;
     const docNum = Number(docCode) + 1;
     /** useState */
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
     const [responseStatus, setResponseStatus] = useState(null);
-
+    const [remainVacation, setRemainVacation] = useState(restVacation?.REMAIN_VACATION ?? 0);
+    // 반차용 싱태변수
+    const [isHalfDay, setIsHalfDay] = useState(false);
     // 입력한 데이터를 저장
     const [form, setForm] = useState({
         docCode: docNum,
@@ -48,12 +52,18 @@ function LeaveApplication(props) {
     }, [docCode]);
 
     useEffect(() => {
+        setRemainVacation(restVacation?.REMAIN_VACATION ?? 0);
+
+    }, [restVacation]);
+
+    useEffect(() => {
         // 멤버 찾기 
         dispatch(callMemberDetailAPI({ memberCode: memberCode }));
         // 휴가테이블에서 잔여 휴가가 없으면 디폴드(12)로 값 넘김
-        dispatch(callSelectUsedcAPI({ memberCode: memberCode }));
+        dispatch(callSelectVacationAPI({ memberCode: memberCode }));
         //eslint-disable-next-line
     }, [])
+
 
     // 날짜 계산
     const startDate = new Date(form?.appStartDate);
@@ -88,8 +98,7 @@ function LeaveApplication(props) {
         }, docNum, memberCode, setResponseStatus))
         // 휴가 신청 서류 일때
         if (docNum === 8) {
-            console.log('callPostVacationAPI 조건문 호출');
-            dispatch(callPostVacationAPI({ memberCode: memberCode }));
+            dispatch(callPostVacationAPI({ memberCode: memberCode }, remainVacation));
 
         }
         // localStorage 저장
@@ -102,16 +111,34 @@ function LeaveApplication(props) {
     }
 
     const inputValue = (e) => {
+
         setForm({
             ...form,
+            appDescript: e.target.checked ? "on" : "",
             [e.target.name]: e.target.value
         })
+
+
+        console.log('onChangeHandler : ', form);
+
+    }
+
+    const handleHalfDayChange = (e) => {
+
+        setIsHalfDay(e.target.checked);
         if (e.target.checked) {
-            setForm({
-                ...form,
-                [e.target.name]: e.target.value
-            })
+            document.getElementById('appEndDate').value = document.getElementById('appStartDate').value;
+
+        } else {
+
+            document.getElementById('appEndDate').value = '';
         }
+        setForm({
+            ...form,
+            appDescript: e.target.checked ? 1 : 0,
+            appEndDate: document.getElementById("appEndDate").value // disabled 됬던 
+        })
+
 
         console.log('onChangeHandler : ', form);
 
@@ -159,9 +186,18 @@ function LeaveApplication(props) {
                                 기간
                             </td>
                             <td className={leaveApplicationCSS.description}>
-                                {!isEdit ? <input type="date" id="appStartDate" name='appStartDate' readOnly /> : <input type="date" id="appStartDate" name='appStartDate' onChange={inputValue} />}~
-                                {!isEdit ? <input type="date" id="appEndDate" name='appEndDate' readOnly /> : <input type="date" id="appEndDate" name='appEndDate' onChange={inputValue} />}
-                                {!isEdit ? <input type="checkbox" id="appDescript" name='appDescript' readOnly /> : <input type="checkbox" id="appDescript" name='appDescript' onChange={inputValue} />} 반차
+                                {
+                                    !isEdit ? <input type="date" id="appStartDate" name='appStartDate' readOnly /> :
+                                        <input type="date" id="appStartDate" name='appStartDate' onChange={inputValue} />
+                                }~
+                                {
+                                    !isEdit ? <input type="date" id="appEndDate" name='appEndDate' readOnly /> :
+                                        <input type="date" id="appEndDate" name='appEndDate' onChange={inputValue} disabled={isHalfDay} />
+                                }
+                                {
+                                    !isEdit ? <input type="checkbox" id="appDescript" name='appDescript' readOnly /> :
+                                        <input type="checkbox" id="appDescript" name='appDescript' onChange={handleHalfDayChange} />
+                                } 반차
                             </td>
                         </tr>
 
