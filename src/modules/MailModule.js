@@ -4,6 +4,7 @@ import { createActions, handleActions } from 'redux-actions';
 const initialState = {
 
     mailData : [],
+    mailDetail : [],
     tagList : [],
     blackList : [],
 
@@ -15,9 +16,11 @@ const initialState = {
 // 액션
 export const GET_MAILS = 'mail/GET_MAILS';
 export const GET_NEW_MAILS = 'mail/GET_NEW_MAILS';
+export const GET_MAIL_DETAIL = 'mail/GET_MAIL_DETAIL';
 export const GET_TAGS = 'mail/GET_TAGS';
 export const GET_BLACKLIST = 'mail/GET_BLACKLIST';
 
+export const POST_MAIL_TAGS = 'mail/POST_MAIL_TAGS';
 export const POST_TAGS = 'mail/POST_TAGS';
 export const POST_BLACKLIST = 'mail/POST_BLACKLIST';
 
@@ -33,9 +36,11 @@ const actions = createActions({
 
     [GET_MAILS] : () => {},
     [GET_NEW_MAILS] : () => {},
+    [GET_MAIL_DETAIL] : () => {},
     [GET_TAGS] : () => {},
     [GET_BLACKLIST] : () => {},
 
+    [POST_MAIL_TAGS] : () => {},
     [POST_TAGS] : () => {},
     [POST_BLACKLIST] : () => {},
 
@@ -45,13 +50,6 @@ const actions = createActions({
     [DELETE_MAIL] : () => {},
     [DELETE_TAGS] : () => {},
     [DELETE_BLACKLIST] : () => {},
-    // [GET_MATCHING_MEMBERS] : () => {},
-
-    // [POST_REPORT] : () => {},
-
-    // [PUT_REPORT] : () => {},
-    
-    // [DELETE_REPORT] : () => {},
 });
 
 // 리듀서
@@ -67,6 +65,11 @@ const mailReducer = handleActions({
             ...state,
             isMailUpdated : payload
         }},
+    [GET_MAIL_DETAIL] : (state, { payload }) => {
+        return {
+            ...state,
+            mailDetail : payload
+        }},
     [GET_TAGS] : (state, { payload }) => {
         return {
             ...state,
@@ -78,6 +81,11 @@ const mailReducer = handleActions({
             blackList : payload
         }},
 
+    [POST_MAIL_TAGS] : (state, { payload }) => {
+        return {
+            ...state,
+            isMailUpdated : payload
+        }},
     [POST_TAGS] : (state, { payload }) => {
         return {
             ...state,

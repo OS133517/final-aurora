@@ -84,7 +84,6 @@
     box-sizing: border-box;
     font-size: 1.5em;
 }
-
 .underBarInput:focus {
     outline: none;
     border-color: #88CFBA;
@@ -97,7 +96,6 @@
     resize: none;
     box-sizing: border-box;
 }
-
 .boxInput:focus {
     outline: none;
     border-color: #88CFBA;

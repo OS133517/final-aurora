@@ -35,10 +35,13 @@ function TagManagerModal(props) {
 
     useEffect(() => {
 
-        dispatch(callSelectTagsAPI({}));
+        if (input.tagCode && input.value !== "" && input.color !== "") {
 
+            updateTags(input.tagCode);
+        }
+        dispatch(callSelectTagsAPI({}));
         setTagUpdated(false);
-    }, [tagUpdated]);
+    }, [tagUpdated, input]);
 
     // 태그 등록 
     const registerTags = () => {
@@ -71,8 +74,8 @@ function TagManagerModal(props) {
         const updatedInput = {
 
             ...input,
-            value: input.value === "" ? existingTag.tagName : input.value,
-            color: input.color === "" ? existingTag.tagColor : input.color,
+            value: input.value === "" ? existingTag?.tagName : input.value,
+            color: input.color === "" ? existingTag?.tagColor : input.color,
         };
         if (updatedInput.value !== "") {
 
@@ -82,6 +85,7 @@ function TagManagerModal(props) {
                 tagName: updatedInput.value,
                 tagColor: updatedInput.color,
             }));
+            setColorPickerVisible({ tagCode: "", visible: false });
             setInput({ tagCode: "", value: "", color: "" });
             setTagUpdated(!tagUpdated);
             onUpdate();
@@ -94,25 +98,26 @@ function TagManagerModal(props) {
     // 수정 입력값 변경 핸들러 
     const handleInputChange = (event, tagCode) => {
 
-        setInput({ ...input, tagCode: tagCode, value: event.target.value });
+        setInput((prevState) => ({
+
+            ...prevState,
+            tagCode: tagCode,
+            value: event.target.value,
+        }));
     };
 
     // 색상 선택 함수
     const selectTagColor = (tagCode, newColor) => {
 
+        const existingTag = tagList.find((tag) => tag.tagCode === tagCode);
+
         setInput((prevState) => ({
 
             ...prevState,
             tagCode: tagCode,
+            value: existingTag?.tagName, 
             color: newColor,
         }));
-    };
-  
-    // 수정 버튼 클릭 이벤트 처리 함수
-    const handleUpdateButtonClick = () => {
-
-            updateTags(input.tagCode);
-            setColorPickerVisible({ tagCode: "", visible: false });
     };
     
     // 색상 변경 박스 토글 
@@ -200,80 +205,51 @@ function TagManagerModal(props) {
                                     </button>
                                 </div>
                                 {/* 태그 리스트 */}
-                                {/* <div className={TagManagementModalCSS.tagList}>
-                                    {tagList?.map((tag) => (
-                                        <div key={tag.tagCode} className={TagManagementModalCSS.tagItem}>
-                                            <div className={TagManagementModalCSS.iconDisplay}>
-                                                {['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'].map((color) => (
-                                                    <input
-                                                        key={color}
-                                                        style={{
-                                                            width: "32px",
-                                                            height: "32px",
-                                                            display: tag.tagColor === color ? 'inline-block' : 'none'
-                                                        }}
-                                                        type='image'
-                                                        src={`/mail/tags/${color}.png`}
-                                                        onClick={() => selectTagColor(color, tag.tagCode)}
-                                                    />
-                                                ))}
-                                            </div>
-                                            <input
-                                                type="text"
-                                                className={TagManagementModalCSS.tagName}
-                                                value={input.tagCode === tag.tagCode? input.value : tag.tagName}
-                                                onChange={(event) => handleInputChange(event, tag.tagCode)}
-                                            />
-                                            <button className={TagManagementModalCSS.editTagBtn} onClick={handleUpdateButtonClick}>수정</button>
-                                            <button className={TagManagementModalCSS.deleteTagBtn} onClick={() => deleteTags(tag.tagCode)}>X</button>
-                                        </div>
-                                    ))}
-                                </div> */}
-                                {/* 태그 리스트 */}
                                     <div className={TagManagementModalCSS.tagList}> 
-                                    {tagList?.map((tag) => (
-                                        <div key={tag.tagCode} className={TagManagementModalCSS.tagItem}>
-                                        <div className={TagManagementModalCSS.iconDisplay}>
-                                            {['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'].map((color) => (
-                                            <input
-                                                key={color}
-                                                style={{
-                                                    width: "32px",
-                                                    height: "32px",
-                                                    display: tag.tagColor === color ? 'inline-block' : 'none'
-                                                }}
-                                                type='image'
-                                                src={`/mail/tags/${color}.png`}
-                                                onClick={() => toggleColorPicker(tag.tagCode)}
-                                            />
-                                            ))}
-                                            {colorPickerVisible.tagCode === tag.tagCode && colorPickerVisible.visible && (
-                                            <div className={TagManagementModalCSS.colorPicker} style={{ display: 'flex', flexDirection: 'row' }}>
+                                        {tagList?.map((tag) => (
+                                            <div key={tag.tagCode} className={TagManagementModalCSS.tagItem}>
+                                            <div className={TagManagementModalCSS.iconDisplay}>
                                                 {['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'].map((color) => (
                                                 <input
                                                     key={color}
                                                     style={{
-                                                    width: "32px",
-                                                    height: "32px",
+                                                        width: "32px",
+                                                        height: "32px",
+                                                        display: tag.tagColor === color ? 'inline-block' : 'none'
                                                     }}
                                                     type='image'
                                                     src={`/mail/tags/${color}.png`}
-                                                    onClick={() => selectTagColor(tag.tagCode, color)}
+                                                    onClick={() => toggleColorPicker(tag.tagCode)}
                                                 />
                                                 ))}
+                                                {colorPickerVisible.tagCode === tag.tagCode && colorPickerVisible.visible && (
+                                                    <div className={TagManagementModalCSS.colorPicker} style={{ display: 'flex', flexDirection: 'row' }}>
+                                                        {['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'].map((color) => (
+                                                            <input
+                                                                key={color}
+                                                                style={{
+                                                                    width: "32px",
+                                                                    height: "32px",
+                                                                }}
+                                                                type='image'
+                                                                src={`/mail/tags/${color}.png`}
+                                                                onClick={() => selectTagColor(tag.tagCode, color)}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
-                                            )}
-                                        </div>
-                                        <input
-                                            type="text"
-                                            className={TagManagementModalCSS.tagName}
-                                            value={input.tagCode === tag.tagCode ? input.value : tag.tagName}
-                                            onChange={(event) => handleInputChange(event, tag.tagCode)}
-                                        />
-                                        <button className={TagManagementModalCSS.editTagBtn} onClick={() => updateTags(tag.tagCode)}>수정</button>
-                                        <button className={TagManagementModalCSS.deleteTagBtn} onClick={() => deleteTags(tag.tagCode)}>X</button>
-                                        </div>
-                                    ))}
+                                            <input
+                                                type="text"
+                                                className={TagManagementModalCSS.tagName}
+                                                value={input.tagCode === tag.tagCode ? input.value : tag.tagName}
+                                                onChange={(event) => handleInputChange(event, tag.tagCode)}
+                                            />
+                                            <button className={TagManagementModalCSS.editTagBtn} onClick={() => updateTags(tag.tagCode)}>수정</button>
+
+                                            <button className={TagManagementModalCSS.deleteTagBtn} onClick={() => deleteTags(tag.tagCode)}>X</button>
+                                            </div>
+                                        ))}
                                     </div>
                             </div>
                             <div className={TagManagementModalCSS.tagModalFooter}>

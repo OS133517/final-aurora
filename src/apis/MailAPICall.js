@@ -1,9 +1,11 @@
 import {
     GET_MAILS, 
     GET_NEW_MAILS,
+    GET_MAIL_DETAIL,
     GET_TAGS,
     GET_BLACKLIST,
 
+    POST_MAIL_TAGS,
     POST_TAGS,
     POST_BLACKLIST,
 
@@ -73,6 +75,30 @@ export const callSelectNewMailListAPI = () => {
     };
 }
 
+// 메일 상세 조회 
+export const callSelectMailDetailAPI = ({mailCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/mails/${mailCode}`;
+
+    return async (dispatch, getState) => {
+        
+        const result = await fetch(requestURL, {
+            method : 'GET',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[MailAPICalls] callSelectMailDetailAPI RESULT', result);
+            dispatch({type : GET_MAIL_DETAIL, payload : result.data});
+        }
+    };
+}
+
 // 메일 중요 상태 수정 
 export const callUpdateImportantStatusAPI = ({mailCode, importantStatus}) => {
 
@@ -118,6 +144,30 @@ export const callUpdateDeleteStatusAPI = ({mailCodeList, deleteStatus}) => {
         if(result.status === 200) {
             console.log('[MailAPICalls] callUpdateDeleteStatusAPI RESULT', result);
             dispatch({type : DELETE_MAIL, payload : result.data});
+        }
+    };
+}
+
+// 메일 삭제 상태 수정 
+export const callUpdateMailTagAPI = ({mailCode, tagCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/mails/${mailCode}/tags/${tagCode}`;
+
+    return async (dispatch, getState) => {
+        
+        const result = await fetch(requestURL, {
+            method : 'PUT',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[MailAPICalls] callUpdateMailTagAPI RESULT', result);
+            dispatch({type : POST_MAIL_TAGS, payload : result.data});
         }
     };
 }

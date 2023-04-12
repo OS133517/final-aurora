@@ -2,23 +2,22 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { decodeJwt } from "../../utils/tokenUtils";
-import { Dropdown, DropdownButton, Button } from "react-bootstrap";
 import { useRef } from "react";
 import { callSelectMailListByConditionsAPI,
             callUpdateImportantStatusAPI,
             callSelectNewMailListAPI,
             callUpdateDeleteStatusAPI,
+            callUpdateMailTagAPI,
             // 태그 
-            callRegisterTagsAPI,
             callSelectTagsAPI,
             callRegisterBlackListAPI,
         } from "../../apis/MailAPICall";
 
 import MailCSS from './Mail.module.css'
+import moment from 'moment';
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker";
 import TagManagementModal from '../../components/mail/TagManagementModal';
-import "react-datepicker/dist/react-datepicker.css";
 
 function Inbox() {
 
@@ -39,10 +38,11 @@ function Inbox() {
     const [searchInput, setSearchInput] = useState({ type: "", value: "" });
     // 태그 
     const [selectedTagFilter, setSelectedTagFilter] = useState(null);
-    // const [tagName, setTagName] = useState('');
-    // const [tagColor, setTagColor] = useState('');
-    const [tags, setTags] = useState([]);
     const [showTagModal, setShowTagModal] = useState(false); // 태그 모달 
+    const [showTagList, setShowTagList] = useState(false);
+    const [selectedMailTag, setSelectedMailTag] = useState(null);
+    const [selectedMailCode, setSelectedMailCode] = useState(null);
+    const [tagListPosition, setTagListPosition] = useState({ x: 0, y: 0 });
     // 필터
     const [filterOpen, setFilterOpen] = useState(false);
     const filterRef = useRef(null);
@@ -50,11 +50,11 @@ function Inbox() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const mailData = useSelector(state => state.mailReducer.mailData);
-    // // console.log("mailList : " + JSON.stringify(mailList));
+    // console.log("mailList : " + JSON.stringify(mailList));
     const mailList = mailData?.data; 
-    // // console.log("routineReportList : " + JSON.stringify(routineReportList));
+    // console.log("routineReportList : " + JSON.stringify(routineReportList));
     const pageInfo = mailData?.pageInfo;
-    // // console.log("pageInfo : " + JSON.stringify(pageInfo));
+    // console.log("pageInfo : " + JSON.stringify(pageInfo));
     const tagList = useSelector(state => state.mailReducer.tagList);
     // console.log("tagList : " + JSON.stringify(tagList));
 
@@ -87,15 +87,27 @@ function Inbox() {
         }
         if (startDate) {
             
-            searchParams.startDate = startDate;
+            searchParams.startDate = moment(startDate).startOf("day").format("YYYY-MM-DD");
         }
         if (endDate) {
 
-            searchParams.endDate = endDate;
+            searchParams.endDate = moment(endDate).endOf("day").format("YYYY-MM-DD");
         }
         if (importantStatus) {
 
-            searchParams.importantStatus = importantStatus;
+            searchParams.importantStatus = importantStatus ? "Y" : "N"; 
+        }
+        if (!isEmailValid(searchParams.recipients)) {
+
+            warningAlert("유효하지 않은 이메일 주소입니다.");
+
+            return;
+        }
+        if (!isDateRangeValid(startDate, endDate)) {
+
+            warningAlert("유효하지 않은 날짜 범위입니다. 시작 날짜는 종료 날짜보다 이전이어야 합니다.");
+
+            return;
         }
         console.log("searchParams : " + JSON.stringify(searchParams));
 
@@ -126,10 +138,31 @@ function Inbox() {
         };
     }, []);
 
+    // 태그 변경 밖 클릭시 
+    useEffect(() => {
+
+        if (showTagList) {
+
+            document.addEventListener("click", handleCloseTagList);
+        } else {
+
+            document.removeEventListener("click", handleCloseTagList);
+        }
+        return () => {
+
+            document.removeEventListener("click", handleCloseTagList);
+        };
+    }, [showTagList]);
+
     // 검색 입력 값 
     const onChangeHandler = (e) => {
 
-        setSearchInput({ ...searchInput, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        setSearchInput((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
     // 필터 토글 
@@ -137,10 +170,17 @@ function Inbox() {
         
         setFilterOpen(!filterOpen);
     };
+
+    // 검색 실행
+    const handleSearch = () => {
+
+        setMailUpdated(true);
+    };
   
     // 태그 선택 
     const handleTagFilterChange = (tagCode) => {
 
+        setSearchTag(tagCode);
         setSelectedTagFilter(tagCode);
     };
 
@@ -148,6 +188,18 @@ function Inbox() {
     const handleTagUpdate = () => {
 
         setUpdateTagTrigger(!updateTagTrigger);
+    };
+    // 모달 관리 함수 
+    const toggleTagModal = () => { // 집 모니터가 커서 생기는 문제일 수 있음 - 모달창 생성시 스크롤 내려가는 문제 
+
+        if (!showTagModal) {
+
+            document.body.style.overflow = "hidden";
+        } else {
+
+            document.body.style.overflow = "auto";
+        }
+        setShowTagModal((prev) => !prev);
     };
   
     // 중요 상태 검색 
@@ -179,14 +231,33 @@ function Inbox() {
     // };
 
     // 삭제 상태 수정 
-    const deleteMail = () => {
+    const deleteMail = async () => {
 
-        dispatch(callUpdateDeleteStatusAPI({
+        if (selectedMails.length === 0) {
 
-            mailCodeList: selectedMails.map((mail) => mail.mailCode),
-            deleteStatus: 'Y',
-        }));
-        setMailUpdated(!mailUpdated);
+            warningAlert("선택된 메일이 없습니다.");
+
+            return;
+        }
+        const result = await Swal.fire({
+
+            title: '메일을 삭제하시겠습니까?',
+            text: '삭제된 메일은 휴지통으로 옮겨집니다.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소',
+        });
+        if (result.isConfirmed) {
+
+            dispatch(callUpdateDeleteStatusAPI({
+
+                mailCodeList: selectedMails.map((mail) => mail.mailCode),
+                deleteStatus: 'Y',
+            }));
+            setMailUpdated(!mailUpdated);
+            successAlert("메일 삭제 완료");
+        }
     };
 
     // 중요 상태 수정 
@@ -200,14 +271,60 @@ function Inbox() {
         setMailUpdated(!mailUpdated);
     };
 
-    // 스팸차단 
-    const registerBlackList = () => {
+    // 태그 변경 토글 
+    const handleTagButtonClick = (mailCode, e) => {
 
-        dispatch(callRegisterBlackListAPI({
+        setShowTagList(false);
+        e.stopPropagation();
+        setSelectedMailCode(mailCode);
+        setShowTagList(true);
+        setTagListPosition({ x: e.clientX, y: e.clientY }); // 위치 계산
+    };
+    // 태그 변경 div 핸들러 
+    const handleCloseTagList = (e) => {
 
-            emails : selectedMails.map((mail) => mail.senderEmail),
-        }));
+        e.stopPropagation();
+        setShowTagList(false);
+    };
+    // 태그 변경 
+    const handleTagChange = (tagCode) => {
+
+        dispatch(callUpdateMailTagAPI({
+
+            mailCode : selectedMailCode,
+            tagCode : tagCode
+        }))
+        setShowTagList(false);
         setMailUpdated(!mailUpdated);
+    }
+
+    // 스팸차단 
+    const registerBlackList = async () => {
+
+        if (selectedMails.length === 0) {
+
+            warningAlert("선택된 메일이 없습니다.");
+
+            return;
+        }
+        const result = await Swal.fire({
+
+            title: '스팸 목록에 등록하시겠습니까?',
+            text: '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소',
+        });
+        if (result.isConfirmed) {
+
+            dispatch(callRegisterBlackListAPI({
+
+                emails : selectedMails.map((mail) => mail.senderEmail),
+            }));
+            setMailUpdated(!mailUpdated);
+            successAlert("스팸목록에 등록 완료");
+        }
     }
 
     // 메일 선택 
@@ -259,21 +376,22 @@ function Inbox() {
         });
     };
 
-    // 모달 관리 
-    // const toggleTagModal = () => {
+    // 이메일 입력값 검증 
+    const isEmailValid = (email) => {
 
-    //     setShowTagModal((prev) => !prev);
-    // };
-    const toggleTagModal = () => { // 집 모니터가 커서 생기는 문제일 수 있음 - 모달창 생성시 스크롤 내려가는 문제 
+        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
-        if (!showTagModal) {
+        return emailRegex.test(email);
+    };
 
-            document.body.style.overflow = "hidden";
-        } else {
+    // 날짜 선택 검증 
+    const isDateRangeValid = (startDate, endDate) => {
 
-            document.body.style.overflow = "auto";
+        if (!startDate || !endDate) {
+
+            return true;
         }
-        setShowTagModal((prev) => !prev);
+        return endDate >= startDate;
     };
 
     return (
@@ -294,15 +412,27 @@ function Inbox() {
                         <option name="condition" value="senderName">발신자 이름</option>
                         <option name="condition" value="senderEmail">발신자 이메일</option>
                     </select>
-                    <input 
+                    {/* <input 
                         type="text" 
                         name="value" 
                         value={searchInput.value} 
                         onChange={onChangeHandler} 
+                    /> */}
+                    <input 
+                        type="text" 
+                        id="searchBar" 
+                        value={searchInput.value} 
+                        name="searchBar" 
+                        autocomplete="off" 
+                        spellcheck="false" 
+                        placeholder="검색어를 입력하세요"
+                        onChange={onChangeHandler} 
                     />
+
                     <button 
                         type="button" 
-                        onClick={() => setMailUpdated(true)} 
+                        // onClick={() => setMailUpdated(true)} 
+                        onClick={handleSearch} 
                     >
                         검색
                     </button>
@@ -310,31 +440,32 @@ function Inbox() {
                         필터
                     </button>
                     {filterOpen && (
-                        // <div className={MailCSS.filterSettings} ref={filterRef}>
                         <div className={`${MailCSS.filterSettings} ${MailCSS.filterContainer}`} ref={filterRef}>
                             <div className={MailCSS.tagFilterContainer}>
+                                태그 목록
                                 <div className={MailCSS.tagFilterScrollContainer}>
+                                    {tagList?.map((tag) => (
+                                        <div
+                                            key={tag.tagCode}
+                                            className={selectedTagFilter === tag.tagCode ? MailCSS.tagFilterSelected : MailCSS.tagFilter}
+                                            onClick={() => handleTagFilterChange(tag.tagCode)}
+                                            style={{cursor:"pointer"}}
+                                        >
+                                            <img
+                                                src={`/mail/tags/${tag.tagColor}.png`}
+                                                alt={`${tag.tagColor} ribbon`}
+                                                style={{
+                                                    width: "16px",
+                                                    height: "16px",
+                                                    marginRight: "4px",
+                                                }}
+                                            />
+                                            {tag.tagName}
+                                        </div>
+                                    ))}
                                 </div>
-                                {tagList?.map((tag) => (
-                                    <div
-                                        key={tag.tagCode}
-                                        className={selectedTagFilter === tag.tagCode ? "tagFilterSelected" : "tagFilter"}
-                                        onClick={() => handleTagFilterChange(tag.tagCode)}
-                                        style={{cursor:"pointer"}}
-                                    >
-                                        <img
-                                            src={`/mail/tags/${tag.tagColor}.png`}
-                                            alt={`${tag.tagColor} ribbon`}
-                                            style={{
-                                                width: "16px",
-                                                height: "16px",
-                                                marginRight: "4px",
-                                            }}
-                                        />
-                                        {tag.tagName}
-                                    </div>
-                                ))}
                             </div>
+                            <hr></hr>
                             <div style={{ whiteSpace: 'nowrap' }}>시작일</div>
                             <DatePicker
                                 selected={startDate}
@@ -349,6 +480,7 @@ function Inbox() {
                                 dateFormat="yyyy-MM-dd"
                                 placeholderText="yyyy-MM-dd"
                             />
+                            <hr></hr>
                             <label>
                                 <input
                                     type="checkbox"
@@ -390,15 +522,7 @@ function Inbox() {
                                         >
                                             스팸차단
                                         </span>
-                                        {/* 클릭시 태그 선택 또는 생성 div 출력 해당 span 기준으로 하위의 흰색배경 검은 테두리 적당히 작은 크기 */}
-                                        {/* <span
-                                            style={{cursor: 'pointer'}}
-                                            onClick={() => toggleTagModal()}
-                                        >
-                                            태그관리
-                                        </span> */}
                                         <span style={{cursor: 'pointer'}}>
-                                            {/* <TagManagementModal onClose={() => toggleTagModal()} /> */}
                                             <TagManagementModal onUpdate={handleTagUpdate} />
                                         </span>
                                         <span 
@@ -462,16 +586,19 @@ function Inbox() {
                                             </div>
                                         </td>
                                         <td>
-                                            <img 
-                                                src="/mail/tags/red.png" 
-                                                alt="태그" 
-                                                style={{width:"16px"}}
+                                            <img
+                                                src={`/mail/tags/${mail?.tagDTO?.tagColor || "null"}.png`}
+                                                alt="태그"
+                                                style={{ width: "16px", cursor: "pointer" }}
+                                                onClick={(e) => {
+                                                    handleTagButtonClick(mail.mailCode, e)
+                                                }}
                                             />
                                         </td>
                                         <td 
                                             className={MailCSS.wide}
-                                            // 해당 메일상세 페이지로 이동, 객체가져가면 될듯 
-                                            // onClick={}
+                                            style={{cursor:"pointer"}}
+                                            onClick={() => navigate(`/aurora/mails/detail/${mail.mailCode}`, { state: { mailCode: mail.mailCode } })}
                                         >
                                             <div className={MailCSS.textOverflow}>
                                                 {mail.mailTitle}
@@ -491,6 +618,42 @@ function Inbox() {
                                     </tr>
                                 )
                             }
+                            {/* 태그 변경 */}
+                            {showTagList && (
+                                <div 
+                                    className={MailCSS.tagFilterListContainer}
+                                    style={{
+                                        position: "absolute",
+                                        top: tagListPosition.y, // 위치 조정
+                                        left: tagListPosition.x, // 위치 조정
+                                    }}
+                                >
+                                    태그 목록
+                                    <div className={MailCSS.tagFilterScrollContainer}>
+                                        {tagList?.map((tag) => (
+                                            <div
+                                                key={tag.tagCode}
+                                                className={selectedMailTag?.tagCode === tag.tagCode
+                                                    ? MailCSS.tagFilterSelected 
+                                                    : MailCSS.tagFilter}
+                                                onClick={() => handleTagChange(tag.tagCode)}
+                                                style={{ cursor: "pointer" }}
+                                            >
+                                                <img
+                                                    src={`/mail/tags/${tag.tagColor}.png`}
+                                                    alt={`${tag.tagColor} ribbon`}
+                                                    style={{
+                                                    width: "16px",
+                                                    height: "16px",
+                                                    marginRight: "4px",
+                                                    }}
+                                                />
+                                                {tag.tagName}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </tbody>
                     </table>
                     {/* 페이징 버튼 */}

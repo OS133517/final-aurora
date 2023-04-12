@@ -46,7 +46,7 @@ function MailSidebar() {
                 <div>
                     <button 
                         className={MailSidebarCSS.buttons}
-                        // onClick={() => navigate('/aurora/mails/compose', { state: { isEdit: false }})}
+                        onClick={() => navigate('/aurora/mails/write')}
                     >
                         메일 작성
                     </button>
@@ -66,22 +66,22 @@ function MailSidebar() {
                     >
                         보낸 메일함
                     </NavLink>
-                    <NavLink
+                    {/* <NavLink
                         to="important"
                         className={MailSidebarCSS.dropDownButtons}
                         onClick={() => handleClick('important')}
                         style={activeMenu === 'important' ? activeStyle : undefined}
                     >
                         중요 메일함
-                    </NavLink>
-                    <NavLink
+                    </NavLink> */}
+                    {/* <NavLink
                         to="spam"
                         className={MailSidebarCSS.dropDownButtons}
                         onClick={() => handleClick('spam')}
                         style={activeMenu === 'spam' ? activeStyle : undefined}
                     >
                         스팸 메일함
-                    </NavLink>
+                    </NavLink> */}
                     <NavLink
                         to="trash"
                         className={MailSidebarCSS.dropDownButtons}
@@ -90,14 +90,14 @@ function MailSidebar() {
                     >
                         휴지통
                     </NavLink>
-                    <NavLink
+                    {/* <NavLink
                         to="statistics"
                         className={MailSidebarCSS.dropDownButtons}
                         onClick={() => handleClick('statistics')}
                         style={activeMenu === 'statistics' ? activeStyle : undefined}
                     >
                         통계
-                    </NavLink>
+                    </NavLink> */}
                 </div>
             </div>
         </>

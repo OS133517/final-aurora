@@ -47,7 +47,7 @@ import Sent from './pages/mail/Sent';
 import Spam from './pages/mail/Spam';
 import Trash from './pages/mail/Trash';
 // import Statistics from './pages/mail/Statistics';
-import Compose from './pages/mail/Compose';
+import MailWrite from './pages/mail/MailWrite';
 import MailDetail from './pages/mail/MailDetail';
 
 import ReportLayout from "./layouts/ReportLayout";
@@ -93,8 +93,8 @@ function App() {
                 <Route path="spam" element={<Spam />} />
                 <Route path="trash" element={<Trash />} />
                 {/* <Route path="statistics" element={<Statistics />} /> */}
-                <Route path="compose" element={<Compose />} />
-                <Route path=":folder/:id" element={<MailDetail />} />
+                <Route path="write" element={<MailWrite />} />
+                <Route path="detail/:mailCode" element={<MailDetail />} />
               </Route>
               <Route path="reports" element={<ReportLayout/>}>
                 <Route path="routines" element={<RoutineReports/>}/>
