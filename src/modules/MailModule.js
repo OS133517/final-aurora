@@ -20,6 +20,7 @@ export const GET_MAIL_DETAIL = 'mail/GET_MAIL_DETAIL';
 export const GET_TAGS = 'mail/GET_TAGS';
 export const GET_BLACKLIST = 'mail/GET_BLACKLIST';
 
+export const POST_MAIL = 'mail/POST_MAIL';
 export const POST_MAIL_TAGS = 'mail/POST_MAIL_TAGS';
 export const POST_TAGS = 'mail/POST_TAGS';
 export const POST_BLACKLIST = 'mail/POST_BLACKLIST';
@@ -28,6 +29,7 @@ export const PUT_IMPORTANT_STATUS = 'mail/PUT_IMPORTANT_STATUS';
 export const PUT_TAGS = 'mail/PUT_TAGS';
 
 export const DELETE_MAIL = 'mail/DELETE_MAIL';
+export const DELETE_MAIL_FOREVER = 'mail/DELETE_FOREVER_MAIL';
 export const DELETE_TAGS = 'mail/DELETE_TAGS';
 export const DELETE_BLACKLIST = 'mail/DELETE_BLACKLIST';
 
@@ -40,6 +42,7 @@ const actions = createActions({
     [GET_TAGS] : () => {},
     [GET_BLACKLIST] : () => {},
 
+    [POST_MAIL] : () => {},
     [POST_MAIL_TAGS] : () => {},
     [POST_TAGS] : () => {},
     [POST_BLACKLIST] : () => {},
@@ -48,6 +51,7 @@ const actions = createActions({
     [PUT_TAGS] : () => {},
 
     [DELETE_MAIL] : () => {},
+    [DELETE_MAIL_FOREVER] : () => {},
     [DELETE_TAGS] : () => {},
     [DELETE_BLACKLIST] : () => {},
 });
@@ -81,6 +85,11 @@ const mailReducer = handleActions({
             blackList : payload
         }},
 
+    [POST_MAIL] : (state, { payload }) => {
+        return {
+            ...state,
+            isMailUpdated : payload
+        }},
     [POST_MAIL_TAGS] : (state, { payload }) => {
         return {
             ...state,
@@ -107,7 +116,12 @@ const mailReducer = handleActions({
             ...state,
             isTagUpdated : payload
         }},
-
+        
+    [DELETE_MAIL_FOREVER] : (state, { payload }) => {
+        return {
+            ...state,
+            isMailUpdated : payload
+        }},
     [DELETE_MAIL] : (state, { payload }) => {
         return {
             ...state,

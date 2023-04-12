@@ -27,15 +27,15 @@ function Inbox() {
 
     const [updateTagTrigger, setUpdateTagTrigger] = useState(false);
     const [selectedMails, setSelectedMails] = useState([]);
-    const [mailUpdated, setMailUpdated] = useState(false); 
+    const [mailUpdated, setMailUpdated] = useState(false); // 메일 리렌더링 
     const [allMailsSelected, setAllMailsSelected] = useState(false); // 전체 선택 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // 새로고침중 
     // 검색 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [importantStatus, setImportantStatus] = useState(false);
     const [searchTag, setSearchTag] = useState(null);
-    const [searchInput, setSearchInput] = useState({ type: "", value: "" });
+    const [searchInput, setSearchInput] = useState({ type: "mailTitle", value: "" });
     // 태그 
     const [selectedTagFilter, setSelectedTagFilter] = useState(null);
     const [showTagModal, setShowTagModal] = useState(false); // 태그 모달 
@@ -70,20 +70,21 @@ function Inbox() {
 
     // 렌더링 
     useEffect(() => {
-        
+
         const searchParams = {
 
-            offset: 1,
+            offset: currentPage,
             recipients: accessToken.memberEmail,
             deleteStatus: "N",
+            [searchInput.type]: searchInput.value
         };
         if (searchTag) {
 
             searchParams.tagCode = searchTag;
         }
-        if (searchInput.type && searchInput.value) {
+        if (searchInput.condition && searchInput.value) { 
 
-            searchParams[searchInput.type] = searchInput.value;
+            searchParams[searchInput.condition] = searchInput.value; 
         }
         if (startDate) {
             
@@ -97,12 +98,6 @@ function Inbox() {
 
             searchParams.importantStatus = importantStatus ? "Y" : "N"; 
         }
-        if (!isEmailValid(searchParams.recipients)) {
-
-            warningAlert("유효하지 않은 이메일 주소입니다.");
-
-            return;
-        }
         if (!isDateRangeValid(startDate, endDate)) {
 
             warningAlert("유효하지 않은 날짜 범위입니다. 시작 날짜는 종료 날짜보다 이전이어야 합니다.");
@@ -115,7 +110,7 @@ function Inbox() {
         dispatch(callSelectTagsAPI({}))
 
         setMailUpdated(false);
-    }, [mailUpdated]);
+    }, [mailUpdated, currentPage]);
 
     // 필터밖 클릭시 
     useEffect(() => {
@@ -154,15 +149,38 @@ function Inbox() {
         };
     }, [showTagList]);
 
+    // 모달 스크롤 문제 
+    useEffect(() => {
+        if (showTagModal) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = 'auto';
+        }
+      
+        return () => {
+          document.body.style.overflow = 'auto';
+        };
+      }, [showTagModal]);
+      
+
     // 검색 입력 값 
     const onChangeHandler = (e) => {
 
         const { name, value } = e.target;
+    
+        if (name === "condition") {
 
-        setSearchInput((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+            setSearchInput((prev) => ({
+                ...prev,
+                type: value,
+            }));
+        } else {
+
+            setSearchInput((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
     };
 
     // 필터 토글 
@@ -170,25 +188,35 @@ function Inbox() {
         
         setFilterOpen(!filterOpen);
     };
-
-    // 검색 실행
-    const handleSearch = () => {
-
-        setMailUpdated(true);
-    };
   
-    // 태그 선택 
+    // 필터 태그 선택 
     const handleTagFilterChange = (tagCode) => {
 
-        setSearchTag(tagCode);
-        setSelectedTagFilter(tagCode);
+        const isTagSelected = selectedTagFilter === tagCode;
+        
+        if (isTagSelected) {
+
+            setSearchTag(null);
+            setSelectedTagFilter(null);
+        } else {
+            
+            setSearchTag(tagCode);
+            setSelectedTagFilter(tagCode);
+        }
     };
 
-    // 태그 업데이트 관리 함수 
+    // 검색 실행
+    const onSearchButtonClick = () => {
+
+        setMailUpdated(true); 
+    };
+
+    // 태그관리모달 업데이트 관리 함수 
     const handleTagUpdate = () => {
 
         setUpdateTagTrigger(!updateTagTrigger);
     };
+
     // 모달 관리 함수 
     const toggleTagModal = () => { // 집 모니터가 커서 생기는 문제일 수 있음 - 모달창 생성시 스크롤 내려가는 문제 
 
@@ -271,7 +299,7 @@ function Inbox() {
         setMailUpdated(!mailUpdated);
     };
 
-    // 태그 변경 토글 
+    // 태그 변경 토글 - 각 메일 
     const handleTagButtonClick = (mailCode, e) => {
 
         setShowTagList(false);
@@ -280,12 +308,14 @@ function Inbox() {
         setShowTagList(true);
         setTagListPosition({ x: e.clientX, y: e.clientY }); // 위치 계산
     };
-    // 태그 변경 div 핸들러 
+
+    // 태그 변경 div 핸들러 - div 밖 클릭시 닫기 
     const handleCloseTagList = (e) => {
 
         e.stopPropagation();
         setShowTagList(false);
     };
+    
     // 태그 변경 
     const handleTagChange = (tagCode) => {
 
@@ -376,14 +406,6 @@ function Inbox() {
         });
     };
 
-    // 이메일 입력값 검증 
-    const isEmailValid = (email) => {
-
-        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-
-        return emailRegex.test(email);
-    };
-
     // 날짜 선택 검증 
     const isDateRangeValid = (startDate, endDate) => {
 
@@ -401,10 +423,11 @@ function Inbox() {
                     {/* <span>받은 메일함 (안 읽은 갯수) / {pageInfo?.totalCount}</span> */}
                     <span>받은 메일함</span>
                 </div>
+                {/* 검색바 */}
                 <div className={MailCSS.searchBar}>
-                    <select 
-                        name="condition" 
-                        onChange={onChangeHandler} 
+                    <select
+                        name="condition"
+                        onChange={onChangeHandler}
                         value={searchInput.condition}
                     >
                         <option name="condition" value="mailTitle">메일 제목</option>
@@ -412,27 +435,19 @@ function Inbox() {
                         <option name="condition" value="senderName">발신자 이름</option>
                         <option name="condition" value="senderEmail">발신자 이메일</option>
                     </select>
-                    {/* <input 
-                        type="text" 
+                    <input
+                        type="text"
+                        id="searchBar"
+                        value={searchInput.value}
                         name="value" 
-                        value={searchInput.value} 
-                        onChange={onChangeHandler} 
-                    /> */}
-                    <input 
-                        type="text" 
-                        id="searchBar" 
-                        value={searchInput.value} 
-                        name="searchBar" 
-                        autocomplete="off" 
-                        spellcheck="false" 
+                        autoComplete="off"
+                        spellCheck="false"
                         placeholder="검색어를 입력하세요"
-                        onChange={onChangeHandler} 
+                        onChange={onChangeHandler}
                     />
-
                     <button 
                         type="button" 
-                        // onClick={() => setMailUpdated(true)} 
-                        onClick={handleSearch} 
+                        onClick={onSearchButtonClick}
                     >
                         검색
                     </button>
@@ -493,6 +508,7 @@ function Inbox() {
                     )}
                 </div>
                 <div>
+                    {/* 메일 리스트 */}
                     <table className={MailCSS.mailTable}>
                         <thead>
                             <tr>
@@ -523,7 +539,8 @@ function Inbox() {
                                             스팸차단
                                         </span>
                                         <span style={{cursor: 'pointer'}}>
-                                            <TagManagementModal onUpdate={handleTagUpdate} />
+                                            {/* <TagManagementModal onUpdate={handleTagUpdate} /> */}
+                                            <TagManagementModal onUpdate={handleTagUpdate} toggleTagModal={toggleTagModal} />
                                         </span>
                                         <span 
                                             style={{cursor: 'pointer'}}
@@ -545,7 +562,7 @@ function Inbox() {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* 메일 리스트 컴포넌트  */}
+                            {/* 메일 항목 */}
                             {Array.isArray(mailList) && mailList.length > 0 ? (
                                 mailList?.map(mail => (
                                     <tr key={mail.mailCode} className={MailCSS.mail}>
@@ -580,7 +597,10 @@ function Inbox() {
                                                 }
                                             />
                                         </td>
-                                        <td>
+                                        <td
+                                            style={{cursor:"pointer"}}
+                                            onClick={() => navigate(`/aurora/mails/detail/${mail.mailCode}`, { state: { mailCode: mail.mailCode } })}
+                                        >
                                             <div className={MailCSS.textOverflow}>
                                                 {mail.senderName}
                                             </div>
@@ -601,10 +621,14 @@ function Inbox() {
                                             onClick={() => navigate(`/aurora/mails/detail/${mail.mailCode}`, { state: { mailCode: mail.mailCode } })}
                                         >
                                             <div className={MailCSS.textOverflow}>
-                                                {mail.mailTitle}
+                                                {mail.mailTitle} {mail.hasAttachments && <img src={"/mail/file.png"} style={{width: "16px"}}/>}
                                             </div>
                                         </td>
-                                        <td className={MailCSS.date}>
+                                        <td 
+                                            className={MailCSS.date}
+                                            style={{cursor:"pointer"}}
+                                            onClick={() => navigate(`/aurora/mails/detail/${mail.mailCode}`, { state: { mailCode: mail.mailCode } })}
+                                        >
                                             {mail.shipDate}
                                         </td>
                                     </tr>

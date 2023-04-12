@@ -12,13 +12,14 @@ import Swal from "sweetalert2";
 
 function TagManagerModal(props) {
 
-    const { onUpdate } = props;
+    // const { onUpdate } = props;
+    const { onUpdate, toggleTagModal } = props;
 
     const dispatch = useDispatch();
 
     const [show, setShow] = useState(false);
     const [tagUpdated, setTagUpdated] = useState(false); 
-    const [selectedTag, setSelectedTag] = useState(null);
+    const [scrollPosition, setScrollPosition] = useState(0); // 스크롤 문제 
     // 태그 등록
     const [newTagName, setNewTagName] = useState('');
     const [newTagColor, setNewTagColor] = useState('');
@@ -29,7 +30,6 @@ function TagManagerModal(props) {
     const [colorPickerVisible, setColorPickerVisible] = useState({ tagCode: "", visible: false });
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const tagList = useSelector(state => state.mailReducer.tagList);
 
@@ -162,13 +162,43 @@ function TagManagerModal(props) {
         });
     };
 
+    // 모달 토글 
+    const handleModalToggle = () => {
+
+        if (!show) {
+
+          setScrollPosition(window.pageYOffset);
+          document.body.style.overflow = "hidden";
+          document.body.style.position = "fixed";
+          document.body.style.top = `-${scrollPosition}px`;
+        } else {
+
+          document.body.style.overflow = "auto";
+          document.body.style.position = "";
+          document.body.style.top = "";
+          window.scrollTo(0, scrollPosition);
+        }
+        setShow((prev) => !prev);
+    };
+
     return (
         <>
             <div>
-                <span onClick={handleShow}>
+                <span onClick={handleModalToggle}>
                     태그관리
                 </span>
-                <Modal show={show} onHide={handleClose} centered className={TagManagementModalCSS.tagModal}>
+                <Modal 
+                    show={show} 
+                    onHide={handleClose} 
+                    centered 
+                    className={TagManagementModalCSS.tagModal}
+                    onEntered={() => {
+                        document.body.style.overflow = "hidden";
+                    }}
+                    onExited={() => {
+                        document.body.style.overflow = "auto";
+                    }}
+                >
                     <div className={TagManagementModalCSS.tagModalBackground}>
                         <div className={TagManagementModalCSS.tagModalContainer}>
                             <div className={TagManagementModalCSS.tagModalHeader}>태그 관리</div>
@@ -253,7 +283,7 @@ function TagManagerModal(props) {
                                     </div>
                             </div>
                             <div className={TagManagementModalCSS.tagModalFooter}>
-                                <button onClick={() => handleClose()}>닫기</button>
+                                <button onClick={handleModalToggle}>닫기</button>
                             </div>
                         </div>
                     </div>

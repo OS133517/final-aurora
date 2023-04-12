@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-// import { callSelectSearchListAboutNameAPI,
-//         } from "../../apis/MailAPICall";
+import { callSendMailAPI,
+        } from "../../apis/MailAPICall";
 
 import MailWriteCSS from './MailWrite.module.css'
 import Swal from "sweetalert2";
@@ -13,7 +13,8 @@ function MailWrite() {
     const navigate = useNavigate();
     
     const [attachments, setAttachments] = useState([]); // 첨부파일 
-    const [mailData, setMailData] = useState({ // 입력값 
+    const [mailUpdated, setMailUpdated] = useState(false); // 메일 리렌더링 
+    const [mailDTO, setMailDTO] = useState({ // 입력값 
 
         recipient: '',
         cc: '',
@@ -22,27 +23,60 @@ function MailWrite() {
         fileList: []
     });
 
-    // 보내기 
+    // 검증 
+    const validateMailData = () => {
+
+        const { recipient, cc, mailTitle, mailBody } = mailDTO;
+    
+        const validationMessages = [
+
+            { condition: !recipient, message: "수신자 이메일 주소를 입력해주세요." },
+            { condition: recipient && !isEmailValid(recipient), message: "유효하지 않은 수신자 이메일 주소입니다." },
+            // { condition: cc && !isEmailValid(cc), message: "유효하지 않은 참조 이메일 주소입니다." },
+            { condition: !mailTitle || mailTitle.trim() === "", message: "메일 제목을 입력해주세요." },
+            { condition: !mailBody || mailBody.trim() === "", message: "메일 본문을 입력해주세요." },
+        ];
+    
+        for (const validation of validationMessages) {
+
+            if (validation.condition) {
+
+                warningAlert(validation.message);
+                
+                return false;
+            }
+        }
+        return true;
+    };
+
+    // 리렌더링 
+    useEffect(() => {
+
+        setMailUpdated(false)
+    }, [mailUpdated]);
+
+    // 메일 전송 
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        
+                
+        if (!validateMailData()) {
+
+            return;
+        }
         const formData = new FormData();
-        formData.append("recipient", mailData.to);
-        formData.append("cc", mailData.cc);
-        formData.append("mailTitle", mailData.subject);
-        formData.append("mailBody", mailData.body);
+        formData.append("mailDTO", JSON.stringify(mailDTO));
 
         attachments.forEach((attachment) => {
             
             formData.append("fileList", attachment);
         });
-        // Submit mailData to the server
+        dispatch(callSendMailAPI({
 
-        // dispatch(callRegisterMailAPI({
-        //     email : email
-        // }))
-        console.log(mailData);
+            formData : formData
+        }))
+        successAlert("메일을 전송했습니다.")
+        navigate("/aurora/mails")
     };
 
     // 입력값 핸들러 
@@ -50,18 +84,31 @@ function MailWrite() {
 
         const { name, value } = e.target;
 
-        setMailData((prev) => ({
+        setMailDTO((prev) => ({
             ...prev,
             [name]: value
         }));
     };
 
-    // 파일 첨부 핸들러 
+    // 파일 목록 변경
     const handleFileInputChange = (e) => {
 
-        const files = e.target.files;
+        setAttachments([...attachments, ...Array.from(e.target.files)]);
+        setMailUpdated(!mailUpdated)
+    };
 
-        setAttachments([...attachments, ...files]);
+    // 파일 삭제
+    const removeFile = (index) => {
+
+        setAttachments(attachments.filter((_, i) => i !== index));
+        setMailUpdated(!mailUpdated)
+    };
+
+    // 파일 전체 삭제
+    const removeAllFiles = () => {
+
+        setAttachments([]);
+        setMailUpdated(!mailUpdated)
     };
 
     // 성공 알림 
@@ -83,6 +130,14 @@ function MailWrite() {
             text: message,
             confirmButtonText: '확인',
         });
+    };
+
+    // 이메일 입력값 검증 
+    const isEmailValid = (email) => {
+
+        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+
+        return emailRegex.test(email);
     };
 
     return (
@@ -117,21 +172,24 @@ function MailWrite() {
                                     <th><label htmlFor="recipient">받는 사람</label></th>
                                     <td>
                                         <input
+                                            className={MailWriteCSS.boxInput}
                                             type="email"
                                             name="recipient"
-                                            value={mailData.recipient}
+                                            value={mailDTO.recipient}
                                             onChange={handleChange}
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><label htmlFor="cc">참조</label></th>
+                                    <th><label htmlFor="cc">숨은 참조</label></th>
                                     <td>
                                         <input
+                                            className={MailWriteCSS.boxInput}
                                             type="email"
                                             name="cc"
-                                            value={mailData.cc}
+                                            value={mailDTO.cc}
                                             onChange={handleChange}
+                                            placeholder="test1@example.com,test2@example.com"
                                         />
                                     </td>
                                 </tr>
@@ -139,9 +197,10 @@ function MailWrite() {
                                     <th><label htmlFor="mailTitle">제목</label></th>
                                     <td>
                                         <input
+                                            className={MailWriteCSS.boxInput}
                                             type="text"
                                             name="mailTitle"
-                                            value={mailData.mailTitle}
+                                            value={mailDTO.mailTitle}
                                             onChange={handleChange}
                                         />
                                     </td>
@@ -149,12 +208,38 @@ function MailWrite() {
                                 <tr>
                                     <th>첨부 파일</th>
                                     <td>
-                                        <input
-                                            type="file"
-                                            name="fileList"
-                                            multiple
-                                            onChange={handleFileInputChange}
-                                        />
+                                        <div className={MailWriteCSS.fileTableContainer}>
+                                            <input
+                                                type="file"
+                                                name="fileList"
+                                                multiple
+                                                onChange={handleFileInputChange}
+                                            />
+                                            <br></br>
+                                            <br></br>
+                                            <table className={MailWriteCSS.fileTable}>
+                                                <thead>
+                                                    <tr>
+                                                        <td className={MailWriteCSS.xColumn}>
+                                                            <button onClick={removeAllFiles}>X</button>
+                                                        </td>
+                                                        <td>파일 제목</td>
+                                                        <td className={MailWriteCSS.sizeColumn}>용량</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {attachments.map((file, index) => (
+                                                        <tr key={index}>
+                                                            <td>
+                                                                <button onClick={() => removeFile(index)}>X</button>
+                                                            </td>
+                                                            <td>{file.name}</td>
+                                                            <td className={MailWriteCSS.sizeColumn}>{(file.size / 1024).toFixed(2)} KB</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -165,7 +250,7 @@ function MailWrite() {
                                             name="mailBody"
                                             rows="10"
                                             cols="30"
-                                            value={mailData.mailBody}
+                                            value={mailDTO.mailBody}
                                             onChange={handleChange}
                                         />
                                     </td>

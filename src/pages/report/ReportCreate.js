@@ -251,13 +251,11 @@ function ReportCreate() {
 
         setFileList([...fileList, ...Array.from(e.target.files)]);
     };
-
     // 파일 삭제 
     const removeFile = (index) => {
 
         setFileList(fileList.filter((_, i) => i !== index));
     };
-
     // 기존 파일중 삭제 
     const removeServerFile = (index) => {
 
@@ -266,7 +264,6 @@ function ReportCreate() {
         newServerFileList.splice(index, 1);
         setServerFileList(newServerFileList);
     };
-
     // 파일 전체 삭제 
     const removeAllFiles = () => {
 

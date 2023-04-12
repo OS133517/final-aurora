@@ -5,6 +5,7 @@ import {
     GET_TAGS,
     GET_BLACKLIST,
 
+    POST_MAIL,
     POST_MAIL_TAGS,
     POST_TAGS,
     POST_BLACKLIST,
@@ -13,9 +14,35 @@ import {
     PUT_TAGS,
 
     DELETE_MAIL,
+    DELETE_MAIL_FOREVER,
     DELETE_TAGS,
     DELETE_BLACKLIST,
 } from "../modules/MailModule";
+
+// 메일 작성 
+export const callSendMailAPI = ({formData}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/mails`;
+
+    return async (dispatch, getState) => {
+        
+        const result = await fetch(requestURL, {
+            method : 'POST',
+            headers : {
+                // "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : formData
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[MailAPICalls] callSendMailAPI RESULT', result);
+            dispatch({type : POST_MAIL, payload : result.data});
+        }
+    };
+}
 
 // 조건별 메일 목록 조회 
 export const callSelectMailListByConditionsAPI = (searchCriteria) => {
@@ -148,7 +175,7 @@ export const callUpdateDeleteStatusAPI = ({mailCodeList, deleteStatus}) => {
     };
 }
 
-// 메일 삭제 상태 수정 
+// 메일 태그 변경  
 export const callUpdateMailTagAPI = ({mailCode, tagCode}) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/mails/${mailCode}/tags/${tagCode}`;
@@ -168,6 +195,31 @@ export const callUpdateMailTagAPI = ({mailCode, tagCode}) => {
         if(result.status === 200) {
             console.log('[MailAPICalls] callUpdateMailTagAPI RESULT', result);
             dispatch({type : POST_MAIL_TAGS, payload : result.data});
+        }
+    };
+}
+
+// 메일 완전 삭제 
+export const callDeleteMailAPI = ({mailCodeList}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/mails`;
+
+    return async (dispatch, getState) => {
+        
+        const result = await fetch(requestURL, {
+            method : 'DELETE',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            },
+            body : JSON.stringify(mailCodeList) 
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[MailAPICalls] callDeleteMailAPI RESULT', result);
+            dispatch({type : DELETE_MAIL_FOREVER, payload : result.data});
         }
     };
 }

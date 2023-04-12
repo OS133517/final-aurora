@@ -31,9 +31,9 @@ function MailDetail() {
     // 태그 
     const [updateTagTrigger, setUpdateTagTrigger] = useState(false);
     const [showTagList, setShowTagList] = useState(false); // 태그 이미지 클릭시 변경가능한 태그 목록 
-    const [showColorPicker, setShowColorPicker] = useState({ tagCode: "", visible: false });
     const [selectedMailCode, setSelectedMailCode] = useState(null);
     const [tagListPosition, setTagListPosition] = useState({ x: 0, y: 0 });
+    // const [showColorPicker, setShowColorPicker] = useState({ tagCode: "", visible: false });
     // const [filterOpen, setFilterOpen] = useState(false);
 
     const mailDetail = useSelector(state => state.mailReducer.mailDetail);
@@ -187,6 +187,47 @@ function MailDetail() {
         });
     };
 
+    // 파일 다운로드
+    const downloadFile = async (fileName, fileOriginName, filePath) => {
+
+        const fullFilePath = `http://${process.env.REACT_APP_RESTAPI_IP}:8090${filePath}`; 
+
+        try {
+            const response = await fetch(fullFilePath);
+            const blob = await response.blob();
+
+            const fileExtension = fileOriginName.split('.').pop().toLowerCase();
+
+            let mimeType = '';
+
+            switch (fileExtension) {
+
+                case 'png':
+                    mimeType = 'image/png';
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                    mimeType = 'image/jpeg';
+                    break;
+                case 'gif':
+                    mimeType = 'image/gif';
+                    break;
+                default:
+                    mimeType = 'application/octet-stream';
+            }
+            const file = new File([blob], fileOriginName, { type: mimeType });
+
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(file);
+            link.download = fileOriginName;
+            link.click();
+            link.remove();
+        } catch (error) {
+            
+            console.error("파일 다운로드 실패!", error);
+        }
+    };
+
     return (
         <>
             <div className={MailDetailCSS.container}>
@@ -304,8 +345,40 @@ function MailDetail() {
                 <hr></hr>
                 {mailDetail.fileList && mailDetail.fileList.length > 0 && (
                     <>
-                        <div>
+                        {/* <div>
                             파일 목록 디브
+                        </div>
+                        <hr></hr> */}
+                        <div 
+                            className={MailDetailCSS.detailReportContainer}
+                            key={mailDetail.mailCode}
+                        >
+                            {/* 첨부파일 목록 */}
+                            <div className={MailDetailCSS.detailReportHeader}>
+                                {/* 첨부 파일 */}
+                            </div>
+                            <div>
+                                {mailDetail.fileList && mailDetail.fileList.length === 0 ? 
+                                    <ul>
+                                        <li>첨부된 파일이 없습니다.</li> 
+                                    </ul> : 
+                                    <ul>
+                                        {mailDetail.fileList?.map((file, index) => (
+                                            <li key={index}>
+                                                <span onClick={() => downloadFile(file.fileName, file.fileOriginName, file.filePath)}>
+                                                    <img 
+                                                        src={'/mail/file.png'}
+                                                        className={MailDetailCSS.fileImg}
+                                                        style={{width: "16px"}}
+                                                    />
+                                                    &nbsp;
+                                                    {file.fileOriginName} ({file.fileSize})
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                }
+                            </div>
                         </div>
                         <hr></hr>
                     </>
