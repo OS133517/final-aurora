@@ -69,17 +69,18 @@
 }
 
 /* 필터 */
-/* .filterSettings {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-    background-color: white;
-    border: 1px solid #C1C1C1;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+.filterContainer {
     position: absolute;
-    z-index: 1; /* 필터 div를 상위로 배치합니다. */
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.tagFilterScrollContainer {
+    max-height: 200px; /* 적절한 높이 설정 */
+    overflow-y: auto;
+}
 .filterSettings {
     position: absolute;
     top: 90%;
@@ -92,7 +93,7 @@
     padding: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-  }
+}
 .filterSettings label {
     display: flex;
     align-items: center;
@@ -120,41 +121,19 @@
     height: 20px;
     margin-left: 5px;
 }
-/* .filterSettings {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.filterSettings label {
-    display: flex;
+.tagFilter {
+    padding: 5px;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
 }
-
-.filterSettings input[type="checkbox"] {
-    margin-right: 8px;
-} */
-/* .filterContainer {
-    width: 200px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border: 1px solid #C1C1C1;
-    padding: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-.filterContainer > * {
-    margin-bottom: 8px;
-}
-.filterContainer label {
-    display: flex;
+.tagFilterSelected {
+    padding: 5px;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
+    border: 2px solid red; 
 }
-.filterContainer input[type="checkbox"] {
-    margin-right: 8px;
-} */
 
 /* 메일 리스트 테이블 */
 .mailTable {

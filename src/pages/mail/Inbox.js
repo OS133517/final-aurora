@@ -280,7 +280,8 @@ function Inbox() {
         <>
             <div className={MailCSS.container}>
                 <div className={MailCSS.titleHeader}>
-                    <span>받은 메일함 (안 읽은 갯수) / {pageInfo?.totalCount}</span>
+                    {/* <span>받은 메일함 (안 읽은 갯수) / {pageInfo?.totalCount}</span> */}
+                    <span>받은 메일함</span>
                 </div>
                 <div className={MailCSS.searchBar}>
                     <select 
@@ -303,41 +304,37 @@ function Inbox() {
                         type="button" 
                         onClick={() => setMailUpdated(true)} 
                     >
-                        검&nbsp;&nbsp;&nbsp;&nbsp;색
+                        검색
                     </button>
                     <button onClick={() => handleFilterClick()}>
                         필터
                     </button>
                     {filterOpen && (
                         // <div className={MailCSS.filterSettings} ref={filterRef}>
-                        <div className={`${MailCSS.filterSettings} filter-container`} ref={filterRef}>
-                            <div className="tagFilterContainer">
+                        <div className={`${MailCSS.filterSettings} ${MailCSS.filterContainer}`} ref={filterRef}>
+                            <div className={MailCSS.tagFilterContainer}>
+                                <div className={MailCSS.tagFilterScrollContainer}>
+                                </div>
                                 {tagList?.map((tag) => (
                                     <div
                                         key={tag.tagCode}
                                         className={selectedTagFilter === tag.tagCode ? "tagFilterSelected" : "tagFilter"}
                                         onClick={() => handleTagFilterChange(tag.tagCode)}
+                                        style={{cursor:"pointer"}}
                                     >
+                                        <img
+                                            src={`/mail/tags/${tag.tagColor}.png`}
+                                            alt={`${tag.tagColor} ribbon`}
+                                            style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                marginRight: "4px",
+                                            }}
+                                        />
                                         {tag.tagName}
                                     </div>
                                 ))}
                             </div>
-                            {/* <DropdownButton 
-                                id="dropdown-tag-selector" 
-                                title="태그 선택"
-                                className={MailCSS.dropdownTagSelector}
-                            >
-                                {tagList.map((tag) => (
-                                    <Dropdown.Item key={tag.tagCode} onClick={() => setSearchTag(tag.tagCode)}>
-                                        <img
-                                            src={`/mail/tags/${tag.tagColor}.png`}
-                                            alt={tag.tagColor}
-                                            style={{ width: "16px", height: "16px", verticalAlign: "middle", marginRight: "4px" }}
-                                        />
-                                        {tag.tagName}
-                                    </Dropdown.Item>
-                                ))}
-                            </DropdownButton> */}
                             <div style={{ whiteSpace: 'nowrap' }}>시작일</div>
                             <DatePicker
                                 selected={startDate}
