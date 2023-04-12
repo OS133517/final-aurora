@@ -79,7 +79,6 @@ function WeekWorklogs() {
                         }
                     </tbody>
                 </table>
-
                 <div className={ WeekWorklogsCSS.pagingBtnDiv }>
                     { Array.isArray(weekWorklogList) &&
                     <button 
@@ -91,14 +90,14 @@ function WeekWorklogs() {
                     </button>
                     }
                     {pageNumber.map((num) => (
-                    <li key={num} onClick={() => setCurrentPage(num)}>
                         <button
-                            style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                            className={ WeekWorklogsCSS.pagingBtn }
+                            key={num} 
+                            onClick={() => setCurrentPage(num)}
+                            style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
+                            className={WeekWorklogsCSS.pagingBtn}
                         >
-                            {num}
+                        {num}
                         </button>
-                    </li>
                     ))}
                     { Array.isArray(weekWorklogList) &&
                     <button 
