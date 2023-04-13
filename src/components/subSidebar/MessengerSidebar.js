@@ -82,7 +82,7 @@ function MessengerSidebar() {
             {inputChatRoom &&
                 <div className={SidebarCSS.modalWrapper}>
                     <div className={SidebarCSS.modalAddChat}>
-                        <ChatRoomAdd />
+                        <ChatRoomAdd roomNum={roomNum} />
                     </div>
                 </div>
             }
