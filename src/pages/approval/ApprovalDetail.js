@@ -29,7 +29,7 @@ function ApprovalDetail() {
     const detailInfo = useSelector(state => state.approvalReducer.approvalLine);
     const memberInfo = useSelector(state => state.memberReducer.memberDetail);
     // 휴가 사용일 수 
-    const useDay = useSelector(state => state.attendanceReducer.vacationUsed);
+    const useDay = useSelector(state => state.attendanceReducer.usedVcations);
     /** useState */
     // CALLAPI에서 응답 상태를 가져옴
     const [responseStatus, setResponseStatus] = useState(0)
@@ -177,7 +177,7 @@ function ApprovalDetail() {
 
         };
         updateAndReload();
-
+        //eslint-disable-next-line
     }, [responseStatus]);
     /** event */
     // 이전 페이지로 이동하기 위해

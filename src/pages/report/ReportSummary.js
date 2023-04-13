@@ -2,25 +2,22 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
 import { callReportSummaryAPI } from "../../apis/ReportAPICall";
-import { useNavigate } from "react-router-dom";
 
 import ReportSummaryCSS from "./ReportSummary.module.css";
-import Swal from "sweetalert2";
 
 function ReportSummary() {
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     
     const reportSummary = useSelector(state => state.reportReducer.reportSummary);
     console.log("reportSummary : " + JSON.stringify(reportSummary));
 
-    const casualList = reportSummary.casualList;
-    const routineList1 = reportSummary.routineList1;
+    const casualList = reportSummary?.casualList;
+    const routineList1 = reportSummary?.routineList1;
     console.log("routineList1 : " + JSON.stringify(routineList1));
-    const routineList2 = reportSummary.routineList2;
+    const routineList2 = reportSummary?.routineList2;
     console.log("routineList2 : " + JSON.stringify(routineList2));
-    const routineList3 = reportSummary.routineList3;
+    const routineList3 = reportSummary?.routineList3;
     console.log("routineList3 : " + JSON.stringify(routineList3));
     
     useEffect(() => {

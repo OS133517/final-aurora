@@ -171,6 +171,7 @@ input:checked + .toggleSlider:before {
     color: #88CFBA;
 }
 
+/* 페이징 div */
 .pagingBtn {
     margin: 5px;
     border-radius: 5px;
@@ -181,17 +182,14 @@ input:checked + .toggleSlider:before {
     width: 30px;
     height: 30px;
 }
-
 .pagingBtn:hover{
     cursor: pointer;
     background-color: rgb(12, 250, 180);
 }
-
 .pagingBtn:disabled {
     background-color: #C1C1C1;
     cursor: not-allowed;
 }
-
 .disalbedPagingButton {
     margin: 5px;
     border-radius: 5px;
@@ -202,7 +200,6 @@ input:checked + .toggleSlider:before {
     width: 30px;
     height: 30px;
 }
-
 .pagingBtnDiv {
     margin-top: 30px;
     display: flex;

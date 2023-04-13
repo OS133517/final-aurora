@@ -31,14 +31,16 @@ const initialState = {
         remainingVacation: 0,
     },
     usedVcations: {
-        usedVacation: 0
+        usedVacation: 0,
+        remainingVacation: 0,
+        vacationNo: 0
     },
 
-    vacationUsed: {
-        vacationNo: 0,
-        remainingVacation: 0,
-        usedVacation: 0
-    },
+    // vacationUsed: {
+    //     vacationNo: 0,
+    //     remainingVacation: 0,
+    //     usedVacation: 0
+    // },
     attendanceMessage: [],
     attendanceList: {
         memberCode: 0,
@@ -48,23 +50,23 @@ const initialState = {
         deptName: '',
         taskName: '',
         jobName: '',
-        tardy:  '',
-        earlyOff:  '',
-        truncy:  '',
-        absence:  '',
-        attRegDate : '',
-        workStatus : '',
+        tardy: '',
+        earlyOff: '',
+        truncy: '',
+        absence: '',
+        attRegDate: '',
+        workStatus: '',
         workTime: '',
-        offTime:''
+        offTime: ''
 
     },
     vacationDetail: {
-        vacationStartDate : '',
-        vacationEndDate : '',
+        vacationStartDate: '',
+        vacationEndDate: '',
         appStatus: '',
         halfDay: ''
     },
-    attendanceMessage : [],
+    attendanceMessage: [],
     workStatus: ''
 }
 
@@ -85,18 +87,18 @@ export const GET_VACATION_DETAIL = 'attendance/GET_VACATION_DETAIL';
 
 //eslint-disable-next-line
 const actions = createActions({
-    [GET_SELECT_ATTENDANCE] : () => {},
-    [GET_SELECT_TIME] : () => {},
-    [GET_SELECT_MONTH_TIME] : () => {},
-    [POST_WORK_TIME] : () => {},
-    [PUT_END_TIME] : () => {},
-    [GET_SELECT_VACATION] : () => {},
-    [GET_SELECT_USED_VACATION] : () => {},
-    [GET_SELECT_WORK_STATUS] : () => {},
-    [PUT_MODIFY_ATTENDANCE] : () => {},
-    [GET_SELECT_TIME_BY_DAT] : () => {},
-    [GET_ATTENDANCE_LIST] : () => {},
-    [GET_VACATION_DETAIL] : () => {},
+    [GET_SELECT_ATTENDANCE]: () => { },
+    [GET_SELECT_TIME]: () => { },
+    [GET_SELECT_MONTH_TIME]: () => { },
+    [POST_WORK_TIME]: () => { },
+    [PUT_END_TIME]: () => { },
+    [GET_SELECT_VACATION]: () => { },
+    [GET_SELECT_USED_VACATION]: () => { },
+    [GET_SELECT_WORK_STATUS]: () => { },
+    [PUT_MODIFY_ATTENDANCE]: () => { },
+    [GET_SELECT_TIME_BY_DAT]: () => { },
+    [GET_ATTENDANCE_LIST]: () => { },
+    [GET_VACATION_DETAIL]: () => { },
 });
 
 const attendanceReducer = handleActions({
@@ -104,9 +106,10 @@ const attendanceReducer = handleActions({
     [GET_SELECT_ATTENDANCE]: (state, { payload }) => {
         return {
             ...state,
-            attendanceStatus : payload
-        }},
-    [GET_SELECT_TIME] : (state , { payload }) => {
+            attendanceStatus: payload
+        }
+    },
+    [GET_SELECT_TIME]: (state, { payload }) => {
         return {
             ...state,
             workHoursDetail: payload
@@ -141,10 +144,11 @@ const attendanceReducer = handleActions({
     [GET_SELECT_USED_VACATION]: (state, { payload }) => {
         return {
             ...state,
-            usedVcations : payload
-        }},
-    [GET_SELECT_WORK_STATUS] : (state , { payload }) => {
-        console.log("payload" ,payload );
+            usedVcations: payload
+        }
+    },
+    [GET_SELECT_WORK_STATUS]: (state, { payload }) => {
+        console.log("payload", payload);
         return {
             ...state,
             workStatus: payload
@@ -161,22 +165,25 @@ const attendanceReducer = handleActions({
         console.log("payload", payload);
         return {
             ...state,
-            inOutTime : payload
-        }},
-    [GET_ATTENDANCE_LIST] : (state , { payload }) => {
-        console.log("payload" ,payload );
+            inOutTime: payload
+        }
+    },
+    [GET_ATTENDANCE_LIST]: (state, { payload }) => {
+        console.log("payload", payload);
         return {
             ...state,
-            attendanceList : payload
-        }},
-    [GET_VACATION_DETAIL] : (state , { payload }) => {
-        console.log("payload" ,payload );
+            attendanceList: payload
+        }
+    },
+    [GET_VACATION_DETAIL]: (state, { payload }) => {
+        console.log("payload", payload);
         return {
             ...state,
-            vacationDetail : payload
-        }}
- 
-   
+            vacationDetail: payload
+        }
+    }
+
+
 }, initialState);
 
 export default attendanceReducer;

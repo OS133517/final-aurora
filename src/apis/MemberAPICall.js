@@ -46,7 +46,7 @@ export const callMemberListAPI = () => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm`;
 
-    const token = "Bearer" + window.localStorage.getItem("accessToken");
+    const token = "Bearer " + window.localStorage.getItem("accessToken");
 
     return async (dispatch, getState) => {
         try {
@@ -77,7 +77,7 @@ export const callMemberDetailAPI = ({ memberCode }) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm/${memberCode}`;
 
-    const token = "Bearer" + window.localStorage.getItem("accessToken");
+    const token = "Bearer " + window.localStorage.getItem("accessToken");
 
     return async (dispatch, getState) => {
         try {

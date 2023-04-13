@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callRoutineReportListByConditionsAPI } from "../../apis/ReportAPICall";
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
 
 import ReportsCSS from "./Reports.module.css";
 
@@ -43,7 +41,7 @@ function RoutineReports() {
             completionStatus: isCompleted,
             offset: currentPage,
         }));
-      }, [currentPage, isCompleted]);
+    }, [currentPage, isCompleted]);
 
     // url 변경 감지 렌더링
     useEffect(() => {

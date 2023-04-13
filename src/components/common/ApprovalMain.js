@@ -4,6 +4,7 @@ import Approvals from '../../pages/approval/Approvals';
 import Completed from '../../pages/approval/Completed';
 import Pending from '../../pages/approval/Pending';
 import ApprovalMainCSS from './ApprovalMain.module.css'
+import ApprovalWait from '../../pages/approval/ApprovalWait';
 
 function ApprovalMain() {
     /** useNavigate */
@@ -13,7 +14,7 @@ function ApprovalMain() {
     const [draftComponent, setDraftComponent] = useState(null);
 
     /** 사용자 지정 변수 */
-    const approval = ["전체", "결재 진행", "결재 완료"];
+    const approval = ["전체", "결재 진행", "결재 완료", "요청 대기"];
 
     /** useEffect */
     useEffect(() => {
@@ -35,6 +36,7 @@ function ApprovalMain() {
             case 0: return setDraftComponent(<Approvals />);
             case 1: return setDraftComponent(<Pending />);
             case 2: return setDraftComponent(<Completed />);
+            case 3: return setDraftComponent(<ApprovalWait />);
             default: return draftComponent;
         }
     }

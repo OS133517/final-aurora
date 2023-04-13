@@ -1,0 +1,144 @@
+.container {
+    width: 100%;
+    height: 100%; 
+    max-width: 100%;
+}
+.titleHeader {
+    width: 100%;
+    max-width: inherit;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 40px;
+}
+.menuHeader {
+    display: flex;
+    align-items: center; 
+    gap: 16px;
+    font-weight: bold;
+    height: 42px;
+    font-size: 20px;
+    color: #88CFBA;
+    padding: 10px 0;
+    border-bottom: 1px solid #C1C1C1;
+    padding-left: 16px;
+}
+.mailHeader {
+    height: 250px;
+    /* padding: 40px; */
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.mailTitle {
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 100px;
+    display: flex;
+    align-items: center;
+}
+.mailInfo {
+    line-height: 48px; 
+}
+.mailBody {
+    padding: 20px;
+    padding-left: 40px;
+    background-color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333333;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+/* 필터 */
+.filterContainer {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.filterSettings {
+    position: absolute;
+    top: 90%;
+    left: 54%;
+    right: 0;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.filterSettings label {
+    display: flex;
+    align-items: center;
+}
+.filterSettings input[type="checkbox"] {
+    margin-right: 8px;
+}
+.dropdownTagSelector {
+    min-width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.datePickerContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.datePickerContainer label {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+}
+.datePickerContainer img {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+}
+
+/* 태그 변경 */
+.tagFilterListContainer {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+}
+.tagFilterScrollContainer {
+    padding-left: 10px;
+    border: 1px black solid;
+    border-radius: 10px;
+    max-height: 170px; /* 적절한 높이 설정 */
+    overflow-y: auto;
+}
+.tagFilter {
+    padding: 5px;
+    cursor: pointer;
+    display: block;
+    align-items: center;
+}
+.tagFilterSelected {
+    padding: 5px;
+    cursor: pointer;
+    display: block;
+    align-items: center;
+    border: 2px solid red; 
+}
+.mailTitleContent {
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 100px;
+}

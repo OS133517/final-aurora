@@ -42,6 +42,15 @@ import AttendanceModify from './pages/attendance/AttnedanceModify';
 import AttendanceDetail from './pages/attendance/AttendanceDetail';
 import VacationDetail from './pages/attendance/VacationDetail';
 
+import MailLayout from "./layouts/MailLayout";
+import Inbox from './pages/mail/Inbox';
+import Sent from './pages/mail/Sent';
+import Spam from './pages/mail/Spam';
+import Trash from './pages/mail/Trash';
+// import Statistics from './pages/mail/Statistics';
+import MailWrite from './pages/mail/MailWrite';
+import MailDetail from './pages/mail/MailDetail';
+
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
 import ReportCreate from "./pages/report/ReportCreate";
@@ -60,9 +69,11 @@ import WeekWorklogDetail from "./pages/worklog/WeekWorklogDetail";
 import WeekWorklogInsert from "./pages/worklog/WeekWorklogInsert";
 
 import MessengerList from "./pages/messenger/MessengerList";
+
 import MessengerLayout from "./layouts/MessengerLayout";
 import ChatRoom from "./components/form/messenger/ChatRoom";
 import Completed from "./pages/approval/Completed";
+
 
 
 function App() {
@@ -79,6 +90,15 @@ function App() {
                 <Route path="addresses" element={<Addresses category='전체 주소록' />} />
                 <Route path="personal-groups/:groupCode" element={<Addresses category='개인 주소록' />} />
                 <Route path="team-groups/:groupCode" element={<Addresses category='공용 주소록' />} />
+              </Route>
+              <Route path="mails" element={<MailLayout />}>
+                <Route index element={<Inbox />} />
+                <Route path="sent" element={<Sent />} />
+                <Route path="spam" element={<Spam />} />
+                <Route path="trash" element={<Trash />} />
+                {/* <Route path="statistics" element={<Statistics />} /> */}
+                <Route path="write" element={<MailWrite />} />
+                <Route path="detail/:mailCode" element={<MailDetail />} />
               </Route>
               <Route path="reports" element={<ReportLayout />}>
                 <Route path="routines" element={<RoutineReports />} />
@@ -145,7 +165,8 @@ function App() {
               </Route>
               <Route path="calendar" element={<ScheduleLayout />}>
                 <Route path="month" element={<Schedules />}></Route>
-              </Route>
+               
+            </Route>
             </Route>
           </Route>
         </Routes>

@@ -102,7 +102,7 @@ function Surveys() {
                     </thead>
                     <tbody>
                         {
-                            Array.isArray(surveyList) && surveyList.map(item => (
+                            Array.isArray(surveyList) && surveyList.length !== 0 && surveyList.map(item => (
                                 <tr key={item.surveyCode} onClick={() => onClickDetail(item)}>
                                     <td>{item.surveyCode}</td>
                                     <td>{item.surveySubject}</td>
