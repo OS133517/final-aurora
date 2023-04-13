@@ -30,13 +30,7 @@ function MyReservation() {
     useEffect(() => {
 
         if(reservationResult.status === 200) {
-            Swal.fire({
-                icon : 'success',
-                text : reservationResult.message,
-                confirmButtonText : '확인'
-            }).then(() => {
-                window.location.reload(true); 
-            })
+            getData();
         } else if (reservationResult.status === 400) {
             Swal.fire({
                 icon : 'error',
