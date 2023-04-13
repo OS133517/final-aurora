@@ -32,7 +32,7 @@ function MessengerSidebar() {
     /** 변수 */
     const memberName = list?.memberDTO?.memberName;
     const roomNum = roomList.map(room => room.roomNum);
-    console.log('roomList : ', roomList);
+    console.log('memberName : ', list);
     /** useEffect */
     useEffect(() => {
         const fetchData = async () => {
