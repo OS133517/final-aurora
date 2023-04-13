@@ -28,7 +28,33 @@ const initialState = {
     },
     vacation: {
         remainingVacation: 0,
+    },
+    usedVcations: {
         usedVacation: 0
+    },
+    attendanceList: {
+        memberCode: 0,
+        memberName: '',
+        phone: '',
+        memberEmail: '',
+        deptName: '',
+        taskName: '',
+        jobName: '',
+        tardy:  '',
+        earlyOff:  '',
+        truncy:  '',
+        absence:  '',
+        attRegDate : '',
+        workStatus : '',
+        workTime: '',
+        offTime:''
+
+    },
+    vacationDetail: {
+        vacationStartDate : '',
+        vacationEndDate : '',
+        appStatus: '',
+        halfDay: ''
     },
     attendanceMessage : [],
     workStatus: ''
@@ -44,6 +70,9 @@ export const GET_SELECT_USED_VACATION = 'attendance/GET_SELECT_USED_VACATION';
 export const GET_SELECT_WORK_STATUS = 'attendance/GET_SELECT_WORK_STATUS';
 export const GET_SELECT_TIME_BY_DAT = 'attnedance/GET_SELECT_TIME_BY_DAT';
 export const PUT_MODIFY_ATTENDANCE = 'attendance/PUT_MODIFY_ATTENDANCE';
+export const GET_ATTENDANCE_LIST = 'attendance/GET_ATTENDANCE_LIST';
+export const GET_VACATION_DETAIL = 'attendance/GET_VACATION_DETAIL';
+// export const GET_ATTENDANCE_LIST_NAME ='attendance/GET_ATTENDANCE_LIST_NAME'
 // export const PUT_REMAIN_VACATION = 'attendance/PUT_REMAIN_VACATION';
 
 const actions = createActions({
@@ -56,8 +85,9 @@ const actions = createActions({
     [GET_SELECT_USED_VACATION] : () => {},
     [GET_SELECT_WORK_STATUS] : () => {},
     [PUT_MODIFY_ATTENDANCE] : () => {},
-    [GET_SELECT_TIME_BY_DAT] : () => {}
-
+    [GET_SELECT_TIME_BY_DAT] : () => {},
+    [GET_ATTENDANCE_LIST] : () => {},
+    [GET_VACATION_DETAIL] : () => {},
 });
 
 const attendanceReducer = handleActions({
@@ -65,7 +95,7 @@ const attendanceReducer = handleActions({
     [GET_SELECT_ATTENDANCE] : (state, { payload }) => { 
         return {
             ...state,
-            attendanceStats : payload
+            attendanceStatus : payload
         }},
     [GET_SELECT_TIME] : (state , { payload }) => {
         return {
@@ -97,7 +127,7 @@ const attendanceReducer = handleActions({
     [GET_SELECT_USED_VACATION] : (state , { payload }) => {
         return {
             ...state,
-            vacation : payload
+            usedVcations : payload
         }},
     [GET_SELECT_WORK_STATUS] : (state , { payload }) => {
         console.log("payload" ,payload );
@@ -116,7 +146,20 @@ const attendanceReducer = handleActions({
         return {
             ...state,
             inOutTime : payload
+        }},
+    [GET_ATTENDANCE_LIST] : (state , { payload }) => {
+        console.log("payload" ,payload );
+        return {
+            ...state,
+            attendanceList : payload
+        }},
+    [GET_VACATION_DETAIL] : (state , { payload }) => {
+        console.log("payload" ,payload );
+        return {
+            ...state,
+            vacationDetail : payload
         }}
+ 
    
 }, initialState);
 

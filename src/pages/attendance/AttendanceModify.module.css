@@ -128,13 +128,19 @@
 }
 
 .contentHead th:nth-child(8) {
-    width: 350px;
+    width: 100px;
 }
 .contentHead th:nth-child(9) {
     width: 100px;
 }
 .contentHead th:nth-child(10) {
-    width: 150px;
+    width: 100px;
+}
+.contentHead th:nth-child(11) {
+    width: 100px;
+}
+.contentHead th:nth-child(12) {
+    width: 100px;
 }
 
 
