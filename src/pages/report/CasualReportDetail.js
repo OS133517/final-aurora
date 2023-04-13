@@ -78,6 +78,25 @@ function CasualReportDetail() {
         }
     }
 
+    // 파일 다운로드 
+    const downloadFile = async (fileName, fileOriginName, filePath) => {
+        
+        const fullFilePath = `http://${process.env.REACT_APP_RESTAPI_IP}:8090${filePath}`; // 상대 경로를 전체 URL로 변경합니다.
+ 
+        try{
+            const response = await fetch(fullFilePath);
+            const blob = await response.blob();
+            
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileOriginName;
+            link.click();
+            link.remove();
+        } catch(error) {
+            console.error("파일 다운로드 실패!", error);
+        }
+    };    
+
     return (
         <>
             <div className={ReportRoundDetailCSS.reportsContainer}>
@@ -157,27 +176,27 @@ function CasualReportDetail() {
                             </div>
                             <div>
                                 {fileList && fileList.length === 0? 
-                                <ul>
-                                    <li>첨부된 파일이 없습니다.</li> 
-                                </ul> : 
-                                <ul>
-                                    {fileList?.map((file, index) => (
-                                        <li 
-                                            key={index}
-                                        >
-                                            <span 
-                                                // onClick={() => downloadFile(file.filePath)}
+                                    <ul>
+                                        <li>첨부된 파일이 없습니다.</li> 
+                                    </ul> : 
+                                    <ul>
+                                        {fileList?.map((file, index) => (
+                                            <li 
+                                                key={index}
                                             >
-                                            <img 
-                                                src={'/fileIcon.png'}
-                                                className={ReportRoundDetailCSS.fileImg}
-                                            /> 
-                                            &nbsp;
-                                                {file.fileOriginName} ({file.fileSize})
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                                <span 
+                                                    onClick={() => downloadFile(file.fileName, file.fileOriginName, file.filePath)}
+                                                >
+                                                <img 
+                                                    src={'/fileIcon.png'}
+                                                    className={ReportRoundDetailCSS.fileImg}
+                                                /> 
+                                                &nbsp;
+                                                    {file.fileOriginName} ({file.fileSize})
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 }
                             </div>
                         </div>
