@@ -31,18 +31,18 @@ function Inbox() {
     const [allMailsSelected, setAllMailsSelected] = useState(false); // 전체 선택 
     const [isLoading, setIsLoading] = useState(false); // 새로고침중 
     // 검색 
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const [importantStatus, setImportantStatus] = useState(false);
-    const [searchTag, setSearchTag] = useState(null);
-    const [searchInput, setSearchInput] = useState({ type: "mailTitle", value: "" });
+    const [startDate, setStartDate] = useState(null); // 시작일 
+    const [endDate, setEndDate] = useState(null); // 종료일 
+    const [importantStatus, setImportantStatus] = useState(false); // 필터 중요 상태 
+    const [searchTag, setSearchTag] = useState(null); // 필터 태그 
+    const [selectedTagFilter, setSelectedTagFilter] = useState(null); // 선택된 필터 태그(선택됨 표시용)
+    const [searchInput, setSearchInput] = useState({ type: "mailTitle", value: "" }); // 검색 입력값 
     // 태그 
-    const [selectedTagFilter, setSelectedTagFilter] = useState(null);
+    const [selectedMailTag, setSelectedMailTag] = useState(null); // 태그 변경 - 선택된 태그 
     const [showTagModal, setShowTagModal] = useState(false); // 태그 모달 
-    const [showTagList, setShowTagList] = useState(false);
-    const [selectedMailTag, setSelectedMailTag] = useState(null);
-    const [selectedMailCode, setSelectedMailCode] = useState(null);
-    const [tagListPosition, setTagListPosition] = useState({ x: 0, y: 0 });
+    const [showTagList, setShowTagList] = useState(false); // 태그 변경 
+    const [selectedMailCode, setSelectedMailCode] = useState(null); // 태그 변경할 메일 코드 
+    const [tagListPosition, setTagListPosition] = useState({ x: 0, y: 0 }); // 태그 변경 div 좌표 설정 
     // 필터
     const [filterOpen, setFilterOpen] = useState(false);
     const filterRef = useRef(null);
@@ -151,17 +151,19 @@ function Inbox() {
 
     // 모달 스크롤 문제 
     useEffect(() => {
+
         if (showTagModal) {
+
           document.body.style.overflow = 'hidden';
         } else {
+
           document.body.style.overflow = 'auto';
         }
-      
         return () => {
+
           document.body.style.overflow = 'auto';
         };
-      }, [showTagModal]);
-      
+    }, [showTagModal]);
 
     // 검색 입력 값 
     const onChangeHandler = (e) => {
@@ -188,7 +190,6 @@ function Inbox() {
         
         setFilterOpen(!filterOpen);
     };
-  
     // 필터 태그 선택 
     const handleTagFilterChange = (tagCode) => {
 
@@ -204,7 +205,11 @@ function Inbox() {
             setSelectedTagFilter(tagCode);
         }
     };
+    // 중요 상태 검색 
+    const handleImportantStatusChange = (e) => {
 
+        setImportantStatus(e.target.checked);
+    };
     // 검색 실행
     const onSearchButtonClick = () => {
 
@@ -216,7 +221,6 @@ function Inbox() {
 
         setUpdateTagTrigger(!updateTagTrigger);
     };
-
     // 모달 관리 함수 
     const toggleTagModal = () => { // 집 모니터가 커서 생기는 문제일 수 있음 - 모달창 생성시 스크롤 내려가는 문제 
 
@@ -228,12 +232,6 @@ function Inbox() {
             document.body.style.overflow = "auto";
         }
         setShowTagModal((prev) => !prev);
-    };
-  
-    // 중요 상태 검색 
-    const handleImportantStatusChange = (e) => {
-
-        setImportantStatus(e.target.checked);
     };
 
     // 메일 새로고침 
@@ -308,14 +306,12 @@ function Inbox() {
         setShowTagList(true);
         setTagListPosition({ x: e.clientX, y: e.clientY }); // 위치 계산
     };
-
     // 태그 변경 div 핸들러 - div 밖 클릭시 닫기 
     const handleCloseTagList = (e) => {
 
         e.stopPropagation();
         setShowTagList(false);
     };
-    
     // 태그 변경 
     const handleTagChange = (tagCode) => {
 

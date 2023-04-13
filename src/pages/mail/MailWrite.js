@@ -1,22 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from 'react-router-dom';
 import { callSendMailAPI,
         } from "../../apis/MailAPICall";
 
 import MailWriteCSS from './MailWrite.module.css'
 import Swal from "sweetalert2";
 
-function MailWrite() {
+function MailWrite({props}) {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const senderEmail = queryParams.get('senderEmail');
     
     const [attachments, setAttachments] = useState([]); // 첨부파일 
     const [mailUpdated, setMailUpdated] = useState(false); // 메일 리렌더링 
     const [mailDTO, setMailDTO] = useState({ // 입력값 
 
-        recipient: '',
+        // recipient: '',
+        recipient: senderEmail || '',
         cc: '',
         mailTitle: '',
         mailBody: '',
@@ -54,6 +59,21 @@ function MailWrite() {
 
         setMailUpdated(false)
     }, [mailUpdated]);
+
+    // 답장시 받는 이메일 설정 
+    // useEffect(() => {
+
+    //     if (senderEmail) {
+
+    //         alert(senderEmail);
+    //     }
+    // }, [senderEmail]);
+    useEffect(() => {
+        setMailDTO((prev) => ({
+            ...prev,
+            recipient: senderEmail || '',
+        }));
+    }, [senderEmail]);
 
     // 메일 전송 
     const handleSubmit = (e) => {
