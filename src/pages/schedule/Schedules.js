@@ -4,15 +4,26 @@ import SchedulesCSS from "./Schedules.module.css";
 import { callMyScheduleAPI } from "../../apis/ScheduleAPICall";
 import ScheduleCalendar from "../../components/schedule/ScheduleCalendar";
 import { decodeJwt } from "../../utils/tokenUtils";
+import { useParams } from "react-router-dom";
+import ScheduleDetailModal from "../../components/schedule/ScheduleDetailModal";
 
 function Schedules({memberCode}) {
     
     const [selectedMonth, setSelectedMonth] = useState([]);
     const [thisMonth, setThisMonth] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState({
+        startDateTime : '',
+        endDateTime : '',
+        day : ''
+    });
+    const [scheduleDetailModal, setScheduleDetailModal] = useState(false);
+    const [scheduleCode, setScheduleCode] = useState('');
+
+    
     const dispatch = useDispatch();
 
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
-    console.log("loginMember : " + loginMember);
+    console.log("loginMember : " + loginMember.memberCode);
 
     useEffect(() => {
 
@@ -32,6 +43,7 @@ function Schedules({memberCode}) {
         const month = date.getMonth();
         const firstDay = new Date(date.getFullYear(), month, 1).getDay();
         const lastDay = new Date(date.getFullYear(), month + 1, 0).getDate();
+        const weekDays = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'] 
         const daysOfMonth = [];
 
         console.log(`${month + 1}월은`, daysOfMonth);
@@ -47,7 +59,8 @@ function Schedules({memberCode}) {
                 daysOfMonth.push({
                     year : month > 1? date.getFullYear():date.getFullYear() - 1,
                     month : month > 1? month : 12,
-                    date : month > 1? new Date(date.getFullYear(), month, -(firstDay - i) + 1).getDate():31 - (firstDay - i) + 1
+                    date : month > 1? new Date(date.getFullYear(), month, -(firstDay - i) + 1).getDate():31 - (firstDay - i) + 1,
+                    day : weekDays[i % 7]
                 });
             }
 
@@ -58,15 +71,16 @@ function Schedules({memberCode}) {
                     daysOfMonth.push({
                         year : date.getFullYear(),
                         month : month + 1,
-                        date : new Date(date.getFullYear(), month, j).getDate(),
-                        day : new Date(date.getFullYear(), month, j++).getDay()
+                        date : new Date(date.getFullYear(), month, j++).getDate(),
+                        day : weekDays[i % 7]
                     });
                 } else {
 
                     daysOfMonth.push({
                         year : month === 12? date.getFullYear() + 1 : date.getFullYear(),
                         month : month === 12? 1 : month + 2,
-                        date : new Date(date.getFullYear(), month, k++).getDate()
+                        date : new Date(date.getFullYear(), month, k++).getDate(),
+                        day : weekDays[i % 7]
                     })
                 }
             }
@@ -98,15 +112,12 @@ function Schedules({memberCode}) {
         setThisMonth(newDate);
     }
 
-    const onClickDay = () => {
-
-    }
-
     return (
         <>
+        {scheduleDetailModal? <ScheduleDetailModal scheduleCode={scheduleCode} setScheduleDetailModal={setScheduleDetailModal}/>:null}
             <div className={SchedulesCSS.calendarDiv}>
                 <div className={SchedulesCSS.calendarHeader}>
-                    {memberCode} 일ㅈㅓㅇ
+                    나의 캘린더
                 </div>
                 <div>   
                     <div className={SchedulesCSS.monthDiv}>
@@ -124,9 +135,12 @@ function Schedules({memberCode}) {
                         <span>토</span>
                     </div>
                     <div className={SchedulesCSS.daysDiv}>
-                    
-                    
-                        {selectedMonth.length !== 0 && selectedMonth.map((day, index) => <ScheduleCalendar key={index} day={day}/>)}
+                        {selectedMonth.length !== 0 && selectedMonth.map((day, index) => <ScheduleCalendar
+                        setScheduleCode={setScheduleCode}
+                        setScheduleDetailModal={setScheduleDetailModal}
+                        setSelectedDate={setSelectedDate}
+                        key={index} 
+                        day={day}/>)}
                     </div>
                 </div>
             </div>

@@ -69,9 +69,11 @@ import WeekWorklogDetail from "./pages/worklog/WeekWorklogDetail";
 import WeekWorklogInsert from "./pages/worklog/WeekWorklogInsert";
 
 import MessengerList from "./pages/messenger/MessengerList";
+
 import MessengerLayout from "./layouts/MessengerLayout";
 import ChatRoom from "./components/form/messenger/ChatRoom";
 import Completed from "./pages/approval/Completed";
+
 
 
 function App() {
@@ -134,6 +136,7 @@ function App() {
                 <Route path="hrm-regist" element={<HrmSignup category='인사 등록' />} />
               </Route>
               <Route path="worklog" element={<WorklogLayout />}>
+                <Route index element={<DayWorklogs />}/>
                 <Route path="day" element={<DayWorklogs />} />
                 <Route path="day/:dayWorklogCode" element={<DayWorklogDetail />} />
                 <Route path="day/insert" element={<DayWorklogInsert />} />
@@ -162,7 +165,8 @@ function App() {
                 <Route index path="detail/:roomNum" element={<ChatRoom />} />
               </Route>
               <Route path="calendar" element={<ScheduleLayout />}>
-                <Route path="month" element={<Schedules />}></Route>
+                <Route index element={<Schedules />}/>
+                <Route path="month" element={<Schedules />}/>
               </Route>
             </Route>
           </Route>

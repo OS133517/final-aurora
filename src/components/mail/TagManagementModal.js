@@ -12,27 +12,22 @@ import Swal from "sweetalert2";
 
 function TagManagerModal(props) {
 
-    // const { onUpdate } = props;
-    const { onUpdate, toggleTagModal } = props;
+    const { onUpdate } = props;
 
     const dispatch = useDispatch();
 
     const [show, setShow] = useState(false);
     const [tagUpdated, setTagUpdated] = useState(false); 
-    const [scrollPosition, setScrollPosition] = useState(0); // 스크롤 문제 
     // 태그 등록
     const [newTagName, setNewTagName] = useState('');
     const [newTagColor, setNewTagColor] = useState('');
     // 태그 수정 
-    // const [input, setInput] = useState({ tagCode: "", value: "" }); // 태그 목록중 태그 각 입력칸의 값 
-    // const [inputColor, setInputColor] = useState({ tagCode: "", value: "" }); // 태그 목록중 태그의 아이콘 클릭시 나타난 목록중 클릭된 값 
     const [input, setInput] = useState({ tagCode: "", value: "", color: "" }); // 태그 목록중 태그 각 입력칸의 값
     const [colorPickerVisible, setColorPickerVisible] = useState({ tagCode: "", visible: false });
 
-    const handleClose = () => setShow(false);
-
     const tagList = useSelector(state => state.mailReducer.tagList);
 
+    // 리렌더링 
     useEffect(() => {
 
         if (input.tagCode && input.value !== "" && input.color !== "") {
@@ -43,9 +38,24 @@ function TagManagerModal(props) {
         setTagUpdated(false);
     }, [tagUpdated, input]);
 
+    // 모달 닫기 함수 
+    const handleClose = () => setShow(false);
+
     // 태그 등록 
     const registerTags = () => {
 
+        if (newTagName === "") {
+
+            warningAlert("태그명을 입력해주세요.");
+
+            return;
+        }
+        if (newTagColor === "") {
+
+            warningAlert("태그 색상을 선택해주세요.");
+
+            return;
+        }
         if (newTagName !== "" && newTagColor !== "") {
 
             dispatch(callRegisterTagsAPI({
@@ -57,12 +67,6 @@ function TagManagerModal(props) {
             setNewTagColor('');
             setTagUpdated(!tagUpdated);
             onUpdate();
-        } else if(newTagName == "") {
-            
-            warningAlert("태그명을 입력해주세요.")
-        } else {
-            
-            warningAlert("태그 색상을 선택해주세요.")
         }
     }
 
@@ -162,29 +166,10 @@ function TagManagerModal(props) {
         });
     };
 
-    // 모달 토글 
-    const handleModalToggle = () => {
-
-        if (!show) {
-
-          setScrollPosition(window.pageYOffset);
-          document.body.style.overflow = "hidden";
-          document.body.style.position = "fixed";
-          document.body.style.top = `-${scrollPosition}px`;
-        } else {
-
-          document.body.style.overflow = "auto";
-          document.body.style.position = "";
-          document.body.style.top = "";
-          window.scrollTo(0, scrollPosition);
-        }
-        setShow((prev) => !prev);
-    };
-
     return (
         <>
             <div>
-                <span onClick={handleModalToggle}>
+                <span onClick={() => setShow(!show)}>
                     태그관리
                 </span>
                 <Modal 
@@ -194,9 +179,17 @@ function TagManagerModal(props) {
                     className={TagManagementModalCSS.tagModal}
                     onEntered={() => {
                         document.body.style.overflow = "hidden";
+                        document.body.style.position = "fixed";
+                        document.body.style.top = `-${window.scrollY}px`;
+                        document.documentElement.style.scrollBehavior = "auto";
                     }}
                     onExited={() => {
+                        const scrollY = document.body.style.top;
                         document.body.style.overflow = "auto";
+                        document.body.style.position = "";
+                        document.body.style.top = "";
+                        document.documentElement.style.scrollBehavior = "";
+                        window.scrollTo(0, parseInt(scrollY || "0") * -1);
                     }}
                 >
                     <div className={TagManagementModalCSS.tagModalBackground}>
@@ -283,7 +276,7 @@ function TagManagerModal(props) {
                                     </div>
                             </div>
                             <div className={TagManagementModalCSS.tagModalFooter}>
-                                <button onClick={handleModalToggle}>닫기</button>
+                                <button onClick={() => setShow(!show)}>닫기</button>
                             </div>
                         </div>
                     </div>

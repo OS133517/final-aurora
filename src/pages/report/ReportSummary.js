@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
 import { callReportSummaryAPI } from "../../apis/ReportAPICall";
+import { updateReportStatus } from '../../modules/ReportModule';
 
 import ReportSummaryCSS from "./ReportSummary.module.css";
 
@@ -9,24 +10,23 @@ function ReportSummary() {
 
     const dispatch = useDispatch();
     
-    const reportSummary = useSelector(state => state.reportReducer.reportSummary);
-    console.log("reportSummary : " + JSON.stringify(reportSummary));
+    const isReportUpdated = useSelector(state => state.reportReducer.isReportListUpdated);
 
+    const reportSummary = useSelector(state => state.reportReducer.reportSummary);
+    // console.log("reportSummary : " + JSON.stringify(reportSummary));
     const casualList = reportSummary?.casualList;
     const routineList1 = reportSummary?.routineList1;
-    console.log("routineList1 : " + JSON.stringify(routineList1));
+    // console.log("routineList1 : " + JSON.stringify(routineList1));
     const routineList2 = reportSummary?.routineList2;
-    console.log("routineList2 : " + JSON.stringify(routineList2));
+    // console.log("routineList2 : " + JSON.stringify(routineList2));
     const routineList3 = reportSummary?.routineList3;
-    console.log("routineList3 : " + JSON.stringify(routineList3));
+    // console.log("routineList3 : " + JSON.stringify(routineList3));
     
     useEffect(() => {
 
-        dispatch(callReportSummaryAPI({
-            
-        }));
+        dispatch(callReportSummaryAPI({}));
     // eslint-disable-next-line
-    }, [])
+    }, [isReportUpdated])
 
     return (
         <div className={ReportSummaryCSS.container}>
@@ -93,8 +93,8 @@ function ReportSummary() {
                                                     {casualReport.reportTitle}
                                                 </NavLink>
                                             </td>
-                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.deptName}</td>
-                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.memberName}</td>
+                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.deptName}/</td>
+                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.memberName}/</td>
                                             <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.jobName}</td>
                                         </tr>
                                     ))
@@ -117,8 +117,8 @@ function ReportSummary() {
                                                     {casualReport.reportTitle}
                                                 </NavLink>
                                             </td>
-                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.deptName}</td>
-                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.memberName}</td>
+                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.deptName}/</td>
+                                            <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.memberName}/</td>
                                             <td className={ReportSummaryCSS.memberInfoCell}>{casualReport.memberDTO.jobName}</td>
                                         </tr>
                                     ))

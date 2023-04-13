@@ -4,7 +4,8 @@ import { createActions, handleActions } from "redux-actions";
 const initialState = {
     memberLogin: [],
     memberList: [],
-    memberDetail: []
+    memberDetail: [],
+    memberInfo: []
 };
 
 // 액션
@@ -18,7 +19,7 @@ const actions = createActions({
     [POST_LOGIN]: () => { },
     [GET_LIST]: () => { },
     [GET_DETAIL]: () => { },
-    [GET_MEMEBER_INFO] : () => {}
+    [GET_MEMEBER_INFO]: () => { }
 });
 
 // 리듀서
@@ -41,9 +42,12 @@ const memberReducer = handleActions({
             memberDetail: payload
         }
     },
-    [GET_MEMEBER_INFO] : (state, { payload }) => {
-        return payload
+    [GET_MEMEBER_INFO]: (state, { payload }) => {
+        return {
+            ...state,
+            memberInfo: payload
         }
+    }
 }, initialState)
 
 export default memberReducer;

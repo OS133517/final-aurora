@@ -1,0 +1,194 @@
+.boxWrapper2 {
+    margin-top: 30px;
+    /* margin-left: 30px; */
+    width: 90%;
+}
+
+.Box2 {
+    width: 100%;
+    /* height: 700px; */
+    height: 400px;
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 30px;
+    height: 14%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.header>div:first-child {
+    font-weight: bold;
+}
+
+.graphDiv {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}   
+
+.footer {
+    display: flex;
+    font-size: 20px;
+    position: relative;
+    line-height: 50px;
+    justify-content: center;
+}
+
+.footer button{
+    box-sizing: border-box;
+    width: 100px;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    background-color: #88CFBA;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.footer>div {
+    position: absolute;
+    right: 10px;
+}
+
+.ulBox ul{
+    display: flex;
+    cursor: pointer;
+    border-bottom: 1px solid #c1c1c1;
+}
+
+.draftList {
+    border: 1px solid #c1c1c1;
+    border-top-right-radius: 10px;
+}
+
+.draftClickList {
+    border: 1px solid #c1c1c1;
+    border-top-right-radius: 10px;
+    background-color: #88CFBA;
+    color: white;
+}
+
+.viewDiv{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* 로딩 스피너  */
+@keyframes spinner {
+
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 로딩 스피너 위치 및 크기 조절 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+.loadingSpinner img {
+    /* 로딩 스피너 애니메이션 적용 */
+    animation: spinner 1s linear infinite;
+}
+
+/* 메일 리스트 테이블 */
+.mailTable {
+    border-top: #C1C1C1 1px solid;
+    width: 100%;
+    border-collapse: collapse;
+}
+.mailTable .header {
+    display: flex;
+    align-items: center; 
+    gap: 16px; 
+}
+.mailTable .header span {
+    margin-right: 16px;
+}
+.mailTable th,
+.mailTable td {
+    padding: 4px;
+    padding-left: 8px;
+    text-align: left;
+    border-bottom: 1px solid #C1C1C1;
+    vertical-align: middle; 
+}
+.mailTable th {
+    height: 2em;
+    font-size: 20px;
+    color: #88CFBA;
+}
+.mailTable td {
+    line-height: 1.5; /* 텍스트 라인 간격 조절 */
+    max-height: 1.5em; /* 한 줄 높이로 제한 */
+    overflow: hidden; /* 셀을 벗어나는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 긴 텍스트를 자르고 생략 부호 표시 */
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+}
+.mailTable .narrow {
+    width: 1%;
+    white-space: nowrap;
+}
+.mailTable .wide {
+    width: 100%;
+}
+.mailTable .date {
+    text-align: right;
+}
+.textOverflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+.centerText {
+    text-align: center;
+    width: 100%;
+}
+
+/* 태그 변경 */
+.tagFilterListContainer {
+    /* position: absolute; */
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.tagFilterScrollContainer {
+    /* padding-left: 10px;
+    border: 1px black solid;
+    border-radius: 10px;
+    max-height: 170px; 
+    overflow-y: auto; */
+    
+    padding-left: 10px;
+    border: 1px black solid;
+    border-radius: 10px;
+    max-height: 170px; 
+    overflow-y: auto;
+    text-align: left; 
+}

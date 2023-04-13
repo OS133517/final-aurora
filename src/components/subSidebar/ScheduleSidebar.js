@@ -57,14 +57,6 @@ function ScheduleSidebar() {
                             style = { ({ isActive }) => isActive? activeStyle : undefined }
                             to={"/aurora/calendar/month"}
                             >나의 캘린더</NavLink>
-                        <NavLink 
-                            style = { ({ isActive }) => isActive? activeStyle : undefined }
-                            to={"/aurora/calendar/week"}
-                            >팀내 캘린더</NavLink>
-                        <NavLink 
-                            style = { ({ isActive }) => isActive? activeStyle : undefined }
-                            to={"/aurora/calendar/day"}
-                            >사내 캘린더</NavLink>
                         </div>
                     )}
                 </div>

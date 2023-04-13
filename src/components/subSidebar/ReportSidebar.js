@@ -47,7 +47,12 @@ function ReportSidebar() {
         <>
             <div className={SidebarCSS.sidebarDiv}>
                 <div className={SidebarCSS.sideHeader}>
-                    <span onClick={ () => window.location.href = "/aurora/reports/summary" }>보고</span>
+                    <span 
+                        onClick={ () => window.location.href = "/aurora/reports/summary" }
+                        style={{cursor: "pointer"}}
+                    >
+                        보고
+                    </span>
                 </div>
                 <div>
                     <button 

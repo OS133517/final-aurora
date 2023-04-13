@@ -44,11 +44,21 @@
     font-size: 16px;
 }
 
+.attModifySearch>input[type='date'] {
+    box-sizing: border-box;
+    width: 600px;
+    height: 32px;
+    border-radius: 10px;
+    border: 1px solid #C1C1C1;
+    font-size: 16px;
+}
+
 .attModifySearch>button {
     box-sizing: border-box;
     width: 93px;
     height: 32px;
     margin-left: 8px;
+    margin-right: 8px;
     border-radius: 5px;
     border: none;
     background-color: #88CFBA;
@@ -100,7 +110,7 @@
     border-bottom: 1px solid #88CFBA;
 }
 .contentHead th:first-child {
-    width: 4%;
+    width: 5%;
     text-indent: 5px;
 }
 .contentHead th:nth-child(2) {

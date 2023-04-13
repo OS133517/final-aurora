@@ -22,6 +22,7 @@ function ChatRoomAdd({ roomNum }) {
 
     /** useState */
     const [selectedMember, setSelectedMember] = useState([]);
+    // 추가 단계
     const [step, setStep] = useState(1);
     const [form, setForm] = useState({
         roomNum: 0,
@@ -142,7 +143,7 @@ function ChatRoomAdd({ roomNum }) {
                                         <input type="checkbox" name="AddMember" checked={selectedMember.some((m) => m.memberCode === list.memberCode)}
                                             onChange={(e) => checkboxHandle(e, list)} />
                                         <span>{list?.memberName} </span>
-                                        <span>{list?.jobName} </span>
+                                        <span> {list?.jobName} </span>
                                     </li>
                                 ))
                         }
