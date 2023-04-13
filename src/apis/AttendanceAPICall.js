@@ -1,20 +1,23 @@
 import {
-    GET_SELECT_ATTENDANCE,
-    GET_SELECT_MONTH_TIME,
-    GET_SELECT_TIME,
-    GET_SELECT_TIME_BY_DAT,
-    GET_SELECT_USED_VACATION,
-    GET_SELECT_VACATION,
-    GET_SELECT_WORK_STATUS,
-    POST_WORK_TIME,
-    PUT_END_TIME,
-    PUT_MODIFY_ATTENDANCE
-} from '../modules/AttendanceModule';
+    GET_ATTENDANCE_LIST,
+     GET_ATTENDANCE_LIST_NAME,
+     GET_SELECT_ATTENDANCE,
+     GET_SELECT_MONTH_TIME,
+     GET_SELECT_TIME,
+     GET_SELECT_TIME_BY_DAT,
+     GET_SELECT_USED_VACATION,
+     GET_SELECT_VACATION,
+     GET_SELECT_WORK_STATUS,
+     GET_VACATION_DETAIL,
+     POST_WORK_TIME,
+     PUT_END_TIME,
+     PUT_MODIFY_ATTENDANCE
+     } from '../modules/AttendanceModule';
 
-export const callSelectAttendanceAPI = ({ memberCode }) => {
+export const  callSelectAttendanceAPI = ({memberCode,  selectedDate }) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/${memberCode}`;
-
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/${memberCode}?selectedDate=${selectedDate}`;
+    
     return async (dispatch, getstate) => {
 
         const result = await fetch(requestURL, {
@@ -253,10 +256,11 @@ export const callSelectTimeByDayAPI = ({ memberCode, attRegDate }) => {
     }
 }
 
-export const callModifyAttendance = ({ memberCode, form }) => {
+export const  callModifyAttendance = ({memberCode,form,selectedDate}) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/modify/${memberCode}`;
-
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/modify/${memberCode}?selectedDate=${selectedDate}`;
+   
+    console.log("form", form);
     return async (dispatch, getstate) => {
 
         const result = await fetch(requestURL, {
@@ -266,15 +270,110 @@ export const callModifyAttendance = ({ memberCode, form }) => {
                 "Accept": "*/*",
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             },
-            body: JSON.stringify(form),
-        })
-            .then(response => response.json());
+            body : JSON.stringify({
+                memberCode : memberCode,
+                tardy : form.tardy,
+                truancy : form.truancy,
+                earlyOff : form.earlyOff,
+                absence : form.absence,
+            
+                 
+             })
+         })
+      
+        .then(response => response.json());
 
-        if (result.status === 201) {
+
+        if(result.status === 201) {
             console.log('[AttendanceCalls] callModifyAttendance', result);
             dispatch({ type: PUT_MODIFY_ATTENDANCE, payload: result.data });
         }
     }
 }
 
+export const callAttendanceListAPI = ({currentPage, selectedDate}) => {
+
+    let requestURL;
+
+    if(currentPage !== undefined || currentPage !== null) {
+        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/list?offset=${currentPage}&selectedDate=${selectedDate}`;
+    } else {
+        requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/list?selectedDate=${selectedDate}`;
+    }
+
+    console.log('[AttendanceCalls] requestURL :' , requestURL);
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : "GET",
+            headers : {
+                "content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AttendanceCalls] callAttendanceListAPI', result);
+            console.log('[AttendanceCalls] callAttendanceListAPI', result.data);
+
+            dispatch({type : GET_ATTENDANCE_LIST, payload : result.data});
+        }
+    }
+
+}
+
+export const  callVacationDetailAPI = ({memberCode}) => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/vacation/detail/${memberCode}`;
+    
+    return async (dispatch, getstate) => {
+
+        const result = await fetch(requestURL, {          
+            method : "GET",
+            headers : {
+                "content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken")
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[AttendanceCalls] callVacationDetailAPI', result);
+            dispatch({type : GET_VACATION_DETAIL, payload : result.data});
+        }
+    }
+}
+
+
+// export const callAttendanceListNameAPI = ({currentPage, selectedDate ,searchValue}) => {
+
+//     let requestURL;
+
+//     if(currentPage !== undefined || currentPage !== null) {
+//         requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/list/name?offset=${currentPage}&selectedDate=${selectedDate}&name=${searchValue}`;
+//     } else {
+//         requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/attendance/list/name?selectedDate=${selectedDate}&name=${searchValue}`;
+//     }
+
+//     console.log('[AttendanceCalls] requestURL :' , requestURL);
+
+//     return async (dispatch, getState) => {
+
+//         const result = await fetch(requestURL, {
+//             method : "GET",
+//             headers : {
+//                 "content-Type" : "application/json",
+//                 "Accept" : "*/*",
+//                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+//             }
+//         })
+//         .then(response => response.json());
+
+//         if(result.status === 200) {
+//             console.log('[AttendanceCalls] callAttendanceListNameAPI', result);
+//             console.log('[AttendanceCalls] callAttendanceListNameAPI', result.data);
 

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { callMemberDetailAPI, callMemberModifyAPI } from '../../apis/HrmAPICall';
 import { decodeJwt } from '../../utils/tokenUtils';
-import HrmDetailCSS from './HrmDetail.module.css';
-
+import HrmDetailCSS from './HrmModify.module.css';
+import Swal from "sweetalert2";
 
 export default function HrmModify() {
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ export default function HrmModify() {
   const memberInfo = member.memberDTO;
   console.log(loginMember.memberCode);
   console.log('member' , member);
+  
 
   const [textarea, setTextarea] =useState('')
   const onChangeHandler = (e) => {
@@ -68,7 +69,7 @@ export default function HrmModify() {
     memberEndDate: '',
   });
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (memberInfo) {
       const updatedMemberInfo = {
         ...memberInfo,
@@ -76,7 +77,8 @@ export default function HrmModify() {
         introduction: textarea,
       };
 
-      dispatch(
+    try {
+      await dispatch(
         callMemberModifyAPI({
           memberInfo: updatedMemberInfo,
           memberCode: formValues.memberCode,
@@ -99,10 +101,16 @@ export default function HrmModify() {
           birthDay: formValues.birthDay,
         }),
       );
-    } else {
-      console.error("memberInfo를 잘 가져오는지 확인하세요");
+      Swal.fire("수정되었습니다!", "", "success");
+    } catch (error) {
+      console.error("멤버 정보 수정에 실패했습니다:", error);
+      Swal.fire("멤버 정보 수정에 실패했습니다!", "", "error");
     }
-  };
+  } else {
+    console.error("멤버 정보가 정의되지 않았습니다");
+  }
+};
+  
 
   useEffect(() => {
 
@@ -145,6 +153,9 @@ export default function HrmModify() {
   return (
       <>
     <div className={HrmDetailCSS.allContainer}>
+    <div className={HrmDetailCSS.hrmHeader}>
+                <span>인사 수정</span>
+        </div>
       <div className={HrmDetailCSS.container}>
         <div>
           <div className={HrmDetailCSS.inputWrapper}>
@@ -280,7 +291,7 @@ export default function HrmModify() {
       </div>
       
 
-   
+      <div className={HrmDetailCSS.textContainer}>
      
       <div className={HrmDetailCSS.textareaContainer}>
       <span>기타정보</span>
@@ -305,7 +316,7 @@ export default function HrmModify() {
        <button type="button" onClick={handleUpdate}>수정</button>
       
       </div>
-       
+      </div>
       </div>
       </div>
       </>

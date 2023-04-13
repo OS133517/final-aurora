@@ -17,13 +17,17 @@ import Swal from "sweetalert2";
 
 export default function Attendance() {
     const dispatch = useDispatch();
-    const attendanceStatus = useSelector(state => state.attendanceReducer.attendanceStats);
+    const attendanceStatus = useSelector(state => state.attendanceReducer?.attendanceStatus);
     const monthTime = useSelector(state => state.attendanceReducer.workHours);
     const remainVacation = useSelector(state => state.attendanceReducer?.vacation);
     const memberInfo = useSelector(state => state.hrmReducer?.memberDetail);
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
     const memberCode = loginMember.memberCode;
     const [workStatus, setWorkStatus] = useState("퇴근");
+    const currentDate = new Date();
+    const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
+    const formattedDate = localDate.toISOString().substring(0, 10);
+
 
     const memberName = memberInfo?.memberDTO?.memberName;
     const deptName = memberInfo?.memberDTO?.deptName;
@@ -47,6 +51,7 @@ export default function Attendance() {
   
     const navLinkRef = useRef();
     
+    const [disableStartWorkButton, setDisableStartWorkButton] = useState(false);
 
 
         
@@ -111,6 +116,7 @@ export default function Attendance() {
               });
               localStorage.setItem("workStatus", "근무");
         }
+        setDisableStartWorkButton(true);
     };
 
     const handleEndWork = async (memberCode) => {
@@ -141,6 +147,8 @@ export default function Attendance() {
               });
               localStorage.setItem("workStatus", "퇴근");
         }
+        setDisableStartWorkButton(false);
+
     };
 
   
@@ -170,7 +178,8 @@ export default function Attendance() {
             memberCode : memberCode,          
         }));
         dispatch(callSelectAttendanceAPI({ 
-            memberCode : memberCode
+            memberCode : memberCode,
+            selectedDate :formattedDate
         }));
         
     },[memberCode]);
@@ -203,10 +212,10 @@ export default function Attendance() {
                                 <tbody>
                                     <tr>
                                         {/* 이부분에서 db에 데이터가 없으면 아예 안보임 처리해야 할거 */}
-                                        <td>{attendanceStatus?.TARDY}</td>
-                                        <td>{attendanceStatus?.ABSENCE}</td>
-                                        <td>{attendanceStatus?.EARLY_OFF}</td>
-                                        <td>{attendanceStatus?.TRUANCY}</td>
+                                        <td>{attendanceStatus?.TARDY}회</td>
+                                        <td>{attendanceStatus?.ABSENCE}회</td>
+                                        <td>{attendanceStatus?.EARLY_OFF}회</td>
+                                        <td>{attendanceStatus?.TRUANCY}회</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -246,7 +255,7 @@ export default function Attendance() {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{remainVacation?.REMAIN_VACATION}</td>
+                                        <td>{remainVacation?.REMAIN_VACATION}일</td>
                                         <div>
                                         <button type='button' className={AttendanceCSS.VacationButton} onClick={handleClick}>휴가신청</button>
                                         <NavLink
@@ -267,11 +276,14 @@ export default function Attendance() {
                         <div className={AttendanceCSS.boxWrapper2}>
                             <span></span>
                             <div className={AttendanceCSS.Box2}>
-                                <div className={AttendanceCSS.img}> </div>
+                                <div className={AttendanceCSS.img}>
+                                <img className={AttendanceCSS.responsiveImage} src={ process.env.PUBLIC_URL + "/" + "person" + ".png" } alt="이미지"/>
+                                     </div>
+                                     
                                 <h3> {deptName} 부서, {memberName}님 환영합니다</h3>
                                 <div className={AttendanceCSS.inOutButton}>
                               {workStatus === '퇴근' && (  
-                                <button type="button" onClick={() => handleStartWork(memberCode)}>출근</button>   
+                                <button type="button" onClick={() => handleStartWork(memberCode)} disabled={disableStartWorkButton}>출근</button>   
                                 )}                    
                               {workStatus === '근무' && (   
                                 <button type="button" onClick={() => handleEndWork(memberCode)}>퇴근</button>   

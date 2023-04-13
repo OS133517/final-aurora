@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Bar } from 'react-chartjs-2';
-import moment from 'moment';
 import AttendanceDetailCSS from "./AttendanceDetail.module.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { decodeJwt } from "../../utils/tokenUtils";
@@ -11,8 +9,10 @@ import AttendanceDoughnut from '../../components/attendance/AttendanceDoughnut';
 
 export default function AttendanceDetail() {
     const dispatch = useDispatch();
-    const attendanceStatus = useSelector(state => state.attendanceReducer?.attendanceStats);
+    const attendanceStatus = useSelector(state => state.attendanceReducer?.attendanceStatus);
     // const attStatus = attendanceStatus.data;
+  
+    console.log("attendanceStatus",attendanceStatus);
     const workHours = useSelector(state => state.attendanceReducer?.inOutTime);
     const workHoursDetail = useSelector(state => state.attendanceReducer?.workHoursDetail);
     const vacation = useSelector(state => state.attendanceReducer?.vacation);
@@ -31,7 +31,7 @@ export default function AttendanceDetail() {
     console.log("attendanceStatus" ,attendanceStatus);
     console.log("workHours", workHours);
     console.log("vacation", vacation);
-    console.log("memberCode" ,memberCode);
+    console.log("workHoursDetail" ,workHoursDetail);
 
 
     // const startWork = inOutTime.WORK_TIME(new Date().toISOString().split('T')[0]);
@@ -146,7 +146,8 @@ export default function AttendanceDetail() {
           memberCode : memberCode,          
       }));
       dispatch(callSelectAttendanceAPI({ 
-          memberCode : memberCode
+          memberCode : memberCode,
+          selectedDate :selectedDate
       }));
 
       

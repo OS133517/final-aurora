@@ -20,15 +20,22 @@ export default function Hrm() {
     const memberList = hrm?.data;
     const pageInfo = hrm?.pageInfo;
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
-    // const memberCode = loginMember.memberCode;
     const location = useLocation();
+    
     const specificUrl = "/aurora/hrm/hrm-modify";
     console.log('hrm', hrm);
     console.log('memberList', memberList);
+    console.log("pageInfo", pageInfo);
     // console.log('memberList.memberCode', memberList.memberCode);
 
     const [currentPage, setCurrentPage] = useState(1);
     const pageNumber = [];
+    if(pageInfo) {
+        for(let i = 1; i <= pageInfo.endPage; i++) {
+            pageNumber.push(i);
+        }
+    }
+    console.log("pageNumber", pageNumber);
 
     const [category , setCategory] = useState('name');
     const [searchValue, setSearchValue] = useState('');
@@ -45,12 +52,7 @@ export default function Hrm() {
        
       },[currentPage]);
         
-      
-      
-    //   const onClickLink = (num) => {
-    //     console.log(num);
-    //     navigate(`/aurora/hrm/hrm-detail/${num}`);
-    //   };
+
 
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
@@ -59,14 +61,6 @@ export default function Hrm() {
     const onChangeTextHandler = (e) => {
         setSearchValue(e.target.value);
     };
-        
-
-    // useEffect(() => {
-
-    //     searchCall();
-    //     setCurrentPage(1);
-    // // eslint-disable-next-line
-    // }, [searchForm])
 
     const onClickSearch = () => {
         switch (category) {
@@ -116,7 +110,7 @@ export default function Hrm() {
                 <select value={category} onChange={handleCategoryChange}>
                     <option value="name">이름</option>
                     <option value="dept">부서</option>
-                    <option value="job">직위</option>
+                    <option value="job">직급</option>
                     <option value="task">직무</option>
                     <option value="email">이메일</option>
                 </select>
@@ -218,7 +212,8 @@ export default function Hrm() {
                      </tbody>
                 </table>
                 <div className={ HrmCSS.pagingBtnDiv }>
-                { Array.isArray(memberList) &&
+                { Array.isArray(memberList) && (
+                    <>
                 <button 
                     onClick={() => setCurrentPage(currentPage - 1)} 
                     disabled={currentPage === 1}
@@ -226,18 +221,19 @@ export default function Hrm() {
                 >
                     &lt;
                 </button>
-                }
+                
                 {pageNumber.map((num) => (
-                <li key={num} onClick={() => setCurrentPage(num)}>
                     <button
+                        key={num}
+                        onClick={() => setCurrentPage(num)}
                         style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
                         className={ HrmCSS.pagingBtn }
                     >
                         {num}
                     </button>
-                </li>
+                
                 ))}
-                { Array.isArray(memberList) &&
+                
                 <button 
                     onClick={() => setCurrentPage(currentPage + 1)} 
                     disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
@@ -245,7 +241,8 @@ export default function Hrm() {
                 >
                     &gt;
                 </button>
-                }
+                </>
+                )}
             </div>
             </div>
         </div>
