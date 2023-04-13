@@ -97,8 +97,6 @@ function ReportCreate() {
             // console.log("!isNumeric(reportDTO.reportCycle) : " + JSON.stringify(!isNumeric(reportDTO.reportCycle)));
             if(reportDetail?.reportDTO?.reportType === 'Casual') {
 
-                // setFileList(originalFileList || []);
-                // setSelectedRecipient(reportDetail.selectedRecipient || null);
                 setServerFileList(originalFileList || []);
                 setSelectedRecipient(recipient || null);
             }
@@ -110,6 +108,7 @@ function ReportCreate() {
         if(inputValue) {
 
             dispatch(callSelectSearchListAboutNameAPI({
+                
                 name : inputValue
             }));
         }
