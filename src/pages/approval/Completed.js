@@ -20,7 +20,7 @@ function Completed() {
         <>
             <div className={ApprovalCSS.mainList}>
                 <div className={ApprovalCSS.subtitle}>
-                    <h3>미결재</h3>
+                    <h3>결재 완료</h3>
                 </div>
                 <table className={ApprovalCSS.approvalTable}>
                     <thead className={ApprovalCSS.theadStyle}>

@@ -51,7 +51,7 @@ function ApprovalSidebar() {
                         <label>결재 대기</label>
                     </div>
                     <div className={SidebarCSS.count} onClick={waitingListHandler}>
-                        <h1>{waitingCount.length}</h1>
+                        <h1>{waitingCount === undefined ? 0 : waitingCount.length}</h1>
                         <label>결재 요청</label>
                     </div>
                 </div>
