@@ -7,6 +7,7 @@
     height: 137px;
     border-bottom: 1px solid #c1c1c1;
     border-right: 1px solid #c1c1c1;
+    overflow: scroll;
 }
 
 .dayDiv:nth-child(7n), .dayDiv:nth-child(7n + 1) {

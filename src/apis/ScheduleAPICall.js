@@ -1,7 +1,9 @@
 import {
+    DELETE_SCHEDULE,
     GET_MY_SCHEDULE,
     GET_SCHEDULE,
-    POST_SCHEDULE
+    POST_SCHEDULE,
+    PUT_SCHEDULE
     
 } from "../modules/ScheduleModule";
 
@@ -27,10 +29,10 @@ export const callMyScheduleAPI = ({ memberCode }) => {
     };
 }
 
-export const callScheduleAPI = ({ scheduleCode, schduleStartDay, scheduleEndDay }) => {
+export const callScheduleDetailAPI = ({ scheduleCode }) => {
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/schedules/calendar/${scheduleCode}?schduleStartDay=${schduleStartDay}&scheduleEndDay=${scheduleEndDay}`;
-
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/schedules/calendar/${scheduleCode}`;
+    
     return async (dispatch, getState) => {
 
         const result = await fetch(requestURL, {
@@ -43,7 +45,7 @@ export const callScheduleAPI = ({ scheduleCode, schduleStartDay, scheduleEndDay 
         }).then(response => response.json());
 
         if(result.status === 200) {
-            console.log('[ScheduleAPICall] callScheduleAPI RESULT', result);
+            console.log('[ScheduleAPICall] callScheduleDetailAPI RESULT', result);
             dispatch({type : GET_SCHEDULE, payload : result.data});
         }
     };
@@ -52,8 +54,7 @@ export const callScheduleAPI = ({ scheduleCode, schduleStartDay, scheduleEndDay 
 export const callScheduleInsertAPI = ({form, memberCode}) => {
 
     console.log('[ScheduleAPICall] callScheduleInsertAPI Call');
-    console.log(memberCode + "memberCode");
-    
+
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/schedules/calendar`;
 
     return async (dispatch, getState) => {
@@ -62,25 +63,80 @@ export const callScheduleInsertAPI = ({form, memberCode}) => {
             method : "POST",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*",
-                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             },
             body : JSON.stringify({
                 memberCode : memberCode,
-                // scheduleName : form.get("scheduleName"),
-                scheduleStartDay : form.get("scheduleStartDay"),
-                scheduleEndDay : form.get("scheduleEndDay"),
-                schduleStartTime : form.get("schduleStartTime.toLocaleString()"),
-                schduleEndTime : form.get("schduleEndTime.toLocaleString()"),
-                schdulePlace : form.get("schdulePlace"),
-                schduleContent : form.get("schduleContent")
+                scheduleName : form.scheduleName,
+                scheduleStartDay : form.scheduleStartDay,
+                scheduleEndDay : form.scheduleEndDay,
+                schedulePlace : form.schedulePlace,
+                scheduleContent : form.scheduleContent
             })
-        }).then(response => response.json());
+            // body : form
+        }).then(response => response.json())
+        .then((data) => console.log(data));
 
         if(result.status === 200) {
-            console.log('[ScheduleAPICall] callScheduleInsertAPI RESULT', result);
+            console.log('[ScheduleAPICall] callScheduleInsertAPI RESULT' + result);
             dispatch({type : POST_SCHEDULE, payload : result});
         }
-    }
+    };
+}
 
+export const callScheduleUpdateAPI = ({ form }) => {
+
+    console.log('[ScheduleAPICall] callScheduleUpdateAPI Call');
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/schedules/calendar`;
+
+    // for(let key of form.keys()){
+    //     console.log(key, form.get(key));
+    // }
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "PUT",
+            headers: {
+                "Content-Type" : "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            },
+            body : JSON.stringify({
+                scheduleCode : form.get("scheduleCode"),
+                scheduleName : form.get("scheduleName"),
+                scheduleStartDay : form.get("scheduleStartDay"),
+                scheduleEndDay : form.get("scheduleEndDay"),
+                schedulePlace : form.get("schedulePlace"),
+                scheduleContent : form.get("scheduleContent")
+            })
+        })
+        .then(response => response.json());
+        console.log('[ScheduleAPICall] callScheduleUpdateAPI RESULT : ', result);
+        dispatch({ type : PUT_SCHEDULE, payload : result });
+    };
+}
+
+export const callScheduleDeleteAPI = ({ scheduleCode }) => {
+
+    console.log('[ScheduleAPICall] callScheduleDeleteAPI Call');
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/schedules/${scheduleCode}`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method: "DELETE",
+            headers: {
+                "Content-Type" : "application/json",
+                "Accept": "*/*",
+                "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
+            }
+        })
+        .then(response => response.json());
+
+        if(result.status === 200){
+            console.log('[ScheduleAPICall] callScheduleDeleteAPI Call RESULT', result);
+            dispatch({ type : DELETE_SCHEDULE, payload: result });
+        }
+    };
 }

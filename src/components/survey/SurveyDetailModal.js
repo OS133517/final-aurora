@@ -206,7 +206,7 @@ function SurveyDetailModal({survey, setIsModalOn}) {
                                         type="radio" 
                                         name={question.questionNo} 
                                         id={choice.choiceNo}
-                                        value={choice.choiceNo}
+                                        value={choice.choiceBody}
                                         onChange={onChangeInputHandler}/>
                                         {choice.choiceBody}
                                 </label>

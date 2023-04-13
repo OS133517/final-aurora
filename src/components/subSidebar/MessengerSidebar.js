@@ -32,6 +32,7 @@ function MessengerSidebar() {
     /** 변수 */
     const memberName = list?.memberDTO?.memberName;
     const roomNum = roomList.map(room => room.roomNum);
+    console.log('roomList : ', roomList);
     /** useEffect */
     useEffect(() => {
         const fetchData = async () => {
@@ -59,8 +60,6 @@ function MessengerSidebar() {
     }
 
     const chatRoomHandler = (roomNum) => {
-        // <ChatRoom roomList={roomList}/>
-        console.log('클릭된 번호 : ', roomNum);
         navigate(`/aurora/messenger/detail/${roomNum}`);
     }
     return (
@@ -83,7 +82,7 @@ function MessengerSidebar() {
             {inputChatRoom &&
                 <div className={SidebarCSS.modalWrapper}>
                     <div className={SidebarCSS.modalAddChat}>
-                        <ChatRoomAdd roomNum={roomNum} />
+                        <ChatRoomAdd />
                     </div>
                 </div>
             }

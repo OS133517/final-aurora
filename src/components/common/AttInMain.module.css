@@ -26,9 +26,30 @@
 }
 
 .graphDiv {
+    display: flex;
     height: 65%;
     margin-bottom: 10px;
 }   
+
+.time {
+    margin-top: 50px;
+    width: 450px;
+    display: flex;
+    align-items: center; 
+    flex-direction: column;
+}
+
+.time span {
+    align-items: left;
+    margin-top: 10px;
+    font-size: 30px;
+    padding-left: 50px;
+}
+
+.attendance{
+    width: 60em;
+    margin-right: 60px;
+}
 
 .footer {
     display: flex;

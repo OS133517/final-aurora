@@ -62,7 +62,7 @@ export const callDayWorklogDetailAPI = ({ dayWorklogCode }) => {
     };
 }
 
-// export const callMemberDayWorklogAPI = ()
+
 
 export const callDayWorklogInsertAPI = ({ form, memberCode }) => {
 

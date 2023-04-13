@@ -5,6 +5,7 @@ import {
     GET_MEMBER_LIST,
     GET_NAME_SEARCH,
     GET_TASK_SEARCH,
+    GET_JOB_SEARCH,
     POST_MEMBER_SIGN_UP,
     PUT_MEMBER_MODIFY,
     GET_CODE
@@ -180,7 +181,9 @@ export const callMemberEmailSearchAPI = ({searchValue, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+                
             }
         })
         .then(response => response.json());
@@ -209,7 +212,8 @@ export const callMemberDeptSearchAPI = ({searchValue, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
@@ -238,14 +242,15 @@ export const callMemberJobSearchAPI = ({searchValue, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
 
         if(result.status === 200) {
             console.log('[HrmAPICalls] callMemberJobSearchAPI' , result);
-            dispatch({type : GET_DEPT_SEARCH, payload : result.data});
+            dispatch({type : GET_JOB_SEARCH, payload : result.data});
 
         }
     }
@@ -267,7 +272,8 @@ export const callMemberTaskSearchAPI = ({searchValue, currentPage}) => {
             method : "GET",
             headers : {
                 "Content-Type" : "application/json",
-                "Accept" : "*/*"
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
             }
         })
         .then(response => response.json());
