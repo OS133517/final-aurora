@@ -5,11 +5,8 @@ import { decodeJwt } from "../../utils/tokenUtils";
 import { callSelectMailListByConditionsAPI,
             callUpdateImportantStatusAPI,
             callSelectNewMailListAPI,
-            callUpdateDeleteStatusAPI,
             callUpdateMailTagAPI,
-            // 태그 
             callSelectTagsAPI,
-            callRegisterBlackListAPI,
         } from "../../apis/MailAPICall";
 
 import MailMainCSS from './MailMain.module.css'
@@ -96,11 +93,12 @@ function MailMain() {
     // 태그 변경 토글 - 각 메일 
     const handleTagButtonClick = (mailCode, e) => {
 
-        setShowTagList(false);
         e.stopPropagation();
         setSelectedMailCode(mailCode);
-        setShowTagList(true);
-        setTagListPosition({ x: e.clientX, y: e.clientY }); // 위치 계산
+        setShowTagList(!showTagList);
+        // 위치 확인후 태그 변경 DIV 출력 
+        const buttonPosition = e.currentTarget.getBoundingClientRect();
+        setTagListPosition({ x: buttonPosition.right, y: buttonPosition.top + window.scrollY }); 
     };
     // 태그 변경 div 핸들러 - div 밖 클릭시 닫기 
     const handleCloseTagList = (e) => {
@@ -170,7 +168,7 @@ function MailMain() {
                         <img 
                             src="/mail/refresh.png" 
                             alt="새로 고침" 
-                            style={{width:"32px", height:"32px"}}
+                            style={{width:"32px", height:"32px", cursor: "pointer"}}
                             onClick={() => updateMailList()}
                         />
                         {isLoading && (
@@ -269,30 +267,38 @@ function MailMain() {
                                         left: tagListPosition.x, // 위치 조정
                                     }}
                                 >
-                                    태그 목록
-                                    <div className={MailMainCSS.tagFilterScrollContainer}>
-                                        {tagList?.map((tag) => (
-                                            <div
-                                                key={tag.tagCode}
-                                                className={selectedMailTag?.tagCode === tag.tagCode
-                                                    ? MailMainCSS.tagFilterSelected 
-                                                    : MailMainCSS.tagFilter}
-                                                onClick={() => handleTagChange(tag.tagCode)}
-                                                style={{ cursor: "pointer" }}
-                                            >
-                                                <img
-                                                    src={`/mail/tags/${tag.tagColor}.png`}
-                                                    alt={`${tag.tagColor} ribbon`}
-                                                    style={{
-                                                    width: "16px",
-                                                    height: "16px",
-                                                    marginRight: "4px",
-                                                    }}
-                                                />
-                                                {tag.tagName}
+                                    {tagList && tagList.length > 0 ? (
+                                        <>
+                                            태그 목록
+                                            <div className={MailMainCSS.tagFilterScrollContainer}>
+                                                {tagList?.map((tag) => (
+                                                    <div
+                                                        key={tag.tagCode}
+                                                        className={selectedMailTag?.tagCode === tag.tagCode
+                                                            ? MailMainCSS.tagFilterSelected 
+                                                            : MailMainCSS.tagFilter}
+                                                        onClick={() => handleTagChange(tag.tagCode)}
+                                                        style={{ cursor: "pointer" }}
+                                                    >
+                                                        <img
+                                                            src={`/mail/tags/${tag.tagColor}.png`}
+                                                            alt={`${tag.tagColor} ribbon`}
+                                                            style={{
+                                                                width: "16px",
+                                                                height: "16px",
+                                                                marginRight: "4px",
+                                                            }}
+                                                        />
+                                                        {tag.tagName}
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
+                                        </>
+                                    ) : (
+                                        <div className={MailMainCSS.noTagsMessage}>
+                                            태그가 없습니다.
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </tbody>

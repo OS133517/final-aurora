@@ -39,7 +39,6 @@ function Inbox() {
     const [searchInput, setSearchInput] = useState({ type: "mailTitle", value: "" }); // 검색 입력값 
     // 태그 
     const [selectedMailTag, setSelectedMailTag] = useState(null); // 태그 변경 - 선택된 태그 
-    const [showTagModal, setShowTagModal] = useState(false); // 태그 모달 
     const [showTagList, setShowTagList] = useState(false); // 태그 변경 
     const [selectedMailCode, setSelectedMailCode] = useState(null); // 태그 변경할 메일 코드 
     const [tagListPosition, setTagListPosition] = useState({ x: 0, y: 0 }); // 태그 변경 div 좌표 설정 
@@ -149,21 +148,11 @@ function Inbox() {
         };
     }, [showTagList]);
 
-    // 모달 스크롤 문제 
-    useEffect(() => {
+    // 태그관리모달 업데이트 관리 함수 
+    const handleTagUpdate = () => {
 
-        if (showTagModal) {
-
-          document.body.style.overflow = 'hidden';
-        } else {
-
-          document.body.style.overflow = 'auto';
-        }
-        return () => {
-
-          document.body.style.overflow = 'auto';
-        };
-    }, [showTagModal]);
+        setUpdateTagTrigger(!updateTagTrigger);
+    };
 
     // 검색 입력 값 
     const onChangeHandler = (e) => {
@@ -216,24 +205,6 @@ function Inbox() {
         setMailUpdated(true); 
     };
 
-    // 태그관리모달 업데이트 관리 함수 
-    const handleTagUpdate = () => {
-
-        setUpdateTagTrigger(!updateTagTrigger);
-    };
-    // 모달 관리 함수 
-    const toggleTagModal = () => { // 집 모니터가 커서 생기는 문제일 수 있음 - 모달창 생성시 스크롤 내려가는 문제 
-
-        if (!showTagModal) {
-
-            document.body.style.overflow = "hidden";
-        } else {
-
-            document.body.style.overflow = "auto";
-        }
-        setShowTagModal((prev) => !prev);
-    };
-
     // 메일 새로고침 
     const updateMailList = async () => {
 
@@ -251,10 +222,6 @@ function Inbox() {
         }
         setMailUpdated(!mailUpdated);
     };
-
-    // 읽음 상태 변경 
-    // const handleToggleReadStatus = (mailCode) => {
-    // };
 
     // 삭제 상태 수정 
     const deleteMail = async () => {
@@ -304,7 +271,9 @@ function Inbox() {
         e.stopPropagation();
         setSelectedMailCode(mailCode);
         setShowTagList(true);
-        setTagListPosition({ x: e.clientX, y: e.clientY }); // 위치 계산
+        // 위치 확인후 태그 변경 DIV 출력 
+        const buttonPosition = e.currentTarget.getBoundingClientRect();
+        setTagListPosition({ x: buttonPosition.right, y: buttonPosition.top + window.scrollY }); 
     };
     // 태그 변경 div 핸들러 - div 밖 클릭시 닫기 
     const handleCloseTagList = (e) => {
@@ -516,12 +485,6 @@ function Inbox() {
                                             checked={allMailsSelected}
                                             onChange={() => handleAllMailsSelection()}
                                         />
-                                        {/* 읽음상태 토글 */}
-                                        <span 
-                                            style={{cursor: "not-allowed"}}
-                                        >
-                                            읽음
-                                        </span>
                                         <span
                                             style={{cursor: 'pointer'}}
                                             onClick={() => deleteMail()}
@@ -536,7 +499,8 @@ function Inbox() {
                                         </span>
                                         <span style={{cursor: 'pointer'}}>
                                             {/* <TagManagementModal onUpdate={handleTagUpdate} /> */}
-                                            <TagManagementModal onUpdate={handleTagUpdate} toggleTagModal={toggleTagModal} />
+                                            {/* <TagManagementModal onUpdate={handleTagUpdate} toggleTagModal={toggleTagModal} /> */}
+                                            <TagManagementModal onUpdate={handleTagUpdate} />
                                         </span>
                                         <span 
                                             style={{cursor: 'pointer'}}
@@ -583,8 +547,6 @@ function Inbox() {
                                         </td>
                                         <td className={MailCSS.narrow}>
                                             <img
-                                                // 읽음 상태 토글 
-                                                // onClick={}
                                                 style={{ width: "16px", cursor: "not-allowed"}}
                                                 src={
                                                 mail.readStatus === "Y"?
@@ -648,30 +610,38 @@ function Inbox() {
                                         left: tagListPosition.x, // 위치 조정
                                     }}
                                 >
-                                    태그 목록
-                                    <div className={MailCSS.tagFilterScrollContainer}>
-                                        {tagList?.map((tag) => (
-                                            <div
-                                                key={tag.tagCode}
-                                                className={selectedMailTag?.tagCode === tag.tagCode
-                                                    ? MailCSS.tagFilterSelected 
-                                                    : MailCSS.tagFilter}
-                                                onClick={() => handleTagChange(tag.tagCode)}
-                                                style={{ cursor: "pointer" }}
-                                            >
-                                                <img
-                                                    src={`/mail/tags/${tag.tagColor}.png`}
-                                                    alt={`${tag.tagColor} ribbon`}
-                                                    style={{
-                                                    width: "16px",
-                                                    height: "16px",
-                                                    marginRight: "4px",
-                                                    }}
-                                                />
-                                                {tag.tagName}
+                                    {tagList && tagList.length > 0 ? (
+                                        <>
+                                            태그 목록
+                                            <div className={MailCSS.tagFilterScrollContainer}>
+                                                {tagList?.map((tag) => (
+                                                    <div
+                                                        key={tag.tagCode}
+                                                        className={selectedMailTag?.tagCode === tag.tagCode
+                                                            ? MailCSS.tagFilterSelected 
+                                                            : MailCSS.tagFilter}
+                                                        onClick={() => handleTagChange(tag.tagCode)}
+                                                        style={{ cursor: "pointer" }}
+                                                    >
+                                                        <img
+                                                            src={`/mail/tags/${tag.tagColor}.png`}
+                                                            alt={`${tag.tagColor} ribbon`}
+                                                            style={{
+                                                                width: "16px",
+                                                                height: "16px",
+                                                                marginRight: "4px",
+                                                            }}
+                                                        />
+                                                        {tag.tagName}
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
+                                        </>
+                                    ) : (
+                                        <div className={MailCSS.noTagsMessage}>
+                                            태그가 없습니다.
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </tbody>

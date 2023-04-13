@@ -118,7 +118,7 @@ function CasualReportDetail() {
                                             deleteReport()
                                         }}
                                     >
-                                        <span>보고 삭제</span> 
+                                        <span>보고 완료</span> 
                                     </button>
                                     <button 
                                         className={ReportRoundDetailCSS.greentButton}
