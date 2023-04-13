@@ -147,7 +147,7 @@ export default function Attendance() {
               });
               localStorage.setItem("workStatus", "퇴근");
         }
-        setDisableStartWorkButton(false);
+        setDisableStartWorkButton(true);
 
     };
 

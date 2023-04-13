@@ -7,7 +7,7 @@ import { decodeJwt } from "../../utils/tokenUtils";
 import Swal from 'sweetalert2';
 import approvalDetailCSS from "./Approvals.module.css"
 import { callGetVacationAPI, callUpdateRemainVacationAPI } from "../../apis/VacationAPICall";
-import { callSelectUsedcAPI } from "../../apis/AttendanceAPICall";
+import { callSelectUsedVacationAPI } from "../../apis/AttendanceAPICall";
 
 function ApprovalDetail() {
 
@@ -147,10 +147,10 @@ function ApprovalDetail() {
 
             // 문서코드가 휴가 문서 일 때 
             if (docCode === 8) {
-                dispatch(callSelectUsedcAPI({ memberCode }));
+                dispatch(callSelectUsedVacationAPI({ memberCode }));
                 // appStatus 가 승인일때 
                 if (vacation === 'y') {
-                    dispatch(callSelectUsedcAPI({ memberCode }));
+                    dispatch(callSelectUsedVacationAPI({ memberCode }));
 
                 }
 

@@ -39,6 +39,7 @@ export default function Hrm() {
 
     const [category , setCategory] = useState('name');
     const [searchValue, setSearchValue] = useState('');
+    console.log("searchValue",searchValue);
 
       useEffect(() => {
 
