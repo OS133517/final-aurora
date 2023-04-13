@@ -110,9 +110,7 @@ function ReservationAssetManagement() {
                 dispatch(callAssetDeleteAPI({
                     assetCodes : deleteList
                 }));
-            } else {
-                Swal.fire('취소되었습니다.');
-            }
+            } 
         })
     }
 
@@ -194,14 +192,13 @@ function ReservationAssetManagement() {
                     </button>
                     }
                     {pageNumber.map((num) => (
-                    <li key={num} onClick={() => setCurrentPage(num)}>
-                        <button
-                            style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                            className={ AssetManagementCSS.pagingBtn }
-                        >
-                            {num}
-                        </button>
-                    </li>
+                    <button
+                        key={num} onClick={() => setCurrentPage(num)}
+                        style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
+                        className={ AssetManagementCSS.pagingBtn }
+                    >
+                        {num}
+                    </button>
                     ))}
                     { Array.isArray(assetList) &&
                     <button 

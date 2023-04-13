@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
-import { callApprovalDetailAPI, callPutApprovalLine } from "../../apis/ApprovalAPICalls";
+import { useParams } from "react-router-dom";
+import { callApprovalDetailAPI, callPutApprovalAPI, callPutApprovalLine } from "../../apis/ApprovalAPICalls";
 import { callMemberDetailAPI } from "../../apis/MemberAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
 import Swal from 'sweetalert2';
 import approvalDetailCSS from "./Approvals.module.css"
+import { callGetVacationAPI, callUpdateRemainVacationAPI } from "../../apis/VacationAPICall";
+import { callSelectUsedVacationAPI } from "../../apis/AttendanceAPICall";
 
 function ApprovalDetail() {
 
@@ -14,8 +16,7 @@ function ApprovalDetail() {
 
     /** useLocation */
     // approvalForm 컴포넌트에서 documentDTO을 가져오기 위한 hook
-    const location = useLocation();
-    const documentDTO = location.state.documentDTO;
+    // const location = useLocation();
 
     /** useParams */
     const paramAppCode = useParams("appCode");
@@ -24,45 +25,66 @@ function ApprovalDetail() {
     const dispatch = useDispatch();
 
     /** useSelector */
+    const vacationInfo = useSelector(state => state.vacationReducer.firstNo);
     const detailInfo = useSelector(state => state.approvalReducer.approvalLine);
     const memberInfo = useSelector(state => state.memberReducer.memberDetail);
-    console.log('detailInfo : ', detailInfo);
+    // 휴가 사용일 수 
+    const useDay = useSelector(state => state.attendanceReducer.usedVcations);
     /** useState */
+    // CALLAPI에서 응답 상태를 가져옴
     const [responseStatus, setResponseStatus] = useState(0)
+    // 결재상태 변경 여부
+    const [approvalLineStatus, setApprovalLineStatus] = useState([]);
+    const [vacationNo, setVacationNo] = useState(0);
+    console.log('vacationNo : ', vacationNo);
+    /** 사용자 정의 변수 */
+    /** @param documentDTO 문서 DTO*/
+    const docName = detailInfo?.detailApproval?.documentDTO?.docName;
 
-    /** 변수 */
     /** @param loginCode 로그인한 유저의 코드*/
     const loginCode = loginMember.memberCode;
+
+    /** @param docCode 휴가 문서 여부 확인*/
+    const docCode = detailInfo?.detailApproval?.documentDTO?.docCode;
 
     /** @param memberCode 작성한 유저의 코드*/
     const memberCode = detailInfo?.detailApproval?.memberDTO?.memberCode;
 
     /** @param memberName 작성한 유저의 이름*/
-    const memberName = memberInfo?.memberName;
+    const memberName = memberInfo?.memberDTO?.memberName;
+
+    /** @param vacation 상태코드 확인*/
+    const vacation = detailInfo?.detailApproval?.appStatus;
 
     /** @param firstNStatus appStatus가 n인 첫번째 배열 값*/
     const firstNStatus = detailInfo?.approvalLine?.find(line => line.appStatus === 'n');
-
     /** @param approvalMember 승인할 유저의 코드*/
     const approvalMemberCode = firstNStatus?.memberDTO?.memberCode;
-    console.log('(find 메서드)승인할 유저의 DTO : ', firstNStatus?.memberDTO);
-    console.log('승인할 유저의 코드 : ', approvalMemberCode);
+
+
+
     /** useEffect */
+
+    // 휴가 일 경우 
+    // 결재 상세조회 , 결재, 결재선
     useEffect(() => {
         const fetchData = async () => {
 
             await dispatch(callApprovalDetailAPI({ appCode: paramAppCode.appCode }));
+
         };
 
         fetchData();
         //eslint-disable-next-line
     }, []);
 
+    // 멤버의 상세정보 조회 
     useEffect(() => {
         const fetchMemberData = async () => {
 
             if (memberCode) {
                 await dispatch(callMemberDetailAPI({ memberCode: memberCode }));
+                await dispatch(callGetVacationAPI({ memberCode: memberCode }));
 
             }
         };
@@ -71,7 +93,92 @@ function ApprovalDetail() {
         //eslint-disable-next-line
     }, [memberCode]);
 
-    console.log('Info memberCode : ');
+    useEffect(() => {
+        setVacationNo(vacationInfo?.VACATION_NO);
+    }, [vacationInfo]);
+
+    // 결재상태가 변경될 때 마다 approvalLineStatus배열에 저장
+    useEffect(() => {
+        const calculateApprovalLineStatus = () => {
+            if (detailInfo?.approvalLine) {
+
+                return detailInfo.approvalLine.map(line => line.appStatus);
+            }
+            return null;
+        };
+        const newApprovalLineStatus = calculateApprovalLineStatus();
+        if (newApprovalLineStatus && JSON.stringify(newApprovalLineStatus) !== JSON.stringify(approvalLineStatus)) {
+
+            setApprovalLineStatus(newApprovalLineStatus);
+        }
+        //eslint-disable-next-line
+    }, [detailInfo?.approvalLine]);
+
+    // console.log('detailInfo : ', detailInfo);
+    // 결재선의 결재 종류에 따라 리스트에 보여질 상태 변경
+    useEffect(() => {
+        // 결재 상태 변경
+        if (approvalLineStatus) {
+            if (approvalLineStatus.every(status => status === "n")) {
+                // console.log("Dispatching with appStatus: 'n'");
+                dispatch(callPutApprovalAPI({
+                    appCode: paramAppCode.appCode,
+                    appStatus: 'n'
+                }));
+            } else if (approvalLineStatus.every(status => status === "y")) {
+                // console.log("Dispatching with appStatus: 'y'");
+                dispatch(callPutApprovalAPI({
+                    appCode: paramAppCode.appCode,
+                    appStatus: 'y'
+                }));
+            } else if (approvalLineStatus.some(status => status === "w")) {
+                // console.log("Dispatching with appStatus: 'w'");
+                dispatch(callPutApprovalAPI({
+                    appCode: paramAppCode.appCode,
+                    appStatus: 'w'
+                }));
+            } else if (approvalLineStatus.some(status => status === "y") && approvalLineStatus.some(status => status === "n")) {
+                // console.log("Dispatching with appStatus: 'p'");
+                dispatch(callPutApprovalAPI({
+                    appCode: paramAppCode.appCode,
+                    appStatus: 'p'
+                }));
+            }
+
+            // 문서코드가 휴가 문서 일 때 
+            if (docCode === 8) {
+                dispatch(callSelectUsedVacationAPI({ memberCode }));
+                // appStatus 가 승인일때 
+                if (vacation === 'y') {
+                    dispatch(callSelectUsedVacationAPI({ memberCode }));
+
+                }
+
+            }
+        }
+        //eslint-disable-next-line
+    }, [approvalLineStatus]);
+
+    useEffect(() => {
+
+        const updateAndReload = async () => {
+
+            if (responseStatus === 200) {
+                await dispatch(callUpdateRemainVacationAPI(memberCode, useDay.usedDay, vacationNo));
+
+                Swal.fire({
+                    icon: "success",
+                    title: "성공",
+                    text: "결재 라인이 성공적으로 등록되었습니다.",
+                }).then(() => {
+                    window.location.reload();
+                });
+            }
+
+        };
+        updateAndReload();
+        //eslint-disable-next-line
+    }, [responseStatus]);
     /** event */
     // 이전 페이지로 이동하기 위해
     const backEvent = () => {
@@ -85,15 +192,6 @@ function ApprovalDetail() {
             appStatus: 'y'
         }, setResponseStatus));
 
-        if (responseStatus === 200) {
-            Swal.fire({
-                icon: "success",
-                title: "성공",
-                text: "결재 라인이 성공적으로 등록되었습니다.",
-            }).then(() => {
-                window.location.reload();
-            });
-        }
     }
 
     const approvalDenyHandler = () => {
@@ -103,16 +201,9 @@ function ApprovalDetail() {
             appStatus: 'w'
         }, setResponseStatus));
 
-        if (responseStatus === 200) {
-            Swal.fire({
-                icon: "success",
-                title: "성공",
-                text: "결재 라인이 성공적으로 등록되었습니다.",
-            }).then(() => {
-                window.location.reload();
-            });
-        }
+
     }
+
     return (
         <div className={approvalDetailCSS.detailBox}>
             <div className={approvalDetailCSS.detailView}>
@@ -123,7 +214,7 @@ function ApprovalDetail() {
                     <thead>
                         <tr>
                             <td className={approvalDetailCSS.detaildocName} colSpan="2">
-                                <h1>{documentDTO.docName}</h1>
+                                <h1>{docName}</h1>
                             </td>
                         </tr>
                     </thead>
@@ -145,8 +236,20 @@ function ApprovalDetail() {
                             </td>
                         </tr>
                         <tr>
+                            <td className={approvalDetailCSS.detailTitle}>
+                                기간
+                            </td>
+                            <td className={approvalDetailCSS.description}>
+                                {memberName &&
+                                    <label>
+                                        {detailInfo?.detailApproval?.appStartDate} ~ { }
+                                        {detailInfo?.detailApproval?.appEndDate}
+                                    </label>}
+                            </td>
+                        </tr>
+                        <tr>
                             <td colSpan="2" className={approvalDetailCSS.detailDescript}>
-                                {detailInfo?.detailApproval?.appDescript}
+                                {docCode !== 8 ? detailInfo?.detailApproval?.appDescript : '  '}
                             </td>
                         </tr>
                     </tbody>
@@ -159,28 +262,38 @@ function ApprovalDetail() {
                     <h5>결재선</h5>
                 </div>
                 {
-                    detailInfo?.approvalLine?.map((line, i) => (
+                    detailInfo?.approvalLine?.sort((a, b) => {
+                        if (a.memberDTO.memberCode < b.memberDTO.memberCode) {
 
-                        <div key={i} className={approvalDetailCSS.lineBox}>
-                            <span>{detailInfo.approvalLine[i].memberDTO.memberName}</span>
-                            {/* appStatus의 상태에 따라 승인, 대기, 보류로 변경 */}
-                            {
-                                detailInfo.approvalLine[i].appStatus === 'y' ?
-                                    <div className={approvalDetailCSS.checkOkCircle}>승인</div> : detailInfo.approvalLine[i].appStatus === 'n' ?
-                                        <div className={approvalDetailCSS.checkWaitCircle}>대기</div> : <div className={approvalDetailCSS.checkDenyCircle}>보류</div>}
-                            {i < detailInfo.approvalLine.length - 1 && (
-                                <div
-                                    className={
-                                        detailInfo.approvalLine[i].appStatus === "n"
-                                            ? approvalDetailCSS.stick
-                                            : detailInfo.approvalLine[i].appStatus === "y"
-                                                ? approvalDetailCSS.stickOk
-                                                : approvalDetailCSS.stickDeny
-                                    }
-                                ></div>
-                            )}
-                        </div>
-                    ))
+                            return 1;
+                        }
+                        if (a.memberDTO.memberCode > b.memberDTO.memberCode) {
+                            return -1;
+                        }
+                        return 0;
+                    })
+                        .map((line, i) => (
+                            <div key={i} className={approvalDetailCSS.lineBox}>
+                                <span>{line.memberDTO.memberName}</span>
+                                <span>{line.memberDTO.jobCode}</span>
+                                {/* appStatus의 상태에 따라 승인, 대기, 보류로 변경 */}
+                                {
+                                    detailInfo.approvalLine[i].appStatus === 'y' ?
+                                        <div className={approvalDetailCSS.checkOkCircle}>승인</div> : detailInfo.approvalLine[i].appStatus === 'n' ?
+                                            <div className={approvalDetailCSS.checkWaitCircle}>대기</div> : <div className={approvalDetailCSS.checkDenyCircle}>보류</div>}
+                                {i < detailInfo.approvalLine.length - 1 && (
+                                    <div
+                                        className={
+                                            detailInfo.approvalLine[i].appStatus === "n"
+                                                ? approvalDetailCSS.stick
+                                                : detailInfo.approvalLine[i].appStatus === "y"
+                                                    ? approvalDetailCSS.stickOk
+                                                    : approvalDetailCSS.stickDeny
+                                        }
+                                    ></div>
+                                )}
+                            </div>
+                        ))
                 }
                 {loginCode === approvalMemberCode && <div className={approvalDetailCSS.lineButtonBox}>
                     <button onClick={approvalOkHandler}> 승인 </button>

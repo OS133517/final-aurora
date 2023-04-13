@@ -10,7 +10,7 @@ function ApprovalSidebar() {
     //eslint-disable-next-line
     const dispatch = useDispatch();
     /** useSelector */
-    const list = useSelector(state => state.approvalReducer.approvalInfo);
+    const list = useSelector(state => state.approvalReducer.pendingList);
     const waitingCount = useSelector(state => state.approvalReducer.lineList);
     /** useState */
     const [open, setOpen] = useState('false');
@@ -22,6 +22,14 @@ function ApprovalSidebar() {
     // 서류 작성 페이지로 이동
     const cilckMakeApproval = () => {
         navigate('/aurora/approval/draft');
+    }
+
+    const pendingListHandler = () => {
+        navigate("/aurora/approval")
+    }
+
+    const waitingListHandler = () => {
+        navigate("/aurora/approval/waiting")
     }
 
     useEffect(() => {
@@ -38,12 +46,12 @@ function ApprovalSidebar() {
             <div >
                 <button className={SidebarCSS.buttons} onClick={cilckMakeApproval}>서류 작성</button>
                 <div className={SidebarCSS.checked}>
-                    <div className={SidebarCSS.count}>
+                    <div className={SidebarCSS.count} onClick={pendingListHandler}>
                         <h1>{Array.isArray(list) && list.length}</h1>
                         <label>결재 대기</label>
                     </div>
-                    <div className={SidebarCSS.count}>
-                        <h1>{waitingCount.length}</h1>
+                    <div className={SidebarCSS.count} onClick={waitingListHandler}>
+                        <h1>{waitingCount === undefined ? 0 : waitingCount.length}</h1>
                         <label>결재 요청</label>
                     </div>
                 </div>
@@ -59,10 +67,10 @@ function ApprovalSidebar() {
                         <>
                             <ul className={SidebarCSS.approvalList}>
                                 <li>
-                                    <NavLink to="/aurora/approval/pending" className={SidebarCSS.approvalItem}>미결재</NavLink>
+                                    <NavLink to="/aurora/approval/pending" className={SidebarCSS.approvalItem}>진행중</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink className={SidebarCSS.approvalItem}>결재완료</NavLink>
+                                    <NavLink to="/aurora/approval/compeleted" className={SidebarCSS.approvalItem}>결재완료</NavLink>
                                 </li>
                                 <li>
                                     <NavLink to="/aurora/approval/waiting" className={SidebarCSS.approvalItem}>요청대기</NavLink>

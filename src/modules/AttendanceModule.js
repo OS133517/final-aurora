@@ -8,7 +8,7 @@ const initialState = {
         avgWorkedMinutes: 0,
 
     },
-    workHoursDetail:{
+    workHoursDetail: {
         extraWorkedMinutes: 0,
         remainingMinutes: 0,
         workedMinutesThisWeek: 0,
@@ -27,10 +27,46 @@ const initialState = {
         ABSENCE: 0
     },
     vacation: {
+        vacationNo: 0,
         remainingVacation: 0,
-        usedVacation: 0
     },
-    attendanceMessage : [],
+    usedVcations: {
+        usedVacation: 0,
+        remainingVacation: 0,
+        vacationNo: 0
+    },
+
+    // vacationUsed: {
+    //     vacationNo: 0,
+    //     remainingVacation: 0,
+    //     usedVacation: 0
+    // },
+    attendanceMessage: [],
+    attendanceList: {
+        memberCode: 0,
+        memberName: '',
+        phone: '',
+        memberEmail: '',
+        deptName: '',
+        taskName: '',
+        jobName: '',
+        tardy: '',
+        earlyOff: '',
+        truncy: '',
+        absence: '',
+        attRegDate: '',
+        workStatus: '',
+        workTime: '',
+        offTime: ''
+
+    },
+    vacationDetail: {
+        vacationStartDate: '',
+        vacationEndDate: '',
+        appStatus: '',
+        halfDay: ''
+    },
+    attendanceMessage: [],
     workStatus: ''
 }
 
@@ -44,80 +80,110 @@ export const GET_SELECT_USED_VACATION = 'attendance/GET_SELECT_USED_VACATION';
 export const GET_SELECT_WORK_STATUS = 'attendance/GET_SELECT_WORK_STATUS';
 export const GET_SELECT_TIME_BY_DAT = 'attnedance/GET_SELECT_TIME_BY_DAT';
 export const PUT_MODIFY_ATTENDANCE = 'attendance/PUT_MODIFY_ATTENDANCE';
+export const GET_ATTENDANCE_LIST = 'attendance/GET_ATTENDANCE_LIST';
+export const GET_VACATION_DETAIL = 'attendance/GET_VACATION_DETAIL';
+// export const GET_ATTENDANCE_LIST_NAME ='attendance/GET_ATTENDANCE_LIST_NAME'
 // export const PUT_REMAIN_VACATION = 'attendance/PUT_REMAIN_VACATION';
 
+//eslint-disable-next-line
 const actions = createActions({
-    [GET_SELECT_ATTENDANCE] : () => {},
-    [GET_SELECT_TIME] : () => {},
-    [GET_SELECT_MONTH_TIME] : () => {},
-    [POST_WORK_TIME] : () => {},
-    [PUT_END_TIME] : () => {},
-    [GET_SELECT_VACATION] : () => {},
-    [GET_SELECT_USED_VACATION] : () => {},
-    [GET_SELECT_WORK_STATUS] : () => {},
-    [PUT_MODIFY_ATTENDANCE] : () => {},
-    [GET_SELECT_TIME_BY_DAT] : () => {}
-
+    [GET_SELECT_ATTENDANCE]: () => { },
+    [GET_SELECT_TIME]: () => { },
+    [GET_SELECT_MONTH_TIME]: () => { },
+    [POST_WORK_TIME]: () => { },
+    [PUT_END_TIME]: () => { },
+    [GET_SELECT_VACATION]: () => { },
+    [GET_SELECT_USED_VACATION]: () => { },
+    [GET_SELECT_WORK_STATUS]: () => { },
+    [PUT_MODIFY_ATTENDANCE]: () => { },
+    [GET_SELECT_TIME_BY_DAT]: () => { },
+    [GET_ATTENDANCE_LIST]: () => { },
+    [GET_VACATION_DETAIL]: () => { },
 });
 
 const attendanceReducer = handleActions({
 
-    [GET_SELECT_ATTENDANCE] : (state, { payload }) => { 
+    [GET_SELECT_ATTENDANCE]: (state, { payload }) => {
         return {
             ...state,
-            attendanceStats : payload
-        }},
-    [GET_SELECT_TIME] : (state , { payload }) => {
+            attendanceStatus: payload
+        }
+    },
+    [GET_SELECT_TIME]: (state, { payload }) => {
         return {
             ...state,
-            workHoursDetail : payload
-        }},  
-    [GET_SELECT_MONTH_TIME] : (state , { payload }) => {
+            workHoursDetail: payload
+        }
+    },
+    [GET_SELECT_MONTH_TIME]: (state, { payload }) => {
         console.log(payload);
         return {
             ...state,
-            workHours : payload
-        }},
-    [POST_WORK_TIME] : (state , { payload }) => {
+            workHours: payload
+        }
+    },
+    [POST_WORK_TIME]: (state, { payload }) => {
         console.log(payload);
         return {
             ...state,
-            attendanceMessage : payload
-        }},
-    [PUT_END_TIME] : (state , { payload }) => {
+            attendanceMessage: payload
+        }
+    },
+    [PUT_END_TIME]: (state, { payload }) => {
         return {
             ...state,
-            attendanceMessage : payload
-        }},     
-    [GET_SELECT_VACATION] : (state , { payload }) => {
+            attendanceMessage: payload
+        }
+    },
+    [GET_SELECT_VACATION]: (state, { payload }) => {
         return {
             ...state,
-            vacation : payload
-        }},   
-    [GET_SELECT_USED_VACATION] : (state , { payload }) => {
+            vacation: payload
+        }
+    },
+    [GET_SELECT_USED_VACATION]: (state, { payload }) => {
         return {
             ...state,
-            vacation : payload
-        }},
-    [GET_SELECT_WORK_STATUS] : (state , { payload }) => {
-        console.log("payload" ,payload );
+            usedVcations: payload
+        }
+    },
+    [GET_SELECT_WORK_STATUS]: (state, { payload }) => {
+        console.log("payload", payload);
         return {
             ...state,
-            workStatus : payload
-        }},
-    [PUT_MODIFY_ATTENDANCE] : (state , { payload }) => {
-        console.log("payload" ,payload );
+            workStatus: payload
+        }
+    },
+    [PUT_MODIFY_ATTENDANCE]: (state, { payload }) => {
+        console.log("payload", payload);
         return {
             ...state,
-            attendanceStatus : payload
-        }},
-    [GET_SELECT_TIME_BY_DAT] : (state , { payload }) => {
-        console.log("payload" ,payload );
+            attendanceStatus: payload
+        }
+    },
+    [GET_SELECT_TIME_BY_DAT]: (state, { payload }) => {
+        console.log("payload", payload);
         return {
             ...state,
-            inOutTime : payload
-        }}
-   
+            inOutTime: payload
+        }
+    },
+    [GET_ATTENDANCE_LIST]: (state, { payload }) => {
+        console.log("payload", payload);
+        return {
+            ...state,
+            attendanceList: payload
+        }
+    },
+    [GET_VACATION_DETAIL]: (state, { payload }) => {
+        console.log("payload", payload);
+        return {
+            ...state,
+            vacationDetail: payload
+        }
+    }
+
+
 }, initialState);
 
 export default attendanceReducer;

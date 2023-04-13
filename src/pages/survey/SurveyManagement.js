@@ -241,12 +241,12 @@ function SurveyManagement() {
                                     <input type="checkBox" id={`checkBox${survey.surveyCode}`}/>
                                 </td>
                                 <td>{survey.surveyCode}</td>
-                                <td>{survey.surveySubject}</td>
+                                <td onClick={(e) => {e.preventDefault(); navigate(`/aurora/survey/survey-management/${survey.surveyCode}`);}}>{survey.surveySubject}</td>
                                 <td>{survey.startDate}&nbsp;~&nbsp;{survey.endDate}</td>
                                 <td>{Math.floor(survey.replyStatus)} %</td>
                                 <td>
-                                    <span style={new Date(`${survey.endDate} 18:00`).getTime() < new Date().getTime()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
-                                        {new Date(`${survey.endDate} 18:00`).getTime() < new Date().getTime()? '마감':'진행중'}
+                                    <span style={new Date(`${survey.startDate} 06:00`).getTime() > new Date().getTime()?{backgroundColor:'#3297f7'}:new Date(`${survey.endDate} 18:00`).getTime() < new Date().getTime()? {backgroundColor:'#3F4940'}:{backgroundColor:'#58b99c'}}>
+                                        {new Date(`${survey.startDate} 06:00`).getTime() > new Date().getTime()? '진행 전':new Date(`${survey.endDate} 18:00`).getTime() < new Date().getTime()? '마감':'진행중'}
                                     </span>
                                 </td>
                             </tr>
@@ -274,14 +274,13 @@ function SurveyManagement() {
                         </button>
                 }
                 {pageNumber.map((num) => (
-                <li key={num} onClick={() => setCurrentPage(num)}>
                     <button
+                        key={num} onClick={() => setCurrentPage(num)}
                         style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
                         className={ SurveysCSS.pagingBtn }
                     >
                         {num}
                     </button>
-                </li>
                 ))}
                 {
                     Array.isArray(surveyList) &&

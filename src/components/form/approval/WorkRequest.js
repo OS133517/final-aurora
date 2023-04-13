@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react';
 import { decodeJwt } from "../../../utils/tokenUtils";
 import { useDispatch, useSelector } from 'react-redux';
 import { callPostApprovalAPI } from '../../../apis/ApprovalAPICalls';
-import ApprovalLine from './ApprovalLine';
+import ApprovalDraftLine from './ApprovalDraftLine';
+import { callMemberDetailAPI } from '../../../apis/MemberAPICall';
 
 function WorkRequest(props) {
     // 선언부 //
@@ -19,12 +20,12 @@ function WorkRequest(props) {
     const dispatch = useDispatch();
     // 유저 정보
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
-    // Selector
     const memberCode = loginMember.memberCode;
     // url 
     const { docCode } = props;
     const docNum = Number(docCode) + 1;
-
+    /** useSelector */
+    const memberName = useSelector(state => state.memberReducer.memberDetail);
     /** useState */
     // http 상태
     const [responseStatus, setResponseStatus] = useState(null);
@@ -33,8 +34,10 @@ function WorkRequest(props) {
         docCode: docNum,
         appTitle: '',
         appDescript: '',
+        appStartDate: todayString,
         appEndDate: todayString,
-        appOpen: 'n',
+        appStatus: 'n',
+        appOpen: 'n'
 
     });
 
@@ -60,10 +63,23 @@ function WorkRequest(props) {
     // 작성하기 버튼 클릭하면 바뀜
     const [isEdit, setIsEdit] = useState(false);
 
+
+
+    useEffect(() => {
+        dispatch(callMemberDetailAPI({ memberCode: memberCode }));
+        //eslint-disable-next-line
+    }, []);
+
+    /** useEffect */
+    useEffect(() => {
+        if (docCode !== undefined) {
+            setIsEdit(true);
+        }
+    }, [docCode]);
+
     /** 클릭, 변경 이벤트 처리 */
     const submitEvent = () => {
 
-        console.log('form :', form);
         // dispatch
         dispatch(callPostApprovalAPI({
             form: form
@@ -76,22 +92,13 @@ function WorkRequest(props) {
             ...form,
             [e.target.name]: e.target.value
         })
-        console.log('onChangeHandler : ', form);
 
     }
 
     const backEvent = () => {
         window.history.back();
     }
-
-    /** useEffect */
-    useEffect(() => {
-        if (docCode !== undefined) {
-            setIsEdit(true);
-        }
-    }, [docCode]);
-
-    // console.log('responseStatus : ', responseStatus);
+    // console.log('memberName : ', memberName);
     return (
         <div className={workRequestCSS.detailBox}>
             {!isEdit ? <div></div> : <div className={workRequestCSS.nextStep}>
@@ -126,6 +133,7 @@ function WorkRequest(props) {
                                 작성자
                             </td>
                             <td className={workRequestCSS.description}>
+                                {memberName?.memberDTO?.memberName}
                             </td>
                         </tr>
                         <tr>
@@ -160,7 +168,7 @@ function WorkRequest(props) {
                 </table>
                 <div className={workRequestCSS.approvalLineBox}>
                     {responseStatus === 200 &&
-                        <ApprovalLine />
+                        <ApprovalDraftLine />
                     }
                 </div>
             </div>

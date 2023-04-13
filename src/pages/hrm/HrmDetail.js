@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
+import Swal from "sweetalert2";
 import { decodeJwt } from '../../utils/tokenUtils';
 import HrmDetailCSS from './HrmDetail.module.css';
 import { callMemberDetailAPI,
@@ -47,14 +47,15 @@ export default function HrmDetail() {
 
    
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
       if (memberInfo && memberInfo.memberName) {
         const updatedMemberInfo = {
           ...memberInfo,
           introduction: textarea,
         };
 
-        dispatch(
+      try {
+        await dispatch(
           callMemberModifyAPI({
             memberInfo : updatedMemberInfo,
             memberCode: memberCode,
@@ -77,11 +78,16 @@ export default function HrmDetail() {
             birthDay: memberInfo.birthDay,
           }),
         );
-      }else {
-        console.error("Member information is not yet defined");
-      }
-    };
 
+        Swal.fire("수정되었습니다!", "", "success");
+      } catch (error) {
+        console.error("멤버 정보 수정에 실패했습니다:", error);
+        Swal.fire("멤버 정보 수정에 실패했습니다!", "", "error");
+      }
+    } else {
+      console.error("멤버 정보가 정의되지 않았습니다");
+    }
+  };
     
     
     
@@ -241,4 +247,3 @@ export default function HrmDetail() {
         </div>
       );
 }
-

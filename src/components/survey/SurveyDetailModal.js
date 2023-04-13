@@ -1,16 +1,34 @@
 import { useEffect, useState } from "react";
 import SurveyModalCSS from "./SurveyDetailModal.module.css";
 import { decodeJwt } from "../../utils/tokenUtils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { callSurveyReplyRegistAPICall } from "../../apis/SurveyAPICall";
+import { callInitAction, callSruveyReplyDetailAPI, callSurveyReplyRegistAPICall } from "../../apis/SurveyAPICall";
 
 function SurveyDetailModal({survey, setIsModalOn}) {
 
     const dispatch = useDispatch();
+    const surveyReply = useSelector(state => state.surveyReducer.surveyReply);
     const isLogin = decodeJwt(window.localStorage.getItem("accessToken"));
     const [form, setForm] = useState([]);
     const [barDivWidth, setBarDivWidth] = useState(form.length / survey.questions.length * 100);
+
+    useEffect(() => {
+
+        if(survey.replyStatus === 'O' || survey.replyStatus === 'Y') {
+            dispatch(callSruveyReplyDetailAPI({
+                surveyCode : survey.surveyCode,
+                memberCode : isLogin.memberCode
+            }))
+        }
+
+        return () => {
+            if(survey.replyStatus === 'O' || survey.replyStatus === 'Y') {
+                dispatch(callInitAction());
+            }
+        }
+    // eslint-disable-next-line
+    }, [])
 
     useEffect(() => {
 
@@ -18,6 +36,33 @@ function SurveyDetailModal({survey, setIsModalOn}) {
     // eslint-disable-next-line
     }, [form.length])
 
+    useEffect(() => {
+
+        Array.isArray(surveyReply) && setForm([
+            ...surveyReply
+        ]);
+        Array.isArray(surveyReply) && setAnswers();
+    // eslint-disable-next-line
+    }, [surveyReply])
+
+    const setAnswers = () => {
+        
+        Array.isArray(surveyReply) && console.log(surveyReply);
+        const inputs = document.querySelectorAll('input');
+        console.log('inputs', inputs);
+        if(surveyReply.surveyCode === survey.surveyCode) {
+        }
+        Array.isArray(surveyReply) && surveyReply.map(item => {
+            console.log('surveyReply', surveyReply)
+            if(document.querySelector(`[id="${item.choiceNo}"]`).type === 'radio') {
+                document.querySelector(`[id="${item.choiceNo}"]`).checked = true;
+            } else if (document.querySelector(`[id="${item.choiceNo}"]`).type === 'text') {
+                document.querySelector(`[id="${item.choiceNo}"]`).value = item.answerBody;
+            }
+            return item;
+        });
+    }
+   
     const onChangeInputHandler = (e) => {
 
         let answerEdit = form.filter(item => item.questionNo === e.target.name);
@@ -30,6 +75,8 @@ function SurveyDetailModal({survey, setIsModalOn}) {
                 answerEdit = form.map((answer, index) => {
                     if(answer.questionNo === e.target.name) {
                         answer = {
+                            ...answer,
+                            surveyCode : Array.isArray(surveyReply) && surveyReply.surveyCode,
                             questionNo : e.target.name,
                             choiceNo : e.target.id,
                             answerBody : e.target.value,
@@ -127,7 +174,7 @@ function SurveyDetailModal({survey, setIsModalOn}) {
     }
 
     const insertReply = (replyStatus) => {
-
+        console.log('저장할 때', form);
         dispatch(callSurveyReplyRegistAPICall({
             form : form,
             replyStatus : replyStatus === 'reply'?'Y':'O',
@@ -176,8 +223,11 @@ function SurveyDetailModal({survey, setIsModalOn}) {
             </div>
             <div className={SurveyModalCSS.buttonDiv}>
                 <button onClick={() => setIsModalOn(false)}>나가기</button>
-                <button onClick={() => onClickHandler('save')}>임시저장</button>
-                <button onClick={() => onClickHandler('reply')}>답변하기</button>
+                {survey.replyStatus !== 'Y' && 
+                <>
+                    <button onClick={() => onClickHandler('save')}>임시저장</button>
+                    <button onClick={() => onClickHandler('reply')}>답변하기</button>
+                </>}
             </div>
         </div>
     </div>

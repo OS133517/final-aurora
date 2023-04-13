@@ -44,9 +44,9 @@ export const callMemberListAPI = () => {
 
     console.log('[callMemberListAPI] in');
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/members`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm`;
 
-    const token = "Bearer" + window.localStorage.getItem("accessToken");
+    const token = "Bearer " + window.localStorage.getItem("accessToken");
 
     return async (dispatch, getState) => {
         try {
@@ -75,9 +75,9 @@ export const callMemberDetailAPI = ({ memberCode }) => {
 
     console.log('[callMemberDetailAPI] in', memberCode);
 
-    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/members/${memberCode}`;
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/hrm/${memberCode}`;
 
-    const token = "Bearer" + window.localStorage.getItem("accessToken");
+    const token = "Bearer " + window.localStorage.getItem("accessToken");
 
     return async (dispatch, getState) => {
         try {
@@ -102,7 +102,7 @@ export const callMemberDetailAPI = ({ memberCode }) => {
     }
 }
 
-export const callMemberInfoAPI = ({memberCode}) => {
+export const callMemberInfoAPI = ({ memberCode }) => {
     console.log(memberCode);
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/worklogs/days/member/${memberCode}`;
@@ -112,7 +112,7 @@ export const callMemberInfoAPI = ({memberCode}) => {
         const result = await fetch(requestURL, {
             method: "GET",
             headers: {
-                "Content-Type" : "application/json",
+                "Content-Type": "application/json",
                 "Accept": "*/*",
                 "Authorization": "Bearer " + window.localStorage.getItem("accessToken")
             },
@@ -124,12 +124,12 @@ export const callMemberInfoAPI = ({memberCode}) => {
             //     afternoonDayContent : form.get("afternoonDayContent"),
             //     afternoonDayNote : form.get("afternoonDayNote"),
             //     daySpecialNote : form.get("daySpecialNote")
-                
-            // })
-            })
-        .then(response => response.json());
 
-        if(result.status === 200){
+            // })
+        })
+            .then(response => response.json());
+
+        if (result.status === 200) {
             console.log('[callMemberInfoAPI] callDayWorklogDetailAPI SUCCESS' + result);
             dispatch({ type: GET_MEMEBER_INFO, payload: result.data });
         }

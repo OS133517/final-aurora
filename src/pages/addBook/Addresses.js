@@ -290,8 +290,6 @@ function Addresses({category = "전체 주소록"}) {
                 dispatch(callAddBookDeleteAPI({
                     addBookNos : deleteList
                 }));
-            } else {
-                Swal.fire('취소되었습니다.');
             }
         })
     }
@@ -466,14 +464,13 @@ function Addresses({category = "전체 주소록"}) {
                 </button>
                 }
                 {pageNumber.map((num) => (
-                <li key={num} onClick={() => setCurrentPage(num)}>
-                    <button
-                        style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                        className={ AddressesCSS.pagingBtn }
-                    >
-                        {num}
-                    </button>
-                </li>
+                <button
+                    key={num} onClick={() => setCurrentPage(num)}
+                    style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
+                    className={ AddressesCSS.pagingBtn }
+                >
+                    {num}
+                </button>
                 ))}
                 { Array.isArray(addressList) &&
                 <button 

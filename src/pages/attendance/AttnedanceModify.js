@@ -12,35 +12,45 @@ import { CallMemberListAPI,
      from '../../apis/HrmAPICall';
 import AttendanceModifyCSS from "./AttendanceModify.module.css"
 import Swal from "sweetalert2";
-import { callModifyAttendance } from '../../apis/AttendanceAPICall';
+import { callAttendanceListAPI, callModifyAttendance } from '../../apis/AttendanceAPICall';
 
 export default function AttendanceModify() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const hrm = useSelector(state => state.hrmReducer.memberList);
+    const data = useSelector(state => state.attendanceReducer.attendanceList?.data);
+    console.log('data', data);
+    const attList = data?.attendanceList;
+    const getAttendanceList = data?.getAttendanceList;
     const memberList = hrm?.data;
     const pageInfo = hrm?.pageInfo;
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
     const location = useLocation();
-    const specificUrl = "/aurora/hrm/hrm-modify";
-    console.log('hrm', hrm);
-    console.log('memberList', memberList);
-
     const [currentPage, setCurrentPage] = useState(1);
+    console.log("attList", attList);
     const pageNumber = [];
-
+    if(pageInfo) {
+        for(let i = 1; i <= pageInfo.endPage; i++) {
+            pageNumber.push(i);
+        }
+    }
     const [category , setCategory] = useState('name');
     const [searchValue, setSearchValue] = useState('');
-
-    const openModal = async (member) => {
+    const currentDate = new Date();
+    const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
+    const formattedDate = localDate.toISOString().substring(0, 10);
+    const [selectDate , setSelectDate] = useState(formattedDate);
+    console.log(formattedDate);
+    const openModal = async (att) => {
         const { value: form } = await Swal.fire({
           title: '근태 수정',
           html: `
           <label><input type="radio" name="attendance" id="earlyOff" class="swal2-radio"> 조기퇴근</label>
           <label><input type="radio" name="attendance" id="tardy" class="swal2-radio"> 지각</label><br>
           <label><input type="radio" name="attendance" id="truancy" class="swal2-radio"> 무단결근</label>
-          <label><input type="radio" name="attendance" id="absence" class="swal2-radio"> 결근</label>
+          <label><input type="radio" name="attendance" id="absence" class="swal2-radio"> 결근</label><br>
+          <label><input type="date" id="attendanceDate" value="${selectDate}" class="swal2-input"></label>
           `,
           focusConfirm: false,
           preConfirm: () => {
@@ -49,24 +59,55 @@ export default function AttendanceModify() {
                 earlyOff: document.getElementById('earlyOff').checked ? 'Y' : 'N',
                 truancy: document.getElementById('truancy').checked ? 'Y' : 'N',
                 absence: document.getElementById('absence').checked ? 'Y' : 'N',
+                selectedDate: document.getElementById('attendanceDate').value
               };
+
+              if (
+                attendance.tardy === "N" &&
+                attendance.earlyOff === "N" &&
+                attendance.truancy === "N" &&
+                attendance.absence === "N"
+              ) {
+                Swal.showValidationMessage("근태를 선택해 주세요.");
+                return;
+              }
         
               return attendance;
             },
           });
     
         if (form) {
-          dispatch(callModifyAttendance({ memberCode: member.memberCode, form }));
+            console.log("form",form);
+          dispatch(callModifyAttendance({ 
+            memberCode : att.memberCode,
+            selectedDate : form.selectedDate,
+            tardy: form.tardy,
+            earlyOff: form.earlyOff,
+            truancy: form.truancy,
+            absence: form.absence,
+            form 
+            }));
           Swal.fire('수정되었습니다!', '', 'success');
+          window.location.reload()
         }
       };
-    
+
+      useEffect(() => {
+
+        dispatch(callAttendanceListAPI({
+            currentPage : 1,
+            selectedDate : selectDate
+
+        }))
+      } , [selectDate])
+      console.log("selectDate", selectDate);
     
 
       useEffect(() => {
 
         dispatch(CallMemberListAPI({ 
             currentPage: 1 
+
         }));
       },[]);
 
@@ -74,12 +115,18 @@ export default function AttendanceModify() {
 
        
       },[currentPage]);
-      const handleCategoryChange = (e) => {
-        setCategory(e.target.value);
+
+    
+    const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
     };
 
     const onChangeTextHandler = (e) => {
         setSearchValue(e.target.value);
+    };
+
+    const onChangeDate = (e) => {
+        setSelectDate(e.target.value);
     };
         
 
@@ -138,6 +185,7 @@ export default function AttendanceModify() {
                 </select>
                 <input type="text" name="value" value={searchValue} onChange={onChangeTextHandler}/>
                 <button type="button" onClick={onClickSearch}>검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
+                <input type="date" style={{width : "200px"}} value={selectDate} onChange={onChangeDate}></input>
             </div>
             <div>
                 <table className={AttendanceModifyCSS.contentTable}>
@@ -165,50 +213,69 @@ export default function AttendanceModify() {
                                 직무
                             </th>
                             <th>
-                                주소
+                                지각
                             </th>
                             <th>
-                                입사일
+                                결근
                             </th>
                             <th>
-                                재직상태
+                                무단결근
                             </th>
+                            <th>
+                                조퇴
+                            </th>
+                            <th>
+                                근무일자
+                            </th>
+                            <th>
+                                근무
+                            </th>
+                            
                            
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            Array.isArray(memberList) && memberList.map((member) => (
-                                <tr key={member?.memberCode} id={member?.memberCode} onClick={() => openModal(member)}>
+                            Array.isArray(attList) && attList.map((att) => (
+                                <tr key={att?.memberCode} id={att?.memberCode} onClick={() => openModal(att)}>
                                     <td >
-                                    &nbsp;&nbsp;&nbsp;{member.memberCode}
+                                    &nbsp;&nbsp;&nbsp;{att.memberCode}
                                     </td>
                                     <td>
-                                        {member.memberName}
+                                        {att.memberName}
                                     </td>
                                     <td>
-                                        {member.phone}
+                                        {att.phone}
                                     </td>
                                     <td>
-                                        {member.memberEmail}
+                                        {att.memberEmail}
                                     </td>
                                     <td>
-                                        {member.deptName}
+                                        {att.deptName}
                                     </td>
                                     <td>
-                                        {member.jobName}
+                                        {att.jobName}
                                     </td>
                                     <td>
-                                        {member.taskName}
+                                        {att.taskName}
                                     </td>
                                     <td>
-                                        {member.address}
+                                        {att.tardy}
                                     </td>
                                     <td>
-                                        {member.memberHireDate}
+                                        {att.absence}
                                     </td>
                                     <td>
-                                    &nbsp;&nbsp;&nbsp;{member.status}
+                                        {att.truancy}
+                                    </td>
+                                    <td>
+                                        {att.earlyOff}
+                                    </td>
+                                    <td>
+                                        {att.attRegDate}
+                                    </td>
+                                    <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{att.workStatus}
                                     </td>
                                     {/* <td>
                                         <button type="button" onClick={() =>  navigate(`/aurora/hrm/hrm-modify/${member?.memberCode}`)}>수정</button>
@@ -219,7 +286,7 @@ export default function AttendanceModify() {
                             ))
                         }
                         {
-                             Array.isArray(memberList) && memberList.length === 0 && (
+                             Array.isArray(attList) && attList.length === 0 && (
                                 <tr>
                                     <td colSpan="7" style={{textAlign:"center"}}>
                                         검색 결과가 없습니다.
@@ -229,7 +296,7 @@ export default function AttendanceModify() {
                      </tbody>
                 </table>
                 <div className={ AttendanceModifyCSS.pagingBtnDiv }>
-                { Array.isArray(memberList) &&
+                { Array.isArray(attList) &&
                 <button 
                     onClick={() => setCurrentPage(currentPage - 1)} 
                     disabled={currentPage === 1}
@@ -248,7 +315,7 @@ export default function AttendanceModify() {
                     </button>
                 </li>
                 ))}
-                { Array.isArray(memberList) &&
+                { Array.isArray(attList) &&
                 <button 
                     onClick={() => setCurrentPage(currentPage + 1)} 
                     disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
