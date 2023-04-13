@@ -158,7 +158,7 @@ export const callSelectVacationAPI = ({ memberCode }) => {
     }
 }
 
-export const callSelectUsedcAPI = ({ memberCode }) => {
+export const callSelectUsedVacationAPI = ({ memberCode }) => {
 
     const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/vacation/used/${memberCode}`;
 
