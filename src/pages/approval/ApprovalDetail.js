@@ -7,7 +7,7 @@ import { decodeJwt } from "../../utils/tokenUtils";
 import Swal from 'sweetalert2';
 import approvalDetailCSS from "./Approvals.module.css"
 import { callGetVacationAPI, callUpdateRemainVacationAPI } from "../../apis/VacationAPICall";
-import { callSelectUsedcAPI } from "../../apis/AttendanceAPICall";
+import { callSelectUsedVacationAPI } from "../../apis/AttendanceAPICall";
 
 function ApprovalDetail() {
 
@@ -29,7 +29,7 @@ function ApprovalDetail() {
     const detailInfo = useSelector(state => state.approvalReducer.approvalLine);
     const memberInfo = useSelector(state => state.memberReducer.memberDetail);
     // 휴가 사용일 수 
-    const useDay = useSelector(state => state.attendanceReducer.vacationUsed);
+    const useDay = useSelector(state => state.attendanceReducer.usedVcations);
     /** useState */
     // CALLAPI에서 응답 상태를 가져옴
     const [responseStatus, setResponseStatus] = useState(0)
@@ -147,10 +147,10 @@ function ApprovalDetail() {
 
             // 문서코드가 휴가 문서 일 때 
             if (docCode === 8) {
-                dispatch(callSelectUsedcAPI({ memberCode }));
+                dispatch(callSelectUsedVacationAPI({ memberCode }));
                 // appStatus 가 승인일때 
                 if (vacation === 'y') {
-                    dispatch(callSelectUsedcAPI({ memberCode }));
+                    dispatch(callSelectUsedVacationAPI({ memberCode }));
 
                 }
 
@@ -177,7 +177,7 @@ function ApprovalDetail() {
 
         };
         updateAndReload();
-
+        //eslint-disable-next-line
     }, [responseStatus]);
     /** event */
     // 이전 페이지로 이동하기 위해

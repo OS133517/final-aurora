@@ -10,7 +10,7 @@ export const callGetApprovalsAPI = ({ memberCode }) => {
 
   return async (dispatch, getState) => {
     try {
-      const token = "Bearer" + window.localStorage.getItem("accessToken");
+      const token = "Bearer " + window.localStorage.getItem("accessToken");
       // 클라이언트 fetch mode : no-cors 사용시 application/json 방식으로 요청이 불가능
       // 서버에서 cors 허용을 해주어야 함
       const result = await fetch(requestURL, {
@@ -39,7 +39,7 @@ export const callApprovalDetailAPI = ({ appCode }) => {
 
   return async (dispatch, getState) => {
     try {
-      const token = "Bearer" + window.localStorage.getItem("accessToken");
+      const token = "Bearer " + window.localStorage.getItem("accessToken");
 
       const result = await fetch(requestURL, {
         method: "GET",
@@ -129,7 +129,7 @@ export const callPostApprovalAPI = ({ form }, docNum, memberCode, setResponseSta
   return async (dispatch, getState) => {
     try {
 
-      const token = "Bearer" + window.localStorage.getItem("accessToken");
+      const token = "Bearer " + window.localStorage.getItem("accessToken");
 
       const response = await fetch(requestURL, {
         method: "POST",
@@ -212,7 +212,7 @@ export const callGetwaitingAPI = ({ memberCode }) => {
 
   return async (dispatch, getState) => {
     try {
-      const token = "Bearer" + window.localStorage.getItem("accessToken");
+      const token = "Bearer " + window.localStorage.getItem("accessToken");
       // 클라이언트 fetch mode : no-cors 사용시 application/json 방식으로 요청이 불가능
       // 서버에서 cors 허용을 해주어야 함
       const result = await fetch(requestURL, {
