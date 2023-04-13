@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { callSelectMailDetailAPI,
             callUpdateDeleteStatusAPI,
             callSelectTagsAPI,
@@ -10,12 +12,9 @@ import { callSelectMailDetailAPI,
             callUpdateImportantStatusAPI,
             callUpdateMailTagAPI,
         } from "../../apis/MailAPICall";
-import { decodeJwt } from "../../utils/tokenUtils";
 
 import MailDetailCSS from './MailDetail.module.css'
-import moment from 'moment';
 import Swal from "sweetalert2";
-import DatePicker from "react-datepicker";
 import TagManagementModal from '../../components/mail/TagManagementModal';
 
 function MailDetail() {
@@ -73,6 +72,17 @@ function MailDetail() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    // // 답장 클릭 핸들러 
+    // const handleReplyClick = (senderEmail) => {
+
+    //     setMailDTO((prev) => ({
+
+    //         ...prev,
+    //         recipient: senderEmail,
+    //     }));
+    //     navigate('/aurora/mailwrite');
+    // };
 
     // 삭제 상태 수정 
     const deleteMail = async () => {
@@ -188,7 +198,7 @@ function MailDetail() {
     };
 
     // 파일 다운로드
-    const downloadFile = async (fileName, fileOriginName, filePath) => {
+    const downloadFile = async (fileOriginName, filePath) => {
 
         const fullFilePath = `http://${process.env.REACT_APP_RESTAPI_IP}:8090${filePath}`; 
 
@@ -241,9 +251,11 @@ function MailDetail() {
                     <span> 메일 상세조회</span>
                 </div>
                 <div className={MailDetailCSS.menuHeader}>
-                    <span>
+                    <NavLink
+                        to={ `/aurora/mails/write?senderEmail=${mailDetail?.senderEmail}` }
+                    >
                         답장
-                    </span>
+                    </NavLink>
                     <span
                         style={{cursor: 'pointer'}}
                         onClick={() => deleteMail()}
@@ -345,18 +357,11 @@ function MailDetail() {
                 <hr></hr>
                 {mailDetail.fileList && mailDetail.fileList.length > 0 && (
                     <>
-                        {/* <div>
-                            파일 목록 디브
-                        </div>
-                        <hr></hr> */}
                         <div 
                             className={MailDetailCSS.detailReportContainer}
                             key={mailDetail.mailCode}
                         >
                             {/* 첨부파일 목록 */}
-                            <div className={MailDetailCSS.detailReportHeader}>
-                                {/* 첨부 파일 */}
-                            </div>
                             <div>
                                 {mailDetail.fileList && mailDetail.fileList.length === 0 ? 
                                     <ul>
@@ -365,7 +370,7 @@ function MailDetail() {
                                     <ul>
                                         {mailDetail.fileList?.map((file, index) => (
                                             <li key={index}>
-                                                <span onClick={() => downloadFile(file.fileName, file.fileOriginName, file.filePath)}>
+                                                <span onClick={() => downloadFile(file.fileOriginName, file.filePath)}>
                                                     <img 
                                                         src={'/mail/file.png'}
                                                         className={MailDetailCSS.fileImg}
