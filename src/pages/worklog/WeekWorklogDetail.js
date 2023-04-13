@@ -6,6 +6,7 @@ import WeekWorklogDetailCSS from './WeekWorklogDetail.module.css';
 import { callWeekWorklogDetailAPI } from '../../apis/WeekWorklogAPICall';
 import { callWeekWorklogUpdateAPI } from '../../apis/WeekWorklogAPICall';
 import { callWeekWorklogDeleteAPI } from '../../apis/WeekWorklogAPICall';
+import { callMemberInfoAPI } from '../../apis/MemberAPICall';
 
 function WeekWorklogDetail() {
 
@@ -20,6 +21,16 @@ function WeekWorklogDetail() {
     const [modifyMode, setModifyMode] = useState(false);
 
     const [form, setForm] = useState({});
+
+    const memberInfo = useSelector(state => state.memberReducer.memberInfo);
+
+    useEffect (() => {
+        console.log("weekWorklog.memberCode" + weekWorklog.memberCode);
+        dispatch(callMemberInfoAPI({
+            memberCode : memberInfo.memberCode
+        }));
+    },[weekWorklog]
+    );
 
     useEffect (() => { // 백에서 패스발리어블?로 넘겨서 이렇게 씀? 패스배리어블을 쓰면 유즈파람을 쓴다??
         dispatch(callWeekWorklogDetailAPI({
@@ -101,13 +112,13 @@ function WeekWorklogDetail() {
                             <td>작성일</td>
                             <td>{ weekWorklog.weekReportingDate || '' }</td>
                             <td>작성자</td>
-                            <td>{ weekWorklog.memberName }</td>
+                            <td>{ memberInfo.memberName }</td>
                         </tr>
                         <tr>
                             <td>부서</td>
-                            <td></td>
+                            <td>{ memberInfo.deptName || '' }</td>
                             <td>직급</td>
-                            <td></td>
+                            <td>{ memberInfo.jobName || '' }</td>
                         </tr>
                     </thead>
                     <tbody>

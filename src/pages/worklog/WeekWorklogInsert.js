@@ -1,9 +1,10 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { decodeJwt } from "../../utils/tokenUtils";
 import WeekWorklogInsertCSS from './WeekWorklogInsert.module.css';
 import { callWeekWorklogInsertAPI } from '../../apis/WeekWorklogAPICall';
+import { callMemberInfoAPI } from '../../apis/MemberAPICall';
 
 function WeekWorklogInsert() {
 
@@ -11,8 +12,20 @@ function WeekWorklogInsert() {
 
     const navigate = useNavigate();
 
+    const weekWorklog = useSelector(state => state.dayWorklogReducer.dayWorklog);
+
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
     console.log(loginMember);
+
+    const memberInfo = useSelector(state => state.memberReducer.memberInfo);
+
+    useEffect (() => {
+        console.log("weekWorklog.memberCode" + weekWorklog.memberCode);
+        dispatch(callMemberInfoAPI({
+            memberCode : loginMember.memberCode
+        }));
+    },[weekWorklog]
+    );
     
     const [form, setForm] = useState({
         monContent : '',
@@ -69,13 +82,13 @@ function WeekWorklogInsert() {
                             <td>작성일</td>
                             <td>{`${new Date().toLocaleDateString()}`}</td>
                             <td>작성자</td>
-                            <td></td>
+                            <td>{ memberInfo.memberName || '' }</td>
                         </tr>
                         <tr>
                             <td>부서</td>
-                            <td></td>
+                            <td>{ memberInfo.deptName || '' }</td>
                             <td>직급</td>
-                            <td></td>
+                            <td>{ memberInfo.jobName || '' }</td>
                         </tr>
                     </thead>
                     <tbody>
