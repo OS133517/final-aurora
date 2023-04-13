@@ -107,7 +107,7 @@ function ScheduleDetailModal({ scheduleCode, setScheduleDetailModal }) {
                                 <input
                                     name='scheduleName'
                                     className={ ScheduleDetailModalCSS.scheduleDetailInfoInput }
-                                    value={form.scheduleName}
+                                    value={form.scheduleName || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
                                 />
@@ -120,7 +120,7 @@ function ScheduleDetailModal({ scheduleCode, setScheduleDetailModal }) {
                                         type="date" 
                                         name="scheduleStartDay" 
                                         className={ ScheduleDetailModalCSS.scheduleDetailInfoInput}
-                                        value={form.scheduleStartDay}
+                                        value={form.scheduleStartDay || ''}
                                         onChange={onChangeHandler}
                                         readOnly={ modifyMode ? false : true }
                                     />
@@ -129,7 +129,7 @@ function ScheduleDetailModal({ scheduleCode, setScheduleDetailModal }) {
                                         type="date" 
                                         name="scheduleEndDay"
                                         className={ ScheduleDetailModalCSS.scheduleDetailInfoInput}
-                                        value={form.scheduleEndDay}
+                                        value={form.scheduleEndDay || ''}
                                         onChange={onChangeHandler}
                                         readOnly={ modifyMode ? false : true }
                                     /> 
@@ -142,7 +142,7 @@ function ScheduleDetailModal({ scheduleCode, setScheduleDetailModal }) {
                                 <input
                                     name='schedulePlace'
                                     className={ ScheduleDetailModalCSS.scheduleDetailInfoInput }
-                                    value={ form.schedulePlace}
+                                    value={ form.schedulePlace || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
                                 />
@@ -154,7 +154,7 @@ function ScheduleDetailModal({ scheduleCode, setScheduleDetailModal }) {
                                 <textarea 
                                     name='scheduleContent'
                                     className={ ScheduleDetailModalCSS.scheduleContentInfoInput }
-                                    value={form.scheduleContent}
+                                    value={form.scheduleContent || ''}
                                     onChange={ onChangeHandler }
                                     readOnly={ modifyMode ? false : true }
                                 />
