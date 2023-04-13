@@ -117,7 +117,7 @@ function Schedules({memberCode}) {
         {scheduleDetailModal? <ScheduleDetailModal scheduleCode={scheduleCode} setScheduleDetailModal={setScheduleDetailModal}/>:null}
             <div className={SchedulesCSS.calendarDiv}>
                 <div className={SchedulesCSS.calendarHeader}>
-                    {memberCode} 일정 관리
+                    나의 캘린더
                 </div>
                 <div>   
                     <div className={SchedulesCSS.monthDiv}>

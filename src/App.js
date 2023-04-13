@@ -136,6 +136,7 @@ function App() {
                 <Route path="hrm-regist" element={<HrmSignup category='인사 등록' />} />
               </Route>
               <Route path="worklog" element={<WorklogLayout />}>
+                <Route index element={<DayWorklogs />}/>
                 <Route path="day" element={<DayWorklogs />} />
                 <Route path="day/:dayWorklogCode" element={<DayWorklogDetail />} />
                 <Route path="day/insert" element={<DayWorklogInsert />} />
@@ -164,9 +165,9 @@ function App() {
                 <Route index path="detail/:roomNum" element={<ChatRoom />} />
               </Route>
               <Route path="calendar" element={<ScheduleLayout />}>
-                <Route path="month" element={<Schedules />}></Route>
-               
-            </Route>
+                <Route index element={<Schedules />}/>
+                <Route path="month" element={<Schedules />}/>
+              </Route>
             </Route>
           </Route>
         </Routes>
