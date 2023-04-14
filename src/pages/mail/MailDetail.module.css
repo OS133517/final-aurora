@@ -26,6 +26,9 @@
     border-bottom: 1px solid #C1C1C1;
     padding-left: 16px;
 }
+.menuHeader a {
+    color: #88CFBA;
+}
 .mailHeader {
     height: 250px;
     /* padding: 40px; */

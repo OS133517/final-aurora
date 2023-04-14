@@ -67,3 +67,25 @@
     margin-bottom: 20px;
     border: 1px solid #c1c1c1;
   }
+  .textContext{
+    display: flex;
+  }
+
+  .messageBox {
+    display: flex;
+    align-items: center;
+    background-color: #c1c1c1;
+    width: 400px;
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .messageTime{
+    font-size: 14px;
+    display: flex;
+    align-items: end;
+  }
+
+  .fullBox{
+    margin-bottom: 20px;
+  }

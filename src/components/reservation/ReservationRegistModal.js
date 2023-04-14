@@ -7,15 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import Swal from "sweetalert2";
+import jwtDecode from "jwt-decode";
 import { callMemberInfoForRegist, callReservationRegistAPI } from "../../apis/ReservationAPICall";
-import { decodeJwt } from "../../utils/tokenUtils";
 
 function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal}) {
 
     const dispatch = useDispatch();
-    const { memberCode, team } = decodeJwt(window.localStorage.getItem("accessToken"));
+    const { memberCode, team } = jwtDecode(window.localStorage.getItem("accessToken"));
     const thisMember = useSelector(state => state.reservationReducer.memberInfo);
     const reservationList = useSelector(state => state.reservationReducer.reservationsByDate);
+
     const [form, setForm] = useState({
         reservationDate : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
         startTime : new Date(startDate),
@@ -39,7 +40,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
 
         setForm({
             ...form,
-            teamCode : thisMember.teamCode
+            teamCode : team
         });
     // eslint-disable-next-line
     }, [thisMember]);

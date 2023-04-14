@@ -9,7 +9,6 @@ import { callMessengerAddAPI } from "../../../apis/MessengerAPICall";
 import { decodeJwt } from "../../../utils/tokenUtils";
 
 
-
 function ChatRoomAdd({ roomNum }) {
 
     /** useDispatch */
@@ -22,6 +21,9 @@ function ChatRoomAdd({ roomNum }) {
 
     /** useState */
     const [selectedMember, setSelectedMember] = useState([]);
+
+    const [roomNumber, setRoomNumber] = useState(0);
+    // 추가 단계
     const [step, setStep] = useState(1);
     const [form, setForm] = useState({
         roomNum: 0,
@@ -34,8 +36,6 @@ function ChatRoomAdd({ roomNum }) {
     const lists = useSelector(state => state.memberReducer.memberList);
 
 
-    // roomNum 배열에서 존재하지않는 숫자를 난수로 빼와서 방 번호로 지정
-    // 난수 roomNum 생성
     const RandomRoomNum = () => {
         return Math.floor(Math.random() * 10000);
     };
@@ -44,22 +44,39 @@ function ChatRoomAdd({ roomNum }) {
     const roomNumExists = (roomNumber, roomList) => {
         return roomList.some((room) => room.roomNum === roomNumber);
     };
-
-    // 
-
-
+    // roomNum 배열에서 존재하지않는 숫자를 난수로 빼와서 방 번호로 지정
     /** useEffect */
     useEffect(() => {
         dispatch(callMemberListAPI());
-        setStep(1);
-        setForm({
-            ...form,
-            roomNum: 0,
-            memberCode: [memberCode],
-            mesName: ''
-        })
+        const inputrandomNum = () => {
+            let newRoomNum = RandomRoomNum();
+
+            while (roomNum && roomNumExists(newRoomNum, roomNum)) {
+                newRoomNum = RandomRoomNum();
+            }
+
+            return newRoomNum;
+        };
+
+        const newNum = inputrandomNum();
+        console.log('newNum : ', newNum);
+        setRoomNumber(newNum);
         //eslint-disable-next-line
     }, []);
+
+    // 새로운 useEffect를 추가해주세요.
+    useEffect(() => {
+
+        setForm({
+            ...form,
+            roomNum: roomNumber,
+            memberCode: [memberCode],
+            mesName: ''
+        });
+        //eslint-disable-next-line
+    }, [roomNumber]);
+
+
     useEffect(() => {
         setForm({
             ...form,
@@ -89,12 +106,7 @@ function ChatRoomAdd({ roomNum }) {
     // 
     const nextStepHandler = () => {
 
-        // 난수 
-        let roomNumber = RandomRoomNum();
 
-        while (roomNumExists(roomNumber, roomNum)) {
-            roomNumber = RandomRoomNum();
-        }
 
         setStep(step + 1);
 
@@ -139,10 +151,10 @@ function ChatRoomAdd({ roomNum }) {
 
                                     <li key={i}>
                                         {/* selectedMember 배열에서 현재 list.memberCode와 일치하는 멤버코드를 가진 요소가 있다면 체크 상태로 없으면 체크되지 않은 상태로 설정 */}
-                                        <input type="checkbox" name="AddMember" checked={selectedMember.some((m) => m.memberCode === list.memberCode)}
+                                        <input type="checkbox" name="AddMember" checked={list.memberCode && selectedMember.some((m) => m.memberCode === list.memberCode)}
                                             onChange={(e) => checkboxHandle(e, list)} />
                                         <span>{list?.memberName} </span>
-                                        <span>{list?.jobName} </span>
+                                        <span> {list?.jobName} </span>
                                     </li>
                                 ))
                         }

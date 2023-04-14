@@ -94,7 +94,7 @@ export default function VacationDetail() {
                         <table className={VacationDetailCSS.inBoxTable}>
                                 <thead>
                                 <tr>
-                                    <th>총 휴가일수</th>
+                                    <th>&nbsp;&nbsp;&nbsp;총 휴가일수</th>
                                     <th></th>
                                 </tr>
                                 </thead>

@@ -1,6 +1,7 @@
 import ApprovalMain from "../components/common/ApprovalMain";
 import AttInMain from "../components/common/AttInMain";
 import CalendarInMain from "../components/common/CalendarInMain";
+import MailMain from "../components/common/MailMain";
 import MainCSS from "./Main.module.css";
 
 function Main() {
@@ -10,6 +11,7 @@ function Main() {
             <AttInMain />
             <CalendarInMain />
             <ApprovalMain />
+            <MailMain />
         </div>
     )
 }

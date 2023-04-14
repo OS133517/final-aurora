@@ -76,6 +76,7 @@ function ReportRoundDetail() {
     const isCompleted = reportDTO && reportDTO.completionStatus == 'Y';
     // reportDTO && console.log("isCompleted : " + JSON.stringify(isCompleted));
 
+    // 리렌더링 
     useEffect(() => {
 
         // 회차 상세 조회 
@@ -85,16 +86,16 @@ function ReportRoundDetail() {
             roundCode : roundCode
         }))
     // eslint-disable-next-line
-    }, [])
+    }, [reportDetailUpdated])
 
     useEffect(() => {
 
         if (reportRoundDetail) {
             
-          setRoundInputValue({
-            roundTitle: reportRoundDetail.roundTitle,
-            roundBody: reportRoundDetail.roundBody,
-          });
+            setRoundInputValue({
+                roundTitle: reportRoundDetail.roundTitle,
+                roundBody: reportRoundDetail.roundBody,
+            });
         }
     }, [reportRoundDetail]);
     
@@ -437,7 +438,7 @@ function ReportRoundDetail() {
                                     </button>
                                 </>
                             }
-                            {!isCompleted && isInCharge &&
+                            {!isCompleted && !isInCharge &&
                                 <button
                                     className={ReportRoundDetailCSS.greentButton}
                                     onClick={() => {
@@ -524,125 +525,80 @@ function ReportRoundDetail() {
                                 </button>
                             </div>
                         )}
-                        {/* <br></br> */}
                         {/* 상세보고 목록 */}
-                        {reportDetailList && reportDetailList.map((reportDetail) => (
-                            <div 
-                                className={ReportRoundDetailCSS.detailReportContainer}
-                                key={reportDetail.detailCode}
-                            >
-                                <div className={ReportRoundDetailCSS.detailReportHeader}>
-                                    <span>
-                                        {reportDetail.memberName} {reportDetail.jobName}
-                                        <span className={ReportRoundDetailCSS.regDate}>
-                                            &nbsp;&nbsp;{reportDetail.regDate}
-                                        </span>
-                                    </span>
-                                    {!isCompleted && reportDetail.memberCode === loginMember && (
+                        {/* {reportDetailList && reportDetailList.map((reportDetail) => ( */}
+                        {reportDetailList && reportDetailList.length > 0 ? ( // 수정된 부분
+                            reportDetailList.map((reportDetail) => (
+                                <div 
+                                    className={ReportRoundDetailCSS.detailReportContainer}
+                                    key={reportDetail.detailCode}
+                                >
+                                    <div className={ReportRoundDetailCSS.detailReportHeader}>
                                         <span>
-                                            <span
-                                                className={ReportRoundDetailCSS.commentEdit} 
-                                                onClick={() => {
-                                                    if (isReportDetailEditing[reportDetail.detailCode]) {
-                                                        updateReportDetail(reportDetail.detailCode);
-                                                    } else {
-                                                        handleReportDetailEditButtonClick(reportDetail.detailCode, reportDetail.detailBody);
-                                                    }
-                                                }}
-                                            >
-                                                { isReportDetailEditing[reportDetail.detailCode]? "완료" : "수정" }
-                                            </span>
-                                            <span>&nbsp;&nbsp;</span>
-                                            <span
-                                                className={ReportRoundDetailCSS.commentEdit}
-                                                onClick={() => {
-                                                    onClickReportDetailDeleteHandler(reportDetail.detailCode);
-                                                }}
-                                            >
-                                                삭제
+                                            {reportDetail.memberName} {reportDetail.jobName}
+                                            <span className={ReportRoundDetailCSS.regDate}>
+                                                &nbsp;&nbsp;{reportDetail.regDate}
                                             </span>
                                         </span>
-                                    )}
+                                        {!isCompleted && reportDetail.memberCode === loginMember && (
+                                            <span>
+                                                <span
+                                                    className={ReportRoundDetailCSS.commentEdit} 
+                                                    onClick={() => {
+                                                        if (isReportDetailEditing[reportDetail.detailCode]) {
+                                                            updateReportDetail(reportDetail.detailCode);
+                                                        } else {
+                                                            handleReportDetailEditButtonClick(reportDetail.detailCode, reportDetail.detailBody);
+                                                        }
+                                                    }}
+                                                >
+                                                    { isReportDetailEditing[reportDetail.detailCode]? "완료" : "수정" }
+                                                </span>
+                                                <span>&nbsp;&nbsp;</span>
+                                                <span
+                                                    className={ReportRoundDetailCSS.commentEdit}
+                                                    onClick={() => {
+                                                        onClickReportDetailDeleteHandler(reportDetail.detailCode);
+                                                    }}
+                                                >
+                                                    삭제
+                                                </span>
+                                            </span>
+                                        )}
+                                    </div>
+                                    {/* 상세보고 내용 */}
+                                    <div className={ReportRoundDetailCSS.detailReportBody}>
+                                        {isReportDetailEditing[reportDetail.detailCode] ? (
+                                            <textarea
+                                                type="text"
+                                                // className={ReportRoundDetailCSS.commentContent}
+                                                className={ReportRoundDetailCSS.detailReportTextArea}
+                                                value={detailInputValue[reportDetail.detailCode]}
+                                                readOnly={!isReportDetailEditing[reportDetail.detailCode]}
+                                                onChange={(e) => {
+                                                    setDetailInputValue({
+                                                        ...detailInputValue,
+                                                        [reportDetail.detailCode] : e.target.value,
+                                                    })
+                                                    handleTextAreaChange(e, reportDetail.detailCode);
+                                                }}
+                                                style={{ height: textAreaHeight[reportDetail.detailCode] }}
+                                            />
+                                        ) : (
+                                            <span className={ReportRoundDetailCSS.detailReportContent}>
+                                                {reportDetail.detailBody}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
-                                {/* 상세보고 내용 */}
-                                <div className={ReportRoundDetailCSS.detailReportBody}>
-                                    {isReportDetailEditing[reportDetail.detailCode] ? (
-                                        <textarea
-                                            type="text"
-                                            // className={ReportRoundDetailCSS.commentContent}
-                                            className={ReportRoundDetailCSS.detailReportTextArea}
-                                            value={detailInputValue[reportDetail.detailCode]}
-                                            readOnly={!isReportDetailEditing[reportDetail.detailCode]}
-                                            onChange={(e) => {
-                                                setDetailInputValue({
-                                                    ...detailInputValue,
-                                                    [reportDetail.detailCode] : e.target.value,
-                                                })
-                                                handleTextAreaChange(e, reportDetail.detailCode);
-                                            }}
-                                            style={{ height: textAreaHeight[reportDetail.detailCode] }}
-                                        />
-                                    ) : (
-                                        <span className={ReportRoundDetailCSS.detailReportContent}>
-                                            {reportDetail.detailBody}
-                                        </span>
-                                    )}
-                                    {/* {isReportDetailEditing[reportDetail.detailCode] ? (
-                                        <input
-                                            type="text"
-                                            className={ReportRoundDetailCSS.commentContent}
-                                            value={detailInputValue[reportDetail.detailCode]}
-                                            readOnly={!isReportDetailEditing[reportDetail.detailCode]}
-                                            onChange={(e) =>
-                                                setDetailInputValue({
-                                                    ...detailInputValue,
-                                                    [reportDetail.detailCode] : e.target.value,
-                                                })
-                                            }
-                                        />
-                                        // <textarea
-                                        //     // className={ReportRoundDetailCSS.detailReportTextArea}
-                                        //     className={`${ReportRoundDetailCSS.detailReportContent} ${ReportRoundDetailCSS.detailReportTextArea}`}
-                                        //     // defaultValue={reportDetail.detailBody}
-                                        //     value={detailInputValue[reportDetail.detailCode]}
-                                        //     onChange={(e) =>
-                                        //         setDetailInputValue({
-                                        //             ...detailInputValue,
-                                        //             [reportDetail.detailCode] : e.target.value,
-                                        //         })
-                                        //     }
-                                        //     rows={detailInputValue[reportDetail.detailCode].split('\n').length || 1} // 행의 수를 입력 값에 따라 동적으로 변경합니다.
-                                        // />
-                                        // <input
-                                        //     type="text"
-                                        //     className={ReportRoundDetailCSS.detailReportTextArea}
-                                        //     value={detailInputValue[reportDetail.detailCode]}
-                                        //     onChange={(e) =>
-                                        //         setDetailInputValue({
-                                        //             ...detailInputValue,
-                                        //             [reportDetail.detailCode]: e.target.value,
-                                        //         })
-                                        //     }
-                                        // />
-                                        // <input
-                                        //     type="text"
-                                        //     className={ReportRoundDetailCSS.detailReportContent}
-                                        //     value={detailInputValue[reportDetail.detailCode]}
-                                        //     onChange={(e) =>
-                                        //         setDetailInputValue({
-                                        //             ...detailInputValue,
-                                        //             [reportDetail.detailCode]: e.target.value,
-                                        //         })
-                                        //     }
-                                        // />
-                                    ) : (
-                                        <span className={ReportRoundDetailCSS.detailReportContent}>
-                                            {reportDetail.detailBody}
-                                        </span>
-                                    )} */}
-                                </div>
+                            ))
+                        ) : (
+                            <div 
+                                className={ReportRoundDetailCSS.noDetailReportContainer}
+                            >
+                                작성된 상세보고가 없습니다.
                             </div>
-                        ))}
+                        )}
                         <div className={ReportRoundDetailCSS.commentContainer}>
                             <div className={ReportRoundDetailCSS.commentHeader}>댓글</div>
                             <div className={ReportRoundDetailCSS.commentBody}>

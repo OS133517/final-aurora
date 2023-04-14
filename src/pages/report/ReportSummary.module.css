@@ -89,6 +89,7 @@ a {
     align-items: flex-start;
 }
 .casualReportDiv {
+    margin-right: 30px;
     margin-left: 1%;
     width: 60%;
     display: inline-block;
@@ -269,7 +270,7 @@ a {
 }
 
 .reportTable {
-    width: 450px;
+    width: 425px;
     border-collapse: collapse;
 }
   
@@ -314,4 +315,10 @@ a {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.memberInfoCell {
+    width: 1%;
+    white-space: nowrap;
+    
 }
