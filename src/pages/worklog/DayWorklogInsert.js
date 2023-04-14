@@ -82,9 +82,9 @@ function DayWorklogInsert() {
                         </tr>
                         <tr>
                             <td>부서</td>
-                            <th>{ memberInfo.deptName || '' }</th>
+                            <td>{ memberInfo.deptName || '' }</td>
                             <td>직급</td>
-                            <th>{ memberInfo.jobName || '' }</th>
+                            <td>{ memberInfo.jobName || '' }</td>
                         </tr>
                     </thead>
                     <tbody>
