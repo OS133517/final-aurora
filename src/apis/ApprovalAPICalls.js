@@ -307,7 +307,9 @@ export const callPutApprovalAPI = ({ appCode, appStatus }) => {
 
 // 결재 서류 삭제
 export const callDeleteApprovalAPI = ({ appCode }) => {
+
   const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/approvals/${appCode}`;
+  console.log('delete 실행 : ', requestURL);
   try {
 
     //eslint-disable-next-line

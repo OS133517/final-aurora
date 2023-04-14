@@ -8,6 +8,7 @@ function Approvals() {
     /** useDispatch */
     const dispatch = useDispatch();
     /** useState */
+    // eslint-disable-next-line
     const [isView, setIsView] = useState(false);
     /** 변수 */
     // 로그인 기능 구현 되면 사용
