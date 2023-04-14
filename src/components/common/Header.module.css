@@ -8,9 +8,40 @@
     padding-bottom: 12px;
 }
 
+.logo {
+    cursor: pointer;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    align-items: center; /* 이 부분 추가 */
+}
+
 .logout {
     width: 32px;
     height: 32px;
     cursor: pointer;
     margin-top: 12px;
+}
+
+.notification {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    margin-top: 12px;
+    position: relative;
+    margin-right: 16px;
+    display: flex;
+    align-items: center; /* 이 부분 추가 */
+    margin-top: auto;
+}
+.notificationDot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background-color: red;
+    border-radius: 50%;
 }
