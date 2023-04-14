@@ -92,7 +92,7 @@ function ReservationDayDetail({assetCode, assetName, assetStatus, selectedDate})
                                     {item.description}
                                 </td>
                                 <td>
-                                    {item.team}
+                                    {item.teamName}
                                 </td>
                                 <td>
                                     {item.startTime} ~ {item.endTime}
