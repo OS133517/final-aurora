@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ScheduleInsertModalCSS from "./ScheduleInsertModal.module.css";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -6,36 +6,35 @@ import { callMyScheduleAPI, callScheduleInsertAPI } from "../../apis/ScheduleAPI
 import { useNavigate } from "react-router-dom";
 import { decodeJwt } from "../../utils/tokenUtils";
 
-function ScheduleInsertModal({ scheduleStartDay, sechduleName, scheduleCode, setScheduleInsertModal }) {
+function ScheduleInsertModal({ setScheduleInsertModal }) {
 
     const dispatch = useDispatch();
 
-    // const { memberCode } = jwtDecode(window.localStorage.getItem("accessToken"));
-    // const thisMember = useSelector(state => state.scheduleReducer.memberInfo);
-    // const scheduleList = useSelector(state => state.scheduleReducer.schedule)
+    const navigate = useNavigate();
+
+    const myScheduleList = useSelector(state => state.scheduleReducer.calendar)
+    console.log(JSON.stringify(myScheduleList))
 
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
     console.log(loginMember);
-   
+
     const [form, setForm] = useState({
+
+        memberCode : loginMember.memberCode,
         scheduleName : '',
         scheduleStartDay : '',
         scheduleEndDay : '',
-        schduleStartTime : '',
-        schduleEndTime : '',
-        schdulePlace : '',
-        schduleContent : '',
+        schedulePlace : '',
+        scheduleContent : ''
     });
 
     useEffect(() => {
 
-        // dispatch(callMyScheduleAPI({
-        //     memberCode : memberCode
-        // }))
+        dispatch(callMyScheduleAPI({
+            memberCode : loginMember.memberCode
+        }))
     },[]
     );
-
-
 
     const  onChangeHandler = (e) => {
 
@@ -54,32 +53,32 @@ function ScheduleInsertModal({ scheduleStartDay, sechduleName, scheduleCode, set
 
     const onClickScheduleInsert = () => {
         
-        const formData = new FormData();
-
-        formData.append("scheduleName", form.scheduleName);
-        formData.append("scheduleStartDay", form.scheduleStartDay);
-        formData.append("scheduleEndDay", form.scheduleEndDay);
-        formData.append("schduleStartTime", form.schduleStartTime);
-        formData.append("schduleEndTime", form.schduleEndTime);
-        formData.append("schdulePlace", form.schdulePlace);
-        formData.append("schduleContent", form.schduleContent);
+        // const formData = new FormData();
+        
+        // formData.append("scheduleCategoryCode", form.scheduleCategoryCode);
+        // formData.append("scheduleName", form.scheduleName);
+        // formData.append("scheduleStartDay", form.scheduleStartDay);
+        // formData.append("scheduleEndDay", form.scheduleEndDay);
+        // formData.append("scheduleStartTime", form.schduleStartTime);
+        // formData.append("scheduleEndTime", form.scheduleEndTime);
+        // formData.append("schedulePlace", form.schedulePlace);
+        // formData.append("scheduleContent", form.scheduleContent);
      
         dispatch(callScheduleInsertAPI({
-            form : FormData,
+            form : form,
             memberCode : loginMember.memberCode
         }));
 
-        // navigate("aurora/calendar/month", { replace : true });
-        // window.location.reload();
+        navigate("/aurora/calendar/month", { replace : true });
+        window.location.reload();
     }
-
 
     return (
         <div className={ScheduleInsertModalCSS.modalBackground} onClick={onClickModalOff}>
             <div className={ScheduleInsertModalCSS.modalContainer}>
                 <div className={ScheduleInsertModalCSS.header}>
                     일정 등록
-                    <button onClick={() => setScheduleInsertModal(false)}>X</button>
+                    <button className={ScheduleInsertModalCSS.xbutton} onClick={() => setScheduleInsertModal(false)}>X</button>
                 </div>
                 <div className={ScheduleInsertModalCSS.modalDiv}>
                     <table>
@@ -95,45 +94,22 @@ function ScheduleInsertModal({ scheduleStartDay, sechduleName, scheduleCode, set
                             </tr>
                             <tr>
                                 <td><label htmlFor="scheduleDay">일시</label></td>
-                                <td><input 
+                                <td className={ScheduleInsertModalCSS.scheduleDay}>
+                                    <input
                                         type="date" 
                                         name="scheduleStartDay" 
                                         id="scheduleStartDay" 
                                         value={form.scheduleStartDay}
-                                        onChange={onChangeHandler}/>
-                                        ~
-                                        <input 
+                                        onChange={onChangeHandler}
+                                    />
+                                &nbsp;~&nbsp;
+                                    <input
                                         type="date" 
                                         name="scheduleEndDay" 
                                         id="scheduleEndDay" 
                                         value={form.scheduleEndDay}
-                                        onChange={onChangeHandler}/></td>
-                            </tr>
-                            <tr>
-                                <td><label htmlFor="scheduleTime">시간</label></td>
-                                <td><input 
-                                        type="time" 
-                                        name="schduleStartTime" 
-                                        id="schduleStartTime" 
-                                        value={form.scheduleStartDay}
-                                        onChange={onChangeHandler}/>
-                                        ~
-                                        <input 
-                                        type="time" 
-                                        name="schduleEndTime" 
-                                        id="schduleEndTime" 
-                                        value={form.schduleEndTime}
-                                        onChange={onChangeHandler}/></td>
-                            </tr>
-                            <tr>
-                                <td>카테고리</td>
-                                <td>
-                                    <select name="scheduleCategoryCode" onChange={onChangeHandler} value={form.scheduleCategoryCode}>
-                                        <option value="requireSelect">카테고리 선택</option>
-                                        {/* {
-                                            Array.isArray()
-                                        } */}
-                                    </select>
+                                        onChange={onChangeHandler}
+                                    /> 
                                 </td>
                             </tr>
                             
@@ -141,44 +117,26 @@ function ScheduleInsertModal({ scheduleStartDay, sechduleName, scheduleCode, set
                                 <td><label htmlFor="schdulePlace">장소</label></td>
                                 <td><input 
                                         type="text" 
-                                        name="schdulePlace" 
-                                        id="schdulePlace" 
-                                        value={form.email}
+                                        name="schedulePlace" 
+                                        id="schedulePlace" 
+                                        value={form.schedulePlace}
                                         onChange={onChangeHandler}/></td>
                             </tr>
                             <tr>
-                                <td><label htmlFor="schduleContent">내용</label></td>
-                                <td><input 
+                                <td><label htmlFor="scheduleContent">내용</label></td>
+                                <td><textarea 
                                         type="text" 
-                                        name="schduleContent" 
-                                        id="schduleContent" 
-                                        value={form.company}
+                                        name="scheduleContent" 
+                                        className={ ScheduleInsertModalCSS.scheduleContentInfoInput }
+                                        id="scheduleContent" 
+                                        value={form.scheduleContent}
                                         onChange={onChangeHandler}/></td>
                             </tr>
-                            
-                            {/* <tr>
-                                <td>그룹</td>
-                                <td>
-                                    <select name="groupCode" onChange={onChangeHandler} value={form.groupCode}>
-                                        <option value="requireSelect">그룹 선택</option>
-                                    {
-                                        Array.isArray(teamGroupList) && teamGroupList.map(group => (
-                                        <option key={group.groupCode} value={group.groupCode}>팀 그룹 - {group.groupName}</option>
-                                        ))
-                                    }
-                                    {
-                                        Array.isArray(personalGroupList) && personalGroupList.map(group => (
-                                        <option key={group.groupCode} value={group.groupCode}>개인 그룹 - {group.groupName}</option>
-                                        ))
-                                    }
-                                    </select>
-                                </td>
-                            </tr> */}
+                           
                         </tbody>
                     </table>
                 </div>
                 <div className={ScheduleInsertModalCSS.buttonDiv}>
-                    
                     <button onClick={onClickScheduleInsert}>저장</button>
                 </div>
             </div>

@@ -4,7 +4,8 @@ import { createActions, handleActions } from "redux-actions";
 const initialState = {
     memberLogin: [],
     memberList: [],
-    memberDetail: []
+    memberDetail: [],
+    memberInfo : []
 };
 
 // 액션
@@ -42,8 +43,10 @@ const memberReducer = handleActions({
         }
     },
     [GET_MEMEBER_INFO] : (state, { payload }) => {
-        return payload
-        }
+        return {
+                ...state,
+                memberInfo : payload
+    }}
 }, initialState)
 
 export default memberReducer;

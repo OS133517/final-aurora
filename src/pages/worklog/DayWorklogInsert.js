@@ -1,9 +1,10 @@
 import DayWorklogInsertCSS from './DayWorklogInsert.module.css';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { callDayWorklogInsertAPI } from '../../apis/DayWorklogAPICall';
 import { decodeJwt } from "../../utils/tokenUtils";
+import { callMemberInfoAPI } from '../../apis/MemberAPICall';
 
 function DayWorklogInsert() {
 
@@ -11,8 +12,20 @@ function DayWorklogInsert() {
 
     const navigate = useNavigate();
 
+    const dayWorklog = useSelector(state => state.dayWorklogReducer.dayWorklog);
+
     const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
     console.log(loginMember);
+
+    const memberInfo = useSelector(state => state.memberReducer.memberInfo);
+    
+    useEffect (() => {
+        console.log("dayWorklog.memberCode" + dayWorklog.memberCode);
+        dispatch(callMemberInfoAPI({
+            memberCode : loginMember.memberCode
+        }));
+    },[dayWorklog]
+    );
     
     const [form, setForm] = useState({
         morningDayContent : '',
@@ -47,7 +60,7 @@ function DayWorklogInsert() {
         }));
 
         navigate("/aurora/worklog/day", { replace : true });
-        // window.location.reload();
+        window.location.reload();
     }
 
     return (
@@ -65,13 +78,13 @@ function DayWorklogInsert() {
                             <td>작성일</td>
                             <td>{`${new Date().toLocaleDateString()}`}</td>
                             <td>작성자</td>
-                            <td></td>
+                            <td>{ memberInfo.memberName || '' }</td>
                         </tr>
                         <tr>
                             <td>부서</td>
-                            <td></td>
+                            <th>{ memberInfo.deptName || '' }</th>
                             <td>직급</td>
-                            <td></td>
+                            <th>{ memberInfo.jobName || '' }</th>
                         </tr>
                     </thead>
                     <tbody>
