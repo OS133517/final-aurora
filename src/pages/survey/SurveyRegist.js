@@ -30,13 +30,7 @@ function SurveyRegist() {
     useEffect(() => {
 
         if(surveyResult.status === 200) {
-            Swal.fire({
-                icon : 'success',
-                text : surveyResult.message,
-                confirmButtonText : '확인'
-            }).then(() => {
-                navigate("/aurora/survey/survey-management", { replace: true});
-            })
+            navigate("/aurora/survey/survey-management", { replace: true});
         } else if(surveyResult.status === 400) {
             Swal.fire({
                 icon : "error",
