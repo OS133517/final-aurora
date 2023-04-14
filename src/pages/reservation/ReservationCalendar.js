@@ -32,7 +32,11 @@ function ReservationCalendar() {
                 text : reservationResult.message,
                 confirmButtonText : '확인'
             }).then(() => {
-                window.location.reload(true); 
+                dispatch(callReservationsAPI({
+                    assetCode : assetCode,
+                    startTime : `${selectedMonth[0]?.year}-${selectedMonth[0]?.month}-${selectedMonth[0]?.date}`,
+                    endTime : `${selectedMonth[34]?.year}-${selectedMonth[34]?.month}-${selectedMonth[34]?.date}`
+                }));
             })
         } else if (reservationResult.status === 400) {
             Swal.fire({

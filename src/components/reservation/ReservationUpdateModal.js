@@ -15,7 +15,7 @@ function ReservationUpdateModal({reservationNo, setUpdateModal}) {
     const reservationDetail = useSelector(state => state.reservationReducer?.reservation);
    
     const [form, setForm] = useState({
-        reservationDate : new Date(),
+        reservationDate : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
         startTime : new Date(),
         endTime : new Date(),
         description : ""

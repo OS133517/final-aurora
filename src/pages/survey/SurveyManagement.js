@@ -241,7 +241,7 @@ function SurveyManagement() {
                                     <input type="checkBox" id={`checkBox${survey.surveyCode}`}/>
                                 </td>
                                 <td>{survey.surveyCode}</td>
-                                <td onClick={(e) => {e.preventDefault(); navigate(`/aurora/survey/survey-management/${survey.surveyCode}`);}}>{survey.surveySubject}</td>
+                                <td onClick={(e) => {e.preventDefault(); navigate(`/aurora/survey/survey-management/${survey.surveyCode}?surveySubject=${survey.surveySubject}`);}}>{survey.surveySubject}</td>
                                 <td>{survey.startDate}&nbsp;~&nbsp;{survey.endDate}</td>
                                 <td>{Math.floor(survey.replyStatus)} %</td>
                                 <td>
@@ -274,14 +274,13 @@ function SurveyManagement() {
                         </button>
                 }
                 {pageNumber.map((num) => (
-                <li key={num} onClick={() => setCurrentPage(num)}>
                     <button
+                        key={num} onClick={() => setCurrentPage(num)}
                         style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
                         className={ SurveysCSS.pagingBtn }
                     >
                         {num}
                     </button>
-                </li>
                 ))}
                 {
                     Array.isArray(surveyList) &&

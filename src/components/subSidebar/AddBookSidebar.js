@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SidebarCSS from "./SubSidebar.module.css";
 import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI, callGroupDeleteAPI, callGroupUpdateAPI } from "../../apis/AddBookAPICall";
 import { NavLink } from "react-router-dom";
 import AddBookFormModal from "../addBook/AddBookFormModal";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { decodeJwt } from "../../utils/tokenUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPenToSquare, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
+
 
 function AddBookSidebar() {
     
@@ -38,9 +39,20 @@ function AddBookSidebar() {
 
     useEffect(() => {
 
+        if(groupResultMessage.status === 200) {
+            
+            getGroups();
+        } else if(groupResultMessage.status === 400) {
+            Swal.fire({
+                icon : "error",
+                text : groupResultMessage.message
+            })
+        }// eslint-disable-next-line
+    }, [groupResultMessage]);
+
+    useEffect(() => {
         getGroups();
-    // eslint-disable-next-line
-    }, []);
+    }, [])
 
     useEffect(() => {
 
@@ -84,7 +96,7 @@ function AddBookSidebar() {
     }
 
     const onClickInsert = (onOff) => {
-        
+
         switch(onOff) {
             case 't' :
                 if(tIsVisible && newTGroupName.trim().length !== 0) {
@@ -379,6 +391,7 @@ function AddBookSidebar() {
                     )}
                 </div>
             </div>
+
             </>
     );
 }

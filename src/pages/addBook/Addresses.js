@@ -382,7 +382,7 @@ function Addresses({category = "전체 주소록"}) {
                 <input type="text" name="value" value={searchInput.value} onChange={onChangeHandler}/>
                 <button type="button" onClick={onClickSearch}>검&nbsp;&nbsp;&nbsp;&nbsp;색</button>
                 <div className={AddressesCSS.imgDiv}>
-                    <img src={process.env.PUBLIC_URL + "/sendMail.png"} alt="메일 발송"/>
+                    {/* <img src={process.env.PUBLIC_URL + "/sendMail.png"} alt="메일 발송"/> */}
                     {category === "전체 주소록" && <img onClick={onClickMembersToGroups} src={process.env.PUBLIC_URL + "/insert.png"} alt="추가"/>}
                     {category !== "전체 주소록" && <img onClick={onClickUpdateModalOn} src={process.env.PUBLIC_URL + "/update.png"} alt="수정"/>}
                     {category !== "전체 주소록" && <img onClick={onClickDelete} src={process.env.PUBLIC_URL + "/delete.png"} alt="삭제"/>}
@@ -464,14 +464,13 @@ function Addresses({category = "전체 주소록"}) {
                 </button>
                 }
                 {pageNumber.map((num) => (
-                <li key={num} onClick={() => setCurrentPage(num)}>
-                    <button
-                        style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                        className={ AddressesCSS.pagingBtn }
-                    >
-                        {num}
-                    </button>
-                </li>
+                <button
+                    key={num} onClick={() => setCurrentPage(num)}
+                    style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
+                    className={ AddressesCSS.pagingBtn }
+                >
+                    {num}
+                </button>
                 ))}
                 { Array.isArray(addressList) &&
                 <button 

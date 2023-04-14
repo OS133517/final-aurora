@@ -36,8 +36,7 @@ function ReservationDayDetail({assetCode, assetName, assetStatus, selectedDate})
                 return;
             })
         } else {
-            console.log(selectedDate.startDateTime)
-            if(new Date(selectedDate.startDateTime).getTime() < new Date().getTime()) {
+            if(new Date(selectedDate.startDateTime.replace('00:00:00', '18:00:00')).getTime() < new Date().getTime()) {
                 Swal.fire({
                     icon : 'warning',
                     text : '이미 지난 날입니다.',
@@ -93,7 +92,7 @@ function ReservationDayDetail({assetCode, assetName, assetStatus, selectedDate})
                                     {item.description}
                                 </td>
                                 <td>
-                                    {item.team}
+                                    {item.teamName}
                                 </td>
                                 <td>
                                     {item.startTime} ~ {item.endTime}

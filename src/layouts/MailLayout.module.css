@@ -1,0 +1,8 @@
+.mailLayout {
+    /* width: 1845px; */
+    display: flex;
+    width: 100%;
+}
+a {
+    text-decoration: none;
+}

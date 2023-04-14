@@ -1,0 +1,263 @@
+button {
+    cursor: pointer;
+}
+
+.reportsContainer {
+    width: 100%;
+    height: 100%; 
+    max-width: 100%;
+}
+
+.reportsHeader {
+    width: 100%;
+    max-width: inherit;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 40px;
+}
+
+.roundsHeader {
+    padding-top: 15px;
+    padding-left: 40px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.roundsTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #88CFBA;
+}
+
+.headerButtonDiv {
+    display: flex;
+    gap: 20px;
+    margin-right: 40px;
+}
+
+.greentButton {
+    background-color: #88CFBA;
+    border: none;
+    color: white;
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    /* margin-left: 13px; */
+    margin-top: 7px;
+    cursor: pointer;
+}
+
+.redButton {
+    background-color: red;
+    border: none;
+    color: white;
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 13px;
+    margin-top: 7px;
+    cursor: pointer;
+}
+
+.toggleSwitch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+  
+.toggleSwitch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+  
+.toggleSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+  
+.toggleSlider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+  
+input:checked + .toggleSlider {
+    background-color: #2196F3;
+}
+  
+input:checked + .toggleSlider:before {
+    transform: translateX(26px);
+}
+
+.reportsInfo {
+    padding-left: 40px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.readOnlyInput {
+    border: none;
+}
+
+.readOnlyInput:focus {
+    outline: none;
+    border: none;
+}
+
+.reportsTable {
+    width: 95%;
+    margin-top: 30px;
+    margin-left: 40px;
+    border-collapse: collapse; 
+    border-bottom: 3px solid black;
+}
+
+.columnRegDate {
+    width: 13%;
+}
+  
+.columnStatus {
+    width: 7%;
+}
+
+.columnMemberInfo {
+    width: 7%;
+    text-align: center !important;
+}
+
+.columnTextAlignTd {
+    text-align: center !important;
+}
+
+.reportsTable th {
+    border-bottom: 3px solid black !important;
+    font-size: 24px;
+}
+
+.reportsTable th,
+.reportsTable td {
+    padding: 7px 0 7px 0;
+    text-align: left;   
+    border-bottom: 1px solid black;
+}
+
+.replyCount {
+    
+    color: #88CFBA;
+}
+
+/* 페이징 div */
+.pagingBtn {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #00CAA6;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+.pagingBtn:hover{
+    cursor: pointer;
+    background-color: rgb(12, 250, 180);
+}
+.pagingBtn:disabled {
+    background-color: #C1C1C1;
+    cursor: not-allowed;
+}
+.disalbedPagingButton {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #C1C1C1;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+.pagingBtnDiv {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    list-style: none;
+}
+
+.modalOverlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경색과 투명도 조절 */
+}
+
+.modal {
+    /* width: 40%; */
+    /* height: 50%; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border: #88CFBA 3px solid;
+    border-radius: 5px;
+    padding: 50px;
+}
+
+.modal h2 {
+    margin-bottom: 50px;
+}
+  
+.modal form {
+    display: flex;
+    flex-direction: column;
+    /* width: 100%; */
+}
+  
+.modal label {
+    margin-bottom: 10px;
+}
+  
+.modal input {
+    width: 300px;
+    margin-bottom: 20px;
+}
+  
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal button {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
