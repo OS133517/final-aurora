@@ -182,10 +182,10 @@ export default function VacationDetail() {
                             <td>{vacation?.vacationStartDate} - {vacation?.vacationEndDate}</td>
                             <td>&nbsp;&nbsp;{workdays}일</td>
                             <td>
-                                {vacation?.appStatus === "Y" ? "승인" :
-                                vacation?.appStatus === "N" ? "대기" :
-                                vacation?.appStatus === "P" ? "진행중" :
-                                vacation?.appStatus === "W" ? "반려" :
+                                {vacation?.appStatus === "y" ? "승인" :
+                                vacation?.appStatus === "n" ? "대기" :
+                                vacation?.appStatus === "p" ? "진행중" :
+                                vacation?.appStatus === "w" ? "반려" :
                                 ""}
                             </td>
                         </tr>
