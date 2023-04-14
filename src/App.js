@@ -105,7 +105,6 @@ function App() {
                 <Route path=":reportCode/rounds" element={<ReportRounds />} />
                 <Route path="casuals" element={<CasualReports />} />
                 <Route path="summary" index element={<ReportsSummary />} />
-                {/* <Route path="edit" element={<ReportCreate />} /> */}
                 <Route path="casuals/:reportCode" element={<CasualReportDetail />} />
                 <Route path="edit" element={<ReportCreate />} />
                 <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail />} />

@@ -231,17 +231,20 @@ function MailWrite({props}) {
                                         <div className={MailWriteCSS.fileTableContainer}>
                                             <input
                                                 type="file"
+                                                id="fileList"
                                                 name="fileList"
+                                                className={MailWriteCSS.customFileInput}
                                                 multiple
                                                 onChange={handleFileInputChange}
                                             />
+                                            <label htmlFor="fileList" className={MailWriteCSS.customFileInputLabel}>파일 첨부</label>
                                             <br></br>
                                             <br></br>
                                             <table className={MailWriteCSS.fileTable}>
                                                 <thead>
                                                     <tr>
                                                         <td className={MailWriteCSS.xColumn}>
-                                                            <button onClick={removeAllFiles}>X</button>
+                                                            <button className={MailWriteCSS.removeFileButton} onClick={removeAllFiles}>X</button>
                                                         </td>
                                                         <td>파일 제목</td>
                                                         <td className={MailWriteCSS.sizeColumn}>용량</td>
@@ -251,7 +254,7 @@ function MailWrite({props}) {
                                                     {attachments.map((file, index) => (
                                                         <tr key={index}>
                                                             <td>
-                                                                <button onClick={() => removeFile(index)}>X</button>
+                                                                <button className={MailWriteCSS.removeFileButton} onClick={() => removeFile(index)}>X</button>
                                                             </td>
                                                             <td>{file.name}</td>
                                                             <td className={MailWriteCSS.sizeColumn}>{(file.size / 1024).toFixed(2)} KB</td>
