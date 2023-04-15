@@ -73,6 +73,7 @@ import MessengerList from "./pages/messenger/MessengerList";
 import MessengerLayout from "./layouts/MessengerLayout";
 import ChatRoom from "./components/form/messenger/ChatRoom";
 import Completed from "./pages/approval/Completed";
+import ApprovalGraph from "./pages/approval/ApprovalGraph";
 
 
 
@@ -125,6 +126,7 @@ function App() {
                 <Route index path="draft" element={<ApprovalDraft />} />
                 <Route index path="detail/:appCode" element={<ApprovalDetail />} />
                 <Route index path="form/:docCode" element={<DraftForm />} />
+                <Route index path="graph" element={<ApprovalGraph />} />
               </Route>
               <Route path="hrm" element={<HrmLayout />}>
                 <Route index element={<Hrm />} />
@@ -135,7 +137,7 @@ function App() {
                 <Route path="hrm-regist" element={<HrmSignup category='인사 등록' />} />
               </Route>
               <Route path="worklog" element={<WorklogLayout />}>
-                <Route index element={<DayWorklogs />}/>
+                <Route index element={<DayWorklogs />} />
                 <Route path="day" element={<DayWorklogs />} />
                 <Route path="day/:dayWorklogCode" element={<DayWorklogDetail />} />
                 <Route path="day/insert" element={<DayWorklogInsert />} />
@@ -152,20 +154,20 @@ function App() {
                 <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황' />} />
               </Route>
               <Route path="survey" element={<SurveyLayout />}>
-                <Route index element={<Surveys/>}/>
+                <Route index element={<Surveys />} />
                 <Route path="list" element={<Surveys />} />
                 <Route path="survey-management" element={<SurveyManagement />} />
                 <Route path="survey-management/regist" element={<SurveyRegist />} />
                 <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate />} />
-                <Route path="survey-management/:surveyCode" element={<SurveyDetail/>}/>
+                <Route path="survey-management/:surveyCode" element={<SurveyDetail />} />
               </Route>
               <Route path="messenger" element={<MessengerLayout />}>
                 <Route index="messengers" element={<MessengerList />} />
                 <Route index path="detail/:roomNum" element={<ChatRoom />} />
               </Route>
               <Route path="calendar" element={<ScheduleLayout />}>
-                <Route index element={<Schedules />}/>
-                <Route path="month" element={<Schedules />}/>
+                <Route index element={<Schedules />} />
+                <Route path="month" element={<Schedules />} />
               </Route>
             </Route>
           </Route>
