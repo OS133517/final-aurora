@@ -89,7 +89,6 @@ const surveyReducer = handleActions({
             surveyReply : payload
         }},
     [INIT_ACTION] : (state, { payload }) => {
-        console.log('이거 되는건가????');
         return {
             ...state,
             surveyReply : payload
