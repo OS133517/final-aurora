@@ -103,8 +103,8 @@ function RoutineReports() {
                         >
                             <input 
                                 type="checkbox" 
-                                onClick={() => toggleCompletionStatus()}/
-                            >         
+                                onClick={() => toggleCompletionStatus()}
+                            />         
                             <span className={ReportsCSS.toggleSlider}></span>
                         </label>
                     </div>
@@ -144,40 +144,37 @@ function RoutineReports() {
                                 )}
                         </tbody>
                     </table>
-                    {/* 페이징 버튼 */}
-                    <div className={ReportsCSS.pagingBtnDiv}>
-                        {Array.isArray(routineReportList) && (
-                            <>
+                </div>
+                {/* 페이징 버튼 */}
+                <div className={ReportsCSS.pagingBtnDiv}>
+                    {Array.isArray(routineReportList) && (
+                        <>
+                            <button
+                                onClick={() => setCurrentPage(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className={ReportsCSS.pagingBtn}    
+                            >
+                                &lt;
+                            </button>
+                            {pageNumber.map((num) => (
                                 <button
-                                    onClick={() => setCurrentPage(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                    className={ReportsCSS.pagingBtn}    
-                                >
-                                    &lt;
-                                </button>
-                                {pageNumber.map((num) => (
-                                    <li 
-                                        key={num} 
-                                        onClick={() => setCurrentPage(num)}
-                                    >
-                                        <button
-                                            style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
-                                            className={ReportsCSS.pagingBtn}
-                                        >
-                                            {num}
-                                        </button>
-                                    </li>
-                                ))}
-                                <button
-                                    onClick={() => setCurrentPage(currentPage + 1)}
-                                    disabled={currentPage === pageInfo.endPage || pageInfo.total === 0}
+                                    key={num} 
+                                    onClick={() => setCurrentPage(num)}
+                                    style={currentPage === num ? { backgroundColor: "rgb(12, 250, 180)" } : null}
                                     className={ReportsCSS.pagingBtn}
                                 >
-                                    &gt;
+                                {num}
                                 </button>
-                            </>
-                        )}
-                    </div>
+                            ))}
+                            <button
+                                onClick={() => setCurrentPage(currentPage + 1)}
+                                disabled={currentPage === pageInfo?.endPage || pageInfo?.total === 0}
+                                className={ReportsCSS.pagingBtn}
+                            >
+                                &gt;
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
         </>
