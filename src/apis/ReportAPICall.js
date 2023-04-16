@@ -4,6 +4,8 @@ import {
 
     GET_REPORT_SUMMARY,
     GET_REPORT_DETAIL,
+    GET_SIDE_ROUTINE_REPORT_LIST,
+    GET_SIDE_CASUAL_REPORT_LIST,
     GET_ROUTINE_REPORT_LIST_BY_CONDITIONS,
     GET_CASUAL_REPORT_LIST_BY_CONDITIONS,
     GET_REPORT_ROUND_LIST,
@@ -125,6 +127,54 @@ export const callSelectReportDetailAPI = ({reportCode}) => {
             console.log('[ReportAPICalls] callReportDetailAPI RESULT', result);
             dispatch({type : GET_REPORT_DETAIL, payload : result.data});
             // console.log("result.data : " + JSON.stringify(result.data));
+        }
+    };
+}
+
+// 사이드바 정기보고 목록 조회 
+export const callSideBarRoutineReportListAPI = () => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/routines/side-bar`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'GET',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }                
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callSideBarRoutineReportListAPI RESULT', result);
+            dispatch({type : GET_SIDE_ROUTINE_REPORT_LIST, payload : result.data});
+        }
+    };
+}
+
+// 사이드바 비정기보고 목록 조회 
+export const callSideBarCasualReportListAPI = () => {
+
+    const requestURL = `http://${process.env.REACT_APP_RESTAPI_IP}:8090/api/v1/reports/casuals/side-bar`;
+
+    return async (dispatch, getState) => {
+
+        const result = await fetch(requestURL, {
+            method : 'GET',
+            headers : {
+                "Content-Type" : "application/json",
+                "Accept" : "*/*",
+                "Authorization" : "Bearer " + window.localStorage.getItem("accessToken") 
+            }                
+        })
+        .then(response => response.json());
+
+        if(result.status === 200) {
+            console.log('[ReportAPICalls] callSideBarCasualReportListAPI RESULT', result);
+            dispatch({type : GET_SIDE_CASUAL_REPORT_LIST, payload : result.data});
         }
     };
 }
