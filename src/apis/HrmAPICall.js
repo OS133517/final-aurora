@@ -83,6 +83,8 @@ export const callMemberModifyAPI = ({memberCode, memberInfo}) => {
                 "Authorization" : "Bearer " + window.localStorage.getItem("accessToken")
             },
             body : JSON.stringify(memberInfo),
+
+            
        
             
         })

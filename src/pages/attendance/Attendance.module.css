@@ -91,7 +91,7 @@
 .box {
     margin-left: 0%;
     padding: 0px;
-    width: 80%;
+    width: 87%;
     height: 200px;
     /* border: 1px solid black;  */
     border: 1px solid #C1C1C1;
@@ -107,7 +107,7 @@
 
 
 .box td {
-     width: 25%;
+     width: 20%;
      height: 50%;
      text-align: center;
      vertical-align: middle;
@@ -120,6 +120,7 @@
     height: 50%; 
     text-align: center;
     vertical-align: middle;
+    font-size: 15px;
 }
 
 .boxWrapper {
@@ -137,7 +138,7 @@
     align-items: left;
 }
 .boxWrapper3 {
-    margin-top: 30px;
+    margin-top: 0px;
     width: 66%;
     display: flex;
     flex-direction: column;
@@ -147,6 +148,15 @@
 .boxWrapper > span {
     position: relative;
     top: -8px; /* 상단에서의 위치 조절 */
+    left: 8px; /* 좌측에서의 위치 조절 */
+    font-size: 22px;
+    font-weight: bold;
+    
+}
+
+.boxWrapper3 > span {
+    position: relative;
+    top: -20px; /* 상단에서의 위치 조절 */
     left: 8px; /* 좌측에서의 위치 조절 */
     font-size: 22px;
     font-weight: bold;
@@ -183,9 +193,10 @@
 .Box3 {
     width: 94%;
     height: 430px;
-    border: 1px solid #C1C1C1;
-    padding: 10px;
+    /* border: 1px solid #C1C1C1; */
     border-radius: 10px;
+    
+    
 }
 
 .boxWrapper2 > .Box2 > div > button{

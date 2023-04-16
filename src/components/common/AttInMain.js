@@ -20,6 +20,7 @@ function AttInMain() {
     const memberName = memberInfo?.memberDTO?.memberName;
     const deptName = memberInfo?.memberDTO?.deptName;
 
+    console.log("workHours" , workHours);
     const [disableStartWorkButton, setDisableStartWorkButton] = useState(false);
     const currentDate = new Date();
     const localDate3 = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
@@ -87,9 +88,26 @@ function AttInMain() {
     const handleStartWork =async (memberCode) => {
         console.log(memberCode);
 
+        if (workHours?.OFF_TIME) {
+            Swal.fire({
+                title: "Warning!",
+                text: "당일 퇴근 시간이 이미 등록되어 있습니다. 다시 출근 처리할 수 없습니다.",
+                icon: "warning",
+                confirmButtonText: "확인",
+            });
+            return;
+        }
+    
+        await dispatch(callWorkTimeAPI({
+    
+            memberCode: memberCode
+    
+        }));
+
         await dispatch(callWorkTimeAPI({
 
             memberCode : memberCode
+
             
         }));
 
@@ -124,10 +142,33 @@ function AttInMain() {
 
 
     const handleEndWork = async (memberCode) => {
+        const now = new Date();
+        const currentHours = now.getHours();
+
+        if (currentHours < 18) {
+            const result = await Swal.fire({
+                title: "Warning!",
+                text: "현재 오후 6시 이전입니다. 정말 퇴근하시겠습니까?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "예",
+                cancelButtonText: "아니오",
+            });
+
+            if (result.isDismissed) {
+                return;
+            }
+        }
+
+    await dispatch(callEndTimeAPI({
+
+        memberCode: memberCode
+
+    }));
+       
         await dispatch(callEndTimeAPI({     
 
             memberCode : memberCode
-    
               
         }));
         const action = await dispatch(callSelectWorkStatus({ memberCode: memberCode }));
@@ -154,6 +195,23 @@ function AttInMain() {
         setDisableStartWorkButton(true);
 
     };
+
+    useEffect(() => {
+        const checkWorkStatus = async () => {
+            const action = await dispatch(callSelectWorkStatus({ memberCode: memberCode }));
+            if (action && action.payload) {
+                const response = action.payload;
+                setWorkStatus(response.WORK_STATUS);
+                localStorage.setItem("workStatus", response.WORK_STATUS);
+    
+                if (response.WORK_STATUS === "근무") {
+                    setDisableStartWorkButton(true);
+                }
+            }
+        };
+        
+        checkWorkStatus();
+    }, []);
 
     return (
         <div className={AttendanceCSS.boxWrapper2}>
