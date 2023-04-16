@@ -10,7 +10,7 @@ function ApprovalSidebar() {
     //eslint-disable-next-line
     const dispatch = useDispatch();
     /** useSelector */
-    const list = useSelector(state => state.approvalReducer.pendingList);
+    const list = useSelector(state => state.approvalReducer.approvalInfo);
     const waitingCount = useSelector(state => state.approvalReducer.lineList);
     /** useState */
     const [open, setOpen] = useState('false');
@@ -47,7 +47,7 @@ function ApprovalSidebar() {
                 <button className={SidebarCSS.buttons} onClick={cilckMakeApproval}>서류 작성</button>
                 <div className={SidebarCSS.checked}>
                     <div className={SidebarCSS.count} onClick={pendingListHandler}>
-                        <h1>{Array.isArray(list) && list.length}</h1>
+                        <h1>{list?.length}</h1>
                         <label>결재 대기</label>
                     </div>
                     <div className={SidebarCSS.count} onClick={waitingListHandler}>
@@ -74,6 +74,9 @@ function ApprovalSidebar() {
                                 </li>
                                 <li>
                                     <NavLink to="/aurora/approval/waiting" className={SidebarCSS.approvalItem}>요청대기</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/aurora/approval/graph" className={SidebarCSS.approvalItem}>통계</NavLink>
                                 </li>
                             </ul>
                         </>

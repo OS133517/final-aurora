@@ -29,12 +29,23 @@ export default function HrmModify() {
     const { name, value } = e.target;
     if (name === "deptName") {
       const selectedDept = member.selectDept.find((dept) => dept.deptCode === value);
-      setFormValues({ ...formValues, deptName: selectedDept.deptName, deptCode: selectedDept.deptCode });
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        deptName: selectedDept.deptName,
+        deptCode: selectedDept.deptCode,
+      }));
     } else if (name === "jobName") {
       const selectedJob = member.selectJob.find((job) => job.jobCode === value);
-      setFormValues({ ...formValues, jobName: selectedJob.jobName, jobCode: selectedJob.jobCode });
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        jobName: selectedJob.jobName,
+        jobCode: selectedJob.jobCode,
+      }));
     } else {
-      setFormValues({ ...formValues, [name]: value });
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
     }
   };
 

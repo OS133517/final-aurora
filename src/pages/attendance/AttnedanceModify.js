@@ -275,7 +275,11 @@ export default function AttendanceModify() {
                                         {att.attRegDate}
                                     </td>
                                     <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{att.workStatus}
+                                    {att.tardy === "Y" ? "지각" :
+                                    att.absence === "Y" ? "결근" :
+                                    att.truancy === "Y" ? "무단결근" :
+                                    att.earlyOff === "Y" ? "조퇴" :
+                                    <>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{att.workStatus}</>}
                                     </td>
                                     {/* <td>
                                         <button type="button" onClick={() =>  navigate(`/aurora/hrm/hrm-modify/${member?.memberCode}`)}>수정</button>
