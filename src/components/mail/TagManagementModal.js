@@ -35,6 +35,7 @@ function TagManagerModal(props) {
             updateTags(input.tagCode);
         }
         dispatch(callSelectTagsAPI({}));
+        dispatch(callSelectTagsAPI({}));
         setTagUpdated(false);
     }, [tagUpdated, input]);
 
@@ -65,8 +66,8 @@ function TagManagerModal(props) {
             }));
             setNewTagName('');
             setNewTagColor('');
-            setTagUpdated(!tagUpdated);
-            onUpdate();
+            setTagUpdated(true);
+            // onUpdate();
         }
     }
 
@@ -91,8 +92,8 @@ function TagManagerModal(props) {
             }));
             setColorPickerVisible({ tagCode: "", visible: false });
             setInput({ tagCode: "", value: "", color: "" });
-            setTagUpdated(!tagUpdated);
-            onUpdate();
+            setTagUpdated(true);
+            // onUpdate();
         } else {
 
             warningAlert("태그명을 입력해주세요.");
@@ -141,8 +142,8 @@ function TagManagerModal(props) {
             
             tagCode : tagCode
         }));
-        setTagUpdated(!tagUpdated);
-        onUpdate();
+        setTagUpdated(true);
+        // onUpdate();
     }
 
     // 성공 알림 
