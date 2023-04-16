@@ -45,20 +45,19 @@ import VacationDetail from './pages/attendance/VacationDetail';
 import MailLayout from "./layouts/MailLayout";
 import Inbox from './pages/mail/Inbox';
 import Sent from './pages/mail/Sent';
-import Spam from './pages/mail/Spam';
 import Trash from './pages/mail/Trash';
-// import Statistics from './pages/mail/Statistics';
-import MailWrite from './pages/mail/MailWrite';
 import MailDetail from './pages/mail/MailDetail';
+import MailWrite from './pages/mail/MailWrite';
+import Statistics from './pages/mail/Statistics';
 
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
-import ReportCreate from "./pages/report/ReportCreate";
 import RoutineReports from "./pages/report/RoutineReports";
-import CasualReports from "./pages/report/CasualReports";
-import CasualReportDetail from "./pages/report/CasualReportDetail";
 import ReportRounds from "./pages/report/ReportRounds";
 import ReportRoundDetail from "./pages/report/ReportRoundDetail";
+import CasualReports from "./pages/report/CasualReports";
+import CasualReportDetail from "./pages/report/CasualReportDetail";
+import ReportCreate from "./pages/report/ReportCreate";
 
 import WorklogLayout from "./layouts/WorklogLayout";
 import DayWorklogs from "./pages/worklog/DayWorklogs";
@@ -95,20 +94,19 @@ function App() {
               <Route path="mails" element={<MailLayout />}>
                 <Route index element={<Inbox />} />
                 <Route path="sent" element={<Sent />} />
-                <Route path="spam" element={<Spam />} />
                 <Route path="trash" element={<Trash />} />
-                {/* <Route path="statistics" element={<Statistics />} /> */}
-                <Route path="write" element={<MailWrite />} />
                 <Route path="detail/:mailCode" element={<MailDetail />} />
+                <Route path="write" element={<MailWrite />} />
+                <Route path="statistics" element={<Statistics />} />
               </Route>
               <Route path="reports" element={<ReportLayout />}>
+                <Route path="summary" index element={<ReportsSummary />} />
                 <Route path="routines" element={<RoutineReports />} />
                 <Route path=":reportCode/rounds" element={<ReportRounds />} />
+                <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail />} />
                 <Route path="casuals" element={<CasualReports />} />
-                <Route path="summary" index element={<ReportsSummary />} />
                 <Route path="casuals/:reportCode" element={<CasualReportDetail />} />
                 <Route path="edit" element={<ReportCreate />} />
-                <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail />} />
               </Route>
               <Route path="reservation" element={<ReservationLayout />}>
                 <Route index element={<MyReservation />} />

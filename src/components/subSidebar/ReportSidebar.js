@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { callRoutineReportListByConditionsAPI,
-    callCasualReportListByConditionsAPI,
+import { callSideBarRoutineReportListAPI,
+    callSideBarCasualReportListAPI,
 } from "../../apis/ReportAPICall";
 import { updateReportStatus } from '../../modules/ReportModule';
 import { NavLink } from "react-router-dom";
@@ -19,8 +19,8 @@ function ReportSidebar() {
     const [casualReportIsOpen, setCasualReportIsOpen] = useState(false);
 
     const isReportUpdated = useSelector(state => state.reportReducer.isReportListUpdated);
-    const routineReportList = useSelector(state => state.reportReducer.routineReportList.data);
-    const casualReportList = useSelector(state => state.reportReducer.casualReportList.data);
+    const routineReportList = useSelector(state => state.reportReducer.sideRoutineReportList.data);
+    const casualReportList = useSelector(state => state.reportReducer.sideCasualReportList.data);
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -29,13 +29,9 @@ function ReportSidebar() {
 
     useEffect(() => {
 
-        dispatch(callRoutineReportListByConditionsAPI({
-            completionStatus : 'N',
-            offset : 1
+        dispatch(callSideBarRoutineReportListAPI({
         }));
-        dispatch(callCasualReportListByConditionsAPI({
-            completionStatus : 'N',
-            offset : 1
+        dispatch(callSideBarCasualReportListAPI({
         }));
         if (isReportUpdated) {
           dispatch(updateReportStatus(false));
