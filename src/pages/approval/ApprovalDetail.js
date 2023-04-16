@@ -162,9 +162,12 @@ function ApprovalDetail() {
     useEffect(() => {
 
         const updateAndReload = async () => {
+            if (vacation === 'y') {
+                await dispatch(callUpdateRemainVacationAPI(memberCode, useDay.usedDay, vacationNo));
+            }
 
             if (responseStatus === 200) {
-                await dispatch(callUpdateRemainVacationAPI(memberCode, useDay.usedDay, vacationNo));
+
 
                 Swal.fire({
                     icon: "success",

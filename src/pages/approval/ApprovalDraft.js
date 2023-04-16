@@ -44,7 +44,9 @@ function ApprovalDraft() {
     const draftApproval = () => {
         const docCode = selectedIndex;
         console.log('num', docCode)
-        navigate(`/aurora/approval/form/${docCode}`);
+        if (docCode !== null) {
+            navigate(`/aurora/approval/form/${docCode}`);
+        }
     }
 
 
