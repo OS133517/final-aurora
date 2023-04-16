@@ -73,10 +73,9 @@ th {
     width: 120px;
 }
 
-/* 파일 테이블 */
 .fileTableContainer {
     margin-top: 20px;
-    padding-left: 8px;
+    margin-left: 8px;
 }
 .fileTable {
     border-collapse: collapse;
@@ -88,12 +87,43 @@ th {
     padding: 8px;
     text-align: left;
 }
-.fileTabled-table th {
+.fileTable th {
     background-color: #f2f2f2;
 }
-.fileTable .xColumn {
-    width: 1%;
+.fileTable tr:nth-child(even) {
+    background-color: #f8f8f8;
 }
-.fileTable .sizeColumn {
-    width: 80px;
+.fileTable tr:hover {
+    background-color: #e8f0fe;
+}
+.removeFileButton {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 8px;
+    display: inline-block;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+.xColumn {
+    width: 1%;
+    white-space: nowrap;
+}
+.sizeColumn {
+    width: 10%;
+}
+.customFileInput {
+    display: none;
+}
+.customFileInputLabel {
+    background-color: #88cfba;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 16px;
+    text-align: center;
 }

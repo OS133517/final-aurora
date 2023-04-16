@@ -30,13 +30,7 @@ function MyReservation() {
     useEffect(() => {
 
         if(reservationResult.status === 200) {
-            Swal.fire({
-                icon : 'success',
-                text : reservationResult.message,
-                confirmButtonText : '확인'
-            }).then(() => {
-                window.location.reload(true); 
-            })
+            getData();
         } else if (reservationResult.status === 400) {
             Swal.fire({
                 icon : 'error',
@@ -194,7 +188,7 @@ function MyReservation() {
                                         <input 
                                             type="checkBox" 
                                             id={`checkBox${reservation.reservationNo}`}
-                                            disabled={new Date(reservation.startTime).getTime() < new Date().getTime()? true:false}/>
+                                            disabled={new Date(reservation.startTime).getTime() < new Date().getTime() || reservation.memberCode !== isLogin.memberCode? true:false}/>
                                     </td>
                                     <td>
                                         {reservation.assetName}

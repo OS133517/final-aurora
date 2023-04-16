@@ -310,14 +310,13 @@ export default function AttendanceModify() {
                 </button>
                 }
                 {pageNumber.map((num) => (
-                <li key={num} onClick={() => setCurrentPage(num)}>
-                    <button
-                        style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
-                        className={ AttendanceModifyCSS.pagingBtn }
-                    >
-                        {num}
-                    </button>
-                </li>
+                <button
+                    key={num} onClick={() => setCurrentPage(num)}
+                    style={ currentPage === num ? {backgroundColor : 'rgb(12, 250, 180)' } : null}
+                    className={ AttendanceModifyCSS.pagingBtn }
+                >
+                    {num}
+                </button>
                 ))}
                 { Array.isArray(attList) &&
                 <button 

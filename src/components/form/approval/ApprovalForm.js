@@ -52,7 +52,6 @@ function ApprovalForm({ approve: { appCode, documentDTO, appTitle, appEndDate, a
             <tr className={approvalModalCSS.approvalList}>
                 <td className={approvalModalCSS.approvalList}>{documentDTO?.docName}</td>
                 <td onClick={onClickModal} className={approvalModalCSS.link}>{appTitle}</td>
-                {/* <td className={approvalModalCSS.approvalList}>{appEndDate}</td> */}
                 <td className={approvalModalCSS.approvalList}>{appEndDate}</td>
                 <td>
                     {appStatus === 'n' || appStatus === 'N' ? <span> 대기 </span> :

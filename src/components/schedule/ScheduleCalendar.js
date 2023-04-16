@@ -6,7 +6,7 @@ import { useState } from "react";
 import { decodeJwt } from "../../utils/tokenUtils";
 import { useParams } from "react-router-dom";
 
-function ScheduleCalendar({ setScheduleCode, setScheduleDetailModal, day, setSelectedDate }) {
+function ScheduleCalendar({ setScheduleCode, setScheduleDetailModal, day, setSelectedDate, memberCode }) {
 
     // const {scheduleCode} = useParams();
 

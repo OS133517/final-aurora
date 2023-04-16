@@ -5,7 +5,7 @@ const initialState = {
     memberLogin: [],
     memberList: [],
     memberDetail: [],
-    memberInfo : []
+    memberInfo: []
 };
 
 // 액션
@@ -19,7 +19,7 @@ const actions = createActions({
     [POST_LOGIN]: () => { },
     [GET_LIST]: () => { },
     [GET_DETAIL]: () => { },
-    [GET_MEMEBER_INFO] : () => {}
+    [GET_MEMEBER_INFO]: () => { }
 });
 
 // 리듀서
@@ -39,13 +39,15 @@ const memberReducer = handleActions({
     [GET_DETAIL]: (state, { payload }) => {
         return {
             ...state,
-            memberLogin : payload
-        }},
-        [GET_MEMEBER_INFO] : (state, { payload }) => {
-            return {
-                ...state,
-                memberInfo : payload
-        }}
+            memberDetail: payload
+        }
+    },
+    [GET_MEMEBER_INFO]: (state, { payload }) => {
+        return {
+            ...state,
+            memberInfo: payload
+        }
+    }
 }, initialState)
 
 export default memberReducer;

@@ -7,15 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import setHours from "date-fns/setHours";
 import setMinutes from "date-fns/setMinutes";
 import Swal from "sweetalert2";
+import jwtDecode from "jwt-decode";
 import { callMemberInfoForRegist, callReservationRegistAPI } from "../../apis/ReservationAPICall";
-import { decodeJwt } from "../../utils/tokenUtils";
 
 function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal}) {
 
     const dispatch = useDispatch();
-    const { memberCode, team } = decodeJwt(window.localStorage.getItem("accessToken"));
+    const { memberCode, team } = jwtDecode(window.localStorage.getItem("accessToken"));
     const thisMember = useSelector(state => state.reservationReducer.memberInfo);
     const reservationList = useSelector(state => state.reservationReducer.reservationsByDate);
+
     const [form, setForm] = useState({
         reservationDate : `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
         startTime : new Date(startDate),
@@ -39,7 +40,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
 
         setForm({
             ...form,
-            teamCode : thisMember.teamCode
+            teamCode : team
         });
     // eslint-disable-next-line
     }, [thisMember]);
@@ -70,7 +71,7 @@ function ReservationRegistModal({startDate, assetName, assetCode, setRegistModal
 
             const sameDay = Array.isArray(reservationList) && reservationList.filter(day => day.startTime.slice(0, -8) === startDate.slice(0, -8)).sort((a, b) => new Date(a.startTime).getHours() - new Date(b.startTime).getHours());
             console.log('sameDay1212', sameDay);
-            return sameDay.length === 0? 18 : sameDay.filter(item => new Date(item.startTime).getHours() > new Date(form.startTime).getHours()).map(item => new Date(item.startTime).getHours())[0];
+            return sameDay.length === 0? 18 : sameDay.filter(item => new Date(item.startTime).getHours() > new Date(form.startTime).getHours()).map(item => new Date(item.startTime).getHours())[0]||18;
         }
         
         return excludeTimes.map(time => setHours(setMinutes(new Date(), 0), time));

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { callMemberDetailAPI } from "../../apis/MemberAPICall";
 import { decodeJwt } from "../../utils/tokenUtils";
 import SidebarCSS from "./SubSidebar.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { callMessengerListAPI } from "../../apis/MessengerAPICall";
 import ChatRoomAdd from "../form/messenger/ChatRoomAdd";
-import ChatRoom from "../form/messenger/ChatRoom";
+// import ChatRoom from "../form/messenger/ChatRoom";
 
 function MessengerSidebar() {
     /** useDispatch */
@@ -22,7 +22,7 @@ function MessengerSidebar() {
     // const waitingCount = useSelector(state => state.approvalReducer.lineList);
     // /** useState */
     const [inputChatRoom, setInputChatRoom] = useState(false);
-    const [selectedRoomNum, setSelectedRoomNum] = useState(null);
+    // const [selectedRoomNum, setSelectedRoomNum] = useState(null);
 
     // /** useNavigate */
     // const navigate = useNavigate();
@@ -32,6 +32,7 @@ function MessengerSidebar() {
     /** 변수 */
     const memberName = list?.memberDTO?.memberName;
     const roomNum = roomList.map(room => room.roomNum);
+    console.log('memberName : ', list);
     /** useEffect */
     useEffect(() => {
         const fetchData = async () => {
@@ -59,8 +60,6 @@ function MessengerSidebar() {
     }
 
     const chatRoomHandler = (roomNum) => {
-        // <ChatRoom roomList={roomList}/>
-        console.log('클릭된 번호 : ', roomNum);
         navigate(`/aurora/messenger/detail/${roomNum}`);
     }
     return (
