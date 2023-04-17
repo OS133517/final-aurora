@@ -62,7 +62,7 @@ function WeekWorklogs() {
                         
                         <tr>
                             <th>
-                                번호
+                                
                             </th>
                             <th>
                                 작성일
@@ -80,7 +80,7 @@ function WeekWorklogs() {
                             Array.isArray(weekWorklogList) && weekWorklogList.map((weekWorklog) => (
                                 <tr key={weekWorklog.weekWorklogCode} id={weekWorklog.weekWorklogCode} onClick={() => onClickWeekWorklogHandler(weekWorklog.weekWorklogCode)}>
                                     <td>
-                                        {weekWorklog.weekWorklogCode}
+                                        
                                     </td>
                                     <td>
                                         {weekWorklog.weekReportingDate}
