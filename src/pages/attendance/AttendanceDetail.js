@@ -70,9 +70,10 @@ export default function AttendanceDetail() {
     //이번주 잔여
     const remainWeek = workHoursDetail?.remaining_minutes;
     console.log("remainWeek", remainWeek);
-    const remainWeekHours = Math.floor(remainWeek / 60);
-    const remainWeekMinutes = remainWeek % 60;
-    const remainWorkedWeek = `${remainWeekHours||0}시간 ${remainWeekMinutes||0}분`;
+    const remainWeekHours = Math.max(0, Math.floor(remainWeek / 60));
+    const remainWeekMinutes = Math.max(0, remainWeek % 60);
+    const remainWorkedWeek = `${remainWeekHours}시간 ${remainWeekMinutes}분`;
+    console.log(remainWorkedWeek);
 
     //이번달 누적
     const totalMonth = workHoursDetail?.worked_minutes_this_month;
