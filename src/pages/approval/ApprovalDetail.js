@@ -36,7 +36,7 @@ function ApprovalDetail() {
     // 결재상태 변경 여부
     const [approvalLineStatus, setApprovalLineStatus] = useState([]);
     const [vacationNo, setVacationNo] = useState(0);
-    console.log('vacationNo : ', vacationNo);
+    // console.log('vacationNo : ', vacationNo);
     /** 사용자 정의 변수 */
     /** @param documentDTO 문서 DTO*/
     const docName = detailInfo?.detailApproval?.documentDTO?.docName;
@@ -162,9 +162,6 @@ function ApprovalDetail() {
     useEffect(() => {
 
         const updateAndReload = async () => {
-            if (vacation === 'y') {
-                await dispatch(callUpdateRemainVacationAPI(memberCode, useDay.usedDay, vacationNo));
-            }
 
             if (responseStatus === 200) {
 
@@ -182,6 +179,19 @@ function ApprovalDetail() {
         updateAndReload();
         //eslint-disable-next-line
     }, [responseStatus]);
+
+    useEffect(() => {
+
+        const updateAndReload = async () => {
+            console.log('vacation : ', vacation);
+            if (vacation === 'y') {
+                await dispatch(callUpdateRemainVacationAPI(memberCode, useDay.usedDay, vacationNo));
+            }
+
+        };
+        updateAndReload();
+        //eslint-disable-next-line
+    }, [vacation]);
     /** event */
     // 이전 페이지로 이동하기 위해
     const backEvent = () => {

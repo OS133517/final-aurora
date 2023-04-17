@@ -66,7 +66,6 @@ function ChatRoom() {
     return (
         <div className={messengerCSS.messengerRoom}>
             <div>
-                {/* <p>메시지 창 뜨는 지 확인 용</p> */}
                 {messages.map((msg, index) => (
                     <div key={index} className={messengerCSS.fullBox}>
                         <div>{member && member?.memberDTO?.memberName} </div>
