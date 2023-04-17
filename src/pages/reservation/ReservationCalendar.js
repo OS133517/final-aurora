@@ -27,17 +27,17 @@ function ReservationCalendar() {
     useEffect(() => {
 
         if(reservationResult.status === 200) {
-            Swal.fire({
-                icon : 'success',
-                text : reservationResult.message,
-                confirmButtonText : '확인'
-            }).then(() => {
+            // Swal.fire({
+            //     icon : 'success',
+            //     text : reservationResult.message,
+            //     confirmButtonText : '확인'
+            // }).then(() => {
                 dispatch(callReservationsAPI({
                     assetCode : assetCode,
                     startTime : `${selectedMonth[0]?.year}-${selectedMonth[0]?.month}-${selectedMonth[0]?.date}`,
                     endTime : `${selectedMonth[34]?.year}-${selectedMonth[34]?.month}-${selectedMonth[34]?.date}`
                 }));
-            })
+            // })
         } else if (reservationResult.status === 400) {
             Swal.fire({
                 icon : 'error',

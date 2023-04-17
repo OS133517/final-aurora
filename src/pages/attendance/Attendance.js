@@ -7,6 +7,7 @@ import { callEndTimeAPI,
         callSelectAttendanceAPI,
         callSelectMonthTimeAPI,
         callSelectTimeByDayAPI,
+        callSelectUsedVacationAPI,
         callSelectVacationAPI,
         callSelectWorkStatus,
         callWorkTimeAPI
@@ -27,10 +28,11 @@ export default function Attendance() {
     const memberCode = loginMember.memberCode;
     const [workStatus, setWorkStatus] = useState("퇴근");
     const currentDate = new Date();
+    const usedVcation = useSelector(state => state.attendanceReducer?.usedVcations);
     const localDate3 = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
     const formattedDate = localDate3.toISOString().substring(0, 10);
     const [selectDate , setSelectDate] = useState(formattedDate);
-
+    let result = (12- usedVcation?.usedDay)
     console.log("workHours" , workHours);
 
     const memberName = memberInfo?.memberDTO?.memberName;
@@ -58,6 +60,14 @@ export default function Attendance() {
     const [disableStartWorkButton, setDisableStartWorkButton] = useState(false);
    
    
+    useEffect(() => {
+
+        dispatch(callSelectUsedVacationAPI({
+
+            memberCode : memberCode
+        }))
+    },[usedVcation?.usedDay])
+
     useEffect(() => {
 
         dispatch(callSelectTimeByDayAPI({
@@ -314,7 +324,8 @@ export default function Attendance() {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{remainVacation?.REMAIN_VACATION}일</td>
+                                        {/* <td>{remainVacation?.REMAIN_VACATION}일</td> */}
+                                        <td>{result}일</td>
                                         <div>
                                         <button type='button' className={AttendanceCSS.VacationButton} onClick={handleClick}>휴가신청</button>
                                         <NavLink
