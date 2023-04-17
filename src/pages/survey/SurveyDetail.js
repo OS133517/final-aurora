@@ -57,11 +57,14 @@ function SurveyDetail() {
             <div className={SurveyDetailCSS.subHeader}>
                 {surveyDetail && `기간 : ${surveyDetail.startDate} ~ ${surveyDetail.endDate}  답변률 : ${Math.floor(surveyDetail.replyStatus)} %`}
             </div>
+            <div className={SurveyDetailCSS.questionBodyDiv}>
+                질문 : {Array.isArray(questions) && questions.filter(item => selectedNos.indexOf(item.questionNo) !== - 1).map(item => item.questionBody)}
+            </div>
             <div className={SurveyDetailCSS.detailBody}>
                 <div className={SurveyDetailCSS.detailFilterBar}>
                     <button 
                         style={Array.isArray(questions) && questionNos.length === selectedNos.length? {backgroundColor : '#88CFBA', color : 'white'}:null}
-                        onClick={() =>  Array.isArray(questions) && setSelectedNo(questionNos)}
+                        onClick={() =>  Array.isArray(questions) && selectedNos.length === questionNos.length? setSelectedNo([]) : setSelectedNo(questionNos)}
                         >
                         전체 결과
                     </button>
