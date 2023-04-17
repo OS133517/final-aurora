@@ -90,14 +90,14 @@ function MailSidebar() {
                     >
                         휴지통
                     </NavLink>
-                    {/* <NavLink
+                    <NavLink
                         to="statistics"
                         className={MailSidebarCSS.dropDownButtons}
                         onClick={() => handleClick('statistics')}
                         style={activeMenu === 'statistics' ? activeStyle : undefined}
                     >
                         통계
-                    </NavLink> */}
+                    </NavLink>
                 </div>
             </div>
         </>

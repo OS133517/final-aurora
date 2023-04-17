@@ -16,25 +16,40 @@ export default function HrmModify() {
   console.log(loginMember.memberCode);
   console.log('member' , member);
   
+  const [significant, setSignificant] = useState('');
+  const [introduction, setIntroduction] = useState('');
 
-  const [textarea, setTextarea] =useState('')
-  const onChangeHandler = (e) => {
-
-    setTextarea(e.target.value);
-
-  }
+  const onSignificantChangeHandler = (e) => {
+    setSignificant(e.target.value);
+  };
+  
+  const onIntroductionChangeHandler = (e) => {
+    setIntroduction(e.target.value);
+  };
 
   
   const onInputChange = (e) => {
     const { name, value } = e.target;
+
     if (name === "deptName") {
       const selectedDept = member.selectDept.find((dept) => dept.deptCode === value);
-      setFormValues({ ...formValues, deptName: selectedDept.deptName, deptCode: selectedDept.deptCode });
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        deptName: selectedDept.deptName,
+        deptCode: selectedDept.deptCode,
+      }));
     } else if (name === "jobName") {
       const selectedJob = member.selectJob.find((job) => job.jobCode === value);
-      setFormValues({ ...formValues, jobName: selectedJob.jobName, jobCode: selectedJob.jobCode });
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        jobName: selectedJob.jobName,
+        jobCode: selectedJob.jobCode,
+      }));
     } else {
-      setFormValues({ ...formValues, [name]: value });
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
     }
   };
 
@@ -74,7 +89,8 @@ export default function HrmModify() {
       const updatedMemberInfo = {
         ...memberInfo,
         ...formValues,
-        introduction: textarea,
+        introduction: introduction,
+        significant: significant
       };
 
     try {
@@ -93,8 +109,8 @@ export default function HrmModify() {
           memberEndDate: formValues.memberEndDate,
           taskCode: memberInfo.taskName,
           memberHireDate: formValues.memberHireDate,
-          signficant: memberInfo.signficant,
-          introduction: textarea,
+          significant: significant,
+          introduction: introduction,
           fileCode: memberInfo.fileCode,
           team: memberInfo.team,
           gender: memberInfo.gender,
@@ -118,12 +134,6 @@ export default function HrmModify() {
       memberCode : memberCode
     }));
   },[memberCode , dispatch]);
-
-  useEffect(() => {
-    
-    setTextarea(memberInfo?.introduction);
-  }, [memberInfo]);
-
   
 
   useEffect(() => {
@@ -141,12 +151,13 @@ export default function HrmModify() {
         birthDay: memberInfo?.birthDay || '',
         address: memberInfo?.address || '',
         memberHireDate: memberInfo?.memberHireDate || '',
-        signficant: memberInfo?.signficant || '',
         status: memberInfo?.status || '',
+        
         memberEndDate: memberInfo?.memberEndDate || '',
       });
+      setSignificant(memberInfo.significant || '');
     }
-  }, [memberInfo]);
+  }, [memberInfo , setFormValues]);
 
 
 
@@ -296,9 +307,10 @@ export default function HrmModify() {
       <div className={HrmDetailCSS.textareaContainer}>
       <span>기타정보</span>
     <textarea
+      name="significant"
       className={HrmDetailCSS.textarea}
-      value={formValues.signficant}
-       onChange={onInputChange}
+      value={significant}
+       onChange={onSignificantChangeHandler}
     />
        
       </div>
@@ -306,8 +318,8 @@ export default function HrmModify() {
       <span>자기소개</span>
     <textarea
       className={HrmDetailCSS.textarea}
-       value={textarea}
-      onChange={onChangeHandler}
+       value={introduction}
+      onChange={onIntroductionChangeHandler}
       readOnly={loginMember.memberCode == memberCode ? false :true}
     />
     <div>

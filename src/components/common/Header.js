@@ -45,7 +45,12 @@ function Header() {
 
     return (
         <div className={HeaderCSS.header}>
-            <img src={ `${process.env.PUBLIC_URL}/aurora.png` } onClick={() => navigate("/")} alt="메인로고"/>
+            <img 
+                style={{cursor: "pointer"}}
+                src={ `${process.env.PUBLIC_URL}/aurora.png` } 
+                onClick={() => navigate("/")} 
+                alt="메인로고"
+            />
             {isLogin && <img className={HeaderCSS.logout} src={ `${process.env.PUBLIC_URL}/logout.png` } onClick={onClickLogoutHandler} alt="로그아웃"/>}
         </div>
     )

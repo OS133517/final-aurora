@@ -449,26 +449,40 @@ function ReportCreate() {
                                     유형
                                 </th>
                                 <td>
-                                    <input 
-                                        id='Routine' 
-                                        type='radio' 
-                                        name='reportType' 
-                                        value='Routine' 
-                                        onChange={onChangeHandler} 
-                                        checked={reportDTO?.reportType === "Routine"}
-                                        disabled={isEdit} // 수정 모드일 때 라디오 버튼 비활성화
-                                    /> 
-                                    <label htmlFor="Routine">정기</label>
-                                    <input 
-                                        id='Casual' 
-                                        type='radio' 
-                                        name='reportType' 
-                                        value='Casual' 
-                                        onChange={onChangeHandler}
-                                        checked={reportDTO?.reportType === "Casual"}
-                                        disabled={isEdit} // 수정 모드일 때 라디오 버튼 비활성화
-                                    /> 
-                                    <label htmlFor="Casual">비정기</label>
+                                    <label 
+                                        htmlFor="Routine"
+                                        className={ReportCreateCSS.radioContainer}
+                                    >
+                                        &nbsp;정기
+                                        <input 
+                                            className={ReportCreateCSS.radio}
+                                            id='Routine' 
+                                            type='radio' 
+                                            name='reportType' 
+                                            value='Routine' 
+                                            onChange={onChangeHandler} 
+                                            checked={reportDTO?.reportType === "Routine"}
+                                            disabled={isEdit} // 수정 모드일 때 라디오 버튼 비활성화
+                                        /> 
+                                        <span className={ReportCreateCSS.radioVisual}></span>
+                                    </label>
+                                    <label 
+                                        htmlFor="Casual"
+                                        className={ReportCreateCSS.radioContainer}
+                                    >
+                                    &nbsp;비정기
+                                        <input 
+                                            className={ReportCreateCSS.radio}
+                                            id='Casual' 
+                                            type='radio' 
+                                            name='reportType' 
+                                            value='Casual' 
+                                            onChange={onChangeHandler}
+                                            checked={reportDTO?.reportType === "Casual"}
+                                            disabled={isEdit} // 수정 모드일 때 라디오 버튼 비활성화
+                                        /> 
+                                        <span className={ReportCreateCSS.radioVisual}></span>
+                                    </label>
                                 </td>
                             </tr>
                             <tr><td><br></br></td></tr>
@@ -478,23 +492,41 @@ function ReportCreate() {
                                     <tr>
                                         <th>보고 주기</th>
                                         <td>
-                                            <select id="cycleType" value={cycleType} onChange={handleCycleTypeChange}>
-                                                <option value="monthly">월간</option>
-                                                <option value="weekly">주간</option>
-                                            </select>
-                                            <select name="reportCycle" id="cycleValue" value={reportDTO?.reportCycle} onChange={onChangeHandler}>
-                                                {cycleType === "monthly"
-                                                ? daysOfMonth.map((day) => (
-                                                    <option key={day} value={day}>
-                                                        {day}
-                                                    </option>
-                                                    ))
-                                                : daysOfWeek.map((day) => (
-                                                    <option key={day} value={day}>
-                                                        {day}
-                                                    </option>
-                                                    ))}
-                                            </select>
+                                            <div className={ReportCreateCSS.selectContainer}>
+                                                <select 
+                                                    id="cycleType" 
+                                                    value={cycleType} 
+                                                    onChange={handleCycleTypeChange}
+                                                    className={ReportCreateCSS.select}
+                                                >
+                                                    <option value="monthly">월간</option>
+                                                    <option value="weekly">주간</option>
+                                                </select>
+                                                <span className={ReportCreateCSS.selectArrow}>&#9660;</span>
+                                            </div>
+                                            <div className={ReportCreateCSS.selectContainer}>
+                                                <select 
+                                                    name="reportCycle" 
+                                                    id="cycleValue" 
+                                                    value={reportDTO?.reportCycle} 
+                                                    onChange={onChangeHandler}
+                                                    className={ReportCreateCSS.select}
+                                                >
+                                                    {cycleType === "monthly"
+                                                        ? daysOfMonth.map((day) => (
+                                                            <option key={day} value={day}>
+                                                                {day}
+                                                            </option>
+                                                            ))
+                                                        : daysOfWeek.map((day) => (
+                                                            <option key={day} value={day}>
+                                                                {day}
+                                                            </option>
+                                                            ))
+                                                    }
+                                                </select>
+                                                <span className={ReportCreateCSS.selectArrow}>&#9660;</span>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr><td><br></br></td></tr>
@@ -591,10 +623,20 @@ function ReportCreate() {
                                     <tr>
                                         <th>파일</th>
                                         <td>
-                                            <input 
+                                            {/* <input 
                                                 type="file" 
                                                 onChange={onFileChange} 
                                                 multiple
+                                            /> */}
+                                            <label htmlFor="file-upload" className={ReportCreateCSS.fileLabel}>
+                                                파일 첨부
+                                            </label>
+                                            <input
+                                                id="file-upload"
+                                                type="file"
+                                                onChange={onFileChange}
+                                                multiple
+                                                className={ReportCreateCSS.fileInput}
                                             />
                                         </td>
                                     </tr>
@@ -606,7 +648,12 @@ function ReportCreate() {
                                                     <thead>
                                                         <tr>
                                                             <td>
-                                                                <button onClick={removeAllFiles}>X</button>
+                                                                <button 
+                                                                    className={ReportCreateCSS.removeFileButton} 
+                                                                    onClick={removeAllFiles}
+                                                                >
+                                                                    X
+                                                                </button>
                                                             </td>
                                                             <td>파일 제목</td>
                                                             <td>용량</td>
@@ -616,7 +663,12 @@ function ReportCreate() {
                                                         {serverFileList.map((file, index) => (
                                                             <tr key={file.fileCode}>
                                                                 <td>
-                                                                    <button onClick={() => removeServerFile(index)}>X</button>
+                                                                    <button 
+                                                                        className={ReportCreateCSS.removeFileButton}
+                                                                        onClick={() => removeServerFile(index)}
+                                                                    >
+                                                                        X
+                                                                    </button>
                                                                 </td>
                                                                 <td>{file.fileOriginName}</td>
                                                                 <td>{(file.fileSize)} </td>
@@ -626,10 +678,14 @@ function ReportCreate() {
                                                         {fileList.map((file, index) => (
                                                             <tr key={index}>
                                                                 <td>
-                                                                    <button onClick={() => removeFile(index)}>X</button>
+                                                                    <button 
+                                                                        className={ReportCreateCSS.removeFileButton}
+                                                                        onClick={() => removeFile(index)}
+                                                                    >
+                                                                        X
+                                                                    </button>
                                                                 </td>
                                                                 <td>{file.name}</td>
-                                                                {/* <td>{file.fileName}</td> */}
                                                                 <td>{(file.size / 1024).toFixed(2)} KB</td>
                                                             </tr>
                                                         ))}
@@ -647,8 +703,18 @@ function ReportCreate() {
                         </tbody>
                     </table>
                     <div className={ReportCreateCSS.buttonDiv}>
-                        <button onClick={onClickSubmit}>보고서 등록</button>
-                        <button onClick={handleCancel}>취소</button>
+                        <button 
+                            className={ReportCreateCSS.greentButton}
+                            onClick={onClickSubmit}
+                        >
+                            보고 작성
+                        </button>
+                        <button 
+                            className={ReportCreateCSS.greentButton}
+                            onClick={handleCancel}
+                        >
+                            취소
+                        </button>
                     </div>
                 </div>
             </div>

@@ -45,20 +45,19 @@ import VacationDetail from './pages/attendance/VacationDetail';
 import MailLayout from "./layouts/MailLayout";
 import Inbox from './pages/mail/Inbox';
 import Sent from './pages/mail/Sent';
-import Spam from './pages/mail/Spam';
 import Trash from './pages/mail/Trash';
-// import Statistics from './pages/mail/Statistics';
-import MailWrite from './pages/mail/MailWrite';
 import MailDetail from './pages/mail/MailDetail';
+import MailWrite from './pages/mail/MailWrite';
+import Statistics from './pages/mail/Statistics';
 
 import ReportLayout from "./layouts/ReportLayout";
 import ReportsSummary from "./pages/report/ReportSummary";
-import ReportCreate from "./pages/report/ReportCreate";
 import RoutineReports from "./pages/report/RoutineReports";
-import CasualReports from "./pages/report/CasualReports";
-import CasualReportDetail from "./pages/report/CasualReportDetail";
 import ReportRounds from "./pages/report/ReportRounds";
 import ReportRoundDetail from "./pages/report/ReportRoundDetail";
+import CasualReports from "./pages/report/CasualReports";
+import CasualReportDetail from "./pages/report/CasualReportDetail";
+import ReportCreate from "./pages/report/ReportCreate";
 
 import WorklogLayout from "./layouts/WorklogLayout";
 import DayWorklogs from "./pages/worklog/DayWorklogs";
@@ -73,6 +72,7 @@ import MessengerList from "./pages/messenger/MessengerList";
 import MessengerLayout from "./layouts/MessengerLayout";
 import ChatRoom from "./components/form/messenger/ChatRoom";
 import Completed from "./pages/approval/Completed";
+import ApprovalGraph from "./pages/approval/ApprovalGraph";
 
 
 
@@ -94,21 +94,19 @@ function App() {
               <Route path="mails" element={<MailLayout />}>
                 <Route index element={<Inbox />} />
                 <Route path="sent" element={<Sent />} />
-                <Route path="spam" element={<Spam />} />
                 <Route path="trash" element={<Trash />} />
-                {/* <Route path="statistics" element={<Statistics />} /> */}
-                <Route path="write" element={<MailWrite />} />
                 <Route path="detail/:mailCode" element={<MailDetail />} />
+                <Route path="write" element={<MailWrite />} />
+                <Route path="statistics" element={<Statistics />} />
               </Route>
               <Route path="reports" element={<ReportLayout />}>
+                <Route path="summary" index element={<ReportsSummary />} />
                 <Route path="routines" element={<RoutineReports />} />
                 <Route path=":reportCode/rounds" element={<ReportRounds />} />
+                <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail />} />
                 <Route path="casuals" element={<CasualReports />} />
-                <Route path="summary" index element={<ReportsSummary />} />
-                {/* <Route path="edit" element={<ReportCreate />} /> */}
                 <Route path="casuals/:reportCode" element={<CasualReportDetail />} />
                 <Route path="edit" element={<ReportCreate />} />
-                <Route path=":reportCode/rounds/:roundCode" element={<ReportRoundDetail />} />
               </Route>
               <Route path="reservation" element={<ReservationLayout />}>
                 <Route index element={<MyReservation />} />
@@ -126,6 +124,7 @@ function App() {
                 <Route index path="draft" element={<ApprovalDraft />} />
                 <Route index path="detail/:appCode" element={<ApprovalDetail />} />
                 <Route index path="form/:docCode" element={<DraftForm />} />
+                <Route index path="graph" element={<ApprovalGraph />} />
               </Route>
               <Route path="hrm" element={<HrmLayout />}>
                 <Route index element={<Hrm />} />
@@ -136,7 +135,7 @@ function App() {
                 <Route path="hrm-regist" element={<HrmSignup category='인사 등록' />} />
               </Route>
               <Route path="worklog" element={<WorklogLayout />}>
-                <Route index element={<DayWorklogs />}/>
+                <Route index element={<DayWorklogs />} />
                 <Route path="day" element={<DayWorklogs />} />
                 <Route path="day/:dayWorklogCode" element={<DayWorklogDetail />} />
                 <Route path="day/insert" element={<DayWorklogInsert />} />
@@ -153,20 +152,20 @@ function App() {
                 <Route path="vacation-detail/:memberCode" element={<VacationDetail category='휴가 현황' />} />
               </Route>
               <Route path="survey" element={<SurveyLayout />}>
-                <Route index element={<Surveys/>}/>
+                <Route index element={<Surveys />} />
                 <Route path="list" element={<Surveys />} />
                 <Route path="survey-management" element={<SurveyManagement />} />
                 <Route path="survey-management/regist" element={<SurveyRegist />} />
                 <Route path="survey-management/update/:surveyCode" element={<SurveyUpdate />} />
-                <Route path="survey-management/:surveyCode" element={<SurveyDetail/>}/>
+                <Route path="survey-management/:surveyCode" element={<SurveyDetail />} />
               </Route>
               <Route path="messenger" element={<MessengerLayout />}>
                 <Route index="messengers" element={<MessengerList />} />
                 <Route index path="detail/:roomNum" element={<ChatRoom />} />
               </Route>
               <Route path="calendar" element={<ScheduleLayout />}>
-                <Route index element={<Schedules />}/>
-                <Route path="month" element={<Schedules />}/>
+                <Route index element={<Schedules />} />
+                <Route path="month" element={<Schedules />} />
               </Route>
             </Route>
           </Route>

@@ -6,6 +6,7 @@ import { decodeJwt } from "../../utils/tokenUtils";
 import { callEndTimeAPI,
         callSelectAttendanceAPI,
         callSelectMonthTimeAPI,
+        callSelectTimeByDayAPI,
         callSelectVacationAPI,
         callSelectWorkStatus,
         callWorkTimeAPI
@@ -17,6 +18,7 @@ import Swal from "sweetalert2";
 
 export default function Attendance() {
     const dispatch = useDispatch();
+    const workHours = useSelector(state => state.attendanceReducer?.inOutTime);
     const attendanceStatus = useSelector(state => state.attendanceReducer?.attendanceStatus);
     const monthTime = useSelector(state => state.attendanceReducer.workHours);
     const remainVacation = useSelector(state => state.attendanceReducer?.vacation);
@@ -25,9 +27,11 @@ export default function Attendance() {
     const memberCode = loginMember.memberCode;
     const [workStatus, setWorkStatus] = useState("퇴근");
     const currentDate = new Date();
-    const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
-    const formattedDate = localDate.toISOString().substring(0, 10);
+    const localDate3 = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
+    const formattedDate = localDate3.toISOString().substring(0, 10);
+    const [selectDate , setSelectDate] = useState(formattedDate);
 
+    console.log("workHours" , workHours);
 
     const memberName = memberInfo?.memberDTO?.memberName;
     const deptName = memberInfo?.memberDTO?.deptName;
@@ -52,10 +56,25 @@ export default function Attendance() {
     const navLinkRef = useRef();
     
     const [disableStartWorkButton, setDisableStartWorkButton] = useState(false);
+   
+   
+    useEffect(() => {
+
+        dispatch(callSelectTimeByDayAPI({
+          memberCode : memberCode,
+          attRegDate : selectDate
+        }))
+      },[selectDate])
+
+    useEffect(() => {
+        if (workStatus === "근무") {
+            setDisableStartWorkButton(true);
+        } else {
+            setDisableStartWorkButton(false);
+        }
+    }, [workStatus]);  
 
 
-        
-      
         const handleClick = () => {
           Swal.fire({
             title: '휴가 신청',
@@ -84,13 +103,23 @@ export default function Attendance() {
         }
       }, []);
 
-    const handleStartWork =async (memberCode) => {
+      const handleStartWork =async (memberCode) => {
         console.log(memberCode);
 
+        if (workHours?.OFF_TIME) {
+            Swal.fire({
+                title: "Warning!",
+                text: "당일 퇴근 시간이 이미 등록되어 있습니다. 다시 출근 처리할 수 없습니다.",
+                icon: "warning",
+                confirmButtonText: "확인",
+            });
+            return;
+        }
+    
         await dispatch(callWorkTimeAPI({
-
-            memberCode : memberCode
-            
+    
+            memberCode: memberCode
+    
         }));
 
         const action = await dispatch(callSelectWorkStatus({ memberCode: memberCode }));
@@ -117,14 +146,32 @@ export default function Attendance() {
               localStorage.setItem("workStatus", "근무");
         }
         setDisableStartWorkButton(true);
+        
     };
 
     const handleEndWork = async (memberCode) => {
+        const now = new Date();
+        const currentHours = now.getHours();
+
+        if (currentHours < 18) {
+            const result = await Swal.fire({
+                title: "Warning!",
+                text: "현재 오후 6시 이전입니다. 정말 퇴근하시겠습니까?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "예",
+                cancelButtonText: "아니오",
+            });
+
+            if (result.isDismissed) {
+                return;
+            }
+        }
+       
         await dispatch(callEndTimeAPI({     
 
             memberCode : memberCode
-
-          
+              
         }));
         const action = await dispatch(callSelectWorkStatus({ memberCode: memberCode }));
         if (action && action.payload) {
@@ -137,20 +184,37 @@ export default function Attendance() {
                 text: "퇴근 처리되었습니다.",
                 icon: "success",
                 confirmButtonText: "확인",
-              });
+                });
             } else {
-              Swal.fire({
+                Swal.fire({
                 title: "Error!",
                 text: "퇴근 처리에 실패하였습니다.",
                 icon: "error",
                 confirmButtonText: "확인",
-              });
-              localStorage.setItem("workStatus", "퇴근");
+                });
+                localStorage.setItem("workStatus", "퇴근");
         }
         setDisableStartWorkButton(true);
+        window.location.reload()
 
     };
 
+    useEffect(() => {
+        const checkWorkStatus = async () => {
+            const action = await dispatch(callSelectWorkStatus({ memberCode: memberCode }));
+            if (action && action.payload) {
+                const response = action.payload;
+                setWorkStatus(response.WORK_STATUS);
+                localStorage.setItem("workStatus", response.WORK_STATUS);
+    
+                if (response.WORK_STATUS === "근무") {
+                    setDisableStartWorkButton(true);
+                }
+            }
+        };
+        
+        checkWorkStatus();
+    }, []);
   
 
     useEffect(() => {
@@ -183,11 +247,6 @@ export default function Attendance() {
         }));
         
     },[memberCode]);
-
-
-
-
-
 
     return (
         <>
@@ -292,10 +351,10 @@ export default function Attendance() {
                             </div>
                         </div>
                         <div className={AttendanceCSS.boxWrapper3}>
-                            <span></span>
+                            <span>휴가 선호도<b>(월)</b> </span>
                             <div className={AttendanceCSS.Box3}>
-                        
-                            </div>
+                            <iframe src={`http://localhost:5601/app/dashboards#/view/0bbdb7a0-da8d-11ed-ba2d-17b135d08f3b?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:'2023-03-31T15:31:56.476Z',to:now))&_a=(description:'',expandedPanelId:'49f1119c-4355-4a21-94e1-a5c9d4938e17',filters:!(),fullScreenMode:!f,options:(hidePanelTitles:!f,syncColors:!f,useMargins:!t),panels:!((embeddableConfig:(attributes:(references:!((id:'971e7b60-da8b-11ed-ba2d-17b135d08f3b',name:indexpattern-datasource-current-indexpattern,type:index-pattern),(id:'971e7b60-da8b-11ed-ba2d-17b135d08f3b',name:indexpattern-datasource-layer-2bc1086e-7243-4610-9bbe-63d9c5598311,type:index-pattern)),state:(datasourceStates:(indexpattern:(layers:('2bc1086e-7243-4610-9bbe-63d9c5598311':(columnOrder:!(b715e65b-3238-4b1e-a2e3-0ce69760fb61,'49f6d1c9-9f68-4cbc-b663-59d443099433'),columns:('49f6d1c9-9f68-4cbc-b663-59d443099433':(dataType:number,isBucketed:!f,label:'95th%20percentile%20of%20month',operationType:percentile,params:(percentile:95),scale:ratio,sourceField:month),b715e65b-3238-4b1e-a2e3-0ce69760fb61:(dataType:number,isBucketed:!t,label:month,operationType:range,params:(maxBars:auto,ranges:!((from:0,label:'',to:1000)),type:histogram),scale:interval,sourceField:month)),incompleteColumns:())))),filters:!(),query:(language:kuery,query:''),visualization:(layers:!((categoryDisplay:default,groups:!(b715e65b-3238-4b1e-a2e3-0ce69760fb61),layerId:'2bc1086e-7243-4610-9bbe-63d9c5598311',layerType:data,legendDisplay:default,metric:'49f6d1c9-9f68-4cbc-b663-59d443099433',nestedLegend:!f,numberDisplay:percent)),shape:donut)),title:'',type:lens,visualizationType:lnsPie),enhancements:()),gridData:(h:15,i:'49f1119c-4355-4a21-94e1-a5c9d4938e17',w:24,x:24,y:0),panelIndex:'49f1119c-4355-4a21-94e1-a5c9d4938e17',type:lens,version:'7.17.5')),query:(language:kuery,query:'member_code:${memberCode}'),tags:!(),timeRestore:!f,title:%EA%B7%BC%ED%98%B82,viewMode:view)&hide-filter-bar=true`} height="450" width="800"></iframe>                            </div>
+
                         </div>  
                     </div>
                     

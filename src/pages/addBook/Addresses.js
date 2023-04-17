@@ -340,9 +340,6 @@ function Addresses({category = "전체 주소록"}) {
                     'groupCode' : temp,
                     memberCodes : insertList
                 }))
-            } else {
-                
-                Swal.fire('취소되었습니다.');
             }
         })
     }

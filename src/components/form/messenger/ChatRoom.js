@@ -13,6 +13,7 @@ function ChatRoom() {
     /** disPatch */
     const dispatch = useDispatch();
     /** useParam */
+    // eslint-disable-next-line    
     const param = useParams();
     /** useSelector */
     const member = useSelector(state => state.memberReducer.memberDetail);
@@ -26,14 +27,6 @@ function ChatRoom() {
     const [messages, setMessages] = useState([]);
     // 메시지 하나
     const [message, setMessage] = useState('');
-
-    let options = {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric'
-    };
 
 
     /** Event */

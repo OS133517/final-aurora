@@ -10,7 +10,9 @@ const initialState = {
     reportSummary : [],
     reportDetail : [],
     routineReportList : [],
+    sideRoutineReportList : [],
     casualReportList : [],
+    sideCasualReportList : [],
     registReportMessage : [],
     reportRoundData : [],
     reportRoundDetailData : [],
@@ -23,6 +25,8 @@ export const GET_MATCHING_MEMBERS = 'report/GET_MATCHING_MEMBERS';
 
 export const GET_REPORT_SUMMARY = 'report/GET_REPORT_SUMMARY';
 export const GET_REPORT_DETAIL = 'report/GET_REPORT_DETAIL';
+export const GET_SIDE_ROUTINE_REPORT_LIST = 'report/GET_SIDE_ROUTINE_REPORT_LIST';
+export const GET_SIDE_CASUAL_REPORT_LIST = 'report/GET_SIDE_CASUAL_REPORT_LIST';
 export const GET_ROUTINE_REPORT_LIST_BY_CONDITIONS = 'report/GET_ROUTINE_REPORT_LIST_BY_CONDITIONS';
 export const GET_CASUAL_REPORT_LIST_BY_CONDITIONS = 'report/GET_CASUAL_REPORT_LIST_BY_CONDITIONS';
 export const GET_REPORT_ROUND_LIST = 'report/GET_REPORT_ROUND_LIST';
@@ -63,6 +67,8 @@ const actions = createActions({
 
     [GET_REPORT_SUMMARY] : () => {},
     [GET_REPORT_DETAIL] : () => {},
+    [GET_SIDE_ROUTINE_REPORT_LIST] : () => {},
+    [GET_SIDE_CASUAL_REPORT_LIST] : () => {},
     [GET_ROUTINE_REPORT_LIST_BY_CONDITIONS] : () => {},
     [GET_CASUAL_REPORT_LIST_BY_CONDITIONS] : () => {},
     [GET_REPORT_ROUND_LIST] : () => {},
@@ -104,6 +110,16 @@ const reportReducer = handleActions({
         return {
             ...state,
             reportDetail : payload
+        }},
+    [GET_SIDE_ROUTINE_REPORT_LIST] : (state, { payload }) => {
+        return {
+            ...state,
+            sideRoutineReportList : payload
+        }},
+    [GET_SIDE_CASUAL_REPORT_LIST] : (state, { payload }) => {
+        return {
+            ...state,
+            sideCasualReportList : payload
         }},
     [GET_ROUTINE_REPORT_LIST_BY_CONDITIONS] : (state, { payload }) => {
         return {

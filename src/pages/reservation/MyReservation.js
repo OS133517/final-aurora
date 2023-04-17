@@ -138,7 +138,7 @@ function MyReservation() {
             }
         })
     }
-
+    console.log(isLogin.memberCode);
     return (
         <>
             {updateModal? <ReservationUpdateModal reservationNo={selectedNo} setUpdateModal={setUpdateModal}/>:null}
@@ -188,7 +188,7 @@ function MyReservation() {
                                         <input 
                                             type="checkBox" 
                                             id={`checkBox${reservation.reservationNo}`}
-                                            disabled={new Date(reservation.startTime).getTime() < new Date().getTime()? true:false}/>
+                                            disabled={(new Date(reservation.startTime).getTime() < new Date().getTime() || parseInt(reservation.memberCode)!== isLogin.memberCode)? true:false}/>
                                     </td>
                                     <td>
                                         {reservation.assetName}
