@@ -66,7 +66,7 @@ function DayWorklogs() {
                     <thead className={ DayWorklogsCSS.contentHead }>
                         <tr>
                             <th>
-                                번호
+                                
                             </th>
                             <th>
                                 작성일
@@ -84,7 +84,7 @@ function DayWorklogs() {
                             Array.isArray(dayWorklogList) && dayWorklogList.map((dayWorklog) => (
                                 <tr key={dayWorklog.dayWorklogCode} id={dayWorklog.dayWorklogCode} onClick={() => onClickDayWorklogHandler(dayWorklog.dayWorklogCode)}>
                                     <td>
-                                        {dayWorklog.dayWorklogCode}
+                                        
                                     </td>
                                     <td>
                                         {dayWorklog.dayReportingDate}
