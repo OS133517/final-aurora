@@ -202,7 +202,7 @@ function ReportRoundDetail() {
     }
 
     // 상세 보고 작성
-    const onClickRegisterReportDetailHandler = () => {
+    const onClickRegisterReportDetailHandler = async () => {
 
         // newReportDetailBody값이 NULL이거나 공백인 경우 검증
         if (!newReportDetailBody || newReportDetailBody.trim() === "") {
@@ -211,7 +211,7 @@ function ReportRoundDetail() {
 
             return;
         }
-        dispatch(callRegisterReportDetailAPI({
+        await dispatch(callRegisterReportDetailAPI({
 
             reportCode : reportDTO.reportCode,
             roundCode : reportRoundDetail.roundCode,
@@ -248,7 +248,7 @@ function ReportRoundDetail() {
 
             return;
         }
-        dispatch(callUpdateReportDetailAPI({
+        await dispatch(callUpdateReportDetailAPI({
 
             reportCode : reportRoundDetail.reportCode,
             roundCode : reportRoundDetail.roundCode,
@@ -274,7 +274,7 @@ function ReportRoundDetail() {
 
         if (result.isConfirmed) {
             
-            dispatch(callDeleteReportDetailAPI({
+            await dispatch(callDeleteReportDetailAPI({
 
                 detailCode : detailCode
             }))
@@ -283,7 +283,7 @@ function ReportRoundDetail() {
     }
 
     // 댓글 작성 함수
-    const handleCreateReply = () => {
+    const handleCreateReply = async () => {
 
         // newReplyBody값이 NULL이거나 공백인 경우 검증
         if (!newReplyBody || newReplyBody.trim() === "") {
@@ -293,7 +293,7 @@ function ReportRoundDetail() {
             return;
         }
         // 댓글 작성 API 호출
-        dispatch(callRegisterReportRoundReplyAPI({
+        await dispatch(callRegisterReportRoundReplyAPI({
 
             roundCode: reportRoundDetail.roundCode,
             replyBody: newReplyBody
@@ -329,7 +329,7 @@ function ReportRoundDetail() {
 
             return;
         }
-        dispatch(callUpdateReportRoundReplyAPI({
+        await dispatch(callUpdateReportRoundReplyAPI({
 
             roundCode : roundCode,
             replyCode : replyCode,
@@ -353,7 +353,7 @@ function ReportRoundDetail() {
         });
         if (result.isConfirmed) {
 
-            dispatch(callDeleteReportRoundReplyAPI({
+            await dispatch(callDeleteReportRoundReplyAPI({
 
                 replyCode : replyCode
             }))

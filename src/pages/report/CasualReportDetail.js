@@ -70,6 +70,7 @@ function CasualReportDetail() {
                 reportCode : reportCode
             }))
             navigate(`/aurora/reports/casuals?completionStatus=N&offset=1`)
+            window.location.reload();
 
             window.history.pushState(null, "", window.location.pathname);
             window.onpopstate = function (event) {

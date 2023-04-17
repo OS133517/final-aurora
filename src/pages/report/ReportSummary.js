@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
 import { callReportSummaryAPI } from "../../apis/ReportAPICall";
+import { useNavigate } from 'react-router-dom';
 import { updateReportStatus } from '../../modules/ReportModule';
 
 import ReportSummaryCSS from "./ReportSummary.module.css";
@@ -9,6 +10,7 @@ import ReportSummaryCSS from "./ReportSummary.module.css";
 function ReportSummary() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
     const isReportUpdated = useSelector(state => state.reportReducer.isReportListUpdated);
 
@@ -31,7 +33,15 @@ function ReportSummary() {
     return (
         <div className={ReportSummaryCSS.container}>
             <div className={ReportSummaryCSS.content}>
-                <span className={ReportSummaryCSS.reportType}>정기 보고</span>
+                <span 
+                    className={ReportSummaryCSS.reportType}
+                    onClick={() => {
+                        navigate('/aurora/reports/routines');
+                    }}
+                    style={{cursor: "pointer"}}
+                >
+                    정기 보고
+                </span>
                 <div className={ReportSummaryCSS.routineBox}>
                     {
                         [routineList1, routineList2, routineList3].map((routineList, index) => (
@@ -80,7 +90,15 @@ function ReportSummary() {
                     }
                 </div>
                 {/* 비정기 보고 */}
-                <span className={ReportSummaryCSS.reportType}>비정기 보고</span>
+                <span 
+                    className={ReportSummaryCSS.reportType}
+                    onClick={() => {
+                        navigate('/aurora/reports/casuals');
+                    }}
+                    style={{cursor: "pointer"}}
+                >
+                    비정기 보고
+                </span>
                 <div className={`${ReportSummaryCSS.casualReportContainer} ${ReportSummaryCSS.flexContainer}`}>
                     <div className={ReportSummaryCSS.casualReportDiv} style={{ width: "450px", overflowY: "auto" }}>
                         <table className={ReportSummaryCSS.reportTable}>
