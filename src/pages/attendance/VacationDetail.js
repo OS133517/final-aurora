@@ -32,6 +32,8 @@ export default function VacationDetail() {
     console.log("usedVcation", usedVcation);
     console.log("vacationDetail", vacationDetail);
 
+
+    let result = (12- usedVcation?.usedDay)
     const navLinkRef = useRef();
 
     const handleClick = () => {
@@ -135,7 +137,8 @@ export default function VacationDetail() {
                                 <tbody>
                                     <tr>
                                         <td></td>
-                                        <td>{remainVcation?.REMAIN_VACATION}일</td>
+                                        {/* <td>{remainVcation?.REMAIN_VACATION}일</td> */}
+                                        <td>{result}일</td>
                                     </tr>
                                 </tbody>
                             </table>
