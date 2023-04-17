@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { callMyScheduleAPI, callScheduleInsertAPI } from "../../apis/ScheduleAPICall"
 import { useNavigate } from "react-router-dom";
 import { decodeJwt } from "../../utils/tokenUtils";
+import Swal from "sweetalert2";
 
 function ScheduleInsertModal({ setScheduleInsertModal }) {
 
@@ -51,19 +52,52 @@ function ScheduleInsertModal({ setScheduleInsertModal }) {
         }
     };
 
+    const validateFormData = () => {
+
+        const { scheduleName, scheduleStartDay, scheduleEndDay, schedulePlace, scheduleContent } = form;
+        
+        const validationMessages = [
+            
+            { condition: !scheduleName, message: "제목을 입력해주세요." },
+            { condition: !scheduleStartDay, message: "시작 날짜를 지정해주세요." }, 
+            { condition: !scheduleEndDay, message: "끝 날짜를 지정해주세요." }, 
+            { condition: !schedulePlace, message: "장소를 입력해주세요." },
+            { condition: !scheduleContent, message: "내용을 입력해주세요." },
+            
+        ];
+
+        for (const validation of validationMessages) {
+
+            if (validation.condition) {
+
+                warningAlert(validation.message);
+
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const warningAlert = (message) => {
+
+        Swal.fire({
+            icon: 'warning',
+            title: '경고',
+            text: message,
+            confirmButtonText: '확인',
+        });
+    };
+
     const onClickScheduleInsert = () => {
+
+        if (!validateFormData()) {
+            
+            return;
+        }else {
+    
         
-        // const formData = new FormData();
         
-        // formData.append("scheduleCategoryCode", form.scheduleCategoryCode);
-        // formData.append("scheduleName", form.scheduleName);
-        // formData.append("scheduleStartDay", form.scheduleStartDay);
-        // formData.append("scheduleEndDay", form.scheduleEndDay);
-        // formData.append("scheduleStartTime", form.schduleStartTime);
-        // formData.append("scheduleEndTime", form.scheduleEndTime);
-        // formData.append("schedulePlace", form.schedulePlace);
-        // formData.append("scheduleContent", form.scheduleContent);
-     
+        console.log("1111")
         dispatch(callScheduleInsertAPI({
             form : form,
             memberCode : loginMember.memberCode
@@ -71,6 +105,7 @@ function ScheduleInsertModal({ setScheduleInsertModal }) {
 
         navigate("/aurora/calendar/month", { replace : true });
         window.location.reload();
+        }
     }
 
     return (
