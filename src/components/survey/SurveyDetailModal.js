@@ -192,7 +192,7 @@ function SurveyDetailModal({survey, setIsModalOn}) {
             <div className={SurveyModalCSS.subHeader}>
                 기간 : {survey.startDate}&nbsp;~&nbsp;{survey.endDate}
             </div>
-            <div className={SurveyModalCSS.progressionBar} style={{ width:`${barDivWidth}%`}}>
+            <div className={SurveyModalCSS.progressionBar} style={{ width:`${barDivWidth >= 100? 100:barDivWidth}%`}}>
                 {'\u00A0'}
             </div>
             <div className={SurveyModalCSS.modalDiv}>
