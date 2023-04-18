@@ -164,7 +164,7 @@ function SurveyRegist() {
                 if(`questionType${item.questionNo}` === e.target.id) {
                     item.questionType = e.target.value
                     if(item.questionType === 'write') {
-                        item.choices = [{choiceBody : ''}];
+                        item.choices = [{choiceBody : 'write'}];
                     } else if(item.questionType === 'choice') {
                         item.choices = [{choiceBody : ''}, {choiceBody : ''}];
                     }

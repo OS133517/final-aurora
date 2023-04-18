@@ -707,7 +707,7 @@ function ReportCreate() {
                             className={ReportCreateCSS.greentButton}
                             onClick={onClickSubmit}
                         >
-                            보고 작성
+                            {isEdit? <>보고 수정</> : <>보고 작성</>}
                         </button>
                         <button 
                             className={ReportCreateCSS.greentButton}

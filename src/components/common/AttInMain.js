@@ -193,6 +193,7 @@ function AttInMain() {
                 localStorage.setItem("workStatus", "퇴근");
         }
         setDisableStartWorkButton(true);
+        window.location.reload();
 
     };
 
