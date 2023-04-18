@@ -5,9 +5,12 @@ const initialState = {
     addresses : [],
     personalGroups : [],
     teamGroups : [],
-    groupRegistMessage : [],
+    groupMessage : [],
     addBookRegistMessage : [],
-    addBookDeleteMessage : []
+    addBookDeleteMessage : [],
+    addBookUpdateMessage : [],
+    memberToGroupMessage : [],
+    address : []
 };
 
 // 액션
@@ -18,6 +21,13 @@ export const GET_GROUP_ADDRESSES = 'addBook/GET_GROUP_ADDRESSES';
 export const POST_GROUP_REGIST = 'addBook/POST_GROUP_REGIST';
 export const POST_ADD_BOOK_REGIST = 'addBook/POST_ADD_BOOK_REGIST';
 export const DELETE_ADD_BOOK_DELETE = 'addBook/DELETE_ADD_BOOK_DELETE';
+export const GET_MEMBER_SEARCH = 'addBook/GET_MEMBER_SEARCH';
+export const GET_GROUP_SEARCH = 'addBook/GET_GROUP_SEARCH';
+export const POST_MEMBER_TO_GROUP = 'addBook/POST_MEMBER_TO_GROUP';
+export const DELETE_GROUP = 'addBook/DELETE_GROUP';
+export const PUT_GROUP = 'addBook/PUT_GROUP';
+export const GET_ADDRESS = 'addBook/GET_ADDRESS';
+export const PUT_ADDRESS = 'addBook/PUT_ADDRESS';
 
 // eslint-disable-next-line
 const actions = createActions({
@@ -27,7 +37,14 @@ const actions = createActions({
     [GET_GROUP_ADDRESSES] : () => {},
     [POST_GROUP_REGIST] : () => {},
     [POST_ADD_BOOK_REGIST] : () => {},
-    [DELETE_ADD_BOOK_DELETE] : () => {}
+    [DELETE_ADD_BOOK_DELETE] : () => {},
+    [GET_MEMBER_SEARCH] : () => {},
+    [GET_GROUP_SEARCH] : () => {},
+    [POST_MEMBER_TO_GROUP] : () => {},
+    [DELETE_GROUP] : () => {},
+    [PUT_GROUP] : () => {},
+    [GET_ADDRESS] : () => {},
+    [PUT_ADDRESS] : () => {}
 });
 
 // 리듀서
@@ -55,7 +72,7 @@ const addBookReducer = handleActions({
     [POST_GROUP_REGIST] : (state, { payload }) => {
         return {
             ...state,
-            groupRegistMessage : payload
+            groupMessage : payload
         }},
     [POST_ADD_BOOK_REGIST] : (state, { payload }) => {
         return {
@@ -66,8 +83,42 @@ const addBookReducer = handleActions({
         return {
             ...state,
             addBookDeleteMessage : payload
-        }
-    }
+        }},
+    [GET_MEMBER_SEARCH] : (state, { payload }) => {
+        return {
+            ...state,
+            addresses : payload
+        }},
+    [GET_GROUP_SEARCH] : (state, { payload }) => {
+        return {
+            ...state,
+            addresses : payload
+        }},
+    [POST_MEMBER_TO_GROUP] : (state, { payload }) => {
+        return {
+            ...state,
+            memberToGroupMessage : payload
+        }},
+    [DELETE_GROUP] : (state, { payload }) => {
+        return {
+            ...state,
+            groupMessage : payload
+        }},
+    [PUT_GROUP] : (state, { payload }) => {
+        return {
+            ...state,
+            groupMessage : payload
+        }},
+    [GET_ADDRESS] : (state, { payload }) => {
+        return {
+            ...state,
+            address : payload
+        }},
+    [PUT_ADDRESS] : (state, { payload }) => {
+        return {
+            ...state,
+            addBookUpdateMessage : payload
+        }}
 }, initialState);
 
 export default addBookReducer;

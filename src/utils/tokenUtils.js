@@ -6,3 +6,10 @@ export function decodeJwt(token) {
 
     return jwt_decode(token);
 }
+
+export function getMemberCode() {
+
+    if(window.localStorage.getItem("accessToken") === null) return null;
+
+    return decodeJwt(window.localStorage.getItem("accessToken")).memberCode;
+}

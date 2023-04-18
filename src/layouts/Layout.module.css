@@ -1,6 +1,9 @@
 .layout {
     margin: 0 auto;
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
 }
-
-
-

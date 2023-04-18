@@ -1,0 +1,265 @@
+.reportCreateContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+}
+
+.reportCreateHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 20px;
+    align-self: flex-start;
+}
+
+.reportCreateDiv {
+    width: 50%; 
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin-top: auto; 
+    margin-bottom: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.formTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.formTable th{
+    font-size: 1.5em;
+}
+
+.form-table td {
+    text-align: left;
+    padding: 5px;
+}
+
+.inputContainer {
+    position: relative;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 10;
+}
+
+.suggestionItem {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestionItem:hover {
+    background-color: #88CFBA;
+}
+
+.buttonDiv {
+    display: flex;
+    justify-content: space-between;
+    width: 30%;
+    padding: 10px;
+}
+
+.underBarInput {
+    width: 100%;
+    border: none;
+    border-bottom: 3px solid #C1C1C1;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 1.5em;
+}
+.underBarInput:focus {
+    outline: none;
+    border-color: #88CFBA;
+}
+
+.boxInput {
+    border: 3px solid #C1C1C1;
+    width: 100%;
+    height: 150px;
+    resize: none;
+    box-sizing: border-box;
+}
+.boxInput:focus {
+    outline: none;
+    border-color: #88CFBA;
+}
+
+.fileTableContainer {
+    margin-top: 20px;
+}
+.fileTable {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 16px;
+    background-color: #fff;
+}
+.fileTable th,
+.fileTable td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+.fileTable thead tr {
+    background-color: #f2f2f2;
+}
+.fileTable tbody tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+.fileTable tbody tr:hover {
+    background-color: #e6e6e6;
+}
+.fileTable thead tr th:first-child,
+.fileTable tbody tr td:first-child {
+    text-align: center;
+}
+.fileTable thead tr th,
+.fileTable tbody tr td {
+    padding: 12px 8px;
+}
+.fileTable thead tr th {
+    font-weight: bold;
+}
+.removeFileButton {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 8px;
+    display: inline-block; 
+    margin-left: 50%; 
+    transform: translateX(-50%); 
+}
+.removeFileButton:hover {
+    background-color: #d32f2f;
+}
+
+.deleteButton {
+    margin-left: 5px;
+    background: red;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    color: white;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+.greentButton {
+    background-color: #88CFBA;
+    border: none;
+    color: white;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 13px;
+    margin-top: 7px;
+    cursor: pointer;
+    width: 150px;
+}
+
+
+.selectContainer {
+    position: relative;
+    display: inline-block;
+    margin-right: 12px;
+}
+.select {
+    border: 2px solid #88CFBA;
+    padding: 4px 8px;
+    border-radius: 4px;
+    appearance: none;
+    background-color: #ffffff;
+    cursor: pointer;
+    width: 70px;
+    height: 40px;
+}
+.selectArrow {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    pointer-events: none;
+}
+
+.fileInput {
+    display: none;
+}
+.fileLabel {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid #88CFBA;
+    border-radius: 4px;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.radioContainer {
+    position: relative;
+    display: inline-block;
+    padding-left: 28px;
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
+    margin-right: 16px; 
+    line-height: 36px; 
+}
+.radio {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.radioVisual {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border: 6px solid #ccc; 
+    border-radius: 50%;
+}
+.radio:checked ~ .radioVisual {
+    background-color: #fff;
+    border: 6px solid #88CFBA;
+    border-radius: 50%;
+}
+.radioVisual:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.radio:checked ~ .radioVisual:after {
+    display: block;
+}
+.radioVisual:after {
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background-color: #88CFBA;
+    border-radius: 50%;
+}

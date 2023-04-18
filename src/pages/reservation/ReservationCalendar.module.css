@@ -1,0 +1,71 @@
+.calendarDiv {
+    /* float: left; */
+    width: 100%;
+    height: 820px;
+}
+
+.calendarHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 20px;
+}
+
+.monthDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    border-bottom: 1px solid #C1C1C1;
+    height: 38px;
+    width: 100%;
+    line-height: 38px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    color: #88CFBA;
+}
+
+.monthDiv>button {
+    border: none;
+    text-align: center;
+    font-size: 25px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-top: 1px;
+    color: #88CFBA;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.sunToSat>span {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 14.8%;
+    height: 38px;
+    border-bottom: 1px solid #C1C1C1;
+    border-right: 1px solid #C1C1C1;
+    text-indent: 10px;
+    font-size: 20px;
+    line-height: 38px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.sunToSat>span:first-child {
+    color: red;
+    width: 13%;
+}
+
+.sunToSat>span:last-child {
+    color: blue;
+    width: 13%;
+}
+
+.daysDiv {
+    display: flex;
+    flex-wrap: wrap;
+}

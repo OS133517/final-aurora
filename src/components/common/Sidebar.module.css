@@ -2,7 +2,6 @@
     background-color: #88CFBA;
     width: 75px;
     height: 1125px;
-    float: left;
     border-bottom: 1px solid #C1C1C1;
 }
 
@@ -21,3 +20,45 @@
 .sidebarDiv img {
     margin: 0 auto;
 }
+
+.buttonBox {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.buttonBox button {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    color: #88CFBA;
+    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s;
+}
+
+.buttonBox button:hover {
+    background-color: #88CFBA;
+    color: white;
+}
+
+/* .buttonBox button::before {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    right: 18px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 8px;
+    border-color: transparent transparent white;
+    transition: border-color 0.3s;
+}
+
+.buttonBox button:hover:before {
+    border-color: transparent transparent #006fe3;
+} */

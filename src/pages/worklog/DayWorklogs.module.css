@@ -1,0 +1,99 @@
+.dayWorklogsDiv {
+    /* float: left; */
+    width: 100%;
+}
+
+.dayWorklogsHeader {
+    width: 100%;
+    height: 58px;
+    border-bottom: 1px solid #C1C1C1;
+    font-size: 24px;
+    font-weight: bold;
+    color: #88CFBA;
+    line-height: 58px;
+    text-indent: 20px;
+}
+
+.contentTable {
+    width: 100%;
+    border-bottom: 1px solid #88CFBA;
+    border-collapse : collapse
+}
+
+.contentHead th {
+    font-weight: normal;
+    font-size: 16px;
+    height: 53px;
+    line-height: 32px;
+    text-align: start;
+    border-bottom: 1px solid #88CFBA;
+}
+.contentTable th:first-child, .contentTable td:first-child {
+    width: 5%;
+    text-indent: 5px;
+    text-align: center;
+}
+.contentHead th:nth-child(2) {
+    width: 700px;
+}
+
+.contentHead th:nth-child(3) {
+    width: 200px;
+}
+
+.contentHead th:nth-child(4) {
+    width: 100px;
+}
+
+.contentHead th:last-child {
+    width: 100px;
+}
+
+.contentTable td {
+    height: 40px;
+}
+
+.contentTable td:nth-child(4)>span, .contentTable td:nth-child(5)>span {
+    display: block;
+    width: 78px;
+    height: 30px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    line-height: 30px;
+}
+
+.contentTable tbody>tr:hover {
+    background-color: #88CFBA;
+    color: white;
+}
+
+.dayWorklogsDiv {
+    /* float: left; */
+    width: 100%;
+}
+
+.pagingBtn {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #00CAA6;
+    font-weight: bold;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+}
+
+.pagingBtn:hover{
+    cursor: pointer;
+    background-color: rgb(12, 250, 180);
+}
+
+.pagingBtnDiv {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    list-style: none;
+}

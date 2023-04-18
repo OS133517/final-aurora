@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SidebarCSS from "./SubSidebar.module.css";
-import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI } from "../../apis/AddBookAPICall";
+import { callPersonalGroupAPI, callTeamGroupAPI, callGroupRegistAPI, callGroupDeleteAPI, callGroupUpdateAPI } from "../../apis/AddBookAPICall";
 import { NavLink } from "react-router-dom";
 import AddBookFormModal from "../addBook/AddBookFormModal";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import { decodeJwt } from "../../utils/tokenUtils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPenToSquare, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
+
 
 function AddBookSidebar() {
     
@@ -24,7 +29,8 @@ function AddBookSidebar() {
 
     const personalGroupList = useSelector(state => state.addBookReducer.personalGroups);
     const teamGroupList = useSelector(state => state.addBookReducer.teamGroups);
-    const groupRegistResult = useSelector(state => state.addBookReducer.groupRegistMessage);
+    const groupResultMessage = useSelector(state => state.addBookReducer.groupMessage);
+    const loginMember = decodeJwt(window.localStorage.getItem("accessToken"));
 
     const activeStyle = {
         backgroundColor : "#73b8a3",
@@ -33,41 +39,54 @@ function AddBookSidebar() {
 
     useEffect(() => {
 
-        dispatch(callTeamGroupAPI({
-            // TODO -> 나중에 토큰에서 꺼내는 걸로
-            memberCode : 2
-        }));
-        
-        dispatch(callPersonalGroupAPI({
-            // TODO -> 나중에 토큰에서 꺼내는 걸로
-            memberCode : 2
-        }));// eslint-disable-next-line
-    }, []);
+        if(groupResultMessage.status === 200) {
+            
+            getGroups();
+        } else if(groupResultMessage.status === 400) {
+            Swal.fire({
+                icon : "error",
+                text : groupResultMessage.message
+            })
+        }// eslint-disable-next-line
+    }, [groupResultMessage]);
+
+    useEffect(() => {
+        getGroups();
+    }, [])
 
     useEffect(() => {
 
-        if(groupRegistResult.status === 200) {
-            dispatch(callTeamGroupAPI({
-                // TODO -> 나중에 토큰에서 꺼내는 걸로
-                memberCode : 2
-            }));
+        if(groupResultMessage.status === 200) {
             
-            dispatch(callPersonalGroupAPI({
-                // TODO -> 나중에 토큰에서 꺼내는 걸로
-                memberCode : 2
-            }));
-        } else if(groupRegistResult.status === 400) {
-            alert(groupRegistResult.message);
+            getGroups();
+        } else if(groupResultMessage.status === 400) {
+            Swal.fire({
+                icon : "error",
+                text : groupResultMessage.message
+            })
         }// eslint-disable-next-line
-    }, [groupRegistResult])
+    }, [groupResultMessage]);
+
+    const getGroups = () => {
+
+        dispatch(callTeamGroupAPI({
+            memberCode : loginMember.memberCode
+        }));
+        
+        dispatch(callPersonalGroupAPI({
+            memberCode : loginMember.memberCode
+        }));
+    }
 
     const toggleMenu = (menuNum) => {
         switch(menuNum) {
             case 1: 
                 setFirstIsOpen(!firstIsOpen);
+                setTIsVisible(false);
                 break;
             case 2: 
                 setSecondIsOpen(!secondIsOpen); 
+                setPIsVisible(false);
                 break;
             case 3: 
                 setThirdIsOpen(!thirdIsOpen); 
@@ -83,8 +102,7 @@ function AddBookSidebar() {
                 if(tIsVisible && newTGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newTGroupName,
-                        // TODO -> 나중에 토큰에서 꺼내는 걸로
-                        team : '개발4팀'
+                        teamCode : loginMember.team
                     }));
                 }
                 setTIsVisible(!tIsVisible);
@@ -94,8 +112,7 @@ function AddBookSidebar() {
                 if(pIsVisible && newPGroupName.trim().length !== 0) {
                     dispatch(callGroupRegistAPI({
                         groupName : newPGroupName,
-                        // TODO -> 나중에 토큰에서 꺼내는 걸로
-                        memberCode : 2
+                        memberCode : loginMember.memberCode
                     }));
                 }
                 setPIsVisible(!pIsVisible);
@@ -122,8 +139,115 @@ function AddBookSidebar() {
         }
     }
 
+    const onHoverManage = (groupCode) => {
+
+        const editDiv = document.querySelector(`#group${groupCode}`);
+        const input = document.querySelector(`#groupUpdateInput${groupCode}`);
+        if(editDiv.style.visibility === 'visible') {
+
+            if(input.style.display !== 'block') {
+
+                editDiv.style.transform = "translateX(100%)";
+                editDiv.style.opacity = '0';
+                editDiv.style.visibility = 'hidden';
+            }
+        } else {
+
+            editDiv.style.transform = "translateX(0)";
+            editDiv.style.opacity = '1';
+            editDiv.style.visibility = 'visible';
+        }
+    }
+
+    const onClickGroupDelete = (groupCode) => {
+
+        Swal.fire({
+            icon : 'warning',
+            title : '정말 삭제하시겠습니까?',
+            text : '그룹 내의 모든 주소록도 삭제됩니다.',
+            showCancelButton : true,
+            cancelButtonText : '취소',
+            confirmButtonText : '확인'
+        }).then((result) => {
+            if(result.isConfirmed) {
+                dispatch(callGroupDeleteAPI({
+                    groupCode : groupCode
+                }))
+            }
+        })
+    }
+
+    const onClickGroupUpdate = (groupCode) => {
+
+        const input = document.querySelector(`#groupUpdateInput${groupCode}`);
+        const nameSpan = document.querySelector(`#groupNameSpan${groupCode}`);
+        const theseButtons = document.querySelectorAll(`.theseButtons${groupCode}`);
+        const otherButtons = document.querySelectorAll(`.otherButtons${groupCode}`);
+
+        if(input.style.display !== 'block') {
+
+            input.style.display = 'block';
+            nameSpan.style.display = 'none';
+            [...theseButtons].map(button => button.style.display = 'none');
+            [...otherButtons].map(button => button.style.display = 'block');
+        } else {
+
+            if(input.value.trim().length === 0) {
+                Swal.fire('그룹명을 입력하세요.');
+                return;
+            }
+
+            Swal.fire({
+                icon : "warning",
+                title : "그룹명 수정",
+                text : "수정하시겠습니까?",
+                showCancelButton : true,
+                cancelButtonText : "취소",
+                confirmButtonText : "확인"  
+            }).then(result => {
+                if(result.isConfirmed) {
+                    dispatch(callGroupUpdateAPI({
+                        groupCode : groupCode,
+                        groupName : input.value
+                    }));
+                } else {
+                    Swal.fire('취소되었습니다.');
+                }
+            })
+
+            input.style.display = 'none';
+            nameSpan.style.display = 'block';
+            [...theseButtons].map(button => button.style.display = 'block');
+            [...otherButtons].map(button => button.style.display = 'none');
+        }
+    }
+
+    const onClickCancel = (tOrP, groupCode) => {
+
+        const input = document.querySelector(`#groupUpdateInput${groupCode}`);
+        const nameSpan = document.querySelector(`#groupNameSpan${groupCode}`);
+        const theseButtons = document.querySelectorAll(`.theseButtons${groupCode}`);
+        const otherButtons = document.querySelectorAll(`.otherButtons${groupCode}`);
+
+        switch(tOrP) {
+            case 't' :
+                input.style.display = 'none';
+                nameSpan.style.display = 'block';
+                break;
+            case 'p' :
+                input.style.display = 'none';
+                nameSpan.style.display = 'block';
+                break;
+            default :
+                return;
+        }
+
+        [...theseButtons].map(button => button.style.display = 'block');
+        [...otherButtons].map(button => button.style.display = 'none');
+    }
+
     return (
-     <>
+        <>
             {addBookModal? <AddBookFormModal setAddBookModal={setAddBookModal}/>:null}
             <div className={SidebarCSS.sidebarDiv}>
                 <div className={SidebarCSS.sideHeader}>
@@ -144,13 +268,51 @@ function AddBookSidebar() {
                                 Array.isArray(teamGroupList) && teamGroupList.map(group => (
                                     <NavLink 
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                        to={`/address-book/team-groups/${group.groupCode}`} 
+                                        to={`/aurora/address-book/team-groups/${group.groupCode}`} 
                                         key={group.groupCode}
-                                        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</NavLink>
+                                        onMouseEnter={() => onHoverManage(group.groupCode)}
+                                        onMouseLeave={() => onHoverManage(group.groupCode)}
+                                        >
+                                        <input 
+                                            className={SidebarCSS.groupUpdateInput}
+                                            id={`groupUpdateInput${group.groupCode}`}
+                                            type="text" 
+                                            maxLength='10'
+                                            name="groupName"/>
+                                        <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
+                                        <div id={`group${group.groupCode}`}>
+                                            <button
+                                                className={`theseButtons${group.groupCode}`}
+                                                value={group.groupCode}
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare}/>
+                                            </button>
+                                            <button 
+                                                className={`theseButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} />
+                                            </button>
+                                            <button 
+                                                className={`otherButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faCheck} />
+                                            </button>
+                                            <button 
+                                                className={`otherButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon  onClick={(e) => {e.preventDefault(); onClickCancel('t', group.groupCode);}} icon={faXmark} />
+                                            </button>
+                                        </div>
+                                    </NavLink>
                                 ))
                             }
-                            {tIsVisible && <input type="text" name="team" value={newTGroupName} onChange={onChangeHandler}/>}
-                            <p onClick={() => onClickInsert('t')}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 그룹 추가</p>
+                            {tIsVisible && <input
+                                                className={SidebarCSS.groupInsertInput} 
+                                                type="text" 
+                                                name="team" 
+                                                maxLength='10'
+                                                value={newTGroupName} 
+                                                onChange={onChangeHandler}/>}
+                            {teamGroupList.length <= 4 && <p style={tIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('t')}>+ 그룹 추가</p>}
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(2)}>
@@ -166,13 +328,50 @@ function AddBookSidebar() {
                                 Array.isArray(personalGroupList) && personalGroupList.map(group => (
                                     <NavLink 
                                         style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                        to={`/address-book/personal-groups/${group.groupCode}`} 
+                                        to={`/aurora/address-book/personal-groups/${group.groupCode}`} 
                                         key={group.groupCode}
-                                        >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{group.groupName}</NavLink>
+                                        onMouseEnter={() => onHoverManage(group.groupCode)}
+                                        onMouseLeave={() => onHoverManage(group.groupCode)}
+                                        >
+                                        <input 
+                                            className={SidebarCSS.groupUpdateInput}
+                                            id={`groupUpdateInput${group.groupCode}`}
+                                            type="text" 
+                                            maxLength='10'
+                                            name="groupName"/>
+                                        <span id={`groupNameSpan${group.groupCode}`}>{group.groupName}</span>
+                                        <div id={`group${group.groupCode}`}>
+                                        <button
+                                                className={`theseButtons${group.groupCode}`}
+                                                value={group.groupCode}
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faPenToSquare} />
+                                            </button>
+                                            <button 
+                                                className={`theseButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupDelete(group.groupCode);}} icon={faTrash} />
+                                            </button>
+                                            <button 
+                                                className={`otherButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon onClick={(e) => {e.preventDefault(); onClickGroupUpdate(group.groupCode);}} icon={faCheck} />
+                                            </button>
+                                            <button 
+                                                className={`otherButtons${group.groupCode}`}
+                                                value={group.groupCode} 
+                                                ><FontAwesomeIcon  onClick={(e) => {e.preventDefault(); onClickCancel('p', group.groupCode);}} icon={faXmark} />
+                                            </button>
+                                        </div>
+                                    </NavLink>
                                 ))
                             }
-                            {pIsVisible && <input type="text" name="personal" value={newPGroupName} onChange={onChangeHandler}/>}
-                            <p onClick={() => onClickInsert('p')}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 그룹 추가</p>
+                            {pIsVisible && <input 
+                                                type="text"
+                                                name="personal" 
+                                                value={newPGroupName} 
+                                                maxLength='10'
+                                                onChange={onChangeHandler}/>}
+                            {personalGroupList.length <= 4 && <p style={pIsVisible? {backgroundColor:'#73b8a3', color:'white'}:null} onClick={() => onClickInsert('p')}>+ 그룹 추가</p>}
                         </div>
                     )}
                     <button className={SidebarCSS.dropDownButtons} onClick={() => toggleMenu(3)}>
@@ -186,17 +385,14 @@ function AddBookSidebar() {
                         <div className={SidebarCSS.dropDownMenus}>
                             <NavLink 
                                 style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                to={"/address-book/addresses"}
-                                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;전체 주소록</NavLink>
-                            <NavLink 
-                                style = { ({ isActive }) => isActive? activeStyle : undefined }
-                                to={"/address-book/team-addresses"}
-                                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;팀 주소록</NavLink>
+                                to={"/aurora/address-book/addresses"}
+                                >전체 주소록</NavLink>
                         </div>
                     )}
                 </div>
             </div>
-      </>
+
+            </>
     );
 }
 
