@@ -29,6 +29,7 @@
     line-height: 58px;
     text-indent: 20px;
     color: #88CFBA;
+    overflow: hidden;
 }
 
 .detailBody {
