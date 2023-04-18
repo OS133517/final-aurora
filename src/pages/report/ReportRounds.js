@@ -110,7 +110,7 @@ function ReportRounds() {
         });
         if (result.isConfirmed) {
             
-            dispatch(callDeleteReportAPI({
+            await dispatch(callDeleteReportAPI({
 
                 reportCode : reportCode
             }))

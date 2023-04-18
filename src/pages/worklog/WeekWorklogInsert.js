@@ -109,7 +109,7 @@ function WeekWorklogInsert() {
                             <td colSpan='3'>
                                 <textarea
                                     name='monContent'
-                                    placeholder='오전 업무 내용'
+                                    placeholder='업무 내용'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
                                     onChange={ onChangeHandler }
                                     />
@@ -120,7 +120,7 @@ function WeekWorklogInsert() {
                             <td colSpan='3'>
                                 <textarea
                                     name='tuesContent'
-                                    placeholder='오후 업무 비고'
+                                    placeholder='업무 내용'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
                                     onChange={ onChangeHandler }
                                     />
@@ -131,7 +131,7 @@ function WeekWorklogInsert() {
                             <td colSpan='3'>
                                 <textarea
                                     name='wedContent'
-                                    placeholder='오후 업무 비고'
+                                    placeholder='업무 내용'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
                                     onChange={ onChangeHandler }
                                     />
@@ -142,7 +142,7 @@ function WeekWorklogInsert() {
                             <td colSpan='3'>
                                 <textarea
                                     name='thurContent'
-                                    placeholder='오후 업무 비고'
+                                    placeholder='업무 내용'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
                                     onChange={ onChangeHandler }
                                     />
@@ -153,7 +153,7 @@ function WeekWorklogInsert() {
                             <td colSpan='3'>
                                 <textarea
                                     name='friContent'
-                                    placeholder='오후 업무 비고'
+                                    placeholder='업무 내용'
                                     className={ WeekWorklogInsertCSS.weekWorklogInfoInput }
                                     onChange={ onChangeHandler }
                                     />
