@@ -8,3 +8,5 @@
 * 김수용 - ssssong125@gmail.com
 * 정근호 -  jgh337337@gmail.com
 * 허재홍 - zero5140@gmail.com
+
+![이미지](./stack.png)
