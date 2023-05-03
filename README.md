@@ -1,4 +1,5 @@
 # 파이널 프로젝트 - 루트3은 4 조
+![image](https://user-images.githubusercontent.com/115364621/235844960-11851733-f3d7-433a-be69-74aee6edc92c.png)
 
 ## 그룹웨어 - AURORA - react
 
