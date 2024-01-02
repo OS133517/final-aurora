@@ -74,7 +74,13 @@ import ChatRoom from "./components/form/messenger/ChatRoom";
 import Completed from "./pages/approval/Completed";
 import ApprovalGraph from "./pages/approval/ApprovalGraph";
 
-
+/**
+ * BrowserRouter 사용 이유
+ * 1. 동적 라우팅 : React 컴포넌트를 기반으로 동적으로 라우팅을 설정한다. -> 개발자가 각 URL에 대해 어떤 컴포넌트를 랜더링할지 쉽게 정의할 수 있게 도와준다.
+ * 2. 네비게이션 지원 : Link, NavLink 같은 컴포넌트를 사용해 다른 주소로 쉽게 네비게이션 가능
+ * BrowserRouter / Routes ? Route
+ * @returns App
+ */
 
 function App() {
   return (
